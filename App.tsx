@@ -1,15 +1,12 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from "react";
+import React from 'react';
 
-import SplashScreen from 'react-native-splash-screen'
-import { View, Text } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
-import LoginScreen from "./Screen/LoginScreen";
-import RegisterScreen from "./Screen/RegisterScreen";
-import WalkthroughScreen from "./Screen/WalkthroughScreen";
+import LoginScreen from './Screen/LoginScreen';
+import RegisterScreen from './Screen/RegisterScreen';
+import WalkthroughScreen from './Screen/WalkthroughScreen';
 import LostPassword from './Screen/Forgot/LostPassword';
 import VerifyOtp from './Screen/Forgot/VerifyOtp';
 import ResetPassword from './Screen/Forgot/ResetPassword';
@@ -33,7 +30,6 @@ import WithoutSignupHome from './Screen/WithoutSignupHome';
 const Stack = createStackNavigator();
 
 const App = () => {
-
   // useEffect(() => {
   //   SplashScreen.hide();
   //   setTimeout(() => {
@@ -47,137 +43,135 @@ const App = () => {
   // }, [])
 
   return (
-   <>
-   {/* <ForegroundHandler /> */}
+    <>
+      {/* <ForegroundHandler /> */}
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="OnboardingScreen"
+        <Stack.Navigator
+          initialRouteName="OnboardingScreen"
           screenOptions={{
             headerStyle: {
               elevation: 0,
-              shadowOpacity: 0
+              shadowOpacity: 0,
             },
-          }}
-        >
+          }}>
           {/* OnboardingScreen which will come once for 5 Seconds */}
           <Stack.Screen
             name="OnboardingScreen"
             component={OnboardingScreen}
             // Hiding header for Splash Screen
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="LoginScreen"
             component={LoginScreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="RegisterScreen"
             component={RegisterScreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="LostPassword"
             component={LostPassword}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="VerifyOtp"
             component={VerifyOtp}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="ResetPassword"
             component={ResetPassword}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="Successfull"
             component={Successfull}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="VerifyOtpRegister"
             component={VerifyOtpRegister}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="WalkthroughScreen"
             component={WalkthroughScreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="Tabs"
             component={Tabs}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="ThroughRegister"
             component={ThroughRegister}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="IndivisualRegister"
             component={IndivisualRegister}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="BusinessRegister"
             component={BusinessRegister}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="FirstStepBusinessRegister"
             component={FirstStepBusinessRegister}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="BusinessPassword"
             component={BusinessPassword}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="BusinessStart"
             component={BusinessStart}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
-
 
           <Stack.Screen
             name="DrawerNavigation"
             component={DrawerNavigation}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="EditProfile"
             component={EditProfile}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
-            name='EditUserProfile'
+            name="EditUserProfile"
             component={EditUserProfile}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
-            name='WithoutSignupHome'
+            name="WithoutSignupHome"
             component={WithoutSignupHome}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
-
         </Stack.Navigator>
       </NavigationContainer>
-   </>
-  )
+    </>
+  );
 };
 
 export default App;
