@@ -1,21 +1,22 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Keyboard, KeyboardAvoidingView } from 'react-native';
-import COLORS from '../../conts/colors';
+import {View, Text, TextInput, StyleSheet, Keyboard} from 'react-native';
+import COLORS from '../conts/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const Input = ({
   label,
   iconName,
   error,
   password,
   cpassword,
-  onFocus = () => { },
+  onFocus = () => {},
   ...props
 }) => {
   const [hidePassword, setHidePassword] = React.useState(password);
   // const [hidePasswordC, setHidePasswordC] = React.useState(cpassword);
   const [isFocused, setIsFocused] = React.useState(false);
   return (
-    <View style={{ marginBottom: 20 }}>
+    <View style={{marginBottom: 20}}>
       <Text style={style.label}>{label}</Text>
       <View
         style={[
@@ -24,8 +25,8 @@ const Input = ({
             borderColor: error
               ? COLORS.red
               : isFocused
-                ? COLORS.darkBlue
-                : COLORS.light,
+              ? COLORS.darkBlue
+              : COLORS.light,
             alignItems: 'center',
           },
         ]}>
@@ -37,19 +38,18 @@ const Input = ({
           }}
           onBlur={() => setIsFocused(false)}
           onSubmitEditing={Keyboard.dismiss}
-          keyboardType='default'
+          keyboardType="default"
           secureTextEntry={hidePassword}
-          style={{ color: '#000000', flex: 1,  }}
-          placeholderTextColor='#828282'
+          style={{color: '#000000', flex: 1}}
+          placeholderTextColor="#828282"
           {...props}
-
         />
         {password && (
           <Icon
             onBlur={() => setIsFocused(false)}
             onPress={() => setHidePassword(!hidePassword)}
             name={hidePassword ? 'eye-off-outline' : 'eye-outline'}
-            style={{ color: COLORS.light, fontSize: 22 }}
+            style={{color: COLORS.light, fontSize: 22}}
           />
         )}
         {cpassword && (
@@ -57,15 +57,11 @@ const Input = ({
             onBlur={() => setIsFocused(false)}
             onPress={() => setHidePassword(!hidePassword)}
             name={hidePassword ? 'eye-outline' : 'eye-off-outline'}
-            style={{ color: COLORS.light, fontSize: 22 }}
+            style={{color: COLORS.light, fontSize: 22}}
           />
         )}
       </View>
-      {error && (
-        <Text style={{ color: COLORS.red, fontSize: 12, }}>
-          {error}
-        </Text>
-      )}
+      {error && <Text style={{color: COLORS.red, fontSize: 12}}>{error}</Text>}
     </View>
   );
 };
@@ -77,7 +73,7 @@ const style = StyleSheet.create({
     fontStyle: 'regular',
     color: '#4F4F4F',
     fontSize: 16,
-    top: -8
+    top: -8,
   },
   inputContainer: {
     height: 50,
@@ -86,7 +82,7 @@ const style = StyleSheet.create({
     paddingHorizontal: 15,
     borderWidth: 1,
     borderColor: '#BDBDBD',
-    borderRadius: 12
+    borderRadius: 12,
   },
 });
 

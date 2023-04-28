@@ -1,19 +1,33 @@
-import React from "react";
+import React from 'react';
 
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, Keyboard, SafeAreaView, Alert,  } from 'react-native';
-import { RadioButton } from 'react-native-paper';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Keyboard,
+  SafeAreaView,
+  Alert,
+} from 'react-native';
+import {RadioButton} from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
-import { horizontalScale, moderateScale, verticalScale } from "./Components/Metrics";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from './Components/Metrics';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import COLORS from '../src/conts/colors';
-import Button from '../src/views/components/Button';
-import Input from '../src/views/components/Input';
-import Loader from '../src/views/components/Loader';
+import COLORS from '../conts/colors';
+import Button from '../components/Button';
+import Input from '../components/Input';
+import Loader from '../components/Loader';
 
-import ProFile from "./Components/ProFile";
+import ProFile from './Components/ProFile';
 
-const RegisterScreen = ({ navigation }) => {
-
+const RegisterScreen = ({navigation}) => {
   const [inputs, setInputs] = React.useState({
     email: '',
     fullname: '',
@@ -26,7 +40,7 @@ const RegisterScreen = ({ navigation }) => {
   const [loading, setLoading] = React.useState(false);
 
   const [checked, setChecked] = React.useState('first');
-  const [toggleCheckBox, setToggleCheckBox] = React.useState(false)
+  const [toggleCheckBox, setToggleCheckBox] = React.useState(false);
 
   const validate = () => {
     Keyboard.dismiss();
@@ -85,21 +99,21 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   const handleOnchange = (text, input) => {
-    setInputs(prevState => ({ ...prevState, [input]: text }));
+    setInputs(prevState => ({...prevState, [input]: text}));
   };
   const handleError = (error, input) => {
-    setErrors(prevState => ({ ...prevState, [input]: error }));
+    setErrors(prevState => ({...prevState, [input]: error}));
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
+    <SafeAreaView style={{backgroundColor: COLORS.white, flex: 1}}>
       <Loader visible={loading} />
       <TouchableOpacity
         onPress={() => navigation.navigate('WalkthroughScreen')}
         style={{
           position: 'relative',
           left: 15,
-          paddingVertical: 40
+          paddingVertical: 40,
           // marginTop: moderateScale(10)
         }}>
         <Image
@@ -108,36 +122,38 @@ const RegisterScreen = ({ navigation }) => {
         />
       </TouchableOpacity>
       <ScrollView
-        contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 20 }}>
-        <Text style={{
-          fontFamily: 'Inter',
-          fontStyle: 'normal',
-          fontWeight: '700',
-          fontSize: moderateScale(32),
-          lineHeight: moderateScale(35),
-          color: '#0E184D'
-        }}>
+        contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
+        <Text
+          style={{
+            fontFamily: 'Inter',
+            fontStyle: 'normal',
+            fontWeight: '700',
+            fontSize: moderateScale(32),
+            lineHeight: moderateScale(35),
+            color: '#0E184D',
+          }}>
           Create Account
         </Text>
-        <Text style={{
-          fontFamily: 'Inter',
-          fontStyle: 'normal',
-          fontWeight: '400',
-          width: 300,
-          fontSize: moderateScale(14),
-          lineHeight: moderateScale(17),
-          alignItems: 'center',
-          color: '#000F1A'
-        }}>
-          Set up your account with us! Please fill the below details to create account.
+        <Text
+          style={{
+            fontFamily: 'Inter',
+            fontStyle: 'normal',
+            fontWeight: '400',
+            width: 300,
+            fontSize: moderateScale(14),
+            lineHeight: moderateScale(17),
+            alignItems: 'center',
+            color: '#000F1A',
+          }}>
+          Set up your account with us! Please fill the below details to create
+          account.
         </Text>
 
         <View>
           <ProFile />
         </View>
 
-        <View style={{ marginVertical: 10 }}>
-
+        <View style={{marginVertical: 10}}>
           <Input
             onChangeText={text => handleOnchange(text, 'fullname')}
             onFocus={() => handleError(null, 'fullname')}
@@ -166,55 +182,65 @@ const RegisterScreen = ({ navigation }) => {
             error={errors.phone}
           />
 
-          <View style={{ marginTop: verticalScale(10), }}>
-            <Text style={{
-              color: '#4F4F4F',
-              marginLeft: horizontalScale(15),
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              fontSize: moderateScale(16),
-              lineHeight: 22,
-            }}>Gender</Text>
+          <View style={{marginTop: verticalScale(10)}}>
+            <Text
+              style={{
+                color: '#4F4F4F',
+                marginLeft: horizontalScale(15),
+                fontFamily: 'Inter',
+                fontStyle: 'normal',
+                fontWeight: '400',
+                fontSize: moderateScale(16),
+                lineHeight: 22,
+              }}>
+              Gender
+            </Text>
 
-            <View style={{ flexDirection: 'row', marginLeft: horizontalScale(15), }}>
+            <View
+              style={{flexDirection: 'row', marginLeft: horizontalScale(15)}}>
               <RadioButton
                 value="first"
                 status={checked === 'first' ? 'checked' : 'unchecked'}
                 onPress={() => setChecked('first')}
               />
-              <Text style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                fontSize: 14,
-                lineHeight: 20,
-                display: 'flex',
-                marginTop: verticalScale(7),
-                alignItems: 'center',
-                color: '#4F4F4F',
-              }}>Male</Text>
+              <Text
+                style={{
+                  fontFamily: 'Inter',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  fontSize: 14,
+                  lineHeight: 20,
+                  display: 'flex',
+                  marginTop: verticalScale(7),
+                  alignItems: 'center',
+                  color: '#4F4F4F',
+                }}>
+                Male
+              </Text>
             </View>
 
-            <View style={{ flexDirection: 'row', marginLeft: horizontalScale(15), }}>
+            <View
+              style={{flexDirection: 'row', marginLeft: horizontalScale(15)}}>
               <RadioButton
                 value="second"
                 status={checked === 'second' ? 'checked' : 'unchecked'}
                 onPress={() => setChecked('second')}
               />
-              <Text style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                fontSize: 14,
-                lineHeight: 20,
-                display: 'flex',
-                marginTop: verticalScale(7),
-                alignItems: 'center',
-                color: '#4F4F4F',
-              }}>Female</Text>
+              <Text
+                style={{
+                  fontFamily: 'Inter',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  fontSize: 14,
+                  lineHeight: 20,
+                  display: 'flex',
+                  marginTop: verticalScale(7),
+                  alignItems: 'center',
+                  color: '#4F4F4F',
+                }}>
+                Female
+              </Text>
             </View>
-
           </View>
 
           <Input
@@ -237,14 +263,19 @@ const RegisterScreen = ({ navigation }) => {
             cpassword
           />
 
-          <View style={{ flexDirection: 'row', marginTop: moderateScale(10), marginLeft: horizontalScale(15), }}>
-            <View style={{ marginTop: moderateScale(-5) }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: moderateScale(10),
+              marginLeft: horizontalScale(15),
+            }}>
+            <View style={{marginTop: moderateScale(-5)}}>
               <CheckBox
                 style={styles.checkbox}
                 disabled={false}
                 onCheckColor="#14226D"
                 value={toggleCheckBox}
-                onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                onValueChange={newValue => setToggleCheckBox(newValue)}
               />
             </View>
             <Text
@@ -254,7 +285,7 @@ const RegisterScreen = ({ navigation }) => {
                 fontWeight: '400',
                 fontSize: moderateScale(14),
                 lineHeight: 22,
-                color: '#000000'
+                color: '#000000',
               }}>
               I have accepted the
             </Text>
@@ -266,7 +297,7 @@ const RegisterScreen = ({ navigation }) => {
                 fontStyle: 'normal',
                 fontWeight: '700',
                 fontSize: moderateScale(14),
-                lineHeight: 22
+                lineHeight: 22,
               }}>
               Terms and Conditions.
             </Text>
@@ -282,20 +313,28 @@ const RegisterScreen = ({ navigation }) => {
               marginLeft: '7.5%',
               backgroundColor: '#0E184D',
               justifyContent: 'center',
-              borderRadius: 8
+              borderRadius: 8,
             }}>
-            <Text style={{
-              textAlign: 'center',
-              color: '#FFFFFF',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: 700,
-              fontSize: moderateScale(16),
-              lineHeight: 22,
-            }}>Next</Text>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: '#FFFFFF',
+                fontFamily: 'Inter',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                fontSize: moderateScale(16),
+                lineHeight: 22,
+              }}>
+              Next
+            </Text>
           </TouchableOpacity>
 
-          <View style={{ flexDirection: 'row', marginTop: moderateScale(20), justifyContent: 'center', }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: moderateScale(20),
+              justifyContent: 'center',
+            }}>
             <Text
               style={{
                 fontFamily: 'Inter',
@@ -303,7 +342,7 @@ const RegisterScreen = ({ navigation }) => {
                 fontWeight: '400',
                 fontSize: moderateScale(14),
                 lineHeight: 22,
-                color: '#000000'
+                color: '#000000',
               }}>
               Already have an account?
             </Text>
@@ -315,22 +354,20 @@ const RegisterScreen = ({ navigation }) => {
                 fontStyle: 'normal',
                 fontWeight: '700',
                 fontSize: moderateScale(14),
-                lineHeight: 22
+                lineHeight: 22,
               }}>
               Log In
             </Text>
           </View>
-
         </View>
       </ScrollView>
     </SafeAreaView>
-  )
+  );
 };
 
 export default RegisterScreen;
 
 const styles = StyleSheet.create({
-
   inputText: {
     width: '92%',
     marginLeft: '4%',
@@ -338,7 +375,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#BDBDBD',
     marginTop: 10,
-    borderRadius: 12
+    borderRadius: 12,
   },
 
   input: {
@@ -352,7 +389,5 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 16,
     height: 14,
-
   },
-
-})
+});

@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
-import COLORS from '../../conts/colors';
-import { moderateScale } from '../../../Screen/Components/Metrics';
+import {moderateScale} from '../Screen/Components/Metrics';
+
 const Button = ({title, onPress = () => {}}) => {
   return (
     <TouchableOpacity
@@ -15,17 +15,18 @@ const Button = ({title, onPress = () => {}}) => {
         backgroundColor: '#0E184D',
         justifyContent: 'center',
         borderRadius: 8,
-        marginTop: moderateScale(20)
+        marginTop: moderateScale(20),
       }}>
-      <Text style={{
-        textAlign: 'center',
-        color: '#FFFFFF',
-        fontFamily: 'Inter',
-        fontStyle: 'normal',
-        fontWeight: 700,
-        fontSize: moderateScale(16),
-        lineHeight: 22,
-      }}>
+      <Text
+        style={{
+          textAlign: 'center',
+          color: '#FFFFFF',
+          fontFamily: 'Inter',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          fontSize: moderateScale(16),
+          lineHeight: 22,
+        }}>
         {title}
       </Text>
     </TouchableOpacity>
