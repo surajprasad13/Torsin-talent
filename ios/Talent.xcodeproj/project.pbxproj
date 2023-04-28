@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0082CC3629FBF5CD00C246E0 /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0082CC2F29FBF5CB00C246E0 /* Inter-Black.ttf */; };
+		0082CC3729FBF5CD00C246E0 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0082CC3029FBF5CC00C246E0 /* Inter-Light.ttf */; };
+		0082CC3829FBF5CD00C246E0 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0082CC3129FBF5CC00C246E0 /* Inter-Medium.ttf */; };
+		0082CC3929FBF5CD00C246E0 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0082CC3229FBF5CC00C246E0 /* Inter-Bold.ttf */; };
+		0082CC3A29FBF5CD00C246E0 /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0082CC3329FBF5CC00C246E0 /* Inter-Thin.ttf */; };
+		0082CC3B29FBF5CD00C246E0 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0082CC3429FBF5CC00C246E0 /* Inter-SemiBold.ttf */; };
+		0082CC3C29FBF5CD00C246E0 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0082CC3529FBF5CD00C246E0 /* Inter-Regular.ttf */; };
 		00E356F31AD99517003FC87E /* TalentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TalentTests.m */; };
 		0C80B921A6F3F58F76C31292 /* libPods-Talent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-Talent.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
@@ -27,6 +34,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0082CC2F29FBF5CB00C246E0 /* Inter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Black.ttf"; sourceTree = "<group>"; };
+		0082CC3029FBF5CC00C246E0 /* Inter-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Light.ttf"; sourceTree = "<group>"; };
+		0082CC3129FBF5CC00C246E0 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
+		0082CC3229FBF5CC00C246E0 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
+		0082CC3329FBF5CC00C246E0 /* Inter-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Thin.ttf"; sourceTree = "<group>"; };
+		0082CC3429FBF5CC00C246E0 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		0082CC3529FBF5CD00C246E0 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* TalentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* TalentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TalentTests.m; sourceTree = "<group>"; };
@@ -116,6 +130,13 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				0082CC2F29FBF5CB00C246E0 /* Inter-Black.ttf */,
+				0082CC3229FBF5CC00C246E0 /* Inter-Bold.ttf */,
+				0082CC3029FBF5CC00C246E0 /* Inter-Light.ttf */,
+				0082CC3129FBF5CC00C246E0 /* Inter-Medium.ttf */,
+				0082CC3529FBF5CD00C246E0 /* Inter-Regular.ttf */,
+				0082CC3429FBF5CC00C246E0 /* Inter-SemiBold.ttf */,
+				0082CC3329FBF5CC00C246E0 /* Inter-Thin.ttf */,
 				13B07FAE1A68108700A75B9A /* Talent */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* TalentTests */,
@@ -242,8 +263,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0082CC3929FBF5CD00C246E0 /* Inter-Bold.ttf in Resources */,
+				0082CC3C29FBF5CD00C246E0 /* Inter-Regular.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				0082CC3629FBF5CD00C246E0 /* Inter-Black.ttf in Resources */,
+				0082CC3729FBF5CD00C246E0 /* Inter-Light.ttf in Resources */,
+				0082CC3B29FBF5CD00C246E0 /* Inter-SemiBold.ttf in Resources */,
+				0082CC3829FBF5CD00C246E0 /* Inter-Medium.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				0082CC3A29FBF5CD00C246E0 /* Inter-Thin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,8 +528,12 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Talent;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -526,7 +558,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Talent;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import COLORS from './const/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const Input = ({
   label,
   iconName,
@@ -74,7 +75,7 @@ const style = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#BDBDBD',
     marginTop: 10,
-    borderRadius: 12
+    borderRadius: 12,
   },
 });
 

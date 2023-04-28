@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 import {moderateScale} from '../Screen/Components/Metrics';
 
-const Button = ({title, onPress = () => {}}) => {
+const Button = ({title, onPress = () => {}}: any) => {
   return (
     <TouchableOpacity
       onPress={onPress}

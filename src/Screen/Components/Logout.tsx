@@ -44,11 +44,6 @@ const Logout = () => {
 
       <AwesomeAlert
         show={showAlert}
-        // title="Confirm Log Out "
-        // titleStyle={}
-        // message="Are you sure you want to logout?"
-        // messageStyle={}
-
         showConfirmButton={true}
         confirmText="Log Out"
         confirmButtonStyle={{
@@ -86,10 +81,6 @@ const Logout = () => {
           console.log('Cancel');
           setShowAlert(false);
         }}
-        // showProgress= {true}
-        // progressColor="red"
-        // progressSize={40}
-
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
         customView={
@@ -99,7 +90,7 @@ const Logout = () => {
               alignItems: 'center',
             }}>
             <Image
-              source={require('../../Image/logout.png')}
+              source={require('../../assets/images/logout.png')}
               style={{
                 width: 30,
                 height: 30,
@@ -139,7 +130,10 @@ const Logout = () => {
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default Logout;
-
-const styles = StyleSheet.create({});
