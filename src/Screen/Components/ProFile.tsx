@@ -1,19 +1,14 @@
 import {
   View,
-  Text,
   TouchableHighlight,
   StyleSheet,
-  Button,
   ToastAndroid,
   Alert,
   Image,
-  TouchableOpacity,
 } from 'react-native';
 import React from 'react';
 import {Avatar} from 'react-native-paper';
 import {launchImageLibrary} from 'react-native-image-picker';
-
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function ProFile() {
   const [Pic, setPic] = React.useState('');

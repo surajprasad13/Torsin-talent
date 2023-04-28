@@ -2,8 +2,32 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import api from '../../api';
 
-export const registerUser = createAsyncThunk(
-  'auth/register',
+export const registerIndivisual = createAsyncThunk(
+  'auth/register/indivisual',
+  async (data: any, {rejectWithValue}) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const value = await api.post(`individual/registration`, data, config);
+
+      console.log(value, 'Success');
+    } catch (error: any) {
+      console.log(error.response.data, 'Error');
+      // return custom error message from backend if present
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  },
+);
+
+export const registerBusiness = createAsyncThunk(
+  'auth/register/business',
   async ({firstName, email, password}: any, {rejectWithValue}) => {
     try {
       const config = {
@@ -11,7 +35,11 @@ export const registerUser = createAsyncThunk(
           'Content-Type': 'application/json',
         },
       };
-      await api.post(`user/registration`, {firstName, email, password}, config);
+      await api.post(
+        `business/registration`,
+        {firstName, email, password},
+        config,
+      );
     } catch (error: any) {
       // return custom error message from backend if present
       if (error.response && error.response.data.message) {

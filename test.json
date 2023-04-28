@@ -1,0 +1,131 @@
+{
+  "config": {
+    "adapter": [
+      "xhr",
+      "http"
+    ],
+    "baseURL": "https://torsin-admin.apponward.com/v1/api/talent/",
+    "data": "{\"firstName\":\"\",\"email\":\"\",\"password\":\"\"}",
+    "env": {
+      "Blob": [Function Blob
+      ],
+      "FormData": [Function FormData
+      ]
+    },
+    "headers": [Object
+    ],
+    "maxBodyLength": -1,
+    "maxContentLength": -1,
+    "method": "post",
+    "timeout": 0,
+    "transformRequest": [
+      [Function transformRequest
+      ]
+    ],
+    "transformResponse": [
+      [Function transformResponse
+      ]
+    ],
+    "transitional": {
+      "clarifyTimeoutError": false,
+      "forcedJSONParsing": true,
+      "silentJSONParsing": true
+    },
+    "url": "individual/registration",
+    "validateStatus": [Function validateStatus
+    ],
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN"
+  },
+  "data": {
+    "error": {
+      "errorCode": 502,
+      "errorMessage": "fullName is required..",
+      "statusCode": 422
+    },
+    "response": null
+  },
+  "headers": {
+    "allow": "POST, OPTIONS",
+    "connection": "keep-alive",
+    "content-length": "100",
+    "content-type": "application/json",
+    "cross-origin-opener-policy": "same-origin",
+    "date": "Fri, 28 Apr 2023 13:09:36 GMT",
+    "referrer-policy": "same-origin",
+    "server": "nginx/1.18.0 (Ubuntu)",
+    "vary": "Accept, Origin",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY"
+  },
+  "request": {
+    "DONE": 4,
+    "HEADERS_RECEIVED": 2,
+    "LOADING": 3,
+    "OPENED": 1,
+    "UNSENT": 0,
+    "_aborted": false,
+    "_cachedResponse": undefined,
+    "_hasError": false,
+    "_headers": {
+      "accept": "application/json, text/plain, */*",
+      "content-type": "application/json"
+    },
+    "_incrementalEvents": false,
+    "_lowerCaseResponseHeaders": {
+      "allow": "POST, OPTIONS",
+      "connection": "keep-alive",
+      "content-length": "100",
+      "content-type": "application/json",
+      "cross-origin-opener-policy": "same-origin",
+      "date": "Fri, 28 Apr 2023 13:09:36 GMT",
+      "referrer-policy": "same-origin",
+      "server": "nginx/1.18.0 (Ubuntu)",
+      "vary": "Accept, Origin",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY"
+    },
+    "_method": "POST",
+    "_perfKey": "network_XMLHttpRequest_https://torsin-admin.apponward.com/v1/api/talent/individual/registration",
+    "_performanceLogger": {
+      "_closed": false,
+      "_extras": [Object
+      ],
+      "_pointExtras": [Object
+      ],
+      "_points": [Object
+      ],
+      "_timespans": [Object
+      ]
+    },
+    "_requestId": null,
+    "_response": "{\"error\":{\"errorCode\":502,\"statusCode\":422,\"errorMessage\":\"fullName is required..\"},\"response\":null}",
+    "_responseType": "",
+    "_sent": true,
+    "_subscriptions": [],
+    "_timedOut": false,
+    "_trackingName": "unknown",
+    "_url": "https://torsin-admin.apponward.com/v1/api/talent/individual/registration",
+    "readyState": 4,
+    "responseHeaders": {
+      "Allow": "POST, OPTIONS",
+      "Connection": "keep-alive",
+      "Content-Length": "100",
+      "Content-Type": "application/json",
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Date": "Fri, 28 Apr 2023 13:09:36 GMT",
+      "Referrer-Policy": "same-origin",
+      "Server": "nginx/1.18.0 (Ubuntu)",
+      "Vary": "Accept, Origin",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY"
+    },
+    "responseURL": "https://torsin-admin.apponward.com/v1/api/talent/individual/registration",
+    "status": 422,
+    "timeout": 0,
+    "upload": {},
+    "withCredentials": true
+  },
+  "status": 422,
+  "statusText": undefined
+}

@@ -1,6 +1,10 @@
 // authSlice.js
 import {createSlice} from '@reduxjs/toolkit';
-import {registerUser} from '../action/authAction';
+import {
+  registerBusiness,
+  registerIndivisual,
+  userLogin,
+} from '../action/authAction';
 
 const initialState = {
   loading: false,
@@ -29,16 +33,31 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = payload;
     },
-    // register user
-    [registerUser.pending]: state => {
+
+    // register Indivisual
+    [registerIndivisual.pending]: state => {
       state.loading = true;
       state.error = null;
     },
-    [registerUser.fulfilled]: (state, {payload}) => {
+    [registerIndivisual.fulfilled]: (state, {payload}) => {
       state.loading = false;
       state.success = true; // registration successful
     },
-    [registerUser.rejected]: (state, {payload}) => {
+    [registerIndivisual.rejected]: (state, {payload}) => {
+      state.loading = false;
+      state.error = payload;
+    },
+
+    // register Bussiness
+    [registerBusiness.pending]: state => {
+      state.loading = true;
+      state.error = null;
+    },
+    [registerBusiness.fulfilled]: (state, {payload}) => {
+      state.loading = false;
+      state.success = true; // registration successful
+    },
+    [registerBusiness.rejected]: (state, {payload}) => {
       state.loading = false;
       state.error = payload;
     },

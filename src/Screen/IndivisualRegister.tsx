@@ -1,39 +1,48 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   Image,
   TouchableOpacity,
   ScrollView,
   Keyboard,
   SafeAreaView,
-  Alert,
   Pressable,
   StatusBar,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
+import {useDispatch, useSelector} from 'react-redux';
+
+// icons
+import Feather from 'react-native-vector-icons/Feather';
+
+// components
 import {
   horizontalScale,
   moderateScale,
   verticalScale,
 } from './Components/Metrics';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import COLORS from '../conts/colors';
-import Button from '../components/Button';
 import Input from '../components/Input';
 import Loader from '../components/Loader';
+
 import {Dropdown} from 'react-native-element-dropdown';
 import ProFile from './Components/ProFile';
 import EmailModal from './Components/modal/EmailModal';
 import PhoneModal from './Components/modal/PhoneModal';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// redux
+import {RootState} from '../redux';
+import {registerIndivisual} from '../redux/action/authAction';
 
-const IndivisualRegister = ({navigation}) => {
+const IndivisualRegister = ({navigation}: any) => {
+  const {loading, success} = useSelector((state: RootState) => state.auth);
+
+  const dispatch = useDispatch();
+
   const data = [
     {label: 'India', value: '1'},
     {label: 'Nepal', value: '2'},
@@ -44,15 +53,14 @@ const IndivisualRegister = ({navigation}) => {
   const [isFocus, setIsFocus] = useState(false);
 
   const [inputs, setInputs] = React.useState({
-    fullname: '',
+    fullName: '',
     email: '',
-    phone: '',
+    mobileNo: '',
     location: '',
-    country: '',
+    countryCodeId: '',
   });
 
   const [errors, setErrors] = React.useState({});
-  const [loading, setLoading] = React.useState(false);
 
   const [checked, setChecked] = React.useState('first');
   const [toggleCheckBox, setToggleCheckBox] = React.useState(false);
@@ -81,32 +89,33 @@ const IndivisualRegister = ({navigation}) => {
       isValid = false;
     }
 
-    // if (!inputs.country) {
-    //     handleError('Please input Country', 'country');
-    //     isValid = false;
-    // }
     if (isValid) {
       register();
     }
   };
 
   const register = () => {
-    setLoading(true);
-    setTimeout(() => {
-      try {
-        setLoading(false);
-        AsyncStorage.setItem('userData', JSON.stringify(inputs));
-        navigation.navigate('BusinessPassword');
-      } catch (error) {
-        Alert.alert('Error', 'Something went wrong');
-      }
-    }, 3000);
+    const field = {
+      ...inputs,
+      gender: 1,
+      profileImage: '',
+      password: 'Abcd@1234',
+      confirmPassword: 'Abcd@1234',
+    };
+
+    dispatch(registerIndivisual(field));
   };
 
-  const handleOnchange = (text, input) => {
+  useEffect(() => {
+    if (success) {
+      navigation.navigate('');
+    }
+  }, [success]);
+
+  const handleOnchange = (text: any, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));
   };
-  const handleError = (error, input) => {
+  const handleError = (error: any, input: any) => {
     setErrors(prevState => ({...prevState, [input]: error}));
   };
 
@@ -119,7 +128,7 @@ const IndivisualRegister = ({navigation}) => {
         translucent={true}
       />
 
-      <Loader visible={loading} />
+      {loading && <Loader />}
       {/* <StatusBar backgroundColor="blue" barStyle='light-content' /> */}
 
       <ScrollView contentContainerStyle={{paddingHorizontal: 20}}>
@@ -212,7 +221,6 @@ const IndivisualRegister = ({navigation}) => {
         <Text
           style={{
             fontFamily: 'Inter',
-            fontStyle: 'normal',
             fontWeight: '400',
             width: 300,
             top: 70,
@@ -280,56 +288,6 @@ const IndivisualRegister = ({navigation}) => {
             </Pressable>
           </View>
 
-          {/* <View style={{ marginTop: verticalScale(10), }}>
-                        <Text style={{
-                            color: '#4F4F4F',
-                            marginLeft: horizontalScale(15),
-                            fontFamily: 'Inter',
-                            fontStyle: 'normal',
-                            fontWeight: '400',
-                            fontSize: moderateScale(16),
-                            lineHeight: 22,
-                        }}>Gender</Text>
-
-                        <View style={{ flexDirection: 'row', marginLeft: horizontalScale(15), }}>
-                            <RadioButton
-                                value="first"
-                                status={checked === 'first' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('first')}
-                            />
-                            <Text style={{
-                                fontFamily: 'Inter',
-                                fontStyle: 'normal',
-                                fontWeight: '400',
-                                fontSize: 14,
-                                lineHeight: 20,
-                                display: 'flex',
-                                marginTop: verticalScale(7),
-                                alignItems: 'center',
-                                color: '#4F4F4F',
-                            }}>Male</Text>
-                        </View>
-
-                        <View style={{ flexDirection: 'row', marginLeft: horizontalScale(15), }}>
-                            <RadioButton
-                                value="second"
-                                status={checked === 'second' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('second')}
-                            />
-                            <Text style={{
-                                fontFamily: 'Inter',
-                                fontStyle: 'normal',
-                                fontWeight: '400',
-                                fontSize: 14,
-                                lineHeight: 20,
-                                display: 'flex',
-                                marginTop: verticalScale(7),
-                                alignItems: 'center',
-                                color: '#4F4F4F',
-                            }}>Female</Text>
-                        </View>
-
-                    </View> */}
           <View style={{marginTop: verticalScale(10)}}>
             <Text
               style={{
@@ -484,12 +442,12 @@ const IndivisualRegister = ({navigation}) => {
           </View>
 
           <TouchableOpacity
-            onPress={validate}
-            disabled={
-              inputs.fullname && inputs.email && inputs.phone && inputs.location
-                ? false
-                : true
-            }
+            onPress={register}
+            // disabled={
+            //   inputs.fullname && inputs.email && inputs.phone && inputs.location
+            //     ? false
+            //     : true
+            // }
             style={{
               width: '85%',
               height: 50,
