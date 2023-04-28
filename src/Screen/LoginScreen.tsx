@@ -120,7 +120,7 @@ const LoginScreen = ({}) => {
         }}>
         <Image
           style={styles.tinyLogo}
-          source={require('../Image/backarrow.png')}
+          source={require('../../src/assets/images/backarrow.png')}
         />
       </TouchableOpacity>
       <ScrollView contentContainerStyle={{paddingHorizontal: 20}}>

@@ -118,7 +118,7 @@ const RegisterScreen = ({navigation}) => {
         }}>
         <Image
           style={styles.tinyLogo}
-          source={require('../Image/backarrow.png')}
+          source={require('../assets/images/backarrow.png')}
         />
       </TouchableOpacity>
       <ScrollView

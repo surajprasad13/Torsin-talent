@@ -1,7 +1,17 @@
-import { View, Text, TouchableHighlight, StyleSheet, Button, ToastAndroid, Alert, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { Avatar } from 'react-native-paper';
-import { launchImageLibrary } from 'react-native-image-picker';
+import {
+  View,
+  Text,
+  TouchableHighlight,
+  StyleSheet,
+  Button,
+  ToastAndroid,
+  Alert,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import React from 'react';
+import {Avatar} from 'react-native-paper';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -23,59 +33,57 @@ export default function ProFile() {
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        setToastMsg('Cancel')
+        setToastMsg('Cancel');
       } else if (response.errorCode == 'permission') {
-        setToastMsg('Permission')
+        setToastMsg('Permission');
       } else if (response.errorCode == 'others') {
         setToastMsg(response.errorMessage);
       } else if (response.assets[0].fileSize > 1097152) {
-        Alert.alert("maximum size");
+        Alert.alert('maximum size');
       } else {
-        setPic(response.assets[0].base64)
+        setPic(response.assets[0].base64);
       }
-    })
-
+    });
   };
 
   const removeImage = () => {
-    setPic('')
-    setToastMsg('Image removed')
-  }
+    setPic('');
+    setToastMsg('Image removed');
+  };
 
   return (
     <View>
       <View style={styles.centerContent}>
         <TouchableHighlight
           onPress={() => uploadImage()}
-          underlayColor="rgba(0,0,0,0)"
-        >
+          underlayColor="rgba(0,0,0,0)">
           <View>
             <Avatar.Image
               size={80}
               style={{
-                backgroundColor: '#ffffff'
+                backgroundColor: '#ffffff',
               }}
-              onProgress={(error) => {
+              onProgress={error => {
                 setError(false);
               }}
               source={
                 error
-                  ? require("../../Image/profile.png")
-                  : { uri: 'data:image/png;base64,' + Pic }
+                  ? require('../../assets/images/profile.png')
+                  : {uri: 'data:image/png;base64,' + Pic}
               }
             />
             <Image
               source={
                 error
-                  ? require("../../Image/camera.png")
-                  : ('../../Image/check.png')
+                  ? require('../../assets/images/camera.png')
+                  : '../../assets/images/check.png'
               }
               style={{
                 width: 34,
                 height: 34,
                 position: 'absolute',
                 marginLeft: 50,
-                marginTop: 45
+                marginTop: 45,
               }}
             />
           </View>
@@ -92,18 +100,14 @@ export default function ProFile() {
       title='Remove Image'
       />
     </View> */}
-
     </View>
-  )
-};
+  );
+}
 
 const styles = StyleSheet.create({
-
   centerContent: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 5
-
-  }
-
-})
+    marginTop: 5,
+  },
+});

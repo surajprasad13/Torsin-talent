@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import {
   View,
@@ -25,7 +25,7 @@ import CheckBox from '@react-native-community/checkbox';
 import Input from '../components/Input';
 import Loader from '../components/Loader';
 
-const BusinessPassword = ({navigation}) => {
+const BusinessPassword = ({ navigation }) => {
   const [inputs, setInputs] = React.useState({
     password: '',
     confirm_password: '',
@@ -73,19 +73,19 @@ const BusinessPassword = ({navigation}) => {
   };
 
   const handleOnchange = (text, input) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
+    setInputs(prevState => ({ ...prevState, [input]: text }));
   };
   const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+    setErrors(prevState => ({ ...prevState, [input]: error }));
   };
 
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <Loader visible={loading} />
 
-      <ScrollView contentContainerStyle={{paddingHorizontal: 20}}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 20 }}>
         {/* <View style={{
         flexDirection: 'row',
         justifyContent: 'center',
@@ -117,7 +117,7 @@ const BusinessPassword = ({navigation}) => {
 
       </View> */}
 
-        <ScrollView contentContainerStyle={{paddingTop: 30}}>
+        <ScrollView contentContainerStyle={{ paddingTop: 30 }}>
           {/* <View style={{
           flexDirection: 'row'
         }}>
@@ -245,7 +245,7 @@ const BusinessPassword = ({navigation}) => {
                 }}>
                 <Image
                   style={styles.tinyLogo}
-                  source={require('../Image/backarrow.png')}
+                  source={require('../assets/images/backarrow.png')}
                 />
               </TouchableOpacity>
               <Text
@@ -294,7 +294,7 @@ const BusinessPassword = ({navigation}) => {
             Create New Password.
           </Text>
 
-          <View style={{marginTop: verticalScale(120)}}>
+          <View style={{ marginTop: verticalScale(120) }}>
             <Input
               onChangeText={text => handleOnchange(text, 'password')}
               onFocus={() => handleError(null, 'password')}
@@ -317,12 +317,12 @@ const BusinessPassword = ({navigation}) => {
               password
             />
 
-            <View style={{marginTop: moderateScale(10), right: 18}}>
+            <View style={{ marginTop: moderateScale(10), right: 18 }}>
               <View style={styles.section}>
                 <CheckBox
                   style={styles.checkbox}
                   disabled={false}
-                  tintColors={{true: '#14226D', false: '#E0E0E0'}}
+                  tintColors={{ true: '#14226D', false: '#E0E0E0' }}
                   value={toggleCheckBox}
                   onValueChange={newValue => setToggleCheckBox(newValue)}
                 />
@@ -332,7 +332,7 @@ const BusinessPassword = ({navigation}) => {
               <View style={styles.section}>
                 <CheckBox
                   style={styles.checkbox}
-                  tintColors={{true: '#14226D', false: '#E0E0E0'}}
+                  tintColors={{ true: '#14226D', false: '#E0E0E0' }}
                   disabled={false}
                   value={toggleCheckBox}
                   onValueChange={newValue => setToggleCheckBox(newValue)}
@@ -343,7 +343,7 @@ const BusinessPassword = ({navigation}) => {
               <View style={styles.section}>
                 <CheckBox
                   style={styles.checkbox}
-                  tintColors={{true: '#14226D', false: '#E0E0E0'}}
+                  tintColors={{ true: '#14226D', false: '#E0E0E0' }}
                   disabled={false}
                   value={toggleCheckBox}
                   onValueChange={newValue => setToggleCheckBox(newValue)}
@@ -354,7 +354,7 @@ const BusinessPassword = ({navigation}) => {
               <View style={styles.section}>
                 <CheckBox
                   style={styles.checkbox}
-                  tintColors={{true: '#14226D', false: '#E0E0E0'}}
+                  tintColors={{ true: '#14226D', false: '#E0E0E0' }}
                   disabled={false}
                   value={toggleCheckBox}
                   onValueChange={newValue => setToggleCheckBox(newValue)}

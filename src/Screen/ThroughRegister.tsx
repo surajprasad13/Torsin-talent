@@ -54,7 +54,6 @@
 //                 flexDirection: 'row',
 //                 justifyContent: 'space-between'
 
-
 //               }}>
 //                   <TouchableOpacity
 //                       onPress={() => setSection('login')}
@@ -112,69 +111,75 @@
 //     },
 // })
 
-import React from "react"
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from "react-native"
+import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 
 const ThroughRegister = ({navigation}) => {
-    return (
-        <ImageBackground
-            source={require('../Image/back.png')}
-            style={{
-                flex: 1,
-                justifyContent: 'center'
-            }}
-        >
-                <TouchableOpacity 
-                onPress={() =>navigation.navigate('IndivisualRegister')}
-                style={{
-                   
-                    alignItems: 'center',
-                    width: '90%',
-                    height: 50,
-                    marginLeft: '5%',
-                    backgroundColor: '#DFE6FD',
-                    justifyContent: 'center',
-                    borderRadius: 8,
+  return (
+    <ImageBackground
+      source={require('../assets/images/back.png')}
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+      }}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('IndivisualRegister')}
+        style={{
+          alignItems: 'center',
+          width: '90%',
+          height: 50,
+          marginLeft: '5%',
+          backgroundColor: '#DFE6FD',
+          justifyContent: 'center',
+          borderRadius: 8,
+        }}>
+        <Text
+          style={{
+            fontSize: 16,
+            textAlign: 'center',
+            color: '#6180F4',
+            fontFamily: 'Inter',
+            fontStyle: 'normal',
+            fontWeight: '700',
+          }}>
+          Individual
+        </Text>
+      </TouchableOpacity>
 
-                }}>
-                    <Text style={{
-                        fontSize: 16,
-                        textAlign: 'center',
-                        color: '#6180F4',
-                        fontFamily: 'Inter',
-                        fontStyle: 'normal',
-                        fontWeight: '700',
-                    }}>Individual</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                onPress={() => navigation.navigate('FirstStepBusinessRegister')} 
-                style={{
-                    marginTop: 20,
-                    alignItems: 'center',
-                    width: '90%',
-                    height: 50,
-                    marginLeft: '5%',
-                    backgroundColor: '#DFE6FD',
-                    justifyContent: 'center',
-                    borderRadius: 8,
-
-                }}>
-                    <Text style={{
-                        fontSize: 16,
-                        textAlign: 'center',
-                        color: '#6180F4',
-                        fontFamily: 'Inter',
-                        fontStyle: 'normal',
-                        fontWeight: '700',
-                    }}>Business</Text>
-                </TouchableOpacity>
-           
-
-        </ImageBackground>
-    )
+      <TouchableOpacity
+        onPress={() => navigation.navigate('FirstStepBusinessRegister')}
+        style={{
+          marginTop: 20,
+          alignItems: 'center',
+          width: '90%',
+          height: 50,
+          marginLeft: '5%',
+          backgroundColor: '#DFE6FD',
+          justifyContent: 'center',
+          borderRadius: 8,
+        }}>
+        <Text
+          style={{
+            fontSize: 16,
+            textAlign: 'center',
+            color: '#6180F4',
+            fontFamily: 'Inter',
+            fontStyle: 'normal',
+            fontWeight: '700',
+          }}>
+          Business
+        </Text>
+      </TouchableOpacity>
+    </ImageBackground>
+  );
 };
 
 export default ThroughRegister;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

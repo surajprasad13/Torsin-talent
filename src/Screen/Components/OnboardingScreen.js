@@ -12,21 +12,21 @@ const OnboardingScreen = ({ navigation }) => {
                 pages={[
                     {
                         backgroundColor: '#fff',
-                        image: <Image source={require('../../Image/onboarding.png')} />,
+                        image: <Image source={require('../../assets/images/onboarding.png')} />,
                         title: 'Talents and Entertainment',
                         subtitle: 'Find the best talents in Media and Entertainment services',
                     },
 
                     {
                         backgroundColor: '#fff',
-                        image: <Image source={require('../../Image/onboarding.png')} />,
+                        image: <Image source={require('../../assets/images/onboarding.png')} />,
                         title: 'Talents and Entertainment',
                         subtitle: 'Find the best talents in Media and Entertainment services',
                     },
 
                     {
                         backgroundColor: '#fff',
-                        image: <Image source={require('../../Image/onboarding.png')} />,
+                        image: <Image source={require('../../assets/images/onboarding.png')} />,
                         title: 'Talents and Entertainment',
                         subtitle: 'Find the best talents in Media and Entertainment services',
 

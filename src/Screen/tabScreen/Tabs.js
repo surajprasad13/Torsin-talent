@@ -56,7 +56,7 @@ const Tabs = () => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ focused }) => (
-                        <Image source={require('../../Image/tabImage/Home_light.png')}
+                        <Image source={require('../../assets/images/tabImage/Home_light.png')}
                             resizeMode="contain"
                             style={{
                                 width: 25,
@@ -75,7 +75,7 @@ const Tabs = () => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ focused }) => (
-                        <Image source={require('../../Image/tabImage/Search.png')}
+                        <Image source={require('../../assets/images/tabImage/Search.png')}
                             resizeMode="contain"
                             style={{
                                 tintColor: focused ? '#14226D' : '#66636C',
@@ -95,7 +95,7 @@ const Tabs = () => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ focused }) => (
-                        <Image source={require('../../Image/tabImage/chat.png')}
+                        <Image source={require('../../assets/images/tabImage/chat.png')}
                             resizeMode="contain"
                             style={{
                                 tintColor: focused ? '#14226D' : '#66636C',
@@ -115,7 +115,7 @@ const Tabs = () => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ focused }) => (
-                        <Image source={require('../../Image/tabImage/User_light.png')}
+                        <Image source={require('../../assets/images/tabImage/User_light.png')}
                             resizeMode="contain"
                             style={{
                                 tintColor: focused ? '#14226D' : '#66636C',

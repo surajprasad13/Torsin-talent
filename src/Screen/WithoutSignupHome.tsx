@@ -36,7 +36,7 @@ const WithoutSignupHome = ({navigation}) => {
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <Image
               style={styles.tinyLogo}
-              source={require('../Image/Sort.png')}
+              source={require('../assets/images/Sort.png')}
               tintColor="#14226D"
             />
           </TouchableOpacity>
@@ -79,7 +79,7 @@ const WithoutSignupHome = ({navigation}) => {
               flexDirection: 'row',
             }}>
             <Image
-              source={require('../Image/otp.png')}
+              source={require('../assets/images/otp.png')}
               style={{
                 width: 89,
                 height: 80,
@@ -186,7 +186,7 @@ const WithoutSignupHome = ({navigation}) => {
               flexDirection: 'row',
             }}>
             <Image
-              source={require('../Image/Profilepicture.png')}
+              source={require('../assets/images/Profilepicture.png')}
               style={{
                 width: 44.55,
                 height: 44.55,
@@ -268,7 +268,7 @@ const WithoutSignupHome = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Image
-                source={require('../Image/Subtract.png')}
+                source={require('../assets/images/Subtract.png')}
                 style={{
                   top: 3,
                   right: 2,
@@ -282,7 +282,7 @@ const WithoutSignupHome = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Image
-                source={require('../Image/Time_light.png')}
+                source={require('../assets/images/Time_light.png')}
                 style={{
                   right: 2,
                 }}
@@ -295,7 +295,7 @@ const WithoutSignupHome = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Image
-                source={require('../Image/User_light.png')}
+                source={require('../assets/images/User_light.png')}
                 style={{
                   right: 2,
                 }}
@@ -320,7 +320,7 @@ const WithoutSignupHome = ({navigation}) => {
               flexDirection: 'row',
             }}>
             <Image
-              source={require('../Image/Profilepicture.png')}
+              source={require('../assets/images/Profilepicture.png')}
               style={{
                 width: 44.55,
                 height: 44.55,
@@ -402,7 +402,7 @@ const WithoutSignupHome = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Image
-                source={require('../Image/Subtract.png')}
+                source={require('../assets/images/Subtract.png')}
                 style={{
                   top: 3,
                   right: 2,
@@ -416,7 +416,7 @@ const WithoutSignupHome = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Image
-                source={require('../Image/Time_light.png')}
+                source={require('../assets/images/Time_light.png')}
                 style={{
                   right: 2,
                 }}
@@ -429,7 +429,7 @@ const WithoutSignupHome = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Image
-                source={require('../Image/User_light.png')}
+                source={require('../assets/images/User_light.png')}
                 style={{
                   right: 2,
                 }}
@@ -454,7 +454,7 @@ const WithoutSignupHome = ({navigation}) => {
               flexDirection: 'row',
             }}>
             <Image
-              source={require('../Image/Profilepicture.png')}
+              source={require('../assets/images/Profilepicture.png')}
               style={{
                 width: 44.55,
                 height: 44.55,
@@ -536,7 +536,7 @@ const WithoutSignupHome = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Image
-                source={require('../Image/Subtract.png')}
+                source={require('../assets/images/Subtract.png')}
                 style={{
                   top: 3,
                   right: 2,
@@ -550,7 +550,7 @@ const WithoutSignupHome = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Image
-                source={require('../Image/Time_light.png')}
+                source={require('../assets/images/Time_light.png')}
                 style={{
                   right: 2,
                 }}
@@ -563,7 +563,7 @@ const WithoutSignupHome = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Image
-                source={require('../Image/User_light.png')}
+                source={require('../assets/images/User_light.png')}
                 style={{
                   right: 2,
                 }}

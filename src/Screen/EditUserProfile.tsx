@@ -120,7 +120,7 @@ const EditUserProfile = ({navigation}) => {
             left: 24,
           }}>
           <Image
-            source={require('../Image/backarrow.png')}
+            source={require('../assets/images/backarrow.png')}
             style={{
               width: 16,
               height: 14,
