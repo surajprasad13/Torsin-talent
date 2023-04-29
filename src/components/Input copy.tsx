@@ -1,8 +1,7 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Keyboard} from 'react-native';
+import {View, Text, TextInput, StyleSheet} from 'react-native';
 
 import {colors} from '../theme';
-
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Input = ({
@@ -10,12 +9,10 @@ const Input = ({
   iconName,
   error,
   password,
-  cpassword,
   onFocus = () => {},
   ...props
 }) => {
   const [hidePassword, setHidePassword] = React.useState(password);
-  // const [hidePasswordC, setHidePasswordC] = React.useState(cpassword);
   const [isFocused, setIsFocused] = React.useState(false);
   return (
     <View style={{marginBottom: 20}}>
@@ -32,6 +29,10 @@ const Input = ({
             alignItems: 'center',
           },
         ]}>
+        <Icon
+          name={iconName}
+          style={{color: colors.darkBlue, fontSize: 22, marginRight: 10}}
+        />
         <TextInput
           autoCorrect={false}
           onFocus={() => {
@@ -39,50 +40,42 @@ const Input = ({
             setIsFocused(true);
           }}
           onBlur={() => setIsFocused(false)}
-          onSubmitEditing={Keyboard.dismiss}
-          keyboardType="default"
           secureTextEntry={hidePassword}
-          style={{color: '#000000', flex: 1}}
-          placeholderTextColor="#828282"
+          style={{color: colors.darkBlue, flex: 1}}
           {...props}
         />
         {password && (
           <Icon
-            onBlur={() => setIsFocused(false)}
-            onPress={() => setHidePassword(!hidePassword)}
-            name={hidePassword ? 'eye-off-outline' : 'eye-outline'}
-            style={{color: colors.light, fontSize: 22}}
-          />
-        )}
-        {cpassword && (
-          <Icon
-            onBlur={() => setIsFocused(false)}
             onPress={() => setHidePassword(!hidePassword)}
             name={hidePassword ? 'eye-outline' : 'eye-off-outline'}
-            style={{color: colors.light, fontSize: 22}}
+            style={{color: colors.darkBlue, fontSize: 22}}
           />
         )}
       </View>
-      {error && <Text style={{color: colors.red, fontSize: 12}}>{error}</Text>}
+      {error && (
+        <Text style={{marginTop: 7, color: colors.red, fontSize: 12}}>
+          {error}
+        </Text>
+      )}
     </View>
   );
 };
 
 const style = StyleSheet.create({
   label: {
+    color: '#000000',
+    fontSize: 14,
     fontWeight: '400',
     fontFamily: 'Inter',
-    fontStyle: 'regular',
-    color: '#4F4F4F',
-    fontSize: 16,
-    top: -8,
+    fontStyle: 'normal',
   },
   inputContainer: {
+    width: '92%',
+    marginLeft: '4%',
     height: 50,
-    flexDirection: 'row',
-    paddingHorizontal: 15,
     borderWidth: 1,
     borderColor: '#BDBDBD',
+    marginTop: 10,
     borderRadius: 12,
   },
 });

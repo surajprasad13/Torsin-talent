@@ -3,4 +3,7 @@ export default {
   secondary: '',
   white: 'white',
   black: 'black',
+  red: 'red',
+  darkBlue: 'blue',
+  light: 'light',
 };

@@ -2,30 +2,36 @@ import React from 'react';
 import {} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import OnboardingScreen from '../Screen/Components/OnboardingScreen';
-import LoginScreen from '../Screen/LoginScreen';
-import LostPassword from '../Screen/Forgot/LostPassword';
-import VerifyOtp from '../Screen/Forgot/VerifyOtp';
-import ResetPassword from '../Screen/Forgot/ResetPassword';
-import VerifyOtpRegister from '../Screen/VerifyOtpRegister';
-import Successfull from '../Screen/Forgot/Successfull';
-import WalkthroughScreen from '../Screen/WalkthroughScreen';
-import Tabs from '../Screen/tabScreen/Tabs';
-import ThroughRegister from '../Screen/ThroughRegister';
-import IndivisualRegister from '../Screen/IndivisualRegister';
-import BusinessRegister from '../Screen/BusinessRegister';
-import FirstStepBusinessRegister from '../Screen/FirstStepBusinessRegister';
-import BusinessPassword from '../Screen/BusinessPassword';
-import BusinessStart from '../Screen/BusinessStart';
-import DrawerNavigation from '../Screen/Components/drawer/DrawerNavigation';
-import EditProfile from '../Screen/EditProfile';
-import EditUserProfile from '../Screen/EditUserProfile';
-import WithoutSignupHome from '../Screen/WithoutSignupHome';
-import RegisterScreen from '../Screen/RegisterScreen';
+
+/**
+ * Screens
+ */
+
+import OnboardingScreen from '../screens/OnboardingScreen';
+import LoginScreen from '../screens/auth/LoginScreen';
+import LostPassword from '../screens/auth/forgot/LostPassword';
+import VerifyOtp from '../screens/auth/forgot/VerifyOtp';
+import ResetPassword from '../screens/auth/forgot/ResetPassword';
+import VerifyOtpRegister from '../screens/auth/VerifyOtpRegister';
+import Successfull from '../screens/auth/forgot/Successfull';
+import WalkthroughScreen from '../screens/WalkthroughScreen';
+import ThroughRegister from '../screens/ThroughRegister';
+import IndivisualRegister from '../screens/auth/IndivisualRegister';
+import BusinessRegister from '../screens/auth/BusinessRegister';
+import FirstStepBusinessRegister from '../screens/FirstStepBusinessRegister';
+import BusinessPassword from '../screens/auth/BusinessPassword';
+import BusinessStart from '../screens/BusinessStart';
+import EditProfile from '../screens/EditProfile';
+import EditUserProfile from '../screens/EditUserProfile';
+import WithoutSignupHome from '../screens/WithoutSignupHome';
+import RegisterScreen from '../screens/auth/RegisterScreen';
+
+import Tabs from '../screens/tabScreen/Tabs';
+import DrawerNavigation from './DrawerNavigator';
 
 const Stack = createStackNavigator();
 
-export default function Appnavigator() {
+export default function Appnavigator({}) {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -40,7 +46,6 @@ export default function Appnavigator() {
         <Stack.Screen
           name="OnboardingScreen"
           component={OnboardingScreen}
-          // Hiding header for Splash Screen
           options={{headerShown: false}}
         />
         <Stack.Screen

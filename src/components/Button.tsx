@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
-import {moderateScale} from '../Screen/Components/Metrics';
+import {moderateScale} from '../screens/Components/Metrics';
 
 const Button = ({title, onPress = () => {}}: any) => {
   return (
