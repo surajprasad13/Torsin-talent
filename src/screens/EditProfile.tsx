@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
   View,
@@ -8,6 +7,12 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+
+// icons
+import Feather from 'react-native-vector-icons/Feather';
+
+import {fonts} from '../theme';
 
 const EditProfile = ({}) => {
   const navigation = useNavigation();
@@ -32,25 +37,14 @@ const EditProfile = ({}) => {
             top: 58,
             left: 24,
           }}>
-          <Image
-            source={require('../assets/images/backarrow.png')}
-            style={{
-              width: 16,
-              height: 14,
-            }}
-          />
+          <Feather name="arrow-left" size={20} />
         </TouchableOpacity>
 
         <Text
           style={{
             textAlign: 'center',
             top: 50,
-            alignItems: 'center',
-            fontFamily: 'Inter',
-            fontStyle: 'medium',
-            fontWeight: '500',
-            fontSize: 16,
-            lineHeight: 28,
+            fontFamily: fonts.medium,
             color: '#000C14',
           }}>
           John Smith’s Profile
@@ -64,7 +58,6 @@ const EditProfile = ({}) => {
         }}>
         <TouchableOpacity
           onPress={() => {
-            //@ts-ignore
             navigation.navigate('EditUserProfile');
           }}>
           <View
@@ -169,45 +162,24 @@ const EditProfile = ({}) => {
               />
             </View>
 
-            <View
-              style={{
-                top: 27,
-                left: 50,
-              }}>
+            <View style={{top: 27, left: 50}}>
               <Text
                 style={{
-                  fontFamily: 'Inter',
-                  fontWeight: '600',
+                  fontFamily: fonts.semibold,
                   fontSize: 16,
                   lineHeight: 20,
-                  display: 'flex',
-                  alignItems: 'center',
                   color: '#1E202B',
                 }}>
                 Add services and skills
               </Text>
             </View>
 
-            <View
-              style={{
-                top: 47,
-                // left: 50
-              }}>
+            <View style={{top: 47}}>
               <Text
                 style={{
-                  fontFamily: 'Inter',
-                  fontWeight: '400',
-                  fontSize: 10,
-                  lineHeight: 15,
+                  fontFamily: fonts.regular,
                   width: 200,
                   right: 115,
-                  /* or 122% */
-
-                  display: 'flex',
-                  alignItems: 'center',
-
-                  /* Brand black */
-
                   color: '#1E202B',
                 }}>
                 Complete your profile. Set your profile completely so that

@@ -1,22 +1,29 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, TextInput, StyleSheet, Keyboard} from 'react-native';
 
-import {colors} from '../theme';
+import {colors, fonts} from '../theme';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+interface InputValueProps {
+  label: string;
+  error: any;
+  password: string;
+  cpassword: string;
+  onFocus: () => void;
+}
+
 const Input = ({
   label,
-  iconName,
   error,
   password,
   cpassword,
   onFocus = () => {},
   ...props
-}) => {
-  const [hidePassword, setHidePassword] = React.useState(password);
-  // const [hidePasswordC, setHidePasswordC] = React.useState(cpassword);
-  const [isFocused, setIsFocused] = React.useState(false);
+}: InputValueProps) => {
+  const [hidePassword, setHidePassword] = useState<boolean>(!!password);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+
   return (
     <View style={{marginBottom: 20}}>
       <Text style={style.label}>{label}</Text>
@@ -41,7 +48,7 @@ const Input = ({
           onBlur={() => setIsFocused(false)}
           onSubmitEditing={Keyboard.dismiss}
           keyboardType="default"
-          secureTextEntry={hidePassword}
+          secureTextEntry={!!hidePassword}
           style={{color: '#000000', flex: 1}}
           placeholderTextColor="#828282"
           {...props}
@@ -70,9 +77,7 @@ const Input = ({
 
 const style = StyleSheet.create({
   label: {
-    fontWeight: '400',
-    fontFamily: 'Inter',
-    fontStyle: 'regular',
+    fontFamily: fonts.regular,
     color: '#4F4F4F',
     fontSize: 16,
     top: -8,

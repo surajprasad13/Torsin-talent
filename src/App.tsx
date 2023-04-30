@@ -5,16 +5,19 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Appnavigator from './routes/Appnavigator';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
 
-import store from './redux';
+import store, {persistor} from './redux';
 
 const App = () => {
   return (
     <SafeAreaProvider>
       <Provider store={store}>
-        <PaperProvider>
-          <Appnavigator />
-        </PaperProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <PaperProvider>
+            <Appnavigator />
+          </PaperProvider>
+        </PersistGate>
       </Provider>
     </SafeAreaProvider>
   );

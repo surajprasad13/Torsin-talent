@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
-import SignupPopup from './tabScreen/SignupPopup';
+import SignupPopup from './bottomScreen/SignupPopup';
 
 const {} = Dimensions.get('window');
 

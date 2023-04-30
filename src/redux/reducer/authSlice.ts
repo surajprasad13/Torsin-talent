@@ -1,66 +1,60 @@
-// authSlice.js
 import {createSlice} from '@reduxjs/toolkit';
-import {
-  registerBusiness,
-  registerIndivisual,
-  userLogin,
-} from '../action/authAction';
+import {userLogin} from '../action/authAction';
 
-const initialState = {
+enum Status {
+  pending = 'pending',
+  succeeded = 'succeeded',
+  failed = 'failed',
+}
+
+interface AuthState {
+  loading: boolean;
+  userInfo: Object;
+  userToken: null | string;
+  error: null | any;
+  success: null | Object;
+  status: null | string;
+}
+
+const initialState: AuthState = {
   loading: false,
-  userInfo: null,
-  userToken: null,
+  userInfo: {}, // for user object
+  userToken: null, // for storing the JWT
   error: null,
-  success: false,
+  success: false, // for monitoring the registration process.
+  status: null,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
-  extraReducers: {
-    // login user
-    [userLogin.pending]: state => {
-      state.loading = true;
-      state.error = null;
+  reducers: {
+    loginValue: state => {
+      state.error = '';
     },
-    [userLogin.fulfilled]: (state, {payload}) => {
-      state.loading = false;
-      state.userInfo = payload;
-      state.userToken = payload.userToken;
-    },
-    [userLogin.rejected]: (state, {payload}) => {
-      state.loading = false;
-      state.error = payload;
-    },
-
-    // register Indivisual
-    [registerIndivisual.pending]: state => {
-      state.loading = true;
-      state.error = null;
-    },
-    [registerIndivisual.fulfilled]: (state, {payload}) => {
-      state.loading = false;
-      state.success = true; // registration successful
-    },
-    [registerIndivisual.rejected]: (state, {payload}) => {
-      state.loading = false;
-      state.error = payload;
-    },
-
-    // register Bussiness
-    [registerBusiness.pending]: state => {
-      state.loading = true;
-      state.error = null;
-    },
-    [registerBusiness.fulfilled]: (state, {payload}) => {
-      state.loading = false;
-      state.success = true; // registration successful
-    },
-    [registerBusiness.rejected]: (state, {payload}) => {
-      state.loading = false;
-      state.error = payload;
+    logout: state => {
+      state.userToken = null;
     },
   },
+  extraReducers: builder => {
+    //login
+    builder
+      .addCase(userLogin.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+      })
+      .addCase(userLogin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true; // registration successful
+        state.userToken = action.payload.response.data.token.access;
+      })
+      .addCase(userLogin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
 });
+
+export const {loginValue} = authSlice.actions;
+
 export default authSlice.reducer;

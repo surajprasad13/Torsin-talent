@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
   codeFiledRoot: {
     height: CELL_SIZE,
     marginTop: 10,
-
     justifyContent: 'center',
   },
   cell: {
@@ -36,13 +35,11 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
-
     // Android
     elevation: 1,
   },
 
   // =======================
-
   root: {
     minHeight: 800,
     padding: 20,
@@ -91,7 +88,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 12,
   },
-
   input: {
     color: '#000000',
     fontSize: moderateScale(14),
@@ -99,7 +95,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontStyle: 'normal',
   },
-
   tinyLogo: {
     width: 30,
     height: 30,

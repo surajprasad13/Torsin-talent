@@ -5,5 +5,5 @@ export default {
   black: 'black',
   red: 'red',
   darkBlue: 'blue',
-  light: 'light',
+  light: 'grey',
 };

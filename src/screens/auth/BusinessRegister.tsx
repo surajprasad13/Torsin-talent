@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-
 import {
   View,
   Text,
@@ -8,25 +7,25 @@ import {
   ScrollView,
   Keyboard,
   SafeAreaView,
-  Alert,
   Pressable,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
 import {Dropdown} from 'react-native-element-dropdown';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 
-import {metrics, colors} from '../../theme';
+import {metrics, colors, fonts} from '../../theme';
 
 import Input from '../../components/Input';
 import Loader from '../../components/Loader';
 import ProFile from '../../components/ProFile';
+import {useAppSelector} from '../../hooks';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
 const BusinessRegister = ({}) => {
   const navigation = useNavigation();
+  const {loading} = useAppSelector(state => state.auth);
 
   const data = [
     {label: 'India', value: '1'},
@@ -34,8 +33,8 @@ const BusinessRegister = ({}) => {
     {label: 'America', value: '3'},
   ];
 
-  const [countryValue, setIsCountryValue] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
+  const [countryValue, setIsCountryValue] = useState<null | string>(null);
+  const [isFocus, setIsFocus] = useState<boolean>(false);
 
   const [inputs, setInputs] = React.useState({
     email: '',
@@ -44,8 +43,8 @@ const BusinessRegister = ({}) => {
     location: '',
     country: '',
   });
-
-  const [value, setValue] = useState('');
+  const [phoneChange, setPhoneChange] = useState<string>('');
+  const [value, setValue] = useState<string>('');
 
   const onChangeEmail = text => {
     if (text.length == 0) {
@@ -55,8 +54,6 @@ const BusinessRegister = ({}) => {
     }
     setValue({value: text});
   };
-
-  const [phoneChange, setPhoneChange] = useState('');
 
   const onChangePhone = e => {
     if (e.length == 0) {
@@ -68,7 +65,6 @@ const BusinessRegister = ({}) => {
   };
 
   const [errors, setErrors] = React.useState({});
-  const [loading, setLoading] = React.useState(false);
 
   const [checked, setChecked] = React.useState('first');
   const [toggleCheckBox, setToggleCheckBox] = React.useState(false);
@@ -110,19 +106,7 @@ const BusinessRegister = ({}) => {
     }
   };
 
-  const register = () => {
-    setLoading(true);
-    setTimeout(() => {
-      try {
-        setLoading(false);
-        AsyncStorage.setItem('userData', JSON.stringify(inputs));
-        //@ts-expect-error
-        navigation.navigate('VerifyOtpRegister');
-      } catch (error) {
-        Alert.alert('Error', 'Something went wrong');
-      }
-    }, 3000);
-  };
+  const register = () => {};
 
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({...prevState, [input]: text}));
@@ -133,16 +117,12 @@ const BusinessRegister = ({}) => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      {loading && <Loader />}
       <ScrollView
         contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
         <Text
           style={{
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '700',
+            fontFamily: fonts.bold,
             fontSize: moderateScale(32),
-            lineHeight: moderateScale(35),
             color: '#0E184D',
           }}>
           Create Account
@@ -162,9 +142,9 @@ const BusinessRegister = ({}) => {
           account.
         </Text>
 
-        <View>
-          <ProFile />
-        </View>
+        {loading && <Loader />}
+
+        <ProFile image="" onPress={() => {}} />
 
         <View style={{marginVertical: 10}}>
           <Input
@@ -180,7 +160,6 @@ const BusinessRegister = ({}) => {
             <Input
               onChangeText={text => onChangeEmail(text)}
               onFocus={() => handleError(null, 'email')}
-              // iconName="email-outline"
               label="Email"
               placeholder="Enter your email address"
               error={errors.email}
@@ -287,12 +266,7 @@ const BusinessRegister = ({}) => {
               />
               <Text
                 style={{
-                  fontFamily: 'Inter',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  fontSize: 14,
-                  lineHeight: 20,
-                  display: 'flex',
+                  fontFamily: fonts.regular,
                   marginTop: verticalScale(7),
                   alignItems: 'center',
                   color: '#4F4F4F',
@@ -350,10 +324,7 @@ const BusinessRegister = ({}) => {
               value={countryValue}
               onFocus={() => setIsCountryValue(true)}
               onBlur={() => setIsCountryValue(false)}
-              iconStyle={{
-                top: 5,
-                right: 5,
-              }}
+              iconStyle={{top: 5, right: 5}}
             />
           </View>
 
@@ -462,8 +433,6 @@ const BusinessRegister = ({}) => {
   );
 };
 
-export default BusinessRegister;
-
 const styles = StyleSheet.create({
   inputText: {
     width: '92%',
@@ -478,9 +447,7 @@ const styles = StyleSheet.create({
   input: {
     color: '#000000',
     fontSize: moderateScale(14),
-    fontWeight: '400',
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
+    fontFamily: fonts.regular,
   },
 
   tinyLogo: {
@@ -488,3 +455,5 @@ const styles = StyleSheet.create({
     height: 25,
   },
 });
+
+export default BusinessRegister;

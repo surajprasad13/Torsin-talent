@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-const Help = () => {
+const Jobs = () => {
   return (
     <View style={styles.container}>
       <Text>Hello</Text>
@@ -12,7 +12,8 @@ const Help = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#ffffff',
   },
 });
 
-export default Help;
+export default Jobs;

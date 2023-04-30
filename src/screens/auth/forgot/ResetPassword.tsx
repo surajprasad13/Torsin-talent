@@ -7,25 +7,25 @@ import {
   Image,
   TouchableOpacity,
   Keyboard,
-  Alert,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import axios from 'axios';
 import CheckBox from '@react-native-community/checkbox';
 
 // helpers
-import {metrics, colors} from '../../../theme';
+import {metrics, colors, fonts} from '../../../theme';
 
 // components
 import Input from '../../../components/Input';
 import Loader from '../../../components/Loader';
 import {useNavigation} from '@react-navigation/native';
+import {useAppSelector} from '../../../hooks';
 
 const {moderateScale, verticalScale} = metrics;
 
 const ResetPassword = ({}) => {
   const navigation = useNavigation();
+  const {loading} = useAppSelector(state => state.auth);
 
   const [inputs, setInputs] = useState({
     password: '',
@@ -35,7 +35,6 @@ const ResetPassword = ({}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const validate = () => {
     Keyboard.dismiss();
@@ -63,10 +62,6 @@ const ResetPassword = ({}) => {
   };
 
   const register = async () => {
-    const headers = {
-      Accept: 'application/json',
-    };
-
     const article = {
       mobileNo: inputs.mobileNo,
       password: inputs.password,
@@ -118,13 +113,8 @@ const ResetPassword = ({}) => {
 
             <Text
               style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                width: 333,
+                fontFamily: fonts.regular,
                 fontSize: moderateScale(14),
-                lineHeight: moderateScale(17),
-                alignItems: 'center',
                 color: '#000F1A',
                 top: 20,
               }}>

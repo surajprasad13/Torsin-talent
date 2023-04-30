@@ -1,37 +1,38 @@
 import React, {useState} from 'react';
-
 import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ScrollView,
   Keyboard,
   SafeAreaView,
-  Alert,
   Pressable,
-  StatusBar,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
-import {colors, metrics} from '../theme';
+// icons
+import Feather from 'react-native-vector-icons/Feather';
+
+// helpers
+import {colors, fonts, metrics} from '../../theme';
+import {useAppSelector} from '../../hooks';
 
 // components
-import Input from '../components/Input';
-import Loader from '../components/Loader';
+import Input from '../../components/Input';
+import Loader from '../../components/Loader';
 import {Dropdown} from 'react-native-element-dropdown';
-import ProFile from '../components/ProFile';
-import EmailModal from '../components/modal/EmailModal';
-import PhoneModal from '../components/modal/PhoneModal';
-import {useNavigation} from '@react-navigation/native';
+import ProFile from '../../components/ProFile';
+import EmailModal from '../../components/modal/EmailModal';
+import PhoneModal from '../../components/modal/PhoneModal';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
 const FirstStepBusinessRegister = ({}) => {
   const navigation = useNavigation();
+  const {loading, error, success} = useAppSelector(state => state.auth);
 
   const data = [
     {label: 'India', value: '1'},
@@ -39,10 +40,13 @@ const FirstStepBusinessRegister = ({}) => {
     {label: 'America', value: '3'},
   ];
 
-  const [countryValue, setIsCountryValue] = useState(null);
+  const [countryValue, setIsCountryValue] = useState<string | null>(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [checked, setChecked] = useState('first');
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [errors, setErrors] = useState<any>({});
 
-  const [inputs, setInputs] = React.useState({
+  const [inputs, setInputs] = useState({
     fullname: '',
     email: '',
     phone: '',
@@ -50,57 +54,31 @@ const FirstStepBusinessRegister = ({}) => {
     country: '',
   });
 
-  const [errors, setErrors] = React.useState({});
-  const [loading, setLoading] = React.useState(false);
-
-  const [checked, setChecked] = React.useState('first');
-  const [toggleCheckBox, setToggleCheckBox] = React.useState(false);
-
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-
     if (!inputs.fullname) {
       handleError('Please input Name', 'fullname');
       isValid = false;
     }
-
     if (!inputs.email) {
       handleError('Please input email', 'email');
       isValid = false;
     }
-
     if (!inputs.phone) {
       handleError('Please input Phone', 'phone');
       isValid = false;
     }
-
     if (!inputs.location) {
       handleError('Please input Location', 'location');
       isValid = false;
     }
-
-    // if (!inputs.country) {
-    //     handleError('Please input Country', 'country');
-    //     isValid = false;
-    // }
     if (isValid) {
       register();
     }
   };
 
-  const register = () => {
-    setLoading(true);
-    setTimeout(() => {
-      try {
-        setLoading(false);
-        AsyncStorage.setItem('userData', JSON.stringify(inputs));
-        navigation.navigate('BusinessPassword');
-      } catch (error) {
-        Alert.alert('Error', 'Something went wrong');
-      }
-    }, 3000);
-  };
+  const register = () => {};
 
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({...prevState, [input]: text}));
@@ -111,21 +89,10 @@ const FirstStepBusinessRegister = ({}) => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <StatusBar
-        barStyle="dark-content"
-        hidden={false}
-        backgroundColor="#ffffff"
-        translucent={true}
-      />
+      {loading && <Loader />}
 
-      <Loader visible={loading} />
-      {/* <StatusBar backgroundColor="blue" barStyle='light-content' /> */}
-
-      <ScrollView contentContainerStyle={{paddingHorizontal: 20}}>
-        <View
-          style={{
-            marginTop: 36,
-          }}>
+      <ScrollView contentContainerStyle={{padding: 10}}>
+        <View>
           <View
             style={{
               flexDirection: 'row',
@@ -159,32 +126,20 @@ const FirstStepBusinessRegister = ({}) => {
               }}></View>
           </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              top: 36,
-            }}>
+          <View style={{flexDirection: 'row', top: 36}}>
             <TouchableOpacity
               onPress={() => navigation.navigate('ThroughRegister')}
               style={{
                 position: 'absolute',
                 top: 8,
-
-                // marginTop: moderateScale(10)
               }}>
-              <Image
-                style={styles.tinyLogo}
-                source={require('../assets/images/backarrow.png')}
-              />
+              <Feather name="arrow-left" size={20} />
             </TouchableOpacity>
             <Text
               style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '700',
+                fontFamily: fonts.bold,
                 marginLeft: 30,
                 fontSize: moderateScale(32),
-                lineHeight: moderateScale(35),
                 color: '#0E184D',
               }}>
               Create Account
@@ -193,9 +148,7 @@ const FirstStepBusinessRegister = ({}) => {
 
           <Text
             style={{
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
+              fontFamily: fonts.regular,
               width: 300,
               top: 50,
               fontSize: moderateScale(14),
@@ -210,9 +163,7 @@ const FirstStepBusinessRegister = ({}) => {
 
         <Text
           style={{
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '400',
+            fontFamily: fonts.regular,
             width: 300,
             top: 70,
             fontSize: moderateScale(18),
@@ -223,18 +174,14 @@ const FirstStepBusinessRegister = ({}) => {
           Add Business Information.
         </Text>
 
-        <View
-          style={{
-            top: 80,
-          }}>
-          <ProFile />
+        <View style={{top: 80}}>
+          <ProFile image="" onPress={() => {}} />
         </View>
 
         <View style={{marginVertical: 47, marginTop: 84}}>
           <Input
             onChangeText={text => handleOnchange(text, 'fullname')}
             onFocus={() => handleError(null, 'fullname')}
-            // iconName="account-outline"
             label="Name"
             placeholder="John smith"
             error={errors.fullname}
@@ -244,7 +191,6 @@ const FirstStepBusinessRegister = ({}) => {
             <Input
               onChangeText={text => handleOnchange(text, 'email')}
               onFocus={() => handleError(null, 'email')}
-              // iconName="email-outline"
               label="Email"
               placeholder="john@gmail.com"
               error={errors.email}
@@ -262,7 +208,7 @@ const FirstStepBusinessRegister = ({}) => {
           <View>
             <Input
               keyboardType="numeric"
-              onChangeText={text => handleOnchange(text, 'phone')}
+              onChangeText={(text: string) => handleOnchange(text, 'phone')}
               onFocus={() => handleError(null, 'phone')}
               // iconName="phone-outline"
               label="Mobile Number"
@@ -290,7 +236,6 @@ const FirstStepBusinessRegister = ({}) => {
                 right: 10,
                 bottom: 20,
                 fontSize: moderateScale(16),
-                lineHeight: 22,
               }}>
               Gender
             </Text>
@@ -304,14 +249,8 @@ const FirstStepBusinessRegister = ({}) => {
               />
               <Text
                 style={{
-                  fontFamily: 'Inter',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  fontSize: 14,
-                  lineHeight: 20,
-                  display: 'flex',
+                  fontFamily: fonts.regular,
                   marginTop: verticalScale(7),
-                  alignItems: 'center',
                   color: '#4F4F4F',
                 }}>
                 Male
@@ -327,14 +266,8 @@ const FirstStepBusinessRegister = ({}) => {
               />
               <Text
                 style={{
-                  fontFamily: 'Inter',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  fontSize: 14,
-                  lineHeight: 20,
-                  display: 'flex',
+                  fontFamily: fonts.regular,
                   marginTop: verticalScale(7),
-                  alignItems: 'center',
                   color: '#4F4F4F',
                 }}>
                 Female
@@ -343,7 +276,7 @@ const FirstStepBusinessRegister = ({}) => {
           </View>
 
           <Input
-            onChangeText={text => handleOnchange(text, 'location')}
+            onChangeText={(text: string) => handleOnchange(text, 'location')}
             onFocus={() => handleError(null, 'location')}
             // iconName="lock-outline"
             label="Location"
@@ -352,21 +285,11 @@ const FirstStepBusinessRegister = ({}) => {
             location
           />
 
-          <Text
-            style={{
-              color: '#000000',
-              fontSize: 14,
-              fontWeight: '400',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-            }}>
-            Country
-          </Text>
+          <Text style={{fontFamily: fonts.regular}}>Country</Text>
 
           <View
             style={{
               width: '100%',
-              // marginLeft: '4%',
               height: 50,
               borderWidth: 1,
               borderColor: '#BDBDBD',
@@ -408,11 +331,9 @@ const FirstStepBusinessRegister = ({}) => {
             </View>
             <Text
               style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '400',
+                fontFamily: fonts.regular,
                 fontSize: moderateScale(14),
-                lineHeight: 22,
+
                 color: '#000000',
               }}>
               I have accepted the
@@ -421,11 +342,8 @@ const FirstStepBusinessRegister = ({}) => {
               onPress={() => navigation.navigate('RegisterScreen')}
               style={{
                 color: '#0E184D',
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '700',
+                fontFamily: fonts.regular,
                 fontSize: moderateScale(14),
-                lineHeight: 22,
                 left: 2,
               }}>
               Terms and Conditions.
@@ -443,7 +361,6 @@ const FirstStepBusinessRegister = ({}) => {
               width: '85%',
               height: 50,
               marginTop: verticalScale(20),
-              // marginTop: moderateScale(150),
               marginLeft: '7.5%',
               backgroundColor:
                 inputs.fullname &&
@@ -459,11 +376,8 @@ const FirstStepBusinessRegister = ({}) => {
               style={{
                 textAlign: 'center',
                 color: '#FFFFFF',
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: 700,
+                fontFamily: fonts.bold,
                 fontSize: moderateScale(16),
-                lineHeight: 22,
               }}>
               Next
             </Text>
@@ -477,11 +391,8 @@ const FirstStepBusinessRegister = ({}) => {
             }}>
             <Text
               style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '400',
+                fontFamily: fonts.regular,
                 fontSize: moderateScale(14),
-                lineHeight: 22,
                 color: '#000000',
               }}>
               Already have an account?
@@ -490,11 +401,8 @@ const FirstStepBusinessRegister = ({}) => {
               onPress={() => navigation.navigate('LoginScreen')}
               style={{
                 color: '#0E184D',
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '700',
+                fontFamily: fonts.regular,
                 fontSize: moderateScale(14),
-                lineHeight: 22,
                 left: 2,
               }}>
               Log In
@@ -516,15 +424,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 12,
   },
-
   input: {
-    color: '#000000',
+    color: colors.black,
     fontSize: moderateScale(14),
-    fontWeight: '400',
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
+    fontFamily: fonts.regular,
   },
-
   tinyLogo: {
     width: 16,
     height: 14,

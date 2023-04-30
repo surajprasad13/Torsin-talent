@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-
 import {
   View,
   Text,
@@ -24,7 +23,6 @@ const LostPassword = ({}) => {
     <ScrollView style={{flex: 1, backgroundColor: '#ffffff'}}>
       <TouchableOpacity
         onPress={() => {
-          //@ts-expect-error
           navigation.navigate('LoginScreen');
         }}
         style={{
@@ -100,7 +98,6 @@ const LostPassword = ({}) => {
 
       <TouchableOpacity
         onPress={() => {
-          //@ts-expect-error
           navigation.navigate('VerifyOtp');
         }}
         style={{

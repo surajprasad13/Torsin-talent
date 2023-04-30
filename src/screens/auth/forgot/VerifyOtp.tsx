@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {
   CodeField,
   Cursor,
@@ -8,8 +8,11 @@ import {
 } from 'react-native-confirmation-code-field';
 import {useNavigation} from '@react-navigation/native';
 
+// icons
+import Feather from 'react-native-vector-icons/Feather';
+
 // helpers
-import {metrics} from '../../../theme';
+import {fonts, metrics} from '../../../theme';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 const CELL_COUNT = 6;
@@ -28,7 +31,6 @@ const VerifyOtp = ({}) => {
     <View style={{flex: 1, backgroundColor: '#ffffff'}}>
       <TouchableOpacity
         onPress={() => {
-          //@ts-expect-error
           navigation.navigate('LostPassword');
         }}
         style={{
@@ -36,13 +38,7 @@ const VerifyOtp = ({}) => {
           left: 15,
           marginTop: moderateScale(40),
         }}>
-        <Image
-          style={{
-            width: 16,
-            height: 16,
-          }}
-          source={require('../../../assets/images/backarrow.png')}
-        />
+        <Feather name="arrow-left" size={20} />
       </TouchableOpacity>
 
       <View style={{flex: 0.8}}>
@@ -53,11 +49,8 @@ const VerifyOtp = ({}) => {
           }}>
           <Text
             style={{
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '700',
+              fontFamily: fonts.bold,
               fontSize: moderateScale(32),
-              lineHeight: moderateScale(35),
               left: 10,
               color: '#0E184D',
             }}>
@@ -66,9 +59,7 @@ const VerifyOtp = ({}) => {
 
           <Text
             style={{
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
+              fontFamily: fonts.regular,
               marginTop: 10,
               width: horizontalScale(300),
               fontSize: moderateScale(14),
@@ -92,7 +83,6 @@ const VerifyOtp = ({}) => {
             textContentType="oneTimeCode"
             renderCell={({index, symbol, isFocused}) => (
               <View
-                // Make sure that you pass onLayout={getCellOnLayoutHandler(index)} prop to root component of "Cell"
                 onLayout={getCellOnLayoutHandler(index)}
                 key={index}
                 style={[]}>
@@ -113,14 +103,13 @@ const VerifyOtp = ({}) => {
               fontStyle: 'normal',
               fontWeight: '400',
               fontSize: moderateScale(14),
-              lineHeight: 22,
+
               color: '#000000',
             }}>
             I didn't receive code?
           </Text>
           <Text
             onPress={() => {
-              //@ts-expect-error
               navigation.navigate('RegisterScreen');
             }}
             style={{
@@ -129,7 +118,7 @@ const VerifyOtp = ({}) => {
               fontStyle: 'normal',
               fontWeight: '400',
               fontSize: moderateScale(14),
-              lineHeight: 22,
+
               left: 2,
             }}>
             Resend Code
@@ -139,13 +128,11 @@ const VerifyOtp = ({}) => {
 
       <TouchableOpacity
         onPress={() => {
-          //@ts-expect-error
           navigation.navigate('ResetPassword');
         }}
         style={{
           width: '85%',
           height: 50,
-          // marginTop: moderateScale(150),
           marginLeft: '7.5%',
           backgroundColor: '#14226D',
           justifyContent: 'center',
@@ -155,10 +142,8 @@ const VerifyOtp = ({}) => {
           style={{
             textAlign: 'center',
             color: '#FFFFFF',
-            fontFamily: 'Inter',
-
+            fontFamily: fonts.regular,
             fontSize: moderateScale(16),
-            lineHeight: 22,
           }}>
           Submit & Verify
         </Text>

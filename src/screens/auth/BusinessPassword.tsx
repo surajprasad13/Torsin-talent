@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-
 import {
   View,
   Text,
@@ -9,21 +8,23 @@ import {
   TouchableOpacity,
   ScrollView,
   Keyboard,
-  Alert,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 
+// helpers
 import {metrics} from '../../theme';
 
+// components
 import Input from '../../components/Input';
 import Loader from '../../components/Loader';
-import {useNavigation} from '@react-navigation/native';
+import {useAppSelector} from '../../hooks';
 
 const {moderateScale, verticalScale} = metrics;
 
 const BusinessPassword = ({}) => {
   const navigation = useNavigation();
+  const {loading} = useAppSelector(state => state.auth);
 
   const [inputs, setInputs] = React.useState({
     password: '',
@@ -31,44 +32,24 @@ const BusinessPassword = ({}) => {
   });
 
   const [errors, setErrors] = React.useState({});
-  const [loading, setLoading] = React.useState(false);
 
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-
     if (!inputs.password) {
       handleError('Please input new Password', 'password');
       isValid = false;
     }
-
     if (!inputs.confirm_password) {
       handleError('Please input Confirm Password', 'confirm_password');
       isValid = false;
     }
-
-    // if (!inputs.country) {
-    //     handleError('Please input Country', 'country');
-    //     isValid = false;
-    // }
     if (isValid) {
       register();
     }
   };
 
-  const register = () => {
-    setLoading(true);
-    setTimeout(() => {
-      try {
-        setLoading(false);
-        AsyncStorage.setItem('userData', JSON.stringify(inputs));
-        //@ts-expect-error
-        navigation.navigate('BusinessStart');
-      } catch (error) {
-        Alert.alert('Error', 'Something went wrong');
-      }
-    }, 3000);
-  };
+  const register = () => {};
 
   const handleOnchange = (text: any, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));

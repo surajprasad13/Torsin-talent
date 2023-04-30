@@ -145,10 +145,7 @@ const HomeScreen = ({}) => {
           </TouchableOpacity>
         </View>
 
-        <View
-          style={{
-            top: 8,
-          }}>
+        <View style={{top: 8}}>
           <ImageSlider />
         </View>
 

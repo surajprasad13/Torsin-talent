@@ -2,7 +2,6 @@ import * as React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import AboutUs from '../screens/drawerScreens/AboutUs';
-import Tabs from '../screens/tabScreen/Tabs';
 import CustomSidebarMenu from '../components/CustomSidebarMenu';
 import Proposals from '../screens/drawerScreens/Proposals';
 import MyRating from '../screens/drawerScreens/MyRating';
@@ -12,7 +11,11 @@ import Payment from '../screens/drawerScreens/Payment';
 import SwitchAccount from '../screens/drawerScreens/SwitchAccount';
 import Terms from '../screens/drawerScreens/Terms';
 
-const Drawer = createDrawerNavigator();
+import Tabs from './BottomNavigator';
+
+import {DrawerScreenParamaList} from './RouteType';
+
+const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
 const DrawerNavigation = () => {
   return (
@@ -40,18 +43,18 @@ const DrawerNavigation = () => {
       }}>
       <Drawer.Screen name="Notifications" component={Tabs} options={{}} />
       <Drawer.Screen name="Proposals" component={Proposals} options={{}} />
-      <Drawer.Screen name="My Ratings" component={MyRating} options={{}} />
-      <Drawer.Screen name="My Services" component={MyService} options={{}} />
-      <Drawer.Screen name="My Jobs" component={MyJobs} options={{}} />
+      <Drawer.Screen name="MyRatings" component={MyRating} options={{}} />
+      <Drawer.Screen name="MyServices" component={MyService} options={{}} />
+      <Drawer.Screen name="MyJobs" component={MyJobs} options={{}} />
       <Drawer.Screen name="Payments" component={Payment} options={{}} />
       <Drawer.Screen
-        name="Switch Account"
+        name="SwitchAccount"
         component={SwitchAccount}
         options={{}}
       />
-      <Drawer.Screen name="About Us" component={AboutUs} options={{}} />
-      <Drawer.Screen name="Terms & Privacy" component={Terms} options={{}} />
-      <Drawer.Screen name="Help & Support" component={Terms} options={{}} />
+      <Drawer.Screen name="AboutUs" component={AboutUs} options={{}} />
+      <Drawer.Screen name="TermsPrivacy" component={Terms} options={{}} />
+      <Drawer.Screen name="HelpSupport" component={Terms} options={{}} />
     </Drawer.Navigator>
   );
 };

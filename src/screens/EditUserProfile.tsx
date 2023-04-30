@@ -1,28 +1,35 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   SafeAreaView,
-  StatusBar,
   TouchableOpacity,
-  Image,
   ScrollView,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {RadioButton} from 'react-native-paper';
+
+// icons
+import Feather from 'react-native-vector-icons/Feather';
+
+// components
 import Input from '../components/Input';
 import ProFile from '../components/ProFile';
 import Loader from '../components/Loader';
 
-import {RadioButton} from 'react-native-paper';
+// helpers
+import {fonts, metrics} from '../theme';
+import {useAppSelector} from '../hooks';
 
-import {metrics} from '../theme';
-import {useNavigation} from '@react-navigation/native';
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
 const EditUserProfile = ({}) => {
   const navigation = useNavigation();
 
-  const [inputs, setInputs] = React.useState({
+  const {} = useAppSelector(state => state.auth);
+
+  const [inputs, setInputs] = useState({
     fullname: '',
     email: '',
     phone: '',
@@ -30,7 +37,7 @@ const EditUserProfile = ({}) => {
     country: '',
   });
 
-  const [errors, setErrors] = React.useState({});
+  const [errors, setErrors] = React.useState<any>({});
   const [loading, setLoading] = React.useState(false);
 
   const [checked, setChecked] = React.useState('first');
@@ -57,11 +64,6 @@ const EditUserProfile = ({}) => {
       handleError('Please input Location', 'location');
       isValid = false;
     }
-
-    // if (!inputs.country) {
-    //     handleError('Please input Country', 'country');
-    //     isValid = false;
-    // }
     if (isValid) {
       register();
     }
@@ -77,53 +79,21 @@ const EditUserProfile = ({}) => {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-      }}>
-      <StatusBar
-        barStyle="dark-content"
-        hidden={false}
-        backgroundColor="#ffffff"
-        translucent={true}
-      />
-
+    <SafeAreaView style={{flex: 1}}>
       {loading && <Loader />}
 
-      <View
-        style={{
-          backgroundColor: '#ffffff',
-          height: 100,
-          width: '100%',
-          flexDirection: 'row',
-          justifyContent: 'center',
-        }}>
+      <View style={styles.backContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate('EditProfile')}
-          style={{
-            position: 'absolute',
-            top: 58,
-            left: 24,
-          }}>
-          <Image
-            source={require('../assets/images/backarrow.png')}
-            style={{
-              width: 16,
-              height: 14,
-            }}
-          />
+          style={{padding: 10}}>
+          <Feather name="arrow-left" size={20} />
         </TouchableOpacity>
 
         <Text
           style={{
             textAlign: 'center',
             top: 50,
-            alignItems: 'center',
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '500',
-            fontSize: 16,
-            lineHeight: 28,
+            fontFamily: fonts.medium,
             color: '#000C14',
           }}>
           John Smith’s Profile
@@ -131,18 +101,14 @@ const EditUserProfile = ({}) => {
       </View>
 
       <ScrollView contentContainerStyle={{paddingHorizontal: 20, bottom: 20}}>
-        <View
-          style={{
-            top: 25,
-          }}>
-          <ProFile />
+        <View style={{top: 25}}>
+          <ProFile image="" onPress={() => {}} />
         </View>
 
         <View style={{marginTop: 47}}>
           <Input
-            onChangeText={text => handleOnchange(text, 'fullname')}
+            onChangeText={(text: string) => handleOnchange(text, 'fullname')}
             onFocus={() => handleError(null, 'fullname')}
-            // iconName="account-outline"
             label="Name"
             placeholder="John smith"
             error={errors.fullname}
@@ -151,7 +117,7 @@ const EditUserProfile = ({}) => {
 
         <View style={{marginTop: 20}}>
           <Input
-            onChangeText={text => handleOnchange(text, 'email')}
+            onChangeText={(text: string) => handleOnchange(text, 'email')}
             onFocus={() => handleError(null, 'email')}
             // iconName="email-outline"
             label="Email"
@@ -165,8 +131,8 @@ const EditUserProfile = ({}) => {
             marginTop: 20,
           }}>
           <Input
-            keyboardType="numeric"
-            onChangeText={text => handleOnchange(text, 'phone')}
+            keyboardType="phone-pad"
+            onChangeText={(text: string) => handleOnchange(text, 'phone')}
             onFocus={() => handleError(null, 'phone')}
             // iconName="phone-outline"
             label="Mobile Number"
@@ -180,13 +146,10 @@ const EditUserProfile = ({}) => {
             style={{
               color: '#4F4F4F',
               marginLeft: horizontalScale(15),
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
+              fontFamily: fonts.regular,
               right: 10,
               bottom: 20,
               fontSize: moderateScale(16),
-              lineHeight: 22,
             }}>
             Gender
           </Text>
@@ -200,14 +163,11 @@ const EditUserProfile = ({}) => {
             />
             <Text
               style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '400',
+                fontFamily: fonts.regular,
                 fontSize: 14,
-                lineHeight: 20,
-                display: 'flex',
+
                 marginTop: verticalScale(7),
-                alignItems: 'center',
+
                 color: '#4F4F4F',
               }}>
               Male
@@ -223,11 +183,8 @@ const EditUserProfile = ({}) => {
             />
             <Text
               style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '400',
+                fontFamily: fonts.regular,
                 fontSize: 14,
-                lineHeight: 20,
                 display: 'flex',
                 marginTop: verticalScale(7),
                 alignItems: 'center',
@@ -245,7 +202,6 @@ const EditUserProfile = ({}) => {
           <Input
             onChangeText={text => handleOnchange(text, 'location')}
             onFocus={() => handleError(null, 'location')}
-            // iconName="lock-outline"
             label="Location"
             placeholder="Murshid Bazar, Deira, P.O Box 40512"
             error={errors.location}
@@ -254,17 +210,10 @@ const EditUserProfile = ({}) => {
         </View>
 
         <TouchableOpacity
-          //   onPress={validate}
-          //   disabled={
-          //       inputs.fullname &&
-          //           inputs.email &&
-          //           inputs.phone &&
-          //           inputs.location ? false : true}
           style={{
             width: '85%',
             height: 50,
             marginTop: verticalScale(20),
-            // marginTop: moderateScale(150),
             marginLeft: '7.5%',
             backgroundColor: '#0E184D',
             justifyContent: 'center',
@@ -274,11 +223,8 @@ const EditUserProfile = ({}) => {
             style={{
               textAlign: 'center',
               color: '#FFFFFF',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: 700,
+              fontFamily: fonts.bold,
               fontSize: moderateScale(16),
-              lineHeight: 22,
             }}>
             Save Changes
           </Text>
@@ -288,6 +234,14 @@ const EditUserProfile = ({}) => {
   );
 };
 
-export default EditUserProfile;
+const styles = StyleSheet.create({
+  backContainer: {
+    backgroundColor: '#ffffff',
+    height: 100,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+});
 
-const styles = StyleSheet.create({});
+export default EditUserProfile;
