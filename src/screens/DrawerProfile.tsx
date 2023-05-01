@@ -1,25 +1,14 @@
-import React from 'react';
-import {
-  View,
-  TouchableHighlight,
-  StyleSheet,
-  ToastAndroid,
-  Alert,
-} from 'react-native';
+import React, {useState} from 'react';
+import {View, TouchableHighlight, StyleSheet, Alert} from 'react-native';
 import {Avatar} from 'react-native-paper';
 import {launchImageLibrary} from 'react-native-image-picker';
 
-export default function DrawerProfile() {
-  const [Pic, setPic] = React.useState('');
-
-  const [error, setError] = React.useState(true);
-
-  const setToastMsg = (msg: any) => {
-    ToastAndroid.showWithGravity(msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
-  };
+function DrawerProfile() {
+  const [image, setImage] = useState('');
+  const [error, setError] = useState(true);
 
   const uploadImage = () => {
-    let options = {
+    let options: any = {
       mediaType: 'photo',
       quality: 1,
       includeBase64: true,
@@ -27,15 +16,12 @@ export default function DrawerProfile() {
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        setToastMsg('Cancel');
       } else if (response.errorCode == 'permission') {
-        setToastMsg('Permission');
       } else if (response.errorCode == 'others') {
-        setToastMsg(response.errorMessage);
       } else if (response.assets[0].fileSize > 1097152) {
         Alert.alert('maximum size');
       } else {
-        setPic(response.assets[0].base64);
+        setImage(response.assets[0].base64);
       }
     });
   };
@@ -59,7 +45,7 @@ export default function DrawerProfile() {
               source={
                 error
                   ? require('../../../Image/profile.png')
-                  : {uri: 'data:image/png;base64,' + Pic}
+                  : {uri: 'data:image/png;base64,' + image}
               }
             />
           </View>
@@ -76,3 +62,5 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 });
+
+export default DrawerProfile;

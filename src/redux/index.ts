@@ -11,7 +11,7 @@ import {
   persistStore,
 } from 'redux-persist';
 
-import authReducer from './reducer/authSlice';
+import authReducer from './reducers/authSlice';
 
 const rootReducer = combineReducers({
   // Add your reducers here

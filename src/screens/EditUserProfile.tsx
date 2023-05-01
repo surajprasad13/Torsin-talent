@@ -71,11 +71,11 @@ const EditUserProfile = ({}) => {
 
   const register = () => {};
 
-  const handleOnchange = (text, input) => {
+  const handleOnchange = (text: string, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));
   };
-  const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+  const handleError = (_error: any, input: any) => {
+    setErrors((prevState: any) => ({...prevState, [input]: _error}));
   };
 
   return (
@@ -165,9 +165,7 @@ const EditUserProfile = ({}) => {
               style={{
                 fontFamily: fonts.regular,
                 fontSize: 14,
-
                 marginTop: verticalScale(7),
-
                 color: '#4F4F4F',
               }}>
               Male
@@ -195,12 +193,9 @@ const EditUserProfile = ({}) => {
           </View>
         </View>
 
-        <View
-          style={{
-            marginTop: 20,
-          }}>
+        <View style={{marginTop: 20}}>
           <Input
-            onChangeText={text => handleOnchange(text, 'location')}
+            onChangeText={(text: string) => handleOnchange(text, 'location')}
             onFocus={() => handleError(null, 'location')}
             label="Location"
             placeholder="Murshid Bazar, Deira, P.O Box 40512"

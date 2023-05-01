@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ScrollView,
   Keyboard,
@@ -11,10 +10,13 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
-import {RadioButton} from 'react-native-paper';
+import {Dialog, Portal, RadioButton} from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
 import {useDispatch, useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
+
+// icons
+import Feather from 'react-native-vector-icons/Feather';
 
 // helpers
 import {metrics, colors, fonts} from '../../theme';
@@ -28,7 +30,7 @@ import ProFile from '../../components/ProFile';
 
 // redux
 import {RootState} from '../../redux';
-import {registerIndivisual} from '../../redux/action/authAction';
+import {registerIndivisual} from '../../redux/actions/authAction';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/native';
 
@@ -39,13 +41,18 @@ type InputProp = {
   email: string;
   mobileNo: string;
   location: string;
-  countryCodeId: string;
+  countryCodeId: number;
+  gender: number;
+  password: string;
+  confirmPassword: string;
 };
 
 const IndivisualRegister = ({}) => {
   const navigation = useNavigation();
 
-  const {loading, success} = useSelector((state: RootState) => state.auth);
+  const {loading, success, userToken} = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   const dispatch = useDispatch();
 
@@ -62,7 +69,10 @@ const IndivisualRegister = ({}) => {
     email: '',
     mobileNo: '',
     location: '',
-    countryCodeId: '',
+    countryCodeId: 1,
+    gender: 1,
+    password: '',
+    confirmPassword: '',
   });
 
   const [image, setImage] = useState<string>('');
@@ -99,20 +109,17 @@ const IndivisualRegister = ({}) => {
   const register = () => {
     const field = {
       ...inputs,
-      gender: 1,
-      profileImage: '',
-      password: 'Abcd@1234',
-      confirmPassword: 'Abcd@1234',
+      profileImage: image,
     };
 
     dispatch(registerIndivisual(field));
   };
 
   useEffect(() => {
-    if (success) {
-      navigation.navigate('');
+    if (userToken) {
+      navigation.navigate('DrawerNavigation');
     }
-  }, [success]);
+  }, [userToken]);
 
   const handleOnchange = (text: any, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));
@@ -142,9 +149,30 @@ const IndivisualRegister = ({}) => {
     });
   };
 
+  const active: boolean =
+    inputs.fullName &&
+    inputs.email &&
+    inputs.mobileNo &&
+    inputs.password &&
+    inputs.confirmPassword &&
+    inputs.location
+      ? true
+      : false;
+
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      {loading && <Loader />}
+      <Portal>
+        <Dialog visible={loading}>
+          <Dialog.Content
+            style={{
+              height: 200,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Loader />
+          </Dialog.Content>
+        </Dialog>
+      </Portal>
 
       <ScrollView contentContainerStyle={{padding: 10}}>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
@@ -178,11 +206,8 @@ const IndivisualRegister = ({}) => {
         <View style={{flexDirection: 'row', top: 36}}>
           <TouchableOpacity
             onPress={() => navigation.navigate('ThroughRegister')}
-            style={{position: 'absolute', top: 8}}>
-            <Image
-              style={styles.tinyLogo}
-              source={require('../../assets/images/backarrow.png')}
-            />
+            style={{top: 8}}>
+            <Feather name="arrow-left" size={20} />
           </TouchableOpacity>
           <Text
             style={{
@@ -203,7 +228,6 @@ const IndivisualRegister = ({}) => {
             fontFamily: fonts.regular,
             width: 300,
             top: 50,
-            lineHeight: moderateScale(17),
             alignItems: 'center',
             color: '#000F1A',
           }}>
@@ -254,7 +278,6 @@ const IndivisualRegister = ({}) => {
           <View>
             <Input
               onFocus={() => handleError(null, 'phone')}
-              // iconName="phone-outline"
               label="Mobile Number"
               placeholder="eg. 895204300"
               error={errors.phone}
@@ -284,56 +307,53 @@ const IndivisualRegister = ({}) => {
               Gender
             </Text>
 
-            <View style={{flexDirection: 'row', bottom: 10, right: 5}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <RadioButton
                 value="first"
                 color="#0E184D"
                 status={checked === 'first' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('first')}
+                onPress={() => {
+                  setChecked('first');
+                  setInputs(prevState => ({...prevState, gender: 1}));
+                }}
               />
               <Text
                 style={{
                   fontFamily: fonts.regular,
-                  fontSize: 14,
-                  lineHeight: 20,
-                  display: 'flex',
-                  marginTop: verticalScale(7),
-                  alignItems: 'center',
                   color: '#4F4F4F',
                 }}>
                 Male
               </Text>
             </View>
 
-            <View style={{flexDirection: 'row', bottom: 10, right: 5}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <RadioButton
                 value="second"
                 color="#0E184D"
                 status={checked === 'second' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('second')}
+                onPress={() => {
+                  setChecked('second');
+                  setInputs(prevState => ({...prevState, gender: 2}));
+                }}
               />
-              <Text
-                style={{
-                  marginTop: verticalScale(7),
-                }}>
-                Female
-              </Text>
+              <Text style={{fontFamily: fonts.regular}}>Female</Text>
             </View>
           </View>
 
-          <Input
-            onChangeText={(text: any) => handleOnchange(text, 'location')}
-            onFocus={() => handleError(null, 'location')}
-            label="Location"
-            placeholder="Enter Location"
-            error={errors.location}
-            location
-          />
+          <View style={{marginTop: 10}}>
+            <Input
+              onChangeText={(text: any) => handleOnchange(text, 'location')}
+              onFocus={() => handleError(null, 'location')}
+              label="Location"
+              placeholder="Enter Location"
+              error={errors.location}
+              location
+            />
+          </View>
           <Text style={{fontFamily: fonts.regular}}>Country</Text>
           <View
             style={{
               width: '100%',
-
               height: 50,
               borderWidth: 1,
               borderColor: '#BDBDBD',
@@ -350,58 +370,56 @@ const IndivisualRegister = ({}) => {
               placeholderStyle={{}}
               searchPlaceholder="Search..."
               value={countryValue}
+              onChange={item => {
+                setInputs(prevState => ({
+                  ...prevState,
+                  countryCodeId: Number(item.value),
+                }));
+              }}
+              onChangeText={() => {
+                //console.log(text);
+              }}
             />
           </View>
 
-          <View style={{flexDirection: 'row', marginTop: moderateScale(10)}}>
-            <View style={{marginTop: moderateScale(-5)}}>
-              <CheckBox
-                style={styles.checkbox}
-                disabled={false}
-                onCheckColor="#14226D"
-                value={toggleCheckBox}
-                onValueChange={newValue => setToggleCheckBox(newValue)}
-              />
+          <View
+            style={{flexDirection: 'row', marginTop: 10, alignItems: 'center'}}>
+            <CheckBox
+              style={styles.checkbox}
+              disabled={false}
+              onCheckColor="#14226D"
+              value={toggleCheckBox}
+              onValueChange={newValue => setToggleCheckBox(newValue)}
+            />
+            <View style={{marginLeft: 10}}>
+              <Text style={{fontFamily: fonts.regular}}>
+                I have accepted the{' '}
+                <Text
+                  onPress={() => {
+                    navigation.navigate('RegisterScreen');
+                  }}
+                  style={{
+                    color: colors.blue,
+                    fontFamily: fonts.bold,
+                    left: 2,
+                  }}>
+                  Terms and Conditions.
+                </Text>
+              </Text>
             </View>
-            <Text
-              style={{
-                fontSize: moderateScale(14),
-                fontFamily: fonts.regular,
-              }}>
-              I have accepted the
-            </Text>
-            <Text
-              onPress={() => {
-                navigation.navigate('RegisterScreen');
-              }}
-              style={{
-                color: '#0E184D',
-                fontFamily: fonts.bold,
-                fontSize: moderateScale(14),
-
-                left: 2,
-              }}>
-              Terms and Conditions.
-            </Text>
           </View>
 
           <TouchableOpacity
-            onPress={register}
+            onPress={validate}
+            disabled={!active}
             style={{
               width: '85%',
               height: 50,
               marginTop: verticalScale(20),
-              // marginTop: moderateScale(150),
-              marginLeft: '7.5%',
-              backgroundColor:
-                inputs.fullName &&
-                inputs.email &&
-                inputs.mobileNo &&
-                inputs.location
-                  ? '#0E184D'
-                  : '#E0E0E0',
+              backgroundColor: active ? '#0E184D' : '#E0E0E0',
               justifyContent: 'center',
               borderRadius: 8,
+              alignSelf: 'center',
             }}>
             <Text
               style={{

@@ -6,4 +6,6 @@ export default {
   red: 'red',
   darkBlue: 'blue',
   light: 'grey',
+  blue: '#0E184D',
+  grey: 'grey',
 };

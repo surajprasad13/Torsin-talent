@@ -11,7 +11,7 @@ import Payment from '../screens/drawerScreens/Payment';
 import SwitchAccount from '../screens/drawerScreens/SwitchAccount';
 import Terms from '../screens/drawerScreens/Terms';
 
-import Tabs from './BottomNavigator';
+import BottomNavigation from './BottomNavigator';
 
 import {DrawerScreenParamaList} from './RouteType';
 
@@ -41,7 +41,11 @@ const DrawerNavigation = () => {
           color: '#000C14',
         },
       }}>
-      <Drawer.Screen name="Notifications" component={Tabs} options={{}} />
+      <Drawer.Screen
+        name="Notifications"
+        component={BottomNavigation}
+        options={{}}
+      />
       <Drawer.Screen name="Proposals" component={Proposals} options={{}} />
       <Drawer.Screen name="MyRatings" component={MyRating} options={{}} />
       <Drawer.Screen name="MyServices" component={MyService} options={{}} />

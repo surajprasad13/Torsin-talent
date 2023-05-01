@@ -8,8 +8,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 interface InputValueProps {
   label: string;
   error: any;
-  password: string;
-  cpassword: string;
+  password: boolean;
+  cpassword: boolean;
   onFocus: () => void;
 }
 
@@ -19,7 +19,7 @@ const Input = ({
   password,
   cpassword,
   onFocus = () => {},
-  ...props
+  ...rest
 }: InputValueProps) => {
   const [hidePassword, setHidePassword] = useState<boolean>(!!password);
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -51,7 +51,7 @@ const Input = ({
           secureTextEntry={!!hidePassword}
           style={{color: '#000000', flex: 1}}
           placeholderTextColor="#828282"
-          {...props}
+          {...rest}
         />
         {password && (
           <Icon

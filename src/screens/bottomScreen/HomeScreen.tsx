@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   Dimensions,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Searchbar} from 'react-native-paper';
@@ -14,135 +15,80 @@ import {Searchbar} from 'react-native-paper';
 // components
 import ImageSlider from '../../components/ImageSlider';
 import CircleProgress from '../../components/CircleProgress';
+import {colors, fonts} from '../../theme';
 
 const {} = Dimensions.get('window');
 
 const HomeScreen = ({}) => {
   const navigation = useNavigation();
-
   const [searchQuery, setSearchQuery] = useState('');
-
   const onChangeSearch = (query: any) => setSearchQuery(query);
 
   return (
-    <View style={{flex: 1, backgroundColor: '#F9FBFF'}}>
-      <View
-        style={{
-          justifyContent: 'space-evenly',
-          top: 30,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        <View>
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollView style={{flex: 1}}>
+        <View
+          style={{
+            justifyContent: 'space-evenly',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
           <TouchableOpacity
             onPress={() => {
-              //@ts-expect-error
-              navigation.openDrawer();
+              // navigation.openDrawer();
             }}>
             <Image
               style={styles.tinyLogo}
               source={require('../../assets/images/Sort.png')}
             />
           </TouchableOpacity>
+          <Searchbar
+            placeholder="Search Jobs"
+            onChangeText={onChangeSearch}
+            value={searchQuery}
+            placeholderTextColor="#BDBDBD"
+            iconColor="#333333"
+            style={{
+              backgroundColor: '#ffffff',
+              borderWidth: 1,
+              width: '75%',
+              height: 44,
+              borderRadius: 30,
+              borderColor: '#BDBDBD',
+            }}
+            inputStyle={styles.searchInput}
+          />
         </View>
-        <Searchbar
-          placeholder="Search Jobs"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-          placeholderTextColor="#BDBDBD"
-          iconColor="#333333"
-          style={{
-            backgroundColor: '#ffffff',
-            borderWidth: 1,
-            width: '75%',
-            height: 44,
-            borderRadius: 30,
-            borderColor: '#BDBDBD',
-          }}
-          inputStyle={styles.searchInput}
-        />
-      </View>
 
-      <ScrollView
-        style={{
-          flex: 1,
-          top: 30,
-          backgroundColor: '#F9FBFF',
-        }}>
         <View
           style={{
-            backgroundColor: '#ffffff',
-            elevation: 2,
-            width: '90%',
-            height: 146,
-            marginLeft: '5%',
-            marginTop: 10,
-            borderRadius: 19,
+            margin: 10,
+            borderRadius: 15,
+            backgroundColor: colors.white,
+            flexDirection: 'row',
+            padding: 10,
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-            }}>
-            <View
-              style={{
-                top: 21,
-                left: 10,
-              }}>
-              <CircleProgress />
-            </View>
-            <Text
-              style={{
-                width: 158,
-                height: 20,
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '600',
-                fontSize: 16,
-                top: 22,
-                left: 116,
-                position: 'absolute',
-                lineHeight: 20,
-                display: 'flex',
-                alignItems: 'center',
-                color: '#1E202B',
-              }}>
+          <CircleProgress />
+          <View style={{width: '70%', marginLeft: 10}}>
+            <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
               John Smith’s Profile
             </Text>
-          </View>
-
-          <Text
-            style={{
-              width: 175,
-              height: 45,
-              fontFamily: 'Inter',
-              fontSize: 10,
-              top: 49,
-              left: 116,
-              opacity: 0.8,
-              position: 'absolute',
-              lineHeight: 15,
-              color: '#1E202B',
-            }}>
-            Complete your profile. Set your profile completely so that recruiter
-            will find your profile easily
-          </Text>
-
-          <TouchableOpacity>
             <Text
               style={{
-                left: 116,
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '500',
-                fontSize: 12,
-                top: 15,
-                display: 'flex',
-                alignItems: 'center',
-                color: '#14226D',
+                fontFamily: fonts.regular,
+                opacity: 0.8,
+                color: '#1E202B',
               }}>
-              5 Details Needed to add.....
+              Complete your profile. Set your profile completely so that
+              recruiter will find your profile easily
             </Text>
-          </TouchableOpacity>
+
+            <TouchableOpacity>
+              <Text style={{fontFamily: fonts.medium, color: '#14226D'}}>
+                5 Details Needed to add.....
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={{top: 8}}>
@@ -412,10 +358,7 @@ const HomeScreen = ({}) => {
               justifyContent: 'space-evenly',
               top: 20,
             }}>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}>
+            <View style={{flexDirection: 'row'}}>
               <Image
                 source={require('../../assets/images/Subtract.png')}
                 style={{
@@ -432,9 +375,7 @@ const HomeScreen = ({}) => {
               }}>
               <Image
                 source={require('../../assets/images/Time_light.png')}
-                style={{
-                  right: 2,
-                }}
+                style={{right: 2}}
               />
               <Text style={styles.innerText}>3d ago</Text>
             </View>
@@ -445,9 +386,7 @@ const HomeScreen = ({}) => {
               }}>
               <Image
                 source={require('../../assets/images/User_light.png')}
-                style={{
-                  right: 2,
-                }}
+                style={{right: 2}}
               />
               <Text style={styles.innerText}>James Cameroon</Text>
             </View>
@@ -588,7 +527,7 @@ const HomeScreen = ({}) => {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -597,15 +536,11 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   searchInput: {
     color: '#454545',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: -5,
   },
   tinyLogo: {
     width: 37,
     height: 37,
   },
-
   container: {
     flex: 1,
   },

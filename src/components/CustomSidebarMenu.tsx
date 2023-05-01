@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+} from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -10,105 +17,95 @@ import {useNavigation} from '@react-navigation/native';
 // components
 import Logout from './Logout';
 import CircleProgress from './CircleProgress';
+import {fonts} from '../theme';
 
 const CustomSidebarMenu = (props: any) => {
   const navigation = useNavigation();
   return (
-    <View style={stylesSidebar.sideMenuContainer}>
-      <View>
-        <View
-          style={{
-            flexDirection: 'row',
-          }}>
+    <SafeAreaView style={{flex: 1}}>
+      <View style={stylesSidebar.sideMenuContainer}>
+        <View>
           <View
             style={{
-              top: 20,
-              left: 10,
+              flexDirection: 'row',
             }}>
-            <CircleProgress />
-            <Text
+            <View
               style={{
-                bottom: 65,
-                left: 119,
-                fontFamily: 'Inter',
-                fontWeight: '600',
-                fontSize: 16,
-                lineHeight: 20,
-                display: 'flex',
-                alignItems: 'center',
-                color: '#1E202B',
+                top: 20,
+                left: 10,
               }}>
-              John Smith
-            </Text>
-
-            <TouchableOpacity
-              onPress={() => {
-                //@ts-expect-error
-                navigation.navigate('EditProfile');
-              }}>
+              <CircleProgress />
               <Text
                 style={{
                   bottom: 65,
                   left: 119,
-                  height: 20,
-                  fontFamily: 'Inter',
-                  fontWeight: '500',
-                  fontSize: 14,
-                  lineHeight: 20,
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: '#14226D',
+                  fontFamily: fonts.semibold,
+                  fontSize: 16,
+                  color: '#1E202B',
                 }}>
-                Update profile
+                John Smith
               </Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('EditProfile');
+                }}>
+                <Text
+                  style={{
+                    bottom: 65,
+                    left: 119,
+                    fontFamily: fonts.medium,
+                    color: '#14226D',
+                  }}>
+                  Update profile
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('EditProfile');
+              }}
+              style={{
+                marginTop: 60,
+                position: 'absolute',
+                right: 20,
+              }}>
+              <Image
+                source={require('../assets/images/forward.png')}
+                style={{
+                  width: 6,
+                  height: 11,
+                }}
+              />
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            onPress={() => {
-              //@ts-expect-error
-              navigation.navigate('EditProfile');
-            }}
-            style={{
-              marginTop: 60,
-              position: 'absolute',
-              right: 20,
-            }}>
-            <Image
-              source={require('../assets/images/forward.png')}
-              style={{
-                width: 6,
-                height: 11,
-              }}
-            />
-          </TouchableOpacity>
         </View>
-      </View>
-      <View style={stylesSidebar.profileHeaderLine} />
+        <View style={stylesSidebar.profileHeaderLine} />
 
-      <DrawerContentScrollView {...props}>
-        <DrawerItemList {...props} />
-        <DrawerItem
-          onPress={() => {}}
-          label={({}) => (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                bottom: 10,
-                borderRadius: 10,
-              }}></View>
-          )}
-        />
-      </DrawerContentScrollView>
-      <Logout />
-    </View>
+        <DrawerContentScrollView {...props}>
+          <DrawerItemList {...props} />
+          <DrawerItem
+            onPress={() => {}}
+            label={({}) => (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  bottom: 10,
+                  borderRadius: 10,
+                }}></View>
+            )}
+          />
+        </DrawerContentScrollView>
+        <Logout />
+      </View>
+    </SafeAreaView>
   );
 };
 
 const stylesSidebar = StyleSheet.create({
   sideMenuContainer: {
-    width: 290,
     height: '100%',
     borderTopRightRadius: 10,
     backgroundColor: '#ffffff',
@@ -139,7 +136,7 @@ const stylesSidebar = StyleSheet.create({
     height: 9,
     backgroundColor: '#f9fbff',
     marginTop: 15,
-    width: 290,
+    width: '100%',
   },
 });
 

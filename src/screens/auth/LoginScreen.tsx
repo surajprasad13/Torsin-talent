@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   TextInputProps,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {Dialog, Portal} from 'react-native-paper';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -21,18 +22,22 @@ import Input from '../../components/Input';
 import Loader from '../../components/Loader';
 
 import {useAppDispatch, useAppSelector} from '../../hooks';
+import {userLogin} from '../../redux/actions/authAction';
+import {loginValue} from '../../redux/reducers/authSlice';
 
 const {moderateScale, verticalScale} = metrics;
 
 const LoginScreen = ({}) => {
   const navigation = useNavigation();
 
-  const {loading, error, success} = useAppSelector(state => state.auth);
+  const {loading, error, success, userToken} = useAppSelector(
+    state => state.auth,
+  );
 
   const dispatch = useAppDispatch();
 
   const [inputs, setInputs] = useState({
-    gmail: '',
+    email: '',
     password: '',
   });
 
@@ -41,7 +46,7 @@ const LoginScreen = ({}) => {
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-    if (!inputs.gmail) {
+    if (!inputs.email) {
       handleError('Please enter email Id', 'gmail');
       isValid = false;
     }
@@ -57,24 +62,39 @@ const LoginScreen = ({}) => {
     }
   };
 
-  const register = async () => {
-    const article = {
-      mobileNo: inputs.gmail,
-      password: inputs.password,
-    };
+  const register = () => {
+    dispatch(userLogin(inputs));
   };
 
   const handleOnchange = (text: any, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));
   };
 
-  const handleError = (error: any, input: any) => {
-    setErrors((prevState: any) => ({...prevState, [input]: error}));
+  const handleError = (_error: any, input: any) => {
+    setErrors((prevState: any) => ({...prevState, [input]: _error}));
   };
+
+  useEffect(() => {
+    if (userToken) {
+      navigation.navigate('DrawerNavigation');
+    }
+  }, [userToken]);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      {loading && <Loader />}
+      <Portal>
+        <Dialog visible={loading}>
+          <Dialog.Content
+            style={{
+              height: 200,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Loader />
+          </Dialog.Content>
+        </Dialog>
+      </Portal>
+
       <TouchableOpacity
         onPress={() => navigation.navigate('OnboardingScreen')}
         style={{padding: 10}}>
@@ -87,7 +107,7 @@ const LoginScreen = ({}) => {
               style={{
                 fontFamily: fonts.bold,
                 fontSize: moderateScale(32),
-                color: '#0E184D',
+                color: colors.blue,
               }}>
               Login
             </Text>
@@ -114,11 +134,26 @@ const LoginScreen = ({}) => {
           </Text>
 
           <View style={{marginVertical: 10, marginTop: 55}}>
+            {!!error && (
+              <Text
+                style={{
+                  marginTop: 20,
+                  textAlign: 'center',
+                  color: 'red',
+                  fontFamily: fonts.medium,
+                }}>
+                {error}
+              </Text>
+            )}
+
             <Input
-              keyboardType="default"
-              onChangeText={(text: TextInputProps) =>
-                handleOnchange(text, 'gmail')
-              }
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              onChangeText={(text: TextInputProps) => {
+                handleOnchange(text, 'email');
+                dispatch(loginValue());
+              }}
               onFocus={() => handleError(null, 'gmail')}
               label="Email"
               placeholder="torsin@gmail.com"
@@ -126,9 +161,10 @@ const LoginScreen = ({}) => {
             />
 
             <Input
-              onChangeText={(text: TextInputProps) =>
-                handleOnchange(text, 'password')
-              }
+              onChangeText={(text: string) => {
+                handleOnchange(text, 'password');
+                dispatch(loginValue());
+              }}
               onFocus={() => handleError(null, 'password')}
               label="Password"
               placeholder="********"
@@ -141,7 +177,6 @@ const LoginScreen = ({}) => {
         <TouchableOpacity
           style={{alignSelf: 'flex-end'}}
           onPress={() => {
-            //@ts-expect-error
             navigation.navigate('LostPassword');
           }}>
           <Text
@@ -155,12 +190,12 @@ const LoginScreen = ({}) => {
 
         <TouchableOpacity
           onPress={validate}
-          disabled={inputs.gmail && inputs.password ? false : true}
+          disabled={inputs.email && inputs.password ? false : true}
           style={[
             styles.buttonContainer,
             {
               backgroundColor:
-                inputs.gmail && inputs.password ? '#0E184D' : '#E0E0E0',
+                inputs.email && inputs.password ? '#0E184D' : '#E0E0E0',
             },
           ]}>
           <Text
@@ -177,13 +212,12 @@ const LoginScreen = ({}) => {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: moderateScale(16),
             justifyContent: 'center',
+            marginTop: 10,
           }}>
           <Text
             style={{
               fontFamily: fonts.regular,
-              fontSize: moderateScale(14),
               color: '#000000',
             }}>
             Don’t have an account?
@@ -193,7 +227,6 @@ const LoginScreen = ({}) => {
             style={{
               color: '#0E184D',
               fontFamily: fonts.bold,
-              fontSize: moderateScale(14),
               left: 2,
             }}>
             Create account
@@ -231,7 +264,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '85%',
     height: 50,
-    marginTop: verticalScale(249),
+    marginTop: verticalScale(200),
     justifyContent: 'center',
     borderRadius: 8,
     alignSelf: 'center',

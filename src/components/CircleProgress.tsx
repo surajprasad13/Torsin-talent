@@ -11,7 +11,7 @@ const CircleProgress = () => {
         fill={80}
         tintColor="#14226D"
         rotation={180}
-        onAnimationComplete={() => console.log('onAnimationComplete')}
+        onAnimationComplete={() => {}}
         backgroundColor="#ffffff"
       />
       <Image
