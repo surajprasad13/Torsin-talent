@@ -114,20 +114,24 @@ const Chat = ({}) => {
             fontFamily: fonts.medium,
             color: '#000C14',
           }}>
-          Add Service
+          Skills & Services
         </Text>
         <View />
       </View>
       <ScrollView>
-        <View style={styles.textContainer}>
+      <View style = {{flexDirection: 'row', justifyContent: 'space-between', padding: 20}}>
           <Text
             style={{
               fontFamily: fonts.semibold,
               color: colors.black,
-              fontSize: 16,
             }}>
-            Add services
+            Skills
           </Text>
+          <TouchableOpacity>
+            <Text style = {{color: colors.primary,}}>Add new skills </Text>
+          </TouchableOpacity>
+          </View>
+        <View style={styles.textContainer}>
           <Text
             style={{
               fontFamily: fonts.regular,

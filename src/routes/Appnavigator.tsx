@@ -30,6 +30,7 @@ import {RootStackParamList} from './RouteType';
 import {useAppSelector} from '../hooks';
 import CreatePassword from '../screens/auth/CreatePassword';
 import AddService from '../screens/setting/AddService';
+import ServiceSkill from '../screens/setting/ServiceSkill';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -139,6 +140,12 @@ export default function Appnavigator({}) {
           <Stack.Screen
             name="AddService"
             component={AddService}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="ServiceSkill"
+            component={ServiceSkill}
             options={{headerShown: false}}
           />
 

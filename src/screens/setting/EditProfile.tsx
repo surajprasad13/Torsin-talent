@@ -76,7 +76,7 @@ const EditProfile = ({}) => {
           style={styles.cardContainer}
           onPress={() => {
             //@ts-expect-error
-            navigation.navigate('AddService');
+            navigation.navigate('ServiceSkill');
           }}>
           <View style={styles.iconContainer}>
             <Feather name="settings" size={20} />

@@ -30,6 +30,7 @@ export type RootStackParamList = {
   BottomScreens: undefined;
   CreatePassword: {item: string} | undefined;
   AddService: undefined;
+  ServiceSkill: undefined;
 };
 
 export type AuthScreenParamList = {
