@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {Dialog, Portal, RadioButton} from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
 
 // icons
@@ -30,9 +30,10 @@ import ProFile from '../../components/ProFile';
 
 // redux
 import {RootState} from '../../redux';
-import {registerIndivisual} from '../../redux/actions/authAction';
+import {} from '../../redux/actions/authAction';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/native';
+import {CustomButton} from '../../components';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
@@ -50,11 +51,7 @@ type InputProp = {
 const IndivisualRegister = ({}) => {
   const navigation = useNavigation();
 
-  const {loading, success, userToken} = useSelector(
-    (state: RootState) => state.auth,
-  );
-
-  const dispatch = useDispatch();
+  const {loading} = useSelector((state: RootState) => state.auth);
 
   const data = [
     {label: 'India', value: '1'},
@@ -108,18 +105,17 @@ const IndivisualRegister = ({}) => {
 
   const register = () => {
     const field = {
-      ...inputs,
-      profileImage: image,
+      screen: 'indivisual',
+      data: {
+        ...inputs,
+        profileImage: image,
+      },
     };
 
-    dispatch(registerIndivisual(field));
+    navigation.navigate('CreatePassword', {
+      item: JSON.stringify(field),
+    });
   };
-
-  useEffect(() => {
-    if (userToken) {
-      navigation.navigate('DrawerNavigation');
-    }
-  }, [userToken]);
 
   const handleOnchange = (text: any, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));
@@ -150,12 +146,7 @@ const IndivisualRegister = ({}) => {
   };
 
   const active: boolean =
-    inputs.fullName &&
-    inputs.email &&
-    inputs.mobileNo &&
-    inputs.password &&
-    inputs.confirmPassword &&
-    inputs.location
+    inputs.fullName && inputs.email && inputs.mobileNo && inputs.location
       ? true
       : false;
 
@@ -214,7 +205,6 @@ const IndivisualRegister = ({}) => {
               fontFamily: fonts.bold,
               marginLeft: 30,
               fontSize: moderateScale(32),
-              lineHeight: moderateScale(35),
               color: '#0E184D',
               textAlign: 'center',
               flex: 1,
@@ -254,16 +244,19 @@ const IndivisualRegister = ({}) => {
             onFocus={() => handleError(null, 'fullname')}
             placeholder="John smith"
             error={errors.fullname}
-            onChangeText={(text: any) => handleOnchange(text, 'fullname')}
+            onChangeText={(text: any) => handleOnchange(text, 'fullName')}
           />
 
           <View>
             <Input
-              onChangeText={text => handleOnchange(text, 'email')}
+              onChangeText={(text: string) => handleOnchange(text, 'email')}
               onFocus={() => handleError(null, 'email')}
               label="Email"
+              keyboardType="email-address"
               placeholder="john@gmail.com"
               error={errors.email}
+              autoComplete="email"
+              autoCapitalize="none"
             />
             <Pressable
               style={{
@@ -281,8 +274,9 @@ const IndivisualRegister = ({}) => {
               label="Mobile Number"
               placeholder="eg. 895204300"
               error={errors.phone}
-              onChangeText={(text: any) => handleOnchange(text, 'phone')}
+              onChangeText={(text: any) => handleOnchange(text, 'mobileNo')}
               keyboardType="phone-pad"
+              maxLength={13}
             />
             <Pressable
               style={{
@@ -317,11 +311,7 @@ const IndivisualRegister = ({}) => {
                   setInputs(prevState => ({...prevState, gender: 1}));
                 }}
               />
-              <Text
-                style={{
-                  fontFamily: fonts.regular,
-                  color: '#4F4F4F',
-                }}>
+              <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
                 Male
               </Text>
             </View>
@@ -347,7 +337,6 @@ const IndivisualRegister = ({}) => {
               label="Location"
               placeholder="Enter Location"
               error={errors.location}
-              location
             />
           </View>
           <Text style={{fontFamily: fonts.regular}}>Country</Text>
@@ -371,6 +360,7 @@ const IndivisualRegister = ({}) => {
               searchPlaceholder="Search..."
               value={countryValue}
               onChange={item => {
+                setIsCountryValue(item.value);
                 setInputs(prevState => ({
                   ...prevState,
                   countryCodeId: Number(item.value),
@@ -385,6 +375,7 @@ const IndivisualRegister = ({}) => {
           <View
             style={{flexDirection: 'row', marginTop: 10, alignItems: 'center'}}>
             <CheckBox
+              boxType="square"
               style={styles.checkbox}
               disabled={false}
               onCheckColor="#14226D"
@@ -409,27 +400,12 @@ const IndivisualRegister = ({}) => {
             </View>
           </View>
 
-          <TouchableOpacity
+          <CustomButton
+            title="Next"
+            disabled={active}
             onPress={validate}
-            disabled={!active}
-            style={{
-              width: '85%',
-              height: 50,
-              marginTop: verticalScale(20),
-              backgroundColor: active ? '#0E184D' : '#E0E0E0',
-              justifyContent: 'center',
-              borderRadius: 8,
-              alignSelf: 'center',
-            }}>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontFamily: fonts.bold,
-                fontSize: moderateScale(16),
-              }}>
-              Next
-            </Text>
-          </TouchableOpacity>
+            style={{marginTop: 20}}
+          />
 
           <View
             style={{

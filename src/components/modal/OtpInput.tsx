@@ -9,7 +9,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 //helpers
-import {metrics} from '../../theme';
+import {fonts, metrics} from '../../theme';
 import styles from './Styles';
 //
 const {moderateScale, horizontalScale, verticalScale} = metrics;
@@ -66,9 +66,7 @@ const OtpInput = ({}) => {
 
           <Text
             style={{
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
+              fontFamily: fonts.regular,
               marginTop: 10,
               width: horizontalScale(300),
               fontSize: moderateScale(14),

@@ -18,17 +18,17 @@ import WalkthroughScreen from '../screens/WalkthroughScreen';
 import ThroughRegister from '../screens/ThroughRegister';
 import IndivisualRegister from '../screens/auth/IndivisualRegister';
 import BusinessRegister from '../screens/auth/BusinessRegister';
-import FirstStepBusinessRegister from '../screens/auth/FirstStepBusinessRegister';
 import BusinessPassword from '../screens/auth/BusinessPassword';
 import BusinessStart from '../screens/BusinessStart';
-import EditProfile from '../screens/EditProfile';
-import EditUserProfile from '../screens/EditUserProfile';
+import EditProfile from '../screens/setting/EditProfile';
+import EditUserProfile from '../screens/setting/EditUserProfile';
 import WithoutSignupHome from '../screens/WithoutSignupHome';
 
 import DrawerNavigation from './DrawerNavigator';
 import {RootStackParamList} from './RouteType';
 
 import {useAppSelector} from '../hooks';
+import CreatePassword from '../screens/auth/CreatePassword';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -110,15 +110,17 @@ export default function Appnavigator({}) {
                 options={{headerShown: false}}
               />
 
+              {/*  */}
               <Stack.Screen
-                name="BusinessRegister"
-                component={BusinessRegister}
+                name="CreatePassword"
+                component={CreatePassword}
+                initialParams={{item: ''}}
                 options={{headerShown: false}}
               />
 
               <Stack.Screen
-                name="FirstStepBusinessRegister"
-                component={FirstStepBusinessRegister}
+                name="BusinessRegister"
+                component={BusinessRegister}
                 options={{headerShown: false}}
               />
 

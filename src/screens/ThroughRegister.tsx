@@ -22,7 +22,7 @@ const ThroughRegister = ({}) => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('FirstStepBusinessRegister')}
+        onPress={() => navigation.navigate('BusinessRegister')}
         style={styles.buttonContainer}>
         <Text style={styles.text}>Business</Text>
       </TouchableOpacity>

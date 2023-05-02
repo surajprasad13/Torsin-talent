@@ -9,7 +9,7 @@ import {
   Animated,
 } from 'react-native';
 
-import {metrics} from '../../theme';
+import {colors, fonts, metrics} from '../../theme';
 
 const {moderateScale} = metrics;
 
@@ -31,13 +31,15 @@ const CELL_COUNT = 6;
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = React.useState(visible);
   const scaleValue = React.useRef(new Animated.Value(0)).current;
+
   React.useEffect(() => {
     toggleModal();
   }, [visible]);
+
   const toggleModal = () => {
     if (visible) {
       setShowModal(true);
-      Animated.spring(scaleValue, {
+      Animated.timing(scaleValue, {
         toValue: 1,
         duration: 300,
         useNativeDriver: true,
@@ -65,13 +67,15 @@ const ModalPoup = ({visible, children}) => {
 
 const PhoneModal = () => {
   const [value, setValue] = useState('');
+
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
+
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
 
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState<boolean>(false);
 
   const [value1, setValue1] = useState('');
 
@@ -106,9 +110,7 @@ const PhoneModal = () => {
 
         <Text
           style={{
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '700',
+            fontFamily: fonts.bold,
             fontSize: 18,
             lineHeight: 20,
             top: -30,
@@ -122,15 +124,13 @@ const PhoneModal = () => {
 
         <Text
           style={{
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '400',
+            fontFamily: fonts.regular,
             fontSize: 14,
             lineHeight: 20,
             display: 'flex',
             alignItems: 'center',
             textAlign: 'center',
-            color: '#000000',
+            color: colors.black,
             top: -20,
           }}>
           Please enter the verification code send to your Phone.
@@ -146,7 +146,6 @@ const PhoneModal = () => {
           textContentType="oneTimeCode"
           renderCell={({index, symbol, isFocused}) => (
             <View
-              // Make sure that you pass onLayout={getCellOnLayoutHandler(index)} prop to root component of "Cell"
               onLayout={getCellOnLayoutHandler(index)}
               key={index}
               style={[isFocused && styles.focusCell]}>
@@ -165,14 +164,11 @@ const PhoneModal = () => {
           }}>
           <Text
             style={{
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
+              fontFamily: fonts.regular,
               fontSize: moderateScale(14),
-              lineHeight: 22,
-              color: '#000000',
+              color: colors.black,
             }}>
-            I didn't receive code?
+            I didn't receive code?{' '}
           </Text>
           <Text
             onPress={() => {
@@ -181,27 +177,18 @@ const PhoneModal = () => {
             }}
             style={{
               color: '#27AE60',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
+              fontFamily: fonts.regular,
               fontSize: moderateScale(14),
-              lineHeight: 22,
             }}>
             Resend Code
           </Text>
         </View>
       </ModalPoup>
-      <TouchableOpacity onPress={() => {}} value={value1}>
+      <TouchableOpacity onPress={() => setVisible(!visible)}>
         <Text
           style={{
             color: value1 ? '#6180F4' : 'gray',
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '400',
-            fontSize: 14,
-            lineHeight: 20,
-            display: 'flex',
-            alignItems: 'center',
+            fontFamily: fonts.regular,
           }}>
           Verify
         </Text>
@@ -231,11 +218,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
-
   codeFiledRoot: {
     height: CELL_SIZE,
     marginTop: 10,
-
     justifyContent: 'center',
   },
   cell: {
@@ -251,7 +236,6 @@ const styles = StyleSheet.create({
     color: '#0C0900',
     backgroundColor: '#fff',
     top: -20,
-
     // IOS
     shadowColor: '#000',
     shadowOffset: {
@@ -260,7 +244,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
-
     // Android
     elevation: 1,
   },

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {metrics} from '../../theme';
+import {fonts, metrics} from '../../theme';
 
 export const CELL_SIZE = 49;
 export const CELL_BORDER_RADIUS = 4;
@@ -11,7 +11,6 @@ const Styles = StyleSheet.create({
   codeFiledRoot: {
     height: CELL_SIZE,
     marginTop: 10,
-
     justifyContent: 'center',
   },
   cell: {
@@ -94,9 +93,8 @@ const Styles = StyleSheet.create({
   input: {
     color: '#000000',
     fontSize: metrics.moderateScale(14),
-    fontWeight: '400',
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
+
+    fontFamily: fonts.regular,
   },
 
   tinyLogo: {

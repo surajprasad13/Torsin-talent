@@ -18,7 +18,6 @@ export type RootStackParamList = {
   ThroughRegister: undefined;
   IndivisualRegister: undefined;
   BusinessRegister: undefined;
-  FirstStepBusinessRegister: undefined;
   BusinessPassword: undefined;
   BusinessStart: undefined;
   DrawerNavigation: undefined;
@@ -29,6 +28,7 @@ export type RootStackParamList = {
   PostDetails: {id: string};
   NotFound: undefined;
   BottomScreens: undefined;
+  CreatePassword: {item: string} | undefined;
 };
 
 export type AuthScreenParamList = {
@@ -47,6 +47,7 @@ export type AuthScreenParamList = {
   FirstStepBusinessRegister: undefined;
   BusinessPassword: undefined;
   BusinessStart: undefined;
+  IndivisualCreatePassword: undefined;
 };
 
 export type DrawerScreenParamaList = {

@@ -28,6 +28,7 @@ const DrawerNavigation = () => {
           borderBottomWidth: 0.5,
           borderBottomColor: '#d3d3d3',
         },
+        drawerType: 'front',
         headerShown: false,
         drawerActiveBackgroundColor: '#ffffff',
         drawerActiveTintColor: '#000C14',

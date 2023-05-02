@@ -35,7 +35,8 @@ const HomeScreen = ({}) => {
           }}>
           <TouchableOpacity
             onPress={() => {
-              // navigation.openDrawer();
+              //@ts-ignore
+              navigation.openDrawer();
             }}>
             <Image
               style={styles.tinyLogo}

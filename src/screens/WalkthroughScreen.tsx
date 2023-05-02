@@ -25,7 +25,6 @@ const WalkthroughScreen = ({}) => {
 
       <TouchableOpacity
         onPress={() => {
-          //@ts-expect-error
           navigation.navigate('LoginScreen');
         }}
         style={{
