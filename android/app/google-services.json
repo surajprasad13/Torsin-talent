@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "329364277976",
+    "project_id": "torsin-talent",
+    "storage_bucket": "torsin-talent.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329364277976:android:5349ca4500add7df2365ad",
+        "android_client_info": {
+          "package_name": "com.torsin.client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329364277976-55thmvtft90avps4cigj2hf823h838la.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClHKxNac4RLi9ErfWL-vPhhxOIdbV5PAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329364277976-55thmvtft90avps4cigj2hf823h838la.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "329364277976-ksbt879au194bhvmu53ul67llrdegpri.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.torsin.talent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -140,7 +140,7 @@ const IndivisualRegister = ({}) => {
         Alert.alert('Please allow permissions');
       } else if (response.errorCode == 'others') {
         Alert.alert(String(response.errorMessage));
-      } else if (response.assets[0].fileSize > 1097152) {
+      } else if (response.assets[0].fileSize > 1024) {
         Alert.alert('maximum size');
       } else {
         setImage(response.assets[0].base64);
