@@ -21,7 +21,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-Talent-TalentTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Talent-TalentTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		84D05DD82A011DC300D9F6D8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84D05DD72A011DC200D9F6D8 /* GoogleService-Info.plist */; };
+		84D05DDC2A01229C00D9F6D8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84D05DDB2A01229C00D9F6D8 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +58,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-Talent.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Talent.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Talent/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84D05DD62A011C1400D9F6D8 /* Talent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Talent.entitlements; path = Talent/Talent.entitlements; sourceTree = "<group>"; };
-		84D05DD72A011DC200D9F6D8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		84D05DDB2A01229C00D9F6D8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Talent-TalentTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Talent-TalentTests.release.xcconfig"; path = "Target Support Files/Pods-Talent-TalentTests/Pods-Talent-TalentTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -134,7 +134,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				84D05DD72A011DC200D9F6D8 /* GoogleService-Info.plist */,
+				84D05DDB2A01229C00D9F6D8 /* GoogleService-Info.plist */,
 				0082CC2F29FBF5CB00C246E0 /* Inter-Black.ttf */,
 				0082CC3229FBF5CC00C246E0 /* Inter-Bold.ttf */,
 				0082CC3029FBF5CC00C246E0 /* Inter-Light.ttf */,
@@ -276,7 +276,7 @@
 				0082CC3729FBF5CD00C246E0 /* Inter-Light.ttf in Resources */,
 				0082CC3B29FBF5CD00C246E0 /* Inter-SemiBold.ttf in Resources */,
 				0082CC3829FBF5CD00C246E0 /* Inter-Medium.ttf in Resources */,
-				84D05DD82A011DC300D9F6D8 /* GoogleService-Info.plist in Resources */,
+				84D05DDC2A01229C00D9F6D8 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				0082CC3A29FBF5CD00C246E0 /* Inter-Thin.ttf in Resources */,
 			);

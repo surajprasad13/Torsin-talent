@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:329364277976:android:5349ca4500add7df2365ad",
+        "mobilesdk_app_id": "1:329364277976:android:41d2120e6719aec92365ad",
         "android_client_info": {
-          "package_name": "com.torsin.client"
+          "package_name": "com.torsin.talent"
         }
       },
       "oauth_client": [
