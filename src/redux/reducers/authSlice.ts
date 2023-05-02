@@ -18,7 +18,7 @@ interface AuthState {
   userInfo: null | LoginResponseData;
   userToken: null | string;
   error: null | any;
-  success: null | Object | boolean;
+  success: null | object | boolean;
   status: null | string;
   registerSuccess: boolean;
 }

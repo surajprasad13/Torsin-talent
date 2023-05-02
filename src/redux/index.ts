@@ -12,10 +12,12 @@ import {
 } from 'redux-persist';
 
 import authReducer from './reducers/authSlice';
+import userReducer from './reducers/userSlice';
 
 const rootReducer = combineReducers({
   // Add your reducers here
   auth: authReducer,
+  user: userReducer,
 });
 
 const persistConfig = {

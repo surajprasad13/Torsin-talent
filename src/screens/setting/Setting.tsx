@@ -90,7 +90,7 @@ const Setting = ({}) => {
           <View style={styles.list}>
             <View style={styles.listContainer}>
               <AntDesign name="user" size={20} />
-              <Text style={styles.userText}>{userInfo?.['business Name']}</Text>
+              <Text style={styles.userText}>{userInfo?.fullName}</Text>
             </View>
 
             {userInfo?.gender && (
@@ -125,8 +125,6 @@ const Setting = ({}) => {
   );
 };
 
-export default Setting;
-
 const styles = StyleSheet.create({
   userText: {
     fontFamily: fonts.regular,
@@ -146,3 +144,5 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 });
+
+export default Setting;

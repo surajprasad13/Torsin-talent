@@ -38,9 +38,131 @@ export default function Appnavigator({}) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{}}>
-        {userToken ? (
-          <Stack.Group>
+      <Stack.Navigator
+        screenOptions={{}}
+        initialRouteName={userToken ? 'DrawerNavigation' : 'OnboardingScreen'}>
+        <Stack.Group>
+          <Stack.Screen
+            name="OnboardingScreen"
+            component={OnboardingScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="LostPassword"
+            component={LostPassword}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="VerifyOtp"
+            component={VerifyOtp}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ResetPassword"
+            component={ResetPassword}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Successfull"
+            component={Successfull}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="VerifyOtpRegister"
+            component={VerifyOtpRegister}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="WalkthroughScreen"
+            component={WalkthroughScreen}
+            options={{headerShown: false}}
+          />
+        </Stack.Group>
+
+        <Stack.Group>
+          <Stack.Screen
+            name="ThroughRegister"
+            component={ThroughRegister}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="IndivisualRegister"
+            component={IndivisualRegister}
+            options={{headerShown: false}}
+          />
+
+          {/*  */}
+          <Stack.Screen
+            name="CreatePassword"
+            component={CreatePassword}
+            initialParams={{item: ''}}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="BusinessRegister"
+            component={BusinessRegister}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="BusinessPassword"
+            component={BusinessPassword}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="BusinessStart"
+            component={BusinessStart}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="EditUserProfile"
+            component={EditUserProfile}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="AddService"
+            component={AddService}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="WithoutSignupHome"
+            component={WithoutSignupHome}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="DrawerNavigation"
+            component={DrawerNavigation}
+            options={{headerShown: false}}
+          />
+        </Stack.Group>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+/**
+ * 
+ * 
+ * 
+ * <Stack.Group>
             <Stack.Screen
               name="DrawerNavigation"
               component={DrawerNavigation}
@@ -51,118 +173,16 @@ export default function Appnavigator({}) {
               component={EditProfile}
               options={{headerShown: false}}
             />
+            <Stack.Screen
+              name="EditUserProfile"
+              component={EditUserProfile}
+              options={{headerShown: false}}
+            />
+
+            <Stack.Screen
+              name="AddService"
+              component={AddService}
+              options={{headerShown: false}}
+            />
           </Stack.Group>
-        ) : (
-          <>
-            <Stack.Group>
-              <Stack.Screen
-                name="OnboardingScreen"
-                component={OnboardingScreen}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="LoginScreen"
-                component={LoginScreen}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="LostPassword"
-                component={LostPassword}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="VerifyOtp"
-                component={VerifyOtp}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="ResetPassword"
-                component={ResetPassword}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="Successfull"
-                component={Successfull}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="VerifyOtpRegister"
-                component={VerifyOtpRegister}
-                options={{headerShown: false}}
-              />
-
-              <Stack.Screen
-                name="WalkthroughScreen"
-                component={WalkthroughScreen}
-                options={{headerShown: false}}
-              />
-            </Stack.Group>
-
-            <Stack.Group>
-              <Stack.Screen
-                name="ThroughRegister"
-                component={ThroughRegister}
-                options={{headerShown: false}}
-              />
-
-              <Stack.Screen
-                name="IndivisualRegister"
-                component={IndivisualRegister}
-                options={{headerShown: false}}
-              />
-
-              {/*  */}
-              <Stack.Screen
-                name="CreatePassword"
-                component={CreatePassword}
-                initialParams={{item: ''}}
-                options={{headerShown: false}}
-              />
-
-              <Stack.Screen
-                name="BusinessRegister"
-                component={BusinessRegister}
-                options={{headerShown: false}}
-              />
-
-              <Stack.Screen
-                name="BusinessPassword"
-                component={BusinessPassword}
-                options={{headerShown: false}}
-              />
-
-              <Stack.Screen
-                name="BusinessStart"
-                component={BusinessStart}
-                options={{headerShown: false}}
-              />
-
-              <Stack.Screen
-                name="EditUserProfile"
-                component={EditUserProfile}
-                options={{headerShown: false}}
-              />
-
-              <Stack.Screen
-                name="AddService"
-                component={AddService}
-                options={{headerShown: false}}
-              />
-
-              <Stack.Screen
-                name="WithoutSignupHome"
-                component={WithoutSignupHome}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="DrawerNavigation"
-                component={DrawerNavigation}
-                options={{headerShown: false}}
-              />
-            </Stack.Group>
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+ */

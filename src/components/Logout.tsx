@@ -70,10 +70,7 @@ const Logout = () => {
             <Button
               onPress={() => {
                 dispatch(logout());
-                navigation.reset({
-                  index: 0,
-                  routes: [{name: 'OnboardingScreen'}],
-                });
+                navigation.dispatch(StackActions.replace('OnboardingScreen'));
               }}>
               Logout
             </Button>

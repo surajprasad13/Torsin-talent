@@ -16,78 +16,74 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // components
-import {CustomButton, CustomInput} from '../../components';
+import {CustomButton, CustomInput, Loader} from '../../components';
 
 // helpers
-import {appstyle, colors, fonts, metrics} from '../../theme';
-import {useAppSelector} from '../../hooks';
-
-
-const {verticalScale} = metrics;
+import {appstyle, colors, fonts} from '../../theme';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {addService} from '../../redux/actions/userAction';
+import {Button, Dialog, Portal} from 'react-native-paper';
+import {updateSuccess} from '../../redux/reducers/userSlice';
 
 const AddService = ({}) => {
   const navigation = useNavigation();
 
-  const {} = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
+
+  const {userToken} = useAppSelector(state => state.auth);
+  const {loading, success, error} = useAppSelector(state => state.user);
 
   const [inputs, setInputs] = useState({
-    service: '',
-    projectType: '',
-    serviceCharge: '',
-    country: '',
+    serviceName: '',
+    chargeType: 0,
+    serviceCharge: 0,
+    serviceDescription: '',
   });
 
   const data = [
-    {label: 'India', value: '1'},
-    {label: 'Nepal', value: '2'},
-    {label: 'America', value: '3'},
+    {label: 'Weekly', value: '1'},
+    {label: 'Monthly', value: '2'},
   ];
-
-  const [countryValue, setIsCountryValue] = useState<string | null>(null);
-
-  const [errors, setErrors] = React.useState<any>({});
-  const [loading, setLoading] = React.useState(false);
-
-  const [checked, setChecked] = React.useState('first');
-
-  const validate = () => {
-    let isValid = true;
-
-    if (!inputs.fullname) {
-      handleError('Please input Name', 'fullname');
-      isValid = false;
-    }
-
-    if (!inputs.email) {
-      handleError('Please input email', 'email');
-      isValid = false;
-    }
-
-    if (!inputs.phone) {
-      handleError('Please input Phone', 'phone');
-      isValid = false;
-    }
-
-    if (!inputs.location) {
-      handleError('Please input Location', 'location');
-      isValid = false;
-    }
-    if (isValid) {
-      register();
-    }
-  };
-
-  const register = () => {};
 
   const handleOnchange = (text: string, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));
   };
-  const handleError = (_error: any, input: any) => {
-    setErrors((prevState: any) => ({...prevState, [input]: _error}));
+
+  const onPressAdd = () => {
+    let value = {
+      inputs,
+      userToken,
+    };
+    dispatch(addService(value));
   };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
+      <Portal>
+        <Dialog visible={loading}>
+          <Dialog.Content
+            style={{
+              height: 200,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Loader />
+          </Dialog.Content>
+        </Dialog>
+
+        <Dialog visible={success}>
+          <Dialog.Title>Service Added</Dialog.Title>
+          <Dialog.Actions>
+            <Button
+              onPress={() => {
+                dispatch(updateSuccess());
+              }}>
+              Ok
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
       <View
         style={{
           flexDirection: 'row',
@@ -105,7 +101,6 @@ const AddService = ({}) => {
           style={{padding: 10}}>
           <Feather name="arrow-left" size={20} />
         </TouchableOpacity>
-
         <Text
           style={{
             fontFamily: fonts.medium,
@@ -115,6 +110,7 @@ const AddService = ({}) => {
         </Text>
         <View />
       </View>
+
       <ScrollView>
         <View style={styles.textContainer}>
           <Text
@@ -134,16 +130,25 @@ const AddService = ({}) => {
             Job Description Complete your profile. Set your profile completely .
           </Text>
         </View>
+        {!!error && (
+          <Text
+            style={{
+              textAlign: 'center',
+              color: colors.red,
+              fontFamily: fonts.medium,
+            }}>
+            {error}
+          </Text>
+        )}
         <View style={styles.inputContainer}>
           <CustomInput
             label="Service Name"
             placeholder="eg. Song Production"
+            value={inputs.serviceName}
+            onChangeText={text => handleOnchange(text, 'serviceName')}
             containerStyle={{}}
           />
-          <View
-            style={{
-              marginTop: 10,
-            }}>
+          <View style={{marginTop: 10}}>
             <Text
               style={{
                 fontFamily: fonts.regular,
@@ -154,7 +159,6 @@ const AddService = ({}) => {
             </Text>
             <View
               style={{
-                width: '100%',
                 height: 50,
                 borderWidth: 1,
                 borderColor: '#BDBDBD',
@@ -162,7 +166,16 @@ const AddService = ({}) => {
                 borderRadius: 12,
               }}>
               <Dropdown
-                style={[styles.dropdown, {borderColor: '#454545'}]}
+                style={[
+                  {
+                    borderColor: '#454545',
+                    backgroundColor: 'white',
+                    borderRadius: 12,
+                    padding: 5,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                  },
+                ]}
                 data={data}
                 search
                 labelField="label"
@@ -170,12 +183,11 @@ const AddService = ({}) => {
                 placeholder={'Select'}
                 placeholderStyle={{}}
                 searchPlaceholder="Search..."
-                value={countryValue}
+                value={String(inputs.chargeType)}
                 onChange={item => {
-                  setIsCountryValue(item.value);
                   setInputs(prevState => ({
                     ...prevState,
-                    countryCodeId: Number(item.value),
+                    chargeType: Number(item.value),
                   }));
                 }}
                 onChangeText={() => {
@@ -184,9 +196,13 @@ const AddService = ({}) => {
               />
             </View>
           </View>
+
           <CustomInput
             label="Service Charge"
             placeholder="eg. $500"
+            keyboardType="number-pad"
+            value={String(inputs.serviceCharge)}
+            onChangeText={text => handleOnchange(text, 'serviceCharge')}
             containerStyle={{marginTop: 10}}
           />
 
@@ -208,7 +224,16 @@ const AddService = ({}) => {
                 borderColor: colors.light,
                 marginTop: 10,
               }}>
-              <TextInput placeholder="type here..." multiline={true} />
+              <TextInput
+                placeholder="Type description here..."
+                multiline={true}
+                placeholderTextColor="#333333"
+                value={inputs.serviceDescription}
+                onChangeText={text =>
+                  handleOnchange(text, 'serviceDescription')
+                }
+                style={{padding: 15}}
+              />
             </View>
           </View>
         </View>
@@ -243,10 +268,8 @@ const AddService = ({}) => {
         <View style={styles.videoInput}>
           <View
             style={{
-              width: '90%',
-              marginLeft: '5%',
               backgroundColor: '#EBEFFF',
-              height: 150,
+              minHeight: 150,
               borderRadius: 10,
               borderColor: colors.primary,
               borderWidth: 1,
@@ -257,9 +280,7 @@ const AddService = ({}) => {
             <AntDesign name="cloudupload" size={40} color="#14226D" />
             <Text style={{fontFamily: fonts.regular, color: colors.black}}>
               Click{' '}
-              <Text
-                onPress={() => navigation.navigate()}
-                style={{color: colors.primary, fontFamily: fonts.bold}}>
+              <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
                 here{' '}
               </Text>
               <Text>upload</Text>
@@ -279,18 +300,17 @@ const AddService = ({}) => {
         <View
           style={{
             ...appstyle.shadow,
-            width: '90%',
-            left: '5%',
             borderRadius: 10,
+            margin: 10,
+            padding: 10,
           }}>
-          <View style={styles.photoInput}>
+          {/*  */}
+          <View style={styles.photoContainer}>
             <View style={styles.innerPhotos}>
               <Feather name="image" size={30} color="#14226D" />
               <Text style={{fontFamily: fonts.regular, color: colors.black}}>
                 Click{' '}
-                <Text
-                  onPress={() => navigation.navigate()}
-                  style={{color: colors.primary, fontFamily: fonts.bold}}>
+                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
                   here{' '}
                 </Text>
               </Text>
@@ -299,9 +319,7 @@ const AddService = ({}) => {
               <Feather name="image" size={30} color="#14226D" />
               <Text style={{fontFamily: fonts.regular, color: colors.black}}>
                 Click{' '}
-                <Text
-                  onPress={() => navigation.navigate()}
-                  style={{color: colors.primary, fontFamily: fonts.bold}}>
+                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
                   here{' '}
                 </Text>
               </Text>
@@ -310,30 +328,19 @@ const AddService = ({}) => {
               <Feather name="image" size={30} color="#14226D" />
               <Text style={{fontFamily: fonts.regular, color: colors.black}}>
                 Click{' '}
-                <Text
-                  onPress={() => navigation.navigate()}
-                  style={{color: colors.primary, fontFamily: fonts.bold}}>
+                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
                   here{' '}
                 </Text>
               </Text>
             </View>
           </View>
-          <View
-            style={{
-              width: '90%',
-              justifyContent: 'space-between',
-              borderRadius: 10,
-              padding: 10,
-              marginLeft: '5%',
-              flexDirection: 'row',
-            }}>
+          {/*  */}
+          <View style={{flexDirection: 'row'}}>
             <View style={styles.innerPhotos}>
               <Feather name="image" size={30} color="#14226D" />
               <Text style={{fontFamily: fonts.regular, color: colors.black}}>
                 Click{' '}
-                <Text
-                  onPress={() => navigation.navigate()}
-                  style={{color: colors.primary, fontFamily: fonts.bold}}>
+                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
                   here{' '}
                 </Text>
               </Text>
@@ -342,9 +349,7 @@ const AddService = ({}) => {
               <Feather name="image" size={30} color="#14226D" />
               <Text style={{fontFamily: fonts.regular, color: colors.black}}>
                 Click{' '}
-                <Text
-                  onPress={() => navigation.navigate()}
-                  style={{color: colors.primary, fontFamily: fonts.bold}}>
+                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
                   here{' '}
                 </Text>
               </Text>
@@ -353,9 +358,11 @@ const AddService = ({}) => {
         </View>
         <CustomButton
           title="Add Service"
-          onPress={validate}
-          style={{marginTop: verticalScale(100)}}
+          onPress={onPressAdd}
+          style={{marginTop: 50}}
+          disabled={true}
         />
+        <View style={{marginTop: 50}} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -364,46 +371,46 @@ const AddService = ({}) => {
 const styles = StyleSheet.create({
   backContainer: {
     backgroundColor: '#ffffff',
-    height: 100,
-    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
   },
   textContainer: {
-    width: '80%',
     marginLeft: 10,
     padding: 10,
   },
   inputContainer: {
-    width: '95%',
     marginLeft: 10,
     padding: 10,
   },
   videoInput: {
     ...appstyle.shadow,
-    width: '90%',
     height: 200,
     justifyContent: 'center',
     borderRadius: 10,
-    left: '5%',
+    margin: 10,
+    padding: 10,
   },
   photoInput: {
-    width: '90%',
     justifyContent: 'space-between',
     borderRadius: 10,
     padding: 10,
-    marginLeft: '5%',
     flexDirection: 'row',
   },
   innerPhotos: {
     backgroundColor: '#EBEFFF',
-    height: 100,
+    minHeight: 100,
     borderRadius: 10,
     borderColor: colors.primary,
     borderWidth: 1,
     borderStyle: 'dashed',
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
+    margin: 5,
+  },
+  dropdwon: {},
+  photoContainer: {
+    flexDirection: 'row',
   },
 });
 
