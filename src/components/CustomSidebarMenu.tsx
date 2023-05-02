@@ -48,7 +48,9 @@ const CustomSidebarMenu = (props: any) => {
 
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('EditProfile');
+                  navigation.navigate('SettingStack', {
+                    screen: 'EditProfile',
+                  });
                 }}>
                 <Text
                   style={{
@@ -64,7 +66,9 @@ const CustomSidebarMenu = (props: any) => {
 
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('EditProfile');
+                navigation.navigate('SettingStack', {
+                  screen: 'EditProfile',
+                });
               }}
               style={{
                 marginTop: 60,
