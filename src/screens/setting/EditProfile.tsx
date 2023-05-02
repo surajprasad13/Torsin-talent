@@ -12,8 +12,10 @@ import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 
 import {appstyle, colors, fonts} from '../../theme';
+import {useAppSelector} from '../../hooks';
 
-const EditProfile = ({}) => {
+const EditProfile = ({}: any) => {
+  const {userInfo} = useAppSelector(state => state.auth);
   const navigation = useNavigation();
 
   return (
@@ -41,7 +43,7 @@ const EditProfile = ({}) => {
             fontFamily: fonts.medium,
             color: '#000C14',
           }}>
-          John Smith’s Profile
+          {`${userInfo?.fullName}'s Profile`}
         </Text>
         <View />
       </View>
@@ -49,9 +51,7 @@ const EditProfile = ({}) => {
       <View style={{backgroundColor: '#F9FBFF', flex: 1, padding: 10}}>
         <TouchableOpacity
           style={styles.cardContainer}
-          onPress={() => {
-            navigation.navigate('EditUserProfile');
-          }}>
+          onPress={() => navigation.navigate('EditUserProfile')}>
           <View style={styles.iconContainer}>
             <Feather name="user" size={20} />
           </View>

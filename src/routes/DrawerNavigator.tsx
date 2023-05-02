@@ -14,6 +14,7 @@ import Terms from '../screens/drawerScreens/Terms';
 import BottomNavigation from './BottomNavigator';
 
 import {DrawerScreenParamaList} from './RouteType';
+import Notification from '../screens/Notification';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
@@ -42,9 +43,10 @@ const DrawerNavigation = () => {
           color: '#000C14',
         },
       }}>
+      <Drawer.Screen name="BottomNavigation" component={BottomNavigation} />
       <Drawer.Screen
         name="Notifications"
-        component={BottomNavigation}
+        component={Notification}
         options={{}}
       />
       <Drawer.Screen name="Proposals" component={Proposals} options={{}} />

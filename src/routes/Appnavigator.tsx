@@ -20,8 +20,6 @@ import IndivisualRegister from '../screens/auth/IndivisualRegister';
 import BusinessRegister from '../screens/auth/BusinessRegister';
 import BusinessPassword from '../screens/auth/BusinessPassword';
 import BusinessStart from '../screens/BusinessStart';
-import EditProfile from '../screens/setting/EditProfile';
-import EditUserProfile from '../screens/setting/EditUserProfile';
 import WithoutSignupHome from '../screens/WithoutSignupHome';
 
 import DrawerNavigation from './DrawerNavigator';
@@ -29,8 +27,6 @@ import {RootStackParamList} from './RouteType';
 
 import {useAppSelector} from '../hooks';
 import CreatePassword from '../screens/auth/CreatePassword';
-import AddService from '../screens/setting/AddService';
-import ServiceSkill from '../screens/setting/ServiceSkill';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -126,30 +122,6 @@ export default function Appnavigator({}) {
           />
 
           <Stack.Screen
-            name="EditProfile"
-            component={EditProfile}
-            options={{headerShown: false}}
-          />
-
-          <Stack.Screen
-            name="EditUserProfile"
-            component={EditUserProfile}
-            options={{headerShown: false}}
-          />
-
-          <Stack.Screen
-            name="AddService"
-            component={AddService}
-            options={{headerShown: false}}
-          />
-
-          <Stack.Screen
-            name="ServiceSkill"
-            component={ServiceSkill}
-            options={{headerShown: false}}
-          />
-
-          <Stack.Screen
             name="WithoutSignupHome"
             component={WithoutSignupHome}
             options={{headerShown: false}}
@@ -164,32 +136,3 @@ export default function Appnavigator({}) {
     </NavigationContainer>
   );
 }
-
-/**
- * 
- * 
- * 
- * <Stack.Group>
-            <Stack.Screen
-              name="DrawerNavigation"
-              component={DrawerNavigation}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="EditProfile"
-              component={EditProfile}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="EditUserProfile"
-              component={EditUserProfile}
-              options={{headerShown: false}}
-            />
-
-            <Stack.Screen
-              name="AddService"
-              component={AddService}
-              options={{headerShown: false}}
-            />
-          </Stack.Group>
- */

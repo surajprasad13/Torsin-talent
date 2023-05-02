@@ -1,8 +1,8 @@
+import type {CompositeScreenProps} from '@react-navigation/native';
 import type {
-  CompositeScreenProps,
-  NavigatorScreenParams,
-} from '@react-navigation/native';
-import type {StackScreenProps} from '@react-navigation/stack';
+  StackNavigationProp,
+  StackScreenProps,
+} from '@react-navigation/stack';
 import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 
 export type RootStackParamList = {
@@ -20,17 +20,15 @@ export type RootStackParamList = {
   BusinessRegister: undefined;
   BusinessPassword: undefined;
   BusinessStart: undefined;
-  DrawerNavigation: undefined;
+  DrawerNavigation: DrawerScreenParamaList;
   EditProfile: undefined;
   EditUserProfile: undefined;
   WithoutSignupHome: undefined;
-  Home: NavigatorScreenParams<HomeTabParamList>;
+  Home: HomeTabParamList;
   PostDetails: {id: string};
   NotFound: undefined;
   BottomScreens: undefined;
   CreatePassword: {item: string} | undefined;
-  AddService: undefined;
-  ServiceSkill: undefined;
 };
 
 export type AuthScreenParamList = {
@@ -63,18 +61,27 @@ export type DrawerScreenParamaList = {
   AboutUs: undefined;
   TermsPrivacy: undefined;
   HelpSupport: undefined;
+  BottomNavigation: BottomScreenParamList;
 };
 
 export type BottomScreenParamList = {
   Home: undefined;
   Jobs: undefined;
   Chat: undefined;
+  SettingStack: SettingScreenParamList;
+};
+
+export type SettingScreenParamList = {
   Setting: undefined;
+  EditProfile: undefined;
+  EditUserProfile: undefined;
+  AddService: undefined;
+  AddSkill: undefined;
+  ServiceSkill: undefined;
 };
 
 export type HomeTabParamList = {
-  Popular: undefined;
-  Latest: undefined;
+  HomeScreen: undefined;
 };
 
 export type RootScreenProps = StackScreenProps<RootStackParamList>;
@@ -87,6 +94,11 @@ export type HomeTabScreenProps<T extends keyof HomeTabParamList> =
     BottomTabScreenProps<HomeTabParamList, T>,
     RootScreenProps
   >;
+
+export type GlobalScreenProps = CompositeScreenProps<
+  StackNavigationProp<RootStackParamList, 'DrawerNavigation'>,
+  BottomTabScreenProps<BottomScreenParamList, 'SettingStack'>
+>;
 
 declare global {
   namespace ReactNavigation {

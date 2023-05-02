@@ -14,9 +14,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 import EditProfile from '../screens/setting/EditProfile';
 import EditUserProfile from '../screens/setting/EditUserProfile';
 import AddService from '../screens/setting/AddService';
+import AddSkill from '../screens/setting/AddSkill';
+import {BottomScreenParamList, SettingScreenParamList} from './RouteType';
+import ServiceSkill from '../screens/setting/ServiceSkill';
 
-const Bottom = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const Bottom = createBottomTabNavigator<BottomScreenParamList>();
+const Stack = createStackNavigator<SettingScreenParamList>();
 
 const SettingStack = () => {
   return (
@@ -25,6 +28,8 @@ const SettingStack = () => {
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="EditUserProfile" component={EditUserProfile} />
       <Stack.Screen name="AddService" component={AddService} />
+      <Stack.Screen name="AddSkill" component={AddSkill} />
+      <Stack.Screen name="ServiceSkill" component={ServiceSkill} />
     </Stack.Navigator>
   );
 };

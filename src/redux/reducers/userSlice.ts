@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {addService} from '../actions/userAction';
+import {addService, addSkill} from '../actions/userAction';
 
 enum Status {
   pending = 'pending',
@@ -44,6 +44,21 @@ const userSlice = createSlice({
         state.success = true; // registration successful
       })
       .addCase(addService.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //skill
+      .addCase(addSkill.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(addSkill.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true; // registration successful
+      })
+      .addCase(addSkill.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

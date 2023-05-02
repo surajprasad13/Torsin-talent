@@ -19,6 +19,24 @@ const addService = createAsyncThunk(
   },
 );
 
-export {addService};
+const addSkill = createAsyncThunk(
+  'user/addSkill',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`add/skill`, value.inputs, {
+        headers: {Authorization: `Bearer ${value.userToken}`},
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+export {addService, addSkill};
 
 export default {};

@@ -1,5 +1,11 @@
 import React from 'react';
-import {TouchableOpacity, Text, StyleSheet, ViewStyle} from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  ActivityIndicator,
+} from 'react-native';
 
 // components
 
@@ -10,6 +16,7 @@ type ButtonProp = {
   onPress?: () => void;
   style?: ViewStyle;
   disabled?: boolean;
+  loading?: boolean;
 };
 
 const CustomButton = (props: ButtonProp) => {
@@ -22,7 +29,11 @@ const CustomButton = (props: ButtonProp) => {
         props.style,
         {backgroundColor: props.disabled ? colors.primary : '#E0E0E0'},
       ]}>
-      <Text style={styles.title}>{props.title}</Text>
+      {props.loading ? (
+        <ActivityIndicator color={colors.white} size="small" />
+      ) : (
+        <Text style={styles.title}>{props.title}</Text>
+      )}
     </TouchableOpacity>
   );
 };
