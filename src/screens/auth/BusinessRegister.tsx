@@ -8,8 +8,8 @@ import {
   Keyboard,
   SafeAreaView,
   Pressable,
+  Alert,
 } from 'react-native';
-import {RadioButton} from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
 import {Dropdown} from 'react-native-element-dropdown';
 import {useNavigation} from '@react-navigation/native';
@@ -17,15 +17,16 @@ import {useNavigation} from '@react-navigation/native';
 import {metrics, colors, fonts} from '../../theme';
 
 import Input from '../../components/Input';
-import Loader from '../../components/Loader';
 import ProFile from '../../components/ProFile';
-import {useAppSelector} from '../../hooks';
 
-const {horizontalScale, moderateScale, verticalScale} = metrics;
+import Feather from 'react-native-vector-icons/Feather';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {CustomButton} from '../../components';
+
+const {moderateScale} = metrics;
 
 const BusinessRegister = ({}) => {
   const navigation = useNavigation();
-  const {loading} = useAppSelector(state => state.auth);
 
   const data = [
     {label: 'India', value: '1'},
@@ -33,47 +34,23 @@ const BusinessRegister = ({}) => {
     {label: 'America', value: '3'},
   ];
 
-  const [countryValue, setIsCountryValue] = useState<null | string>(null);
-  const [isFocus, setIsFocus] = useState<boolean>(false);
-
   const [inputs, setInputs] = React.useState({
+    fullName: '',
     email: '',
-    fullname: '',
-    phone: '',
+    mobileNo: '',
     location: '',
-    country: '',
+    countryCodeId: '1',
   });
-  const [phoneChange, setPhoneChange] = useState<string>('');
-  const [value, setValue] = useState<string>('');
+  const [image, setImage] = useState<string>('');
+  const [errors, setErrors] = React.useState<any>({});
 
-  const onChangeEmail = text => {
-    if (text.length == 0) {
-      setValue({value: true});
-    } else {
-      setValue({value: false});
-    }
-    setValue({value: text});
-  };
-
-  const onChangePhone = e => {
-    if (e.length == 0) {
-      setPhoneChange({phoneChange: true});
-    } else {
-      setPhoneChange({phoneChange: false});
-    }
-    setPhoneChange({phoneChange: e});
-  };
-
-  const [errors, setErrors] = React.useState({});
-
-  const [checked, setChecked] = React.useState('first');
   const [toggleCheckBox, setToggleCheckBox] = React.useState(false);
 
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
 
-    if (!inputs.fullname) {
+    if (!inputs.fullName) {
       handleError('Please input fullname', 'fullname');
       isValid = false;
     }
@@ -86,7 +63,7 @@ const BusinessRegister = ({}) => {
       isValid = false;
     }
 
-    if (!inputs.phone) {
+    if (!inputs.mobileNo) {
       handleError('Please input phone number', 'phone');
       isValid = false;
     }
@@ -96,7 +73,7 @@ const BusinessRegister = ({}) => {
       isValid = false;
     }
 
-    if (!inputs.country) {
+    if (!inputs.countryCodeId) {
       handleError('Please input Country', 'country');
       isValid = false;
     }
@@ -106,33 +83,113 @@ const BusinessRegister = ({}) => {
     }
   };
 
-  const register = () => {};
+  const uploadImage = () => {
+    let options: any = {
+      mediaType: 'photo',
+      quality: 1,
+      includeBase64: true,
+    };
 
-  const handleOnchange = (text, input) => {
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+      } else if (response.errorCode == 'permission') {
+        Alert.alert('Please allow permissions');
+      } else if (response.errorCode == 'others') {
+        Alert.alert(String(response.errorMessage));
+        //@ts-expect-error
+      } else if (response.assets[0].fileSize > 1097152) {
+        Alert.alert('maximum size');
+      } else {
+        //@ts-expect-error
+        setImage(response.assets[0].base64);
+      }
+    });
+  };
+
+  const register = () => {
+    const field = {
+      screen: 'business',
+      data: {
+        ...inputs,
+        profileImage: image,
+      },
+    };
+    navigation.navigate('CreatePassword', {
+      item: JSON.stringify(field),
+    });
+  };
+
+  const handleOnchange = (text: string, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));
   };
-  const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+  const handleError = (_error: any, input: any) => {
+    setErrors((prevState: any) => ({...prevState, [input]: _error}));
   };
+
+  const active: boolean =
+    inputs.fullName && inputs.email && inputs.mobileNo && inputs.location
+      ? true
+      : false;
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
       <ScrollView
         contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
-        <Text
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          <View
+            style={{
+              width: 20,
+              height: 20,
+              borderRadius: 10,
+              backgroundColor: '#14226D',
+              right: -1,
+            }}></View>
+
+          <View
+            style={{
+              width: 120,
+              height: 10,
+              backgroundColor: '#E0E0E0',
+              top: 5,
+            }}></View>
+
+          <View
+            style={{
+              width: 20,
+              height: 20,
+              borderRadius: 10,
+              backgroundColor: '#E0E0E0',
+              left: -2,
+            }}></View>
+        </View>
+        <View
           style={{
-            fontFamily: fonts.bold,
-            fontSize: moderateScale(32),
-            color: '#0E184D',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: 20,
           }}>
-          Create Account
-        </Text>
+          <TouchableOpacity
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              }
+            }}>
+            <Feather name="arrow-left" size={20} />
+          </TouchableOpacity>
+          <Text
+            style={{
+              color: colors.blue,
+              fontFamily: fonts.bold,
+              fontSize: moderateScale(32),
+            }}>
+            Create Account
+          </Text>
+          <View />
+        </View>
         <Text
           style={{
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '400',
-            width: 300,
+            fontFamily: fonts.regular,
             fontSize: moderateScale(14),
             lineHeight: moderateScale(17),
             alignItems: 'center',
@@ -142,15 +199,23 @@ const BusinessRegister = ({}) => {
           account.
         </Text>
 
-        {loading && <Loader />}
+        <Text
+          style={{
+            fontFamily: fonts.medium,
+            color: colors.primary,
+            marginTop: 20,
+            marginBottom: 20,
+            fontSize: 16,
+          }}>
+          Add Business Information
+        </Text>
 
-        <ProFile image="" onPress={() => {}} />
+        <ProFile image={image} onPress={uploadImage} />
 
         <View style={{marginVertical: 10}}>
           <Input
-            onChangeText={text => handleOnchange(text, 'fullname')}
+            onChangeText={text => handleOnchange(text, 'fullName')}
             onFocus={() => handleError(null, 'fullname')}
-            // iconName="account-outline"
             label="Name"
             placeholder="Enter your full name"
             error={errors.fullname}
@@ -158,27 +223,24 @@ const BusinessRegister = ({}) => {
 
           <View>
             <Input
-              onChangeText={text => onChangeEmail(text)}
+              onChangeText={text => handleOnchange(text, 'email')}
               onFocus={() => handleError(null, 'email')}
               label="Email"
               placeholder="Enter your email address"
               error={errors.email}
+              keyboardType="email-address"
+              autoCapitalize="none"
             />
             <Pressable
-              value={value}
               style={{
                 position: 'absolute',
-                marginTop: 34,
+                marginTop: 45,
                 right: 10,
               }}>
               <Text
                 style={{
-                  color: value ? '#6180F4' : 'gray',
-                  fontFamily: 'Inter',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  fontSize: 14,
-                  lineHeight: 20,
+                  color: 'gray',
+                  fontFamily: fonts.regular,
                   display: 'flex',
                   alignItems: 'center',
                 }}>
@@ -189,119 +251,44 @@ const BusinessRegister = ({}) => {
 
           <View>
             <Input
-              keyboardType="numeric"
-              onChangeText={e => onChangePhone(e)}
-              onFocus={() => handleError(null, 'phone')}
-              // iconName="phone-outline"
               label="Phone Number"
               placeholder="Enter your phone no"
+              keyboardType="phone-pad"
+              onChangeText={e => handleOnchange(e, 'mobileNo')}
+              onFocus={() => handleError(null, 'phone')}
               error={errors.phone}
+              maxLength={13}
             />
             <Pressable
-              phoneChange={phoneChange}
               style={{
                 position: 'absolute',
-                marginTop: 34,
+                marginTop: 45,
                 right: 10,
               }}>
               <Text
                 style={{
-                  color: phoneChange ? '#6180F4' : 'gray',
-                  fontFamily: 'Inter',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  fontSize: 14,
-                  lineHeight: 20,
-                  display: 'flex',
-                  alignItems: 'center',
+                  color: 'gray',
+                  fontFamily: fonts.regular,
                 }}>
                 Verify
               </Text>
             </Pressable>
           </View>
 
-          <View style={{marginTop: verticalScale(10)}}>
-            <Text
-              style={{
-                color: '#4F4F4F',
-                marginLeft: horizontalScale(15),
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                fontSize: moderateScale(16),
-                lineHeight: 22,
-              }}>
-              Gender
-            </Text>
-
-            <View
-              style={{flexDirection: 'row', marginLeft: horizontalScale(15)}}>
-              <RadioButton
-                value="first"
-                status={checked === 'first' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('first')}
-              />
-              <Text
-                style={{
-                  fontFamily: 'Inter',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  fontSize: 14,
-                  lineHeight: 20,
-                  display: 'flex',
-                  marginTop: verticalScale(7),
-                  alignItems: 'center',
-                  color: '#4F4F4F',
-                }}>
-                Male
-              </Text>
-            </View>
-
-            <View
-              style={{flexDirection: 'row', marginLeft: horizontalScale(15)}}>
-              <RadioButton
-                value="second"
-                status={checked === 'second' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('second')}
-              />
-              <Text
-                style={{
-                  fontFamily: fonts.regular,
-                  marginTop: verticalScale(7),
-                  alignItems: 'center',
-                  color: '#4F4F4F',
-                }}>
-                Female
-              </Text>
-            </View>
-          </View>
-
           <Input
             onChangeText={text => handleOnchange(text, 'location')}
             onFocus={() => handleError(null, 'location')}
-            // iconName="lock-outline"
             label="Location"
             placeholder="Enter your Location"
             error={errors.location}
-            location
           />
 
-          <Text
-            style={{
-              color: '#000000',
-              fontSize: 14,
-              fontWeight: '400',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              marginBottom: -10,
-            }}>
+          <Text style={{color: '#4F4F4F', fontFamily: fonts.regular}}>
             Country
           </Text>
 
           <View
             style={{
-              width: '100%',
-              // marginLeft: '4%',
               height: 50,
               borderWidth: 1,
               borderColor: '#BDBDBD',
@@ -309,7 +296,7 @@ const BusinessRegister = ({}) => {
               borderRadius: 12,
             }}>
             <Dropdown
-              style={[styles.dropdown, isFocus && {borderColor: '#454545'}]}
+              style={[styles.dropdown]}
               data={data}
               search
               maxHeight={300}
@@ -321,21 +308,26 @@ const BusinessRegister = ({}) => {
                 marginTop: 10,
               }}
               searchPlaceholder="Search..."
-              value={countryValue}
-              onFocus={() => setIsCountryValue(true)}
-              onBlur={() => setIsCountryValue(false)}
+              value={inputs.countryCodeId}
               iconStyle={{top: 5, right: 5}}
+              onChange={item => {
+                setInputs(prevState => ({
+                  ...prevState,
+                  countryCodeId: item.value,
+                }));
+              }}
             />
           </View>
 
           <View
             style={{
               flexDirection: 'row',
-              marginTop: moderateScale(10),
-              marginLeft: horizontalScale(15),
+              marginTop: 20,
+              alignItems: 'center',
             }}>
             <View style={{marginTop: moderateScale(-5)}}>
               <CheckBox
+                boxType="square"
                 style={styles.checkbox}
                 disabled={false}
                 onCheckColor="#14226D"
@@ -345,57 +337,23 @@ const BusinessRegister = ({}) => {
             </View>
             <Text
               style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                fontSize: moderateScale(14),
-                lineHeight: 22,
-                color: '#000000',
+                fontFamily: fonts.regular,
+                color: colors.black,
+                paddingLeft: 10,
               }}>
-              I have accepted the
-            </Text>
-            <Text
-              onPress={() => {
-                //@ts-expect-error
-                navigation.navigate('RegisterScreen');
-              }}
-              style={{
-                color: '#0E184D',
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '700',
-                fontSize: moderateScale(14),
-                lineHeight: 22,
-              }}>
-              Terms and Conditions.
+              I have accepted the{' '}
+              <Text style={{fontFamily: fonts.medium, color: colors.primary}}>
+                Terms and Conditions.
+              </Text>
             </Text>
           </View>
 
-          <TouchableOpacity
+          <CustomButton
+            title="Next"
+            disabled={active}
             onPress={validate}
-            style={{
-              width: '85%',
-              height: 50,
-              marginTop: verticalScale(20),
-              // marginTop: moderateScale(150),
-              marginLeft: '7.5%',
-              backgroundColor: '#0E184D',
-              justifyContent: 'center',
-              borderRadius: 8,
-            }}>
-            <Text
-              style={{
-                textAlign: 'center',
-                color: '#FFFFFF',
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: 700,
-                fontSize: moderateScale(16),
-                lineHeight: 22,
-              }}>
-              Next
-            </Text>
-          </TouchableOpacity>
+            style={{marginTop: 20}}
+          />
 
           <View
             style={{
@@ -403,28 +361,13 @@ const BusinessRegister = ({}) => {
               marginTop: moderateScale(20),
               justifyContent: 'center',
             }}>
-            <Text
-              style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                fontSize: moderateScale(14),
-                lineHeight: 22,
-                color: '#000000',
-              }}>
-              Already have an account?
-            </Text>
-            <Text
-              onPress={() => navigation.navigate('LoginScreen')}
-              style={{
-                color: '#0E184D',
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '700',
-                fontSize: moderateScale(14),
-                lineHeight: 22,
-              }}>
-              Log In
+            <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+              Already have an account?{' '}
+              <Text
+                onPress={() => navigation.navigate('LoginScreen')}
+                style={{color: colors.primary, fontFamily: fonts.bold}}>
+                Log In
+              </Text>
             </Text>
           </View>
         </View>
@@ -454,6 +397,8 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
+  dropdown: {},
+  checkbox: {},
 });
 
 export default BusinessRegister;

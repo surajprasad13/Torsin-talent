@@ -14,13 +14,13 @@ import {RadioButton} from 'react-native-paper';
 import Feather from 'react-native-vector-icons/Feather';
 
 // components
-import Input from '../components/Input';
-import ProFile from '../components/ProFile';
-import Loader from '../components/Loader';
+import Input from '../../components/Input';
+import ProFile from '../../components/ProFile';
+import Loader from '../../components/Loader';
 
 // helpers
-import {fonts, metrics} from '../theme';
-import {useAppSelector} from '../hooks';
+import {colors, fonts, metrics} from '../../theme';
+import {useAppSelector} from '../../hooks';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
@@ -71,40 +71,46 @@ const EditUserProfile = ({}) => {
 
   const register = () => {};
 
-  const handleOnchange = (text, input) => {
+  const handleOnchange = (text: string, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));
   };
-  const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+  const handleError = (_error: any, input: any) => {
+    setErrors((prevState: any) => ({...prevState, [input]: _error}));
   };
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      {loading && <Loader />}
-
-      <View style={styles.backContainer}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: colors.white,
+          padding: 10,
+        }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('EditProfile')}
+          onPress={() => {
+            if (navigation.canGoBack()) {
+              navigation.goBack();
+            }
+          }}
           style={{padding: 10}}>
           <Feather name="arrow-left" size={20} />
         </TouchableOpacity>
 
         <Text
           style={{
-            textAlign: 'center',
-            top: 50,
             fontFamily: fonts.medium,
             color: '#000C14',
           }}>
           John Smith’s Profile
         </Text>
+        <View />
       </View>
-
-      <ScrollView contentContainerStyle={{paddingHorizontal: 20, bottom: 20}}>
+      <ScrollView style={{flex: 1, padding: 10}}>
         <View style={{top: 25}}>
           <ProFile image="" onPress={() => {}} />
         </View>
-
         <View style={{marginTop: 47}}>
           <Input
             onChangeText={(text: string) => handleOnchange(text, 'fullname')}
@@ -114,7 +120,6 @@ const EditUserProfile = ({}) => {
             error={errors.fullname}
           />
         </View>
-
         <View style={{marginTop: 20}}>
           <Input
             onChangeText={(text: string) => handleOnchange(text, 'email')}
@@ -125,7 +130,6 @@ const EditUserProfile = ({}) => {
             error={errors.email}
           />
         </View>
-
         <View
           style={{
             marginTop: 20,
@@ -140,7 +144,6 @@ const EditUserProfile = ({}) => {
             error={errors.phone}
           />
         </View>
-
         <View style={{marginTop: verticalScale(20)}}>
           <Text
             style={{
@@ -165,9 +168,7 @@ const EditUserProfile = ({}) => {
               style={{
                 fontFamily: fonts.regular,
                 fontSize: 14,
-
                 marginTop: verticalScale(7),
-
                 color: '#4F4F4F',
               }}>
               Male
@@ -194,21 +195,15 @@ const EditUserProfile = ({}) => {
             </Text>
           </View>
         </View>
-
-        <View
-          style={{
-            marginTop: 20,
-          }}>
+        <View style={{marginTop: 20}}>
           <Input
-            onChangeText={text => handleOnchange(text, 'location')}
+            onChangeText={(text: string) => handleOnchange(text, 'location')}
             onFocus={() => handleError(null, 'location')}
             label="Location"
             placeholder="Murshid Bazar, Deira, P.O Box 40512"
             error={errors.location}
-            location
           />
         </View>
-
         <TouchableOpacity
           style={{
             width: '85%',

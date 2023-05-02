@@ -2,7 +2,6 @@ import React from 'react';
 import {
   useWindowDimensions,
   View,
-  Text,
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
@@ -13,10 +12,7 @@ const Loader = ({}) => {
   const {width, height} = useWindowDimensions();
   return (
     <View style={[style.container, {height, width}]}>
-      <View style={style.loader}>
-        <ActivityIndicator size="large" color={colors.blue} />
-        <Text style={{marginLeft: 10, fontSize: 16}}>Loading...</Text>
-      </View>
+      <ActivityIndicator size="large" color={colors.blue} />
     </View>
   );
 };
@@ -32,9 +28,6 @@ const style = StyleSheet.create({
     paddingHorizontal: 20,
   },
   container: {
-    position: 'absolute',
-    zIndex: 10,
-    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
   },
 });

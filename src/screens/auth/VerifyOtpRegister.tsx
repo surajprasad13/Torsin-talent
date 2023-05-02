@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import {metrics} from '../../theme';
+import {fonts, metrics} from '../../theme';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
@@ -31,7 +31,6 @@ const VerifyOtpRegister = ({}) => {
     <View style={{flex: 1, backgroundColor: '#ffffff'}}>
       <TouchableOpacity
         onPress={() => {
-          //@ts-expect-error
           navigation.navigate('RegisterScreen');
         }}
         style={{
@@ -90,10 +89,7 @@ const VerifyOtpRegister = ({}) => {
             keyboardType="number-pad"
             textContentType="oneTimeCode"
             renderCell={({index, symbol, isFocused}) => (
-              <View
-                // Make sure that you pass onLayout={getCellOnLayoutHandler(index)} prop to root component of "Cell"
-                onLayout={getCellOnLayoutHandler(index)}
-                key={index}>
+              <View onLayout={getCellOnLayoutHandler(index)} key={index}>
                 <Text style={styles.cell}>
                   {symbol || (isFocused ? <Cursor /> : null)}
                 </Text>
@@ -120,14 +116,11 @@ const VerifyOtpRegister = ({}) => {
           </Text>
           <Text
             onPress={() => {
-              //@ts-expect-error
               navigation.navigate('RegisterScreen');
             }}
             style={{
               color: '#27AE60',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
+              fontFamily: fonts.regular,
               fontSize: moderateScale(14),
               lineHeight: 22,
             }}>
@@ -138,13 +131,11 @@ const VerifyOtpRegister = ({}) => {
 
       <TouchableOpacity
         onPress={() => {
-          //@ts-expect-error
           navigation.navigate('ResetPassword');
         }}
         style={{
           width: '85%',
           flex: 0.075,
-          // marginTop: moderateScale(150),
           marginLeft: '7.5%',
           backgroundColor: '#14226D',
           justifyContent: 'center',

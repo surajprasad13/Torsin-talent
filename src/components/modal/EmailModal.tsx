@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Animated,
 } from 'react-native';
-import {metrics} from '../../theme';
+import {colors, fonts, metrics} from '../../theme';
 
 import {
   CodeField,
@@ -98,9 +98,7 @@ const EmailModal = () => {
 
         <Text
           style={{
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '700',
+            fontFamily: fonts.bold,
             fontSize: 18,
             lineHeight: 20,
             top: -30,
@@ -114,9 +112,7 @@ const EmailModal = () => {
 
         <Text
           style={{
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '400',
+            fontFamily: fonts.regular,
             fontSize: 14,
             lineHeight: 20,
             display: 'flex',
@@ -138,7 +134,6 @@ const EmailModal = () => {
           textContentType="oneTimeCode"
           renderCell={({index, symbol, isFocused}) => (
             <View
-              // Make sure that you pass onLayout={getCellOnLayoutHandler(index)} prop to root component of "Cell"
               onLayout={getCellOnLayoutHandler(index)}
               key={index}
               style={[isFocused && styles.focusCell]}>
@@ -162,7 +157,7 @@ const EmailModal = () => {
               fontWeight: '400',
               fontSize: metrics.moderateScale(14),
               lineHeight: 22,
-              color: '#000000',
+              color: colors.black,
             }}>
             I didn't receive code?
           </Text>
@@ -187,9 +182,7 @@ const EmailModal = () => {
         <Text
           style={{
             color: visible ? '#6180F4' : 'gray',
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '400',
+            fontFamily: fonts.regular,
             fontSize: 14,
             lineHeight: 20,
             display: 'flex',
