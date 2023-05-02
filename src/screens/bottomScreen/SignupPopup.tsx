@@ -14,6 +14,7 @@ import {
   moderateScale,
   verticalScale,
 } from '../Components/Metrics';
+import { useNavigation } from '@react-navigation/native';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = React.useState(visible);
@@ -51,6 +52,7 @@ const ModalPoup = ({visible, children}) => {
 };
 
 const SignupPopup = () => {
+  const navigation = useNavigation();
   const [visible, setVisible] = React.useState(false);
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -119,7 +121,8 @@ const SignupPopup = () => {
           </Text>
         </View>
 
-        <TouchableOpacity onPress={setVisible}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('OnboardingScreen')}>
           <Text
             style={{
               textAlign: 'center',
@@ -141,7 +144,6 @@ const SignupPopup = () => {
           height: 27,
           backgroundColor: '#14226D',
           borderRadius: 4,
-          left: '40%',
           bottom: 10,
           justifyContent: 'center',
         }}>

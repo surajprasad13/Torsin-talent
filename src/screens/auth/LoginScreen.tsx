@@ -139,7 +139,7 @@ const LoginScreen = ({}) => {
         </View>
 
         <TouchableOpacity
-          style={{alignSelf: 'flex-end'}}
+          style={{alignSelf: 'center'}}
           onPress={() => {
             //@ts-expect-error
             navigation.navigate('LostPassword');

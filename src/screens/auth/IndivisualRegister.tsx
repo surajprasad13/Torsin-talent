@@ -57,6 +57,9 @@ const IndivisualRegister = ({}) => {
 
   const [countryValue, setIsCountryValue] = useState<string | null>(null);
 
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+
   const [inputs, setInputs] = useState<InputProp>({
     fullName: '',
     email: '',

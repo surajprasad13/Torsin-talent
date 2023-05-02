@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import SignupPopup from './bottomScreen/SignupPopup';
+import {fonts} from '../theme';
 
 const {} = Dimensions.get('window');
 
@@ -24,9 +25,9 @@ const WithoutSignupHome = ({}) => {
       <View
         style={{
           justifyContent: 'space-evenly',
-          top: 20,
           flexDirection: 'row',
-          alignItems: 'center',
+          padding: 30,
+          top: 30,
         }}>
         <View>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -122,7 +123,7 @@ const WithoutSignupHome = ({}) => {
 
           <Pressable
             style={{
-              right: 120,
+              alignItems: 'center',
             }}>
             <SignupPopup />
           </Pressable>
@@ -583,6 +584,7 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     tintColor: '#BDBDBD',
+    top: 15,
   },
 
   container: {
@@ -599,48 +601,24 @@ const styles = StyleSheet.create({
   },
 
   textStyle: {
-    width: 101,
-    height: 26,
-    left: 14,
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '700',
-    fontSize: 16,
-    lineHeight: 25,
+    fontStyle: fonts.bold,
     color: '#14226D',
   },
 
   innertextStyle: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    fontSize: 10,
-    marginLeft: 14,
-    lineHeight: 12,
+    fontStyle: fonts.regular,
     color: '#4F4F4F',
   },
 
   viewmore: {
-    width: 59,
-    height: 20,
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
-    fontSize: 12,
-    lineHeight: 20,
+    fontStyle: fonts.regular,
     textAlign: 'center',
     color: '#0036FF',
   },
 
   innerText: {
     // width: 77,
-    height: 19,
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '400',
-    fontSize: 12,
-    display: 'flex',
-    alignItems: 'center',
+    fontStyle: fonts.medium,
     color: '#4F4F4F',
   },
 });

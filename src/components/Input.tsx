@@ -34,7 +34,7 @@ const Input = ({
             borderColor: error
               ? colors.red
               : isFocused
-              ? colors.darkBlue
+              ? colors.light
               : colors.light,
             alignItems: 'center',
           },
