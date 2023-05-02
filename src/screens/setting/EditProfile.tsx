@@ -75,7 +75,8 @@ const EditProfile = ({}) => {
         <TouchableOpacity
           style={styles.cardContainer}
           onPress={() => {
-            navigation.navigate('EditUserProfile');
+            //@ts-expect-error
+            navigation.navigate('AddService');
           }}>
           <View style={styles.iconContainer}>
             <Feather name="settings" size={20} />

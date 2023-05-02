@@ -13,6 +13,7 @@ import {colors} from '../theme';
 import {createStackNavigator} from '@react-navigation/stack';
 import EditProfile from '../screens/setting/EditProfile';
 import EditUserProfile from '../screens/setting/EditUserProfile';
+import AddService from '../screens/setting/AddService';
 
 const Bottom = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,6 +24,7 @@ const SettingStack = () => {
       <Stack.Screen name="Setting" component={Setting} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="EditUserProfile" component={EditUserProfile} />
+      <Stack.Screen name="AddService" component={AddService} />
     </Stack.Navigator>
   );
 };

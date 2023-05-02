@@ -7,7 +7,6 @@ import {
   Keyboard,
   ScrollView,
   SafeAreaView,
-  TextInputProps,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Dialog, Portal} from 'react-native-paper';
@@ -24,15 +23,14 @@ import Loader from '../../components/Loader';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {userLogin} from '../../redux/actions/authAction';
 import {loginValue} from '../../redux/reducers/authSlice';
+import {CustomButton} from '../../components';
 
 const {moderateScale, verticalScale} = metrics;
 
 const LoginScreen = ({}) => {
   const navigation = useNavigation();
 
-  const {loading, error, success, userToken} = useAppSelector(
-    state => state.auth,
-  );
+  const {loading, error, userToken} = useAppSelector(state => state.auth);
 
   const dispatch = useAppDispatch();
 
@@ -78,7 +76,7 @@ const LoginScreen = ({}) => {
     if (userToken) {
       navigation.navigate('DrawerNavigation');
     }
-  }, [userToken]);
+  }, [userToken, navigation]);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
@@ -150,7 +148,7 @@ const LoginScreen = ({}) => {
               keyboardType="email-address"
               autoCapitalize="none"
               autoComplete="email"
-              onChangeText={(text: TextInputProps) => {
+              onChangeText={(text: string) => {
                 handleOnchange(text, 'email');
                 dispatch(loginValue());
               }}
@@ -188,26 +186,12 @@ const LoginScreen = ({}) => {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        <CustomButton
+          title="Login"
           onPress={validate}
-          disabled={inputs.email && inputs.password ? false : true}
-          style={[
-            styles.buttonContainer,
-            {
-              backgroundColor:
-                inputs.email && inputs.password ? '#0E184D' : '#E0E0E0',
-            },
-          ]}>
-          <Text
-            style={{
-              textAlign: 'center',
-              color: '#FFFFFF',
-              fontFamily: fonts.regular,
-              fontSize: moderateScale(16),
-            }}>
-            Login
-          </Text>
-        </TouchableOpacity>
+          disabled={inputs.email && inputs.password ? true : false}
+          style={{marginTop: verticalScale(200)}}
+        />
 
         <View
           style={{
@@ -218,7 +202,7 @@ const LoginScreen = ({}) => {
           <Text
             style={{
               fontFamily: fonts.regular,
-              color: '#000000',
+              color: colors.black,
             }}>
             Don’t have an account?
           </Text>

@@ -53,6 +53,24 @@ const userLogin = createAsyncThunk(
   },
 );
 
-export {userLogin, registerIndivisual, registerBusiness};
+const userUpdate = createAsyncThunk(
+  'auth/update',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.put(`user/update`, value.inputs, {
+        headers: {Authorization: `Bearer ${value.userToken}`},
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+export {userLogin, registerIndivisual, registerBusiness, userUpdate};
 
 export default {};

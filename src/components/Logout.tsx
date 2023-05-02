@@ -9,8 +9,10 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {colors, fonts} from '../theme';
 import {useAppDispatch} from '../hooks';
 import {logout} from '../redux/reducers/authSlice';
+import {StackActions, useNavigation} from '@react-navigation/native';
 
 const Logout = () => {
+  const navigation = useNavigation();
   const dispatch = useAppDispatch();
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -68,6 +70,10 @@ const Logout = () => {
             <Button
               onPress={() => {
                 dispatch(logout());
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'OnboardingScreen'}],
+                });
               }}>
               Logout
             </Button>

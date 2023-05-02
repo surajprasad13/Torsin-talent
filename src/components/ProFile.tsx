@@ -13,16 +13,16 @@ function ProFile({onPress, image}: ProfilePorp) {
       <Pressable onPress={onPress}>
         <Avatar.Image
           size={80}
-          style={{}}
+          style={{backgroundColor: 'grey'}}
           source={
-            image
+            image.length > 10
               ? {uri: 'data:image/png;base64,' + image}
               : require('../assets/images/profile.png')
           }
         />
         <Image
           source={
-            image
+            image.length > 10
               ? require('../assets/images/check.png')
               : require('../assets/images/camera.png')
           }

@@ -12,13 +12,18 @@ import {useNavigation} from '@react-navigation/native';
 // icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 // components
 import ProFile from '../../components/ProFile';
 import {colors, fonts} from '../../theme';
+import {useAppSelector} from '../../hooks';
 
 const Setting = ({}) => {
   const navigation = useNavigation();
+
+  const {userInfo} = useAppSelector(state => state.auth);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -82,58 +87,37 @@ const Setting = ({}) => {
             </TouchableOpacity>
           </View>
 
-          <View style={{flexDirection: 'row', top: 71}}>
-            <Image
-              source={require('../../assets/images/User_light.png')}
-              style={styles.userIcon}
-            />
-            <Text style={styles.userText}>John Smith</Text>
-          </View>
+          <View style={styles.list}>
+            <View style={styles.listContainer}>
+              <AntDesign name="user" size={20} />
+              <Text style={styles.userText}>{userInfo?.['business Name']}</Text>
+            </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              top: 94,
-            }}>
-            <Image
-              source={require('../../assets/images/nounMale.png')}
-              style={styles.userIcon}
-            />
-            <Text style={styles.userText}>Male</Text>
-          </View>
+            {userInfo?.gender && (
+              <View style={styles.listContainer}>
+                <Image
+                  source={require('../../assets/images/nounMale.png')}
+                  style={styles.userIcon}
+                />
+                <Text style={styles.userText}>Male</Text>
+              </View>
+            )}
+            <View style={styles.listContainer}>
+              <Fontisto name="email" size={20} />
+              <Text style={styles.userText}>{userInfo?.email}</Text>
+            </View>
 
-          <View style={{flexDirection: 'row', top: 115}}>
-            <Image
-              source={require('../../assets/images/Message_light.png')}
-              style={styles.userIcon}
-            />
-            <Text style={styles.userText}>john@gmail.com</Text>
-          </View>
+            <View style={styles.listContainer}>
+              <Feather name="phone" size={20} />
+              <Text style={styles.userText}>{userInfo?.mobileNo}</Text>
+            </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              top: 136,
-            }}>
-            <Image
-              source={require('../../assets/images/Phone_light.png')}
-              style={styles.userIcon}
-            />
-            <Text style={styles.userText}>895204300</Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              top: 157,
-            }}>
-            <Image
-              source={require('../../assets/images/location.png')}
-              style={styles.userIcon}
-            />
-            <Text style={styles.userText}>
-              Murshid Bazar, Deira, P.O Box 40512
-            </Text>
+            {userInfo?.location && (
+              <View style={styles.listContainer}>
+                <Entypo name="location-pin" size={20} />
+                <Text style={styles.userText}>{userInfo?.location}</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -145,19 +129,20 @@ export default Setting;
 
 const styles = StyleSheet.create({
   userText: {
-    fontFamily: 'Inter',
-    fontWeight: '400',
-    fontSize: 14,
-    lineHeight: 20,
-    color: '#000000',
-    left: 60,
+    fontFamily: fonts.regular,
+    color: colors.black,
+    marginLeft: 10,
   },
 
   userIcon: {
-    width: 15,
-    height: 15,
-    left: 27,
-    top: 3,
     tintColor: '#6c6c6c',
+  },
+  listContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  list: {
+    margin: 10,
   },
 });

@@ -21,10 +21,10 @@ type CustomInputProp = {
 const CustomInput = (props: TextInputProps & CustomInputProp) => {
   const [active, setActive] = useState<boolean>(false);
 
-  const [visible, setVisible] = useState<boolean>(true);
+  const [visible, setVisible] = useState<boolean>(props.password ?? false);
 
   return (
-    <View style={props.containerStyle}>
+    <View style={[props.containerStyle]}>
       <Text style={styles.label}>{props.label}</Text>
       <View
         style={[
@@ -63,11 +63,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     marginTop: 10,
+    backgroundColor: 'white',
   },
   input: {
     padding: 15,
     flex: 1,
     color: '#333333',
+    backgroundColor: 'white',
+    borderRadius: 10,
   },
 });
 

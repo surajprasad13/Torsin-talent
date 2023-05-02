@@ -2,19 +2,13 @@ import React from 'react';
 import {
   View,
   StyleSheet,
-  Button,
   Modal,
   Image,
   Text,
   TouchableOpacity,
   Animated,
 } from 'react-native';
-import {
-  horizontalScale,
-  moderateScale,
-  verticalScale,
-} from '../Components/Metrics';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = React.useState(visible);
