@@ -93,8 +93,14 @@ const PhoneModal = ({active, phone}) => {
 
   const sendOtp = async () => {
     try {
+      var mobilePhone = phone;
+      if (phone.length == 7) {
+        mobilePhone = '971' + phone;
+      } else {
+        mobilePhone = '91' + phone;
+      }
       setLoading(true);
-      const mobile = '+91' + phone;
+      const mobile = '+' + mobilePhone;
       const confirmation = await auth().signInWithPhoneNumber(mobile);
       console.log(confirmation.verificationId);
       setConfirm(confirmation);

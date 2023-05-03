@@ -300,7 +300,7 @@ const IndivisualRegister = ({}) => {
                 right: 10,
               }}>
               <PhoneModal
-                active={inputs.mobileNo.length >= 10}
+                active={inputs.mobileNo.length >= 7}
                 phone={inputs.mobileNo}
               />
             </Pressable>
