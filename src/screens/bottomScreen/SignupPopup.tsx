@@ -9,6 +9,7 @@ import {
   Animated,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = React.useState(visible);
@@ -54,10 +55,7 @@ const SignupPopup = () => {
         <View style={{alignItems: 'center'}}>
           <View style={styles.header}>
             <TouchableOpacity onPress={() => setVisible(false)}>
-              <Image
-                source={require('../../assets/images/Delete.png')}
-                style={{height: 20, width: 20, bottom: 30}}
-              />
+              <Entypo name="cross" size={20} />
             </TouchableOpacity>
           </View>
         </View>

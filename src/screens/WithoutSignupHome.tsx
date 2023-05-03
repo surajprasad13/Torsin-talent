@@ -13,6 +13,9 @@ import {Searchbar} from 'react-native-paper';
 import SignupPopup from './bottomScreen/SignupPopup';
 import {fonts} from '../theme';
 
+// icons
+import Feather from 'react-native-vector-icons/Feather';
+
 const {} = Dimensions.get('window');
 
 const WithoutSignupHome = ({}) => {
@@ -31,10 +34,7 @@ const WithoutSignupHome = ({}) => {
         }}>
         <View>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <Image
-              style={styles.tinyLogo}
-              source={require('../assets/images/Sort.png')}
-            />
+            <Feather name="user" size={20} />
           </TouchableOpacity>
         </View>
         <Searchbar
@@ -277,12 +277,7 @@ const WithoutSignupHome = ({}) => {
               style={{
                 flexDirection: 'row',
               }}>
-              <Image
-                source={require('../assets/images/Time_light.png')}
-                style={{
-                  right: 2,
-                }}
-              />
+              <Feather name="user" size={20} />
               <Text style={styles.innerText}>3d ago</Text>
             </View>
 
@@ -290,12 +285,7 @@ const WithoutSignupHome = ({}) => {
               style={{
                 flexDirection: 'row',
               }}>
-              <Image
-                source={require('../assets/images/User_light.png')}
-                style={{
-                  right: 2,
-                }}
-              />
+              <Feather name="user" size={20} />
               <Text style={styles.innerText}>James Cameroon</Text>
             </View>
           </View>
@@ -411,12 +401,7 @@ const WithoutSignupHome = ({}) => {
               style={{
                 flexDirection: 'row',
               }}>
-              <Image
-                source={require('../assets/images/Time_light.png')}
-                style={{
-                  right: 2,
-                }}
-              />
+              <Feather name="user" size={20} />
               <Text style={styles.innerText}>3d ago</Text>
             </View>
 
@@ -424,12 +409,7 @@ const WithoutSignupHome = ({}) => {
               style={{
                 flexDirection: 'row',
               }}>
-              <Image
-                source={require('../assets/images/User_light.png')}
-                style={{
-                  right: 2,
-                }}
-              />
+              <Feather name="user" size={20} />
               <Text style={styles.innerText}>James Cameroon</Text>
             </View>
           </View>
@@ -545,12 +525,7 @@ const WithoutSignupHome = ({}) => {
               style={{
                 flexDirection: 'row',
               }}>
-              <Image
-                source={require('../assets/images/Time_light.png')}
-                style={{
-                  right: 2,
-                }}
-              />
+              <Feather name="user" size={20} />
               <Text style={styles.innerText}>3d ago</Text>
             </View>
 
@@ -558,12 +533,7 @@ const WithoutSignupHome = ({}) => {
               style={{
                 flexDirection: 'row',
               }}>
-              <Image
-                source={require('../assets/images/User_light.png')}
-                style={{
-                  right: 2,
-                }}
-              />
+              <Feather name="user" size={20} />
               <Text style={styles.innerText}>James Cameroon</Text>
             </View>
           </View>

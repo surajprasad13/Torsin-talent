@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -34,6 +34,8 @@ import {} from '../../redux/actions/authAction';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/native';
 import {CustomButton} from '../../components';
+import {useAppDispatch} from '../../hooks';
+import {resetVerified} from '../../redux/reducers/authSlice';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
@@ -50,7 +52,7 @@ type InputProp = {
 
 const IndivisualRegister = ({}) => {
   const navigation = useNavigation();
-
+  const dispatch = useAppDispatch();
   const {loading} = useSelector((state: RootState) => state.auth);
 
   const data = [
@@ -60,9 +62,6 @@ const IndivisualRegister = ({}) => {
   ];
 
   const [countryValue, setIsCountryValue] = useState<string | null>(null);
-
-  const [value, setValue] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
 
   const [inputs, setInputs] = useState<InputProp>({
     fullName: '',
@@ -140,9 +139,8 @@ const IndivisualRegister = ({}) => {
         Alert.alert('Please allow permissions');
       } else if (response.errorCode == 'others') {
         Alert.alert(String(response.errorMessage));
-      } else if (response.assets[0].fileSize > 1024) {
-        Alert.alert('maximum size');
       } else {
+        //@ts-expect-error
         setImage(response.assets[0].base64);
       }
     });
@@ -152,6 +150,13 @@ const IndivisualRegister = ({}) => {
     inputs.fullName && inputs.email && inputs.mobileNo && inputs.location
       ? true
       : false;
+
+  useEffect(() => {
+    const listener = navigation.addListener('beforeRemove', () => {
+      dispatch(resetVerified());
+    });
+    return () => listener;
+  }, []);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
@@ -197,29 +202,33 @@ const IndivisualRegister = ({}) => {
             }}></View>
         </View>
 
-        <View style={{flexDirection: 'row', top: 36}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            top: 36,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('ThroughRegister')}
-            style={{top: 8}}>
+            onPress={() => navigation.navigate('ThroughRegister')}>
             <Feather name="arrow-left" size={20} />
           </TouchableOpacity>
           <Text
             style={{
               fontFamily: fonts.bold,
-              marginLeft: 30,
               fontSize: moderateScale(32),
-              color: '#0E184D',
+              color: colors.primary,
               textAlign: 'center',
-              flex: 1,
             }}>
             Create Account
           </Text>
+          <View style={{flex: 0.2}} />
         </View>
 
         <Text
           style={{
             fontFamily: fonts.regular,
-            width: 300,
+
             top: 50,
             alignItems: 'center',
             color: '#000F1A',
@@ -264,10 +273,13 @@ const IndivisualRegister = ({}) => {
             <Pressable
               style={{
                 position: 'absolute',
-                marginTop: 34,
+                marginTop: 45,
                 right: 10,
               }}>
-              <EmailModal />
+              <EmailModal
+                active={inputs.email.length > 0}
+                email={inputs.email}
+              />
             </Pressable>
           </View>
 
@@ -284,10 +296,13 @@ const IndivisualRegister = ({}) => {
             <Pressable
               style={{
                 position: 'absolute',
-                marginTop: 34,
+                marginTop: 45,
                 right: 10,
               }}>
-              <PhoneModal />
+              <PhoneModal
+                active={inputs.mobileNo.length >= 10}
+                phone={inputs.mobileNo}
+              />
             </Pressable>
           </View>
 
@@ -410,19 +425,13 @@ const IndivisualRegister = ({}) => {
             style={{marginTop: 20}}
           />
 
-          <View
+          <Text
             style={{
-              flexDirection: 'row',
-              marginTop: moderateScale(20),
-              justifyContent: 'center',
+              fontFamily: fonts.regular,
+              textAlign: 'center',
+              marginTop: 10,
             }}>
-            <Text
-              style={{
-                fontFamily: fonts.regular,
-                fontSize: moderateScale(14),
-              }}>
-              Already have an account?
-            </Text>
+            Already have an account?{' '}
             <Text
               onPress={() => {
                 navigation.navigate('LoginScreen');
@@ -430,12 +439,10 @@ const IndivisualRegister = ({}) => {
               style={{
                 color: '#0E184D',
                 fontFamily: fonts.bold,
-                fontSize: moderateScale(14),
-                left: 2,
               }}>
               Log In
             </Text>
-          </View>
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -477,7 +484,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.medium,
     fontSize: 16,
   },
-  dropdown: {},
+  dropdown: {
+    marginTop: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
   checkbox: {},
 });
 

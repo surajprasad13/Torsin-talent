@@ -21,10 +21,13 @@ import ImageSlider from '../../components/ImageSlider';
 import CircleProgress from '../../components/CircleProgress';
 import {colors, fonts} from '../../theme';
 import ExpertiseCard from './components/ExpertiseCard';
+import {useAppSelector} from '../../hooks';
 
 const {} = Dimensions.get('window');
 
 const HomeScreen = ({}) => {
+  const {userInfo} = useAppSelector(state => state.auth);
+
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = (query: any) => setSearchQuery(query);
@@ -71,10 +74,10 @@ const HomeScreen = ({}) => {
             padding: 15,
             justifyContent: 'space-between',
           }}>
-          <CircleProgress />
+          <CircleProgress image={userInfo?.profileImage} />
           <View style={{width: '70%'}}>
             <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
-              John Smith’s Profile
+              {userInfo?.fullName} Profile
             </Text>
             <Text
               style={{

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -14,12 +15,32 @@ import Feather from 'react-native-vector-icons/Feather';
 
 import {appstyle, colors, fonts} from '../../theme';
 import ServiceCard from './components/ServiceCard';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {Dialog, Provider} from 'react-native-paper';
+import {fetchService, fetchSkill} from '../../redux/actions/userAction';
+import {Service} from '../../types/user';
 
 const ServiceSkill = ({}) => {
   const navigation = useNavigation();
 
+  const dispatch = useAppDispatch();
+  const {userToken} = useAppSelector(state => state.auth);
+  const {skills, services, loading} = useAppSelector(state => state.user);
+
+  useEffect(() => {
+    dispatch(fetchSkill({userToken}));
+  }, []);
+  useEffect(() => {
+    dispatch(fetchService({userToken}));
+  }, []);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
+      <Provider>
+        <Dialog visible={loading}>
+          <ActivityIndicator />
+        </Dialog>
+      </Provider>
       <View
         style={{
           flexDirection: 'row',
@@ -84,10 +105,10 @@ const ServiceSkill = ({}) => {
           }}>
           {/*  */}
 
-          {[0, 1, 2, 3, 4, 5, 6,7,8,9,10].map(item => {
+          {skills.map((item, index) => {
             return (
               <View
-                key={item.toString()}
+                key={index.toString()}
                 style={{
                   borderWidth: 1,
                   borderColor: '#08161433',
@@ -101,7 +122,7 @@ const ServiceSkill = ({}) => {
                     color: colors.black,
                     opacity: 0.3,
                   }}>
-                  Singing
+                  {item}
                 </Text>
               </View>
             );
@@ -134,8 +155,8 @@ const ServiceSkill = ({}) => {
         {/*  */}
 
         <View style={{marginTop: 20}}>
-          {[0, 1, 2, 3, 4, 5,6,7,8,9,10].map((item, index) => (
-            <ServiceCard key={index.toString()} />
+          {services.map((item: Service, index) => (
+            <ServiceCard item={item} key={index.toString()} />
           ))}
         </View>
 

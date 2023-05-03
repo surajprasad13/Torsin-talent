@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {metrics} from '../../../theme';
+import {colors, fonts, metrics} from '../../../theme';
 import {useNavigation} from '@react-navigation/native';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
@@ -43,25 +43,18 @@ const LostPassword = ({}) => {
           }}>
           <Text
             style={{
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '700',
+              fontFamily: fonts.bold,
               fontSize: moderateScale(32),
-              lineHeight: moderateScale(35),
-              color: '#0E184D',
+              color: colors.primary,
             }}>
             Lost Password
           </Text>
 
           <Text
             style={{
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
+              fontFamily: fonts.regular,
               width: horizontalScale(300),
               fontSize: moderateScale(14),
-              lineHeight: moderateScale(17),
-              alignItems: 'center',
               color: '#000F1A',
               top: 20,
             }}>
@@ -75,11 +68,8 @@ const LostPassword = ({}) => {
             style={{
               color: '#4F4F4F',
               marginLeft: horizontalScale(15),
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
+              fontFamily: fonts.regular,
               fontSize: moderateScale(16),
-              lineHeight: 22,
             }}>
             Email
           </Text>
@@ -135,15 +125,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 12,
   },
-
   input: {
     color: '#000000',
     fontSize: moderateScale(14),
-    fontWeight: '400',
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
+    fontFamily: fonts.regular,
   },
-
   tinyLogo: {
     width: 16,
     height: 16,

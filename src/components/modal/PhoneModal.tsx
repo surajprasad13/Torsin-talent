@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,18 +7,26 @@ import {
   Text,
   TouchableOpacity,
   Animated,
+  ActivityIndicator,
 } from 'react-native';
-
-import {colors, fonts, metrics} from '../../theme';
-
-const {moderateScale} = metrics;
-
 import {
   CodeField,
   Cursor,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+import auth from '@react-native-firebase/auth';
+
+// icons
+import Entypo from 'react-native-vector-icons/Entypo';
+
+// helpers
+import {colors, fonts, metrics} from '../../theme';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {phoneVerified, resetSuccess} from '../../redux/reducers/authSlice';
+import {useSelector} from 'react-redux';
+
+const {moderateScale} = metrics;
 
 export const CELL_SIZE = 40;
 export const CELL_BORDER_RADIUS = 4;
@@ -65,11 +73,17 @@ const ModalPoup = ({visible, children}) => {
   );
 };
 
-const PhoneModal = () => {
+const PhoneModal = ({active, phone}) => {
+  const dispatch = useAppDispatch();
+  const {mobileVerified} = useAppSelector(state => state.auth);
+
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [confirm, setConfirm] = useState<any>(null);
+
   const [value, setValue] = useState('');
-
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
-
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
@@ -77,64 +91,106 @@ const PhoneModal = () => {
 
   const [visible, setVisible] = useState<boolean>(false);
 
-  const [value1, setValue1] = useState('');
-
-  const onChangeEmail = text => {
-    if (text.length == 0) {
-      setValue1({value1: true});
-    } else {
-      setValue1({value1: false});
+  const sendOtp = async () => {
+    try {
+      setLoading(true);
+      const mobile = '+91' + phone;
+      const confirmation = await auth().signInWithPhoneNumber(mobile);
+      console.log(confirmation);
+      setConfirm(confirmation);
+      setMessage('Otp sent sucessfully');
+      setLoading(false);
+    } catch (err) {
+      setError(String(error));
+      setLoading(false);
     }
-    setValue1({value1: text});
   };
+
+  async function confirmCode() {
+    try {
+      setError('');
+      setMessage('');
+      setLoading(true);
+      await confirm.confirm(value);
+      setLoading(false);
+      dispatch(phoneVerified());
+      dispatch(resetSuccess());
+      setVisible(false);
+    } catch (_error: any) {
+      console.log(_error);
+      setLoading(false);
+      setMessage('');
+      setError('Invalid Code');
+    }
+  }
+
+  useEffect(() => {
+    if (value.length >= 6 && confirm) {
+      confirmCode();
+    }
+  }, [value, confirm]);
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <ModalPoup visible={visible}>
-        <View style={{alignItems: 'center'}}>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => setVisible(false)}>
-              <Image
-                source={require('../../assets/images/Delete.png')}
-                style={{height: 20, width: 20, top: -30}}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <TouchableOpacity
+          style={{alignSelf: 'flex-end'}}
+          onPress={() => setVisible(false)}>
+          <Entypo name="cross" size={20} />
+        </TouchableOpacity>
         <View style={{alignItems: 'center'}}>
           <Image
             source={require('../../assets/images/mobile.png')}
-            style={{height: 70, width: 70, top: -40, borderRadius: 20}}
+            style={{height: 50, width: 50}}
           />
         </View>
 
-        <Text
-          style={{
-            fontFamily: fonts.bold,
-            fontSize: 18,
-            lineHeight: 20,
-            top: -30,
-            display: 'flex',
-            alignItems: 'center',
-            textAlign: 'center',
-            color: '#0E184D',
-          }}>
-          Phone verification via OTP
-        </Text>
+        <View style={{marginTop: 10}}>
+          <Text
+            style={{
+              fontFamily: fonts.bold,
+              fontSize: 18,
+              textAlign: 'center',
+              color: colors.primary,
+            }}>
+            Phone verification via OTP
+          </Text>
+          <Text
+            style={{
+              fontFamily: fonts.regular,
+              textAlign: 'center',
+              color: colors.black,
+              marginTop: 5,
+            }}>
+            Please enter the verification code send to your Phone.
+          </Text>
+        </View>
 
-        <Text
-          style={{
-            fontFamily: fonts.regular,
-            fontSize: 14,
-            lineHeight: 20,
-            display: 'flex',
-            alignItems: 'center',
-            textAlign: 'center',
-            color: colors.black,
-            top: -20,
-          }}>
-          Please enter the verification code send to your Phone.
-        </Text>
+        {!!error && (
+          <Text
+            style={{
+              marginTop: 10,
+              fontFamily: fonts.medium,
+              color: colors.red,
+              textAlign: 'center',
+            }}>
+            {error}
+          </Text>
+        )}
+        {!!message && (
+          <Text
+            style={{
+              marginTop: 10,
+              fontFamily: fonts.medium,
+              color: 'green',
+              textAlign: 'center',
+            }}>
+            {message}
+          </Text>
+        )}
+
+        {loading && <ActivityIndicator style={{marginTop: 10}} />}
+
         <CodeField
           ref={ref}
           {...props}
@@ -145,10 +201,7 @@ const PhoneModal = () => {
           keyboardType="number-pad"
           textContentType="oneTimeCode"
           renderCell={({index, symbol, isFocused}) => (
-            <View
-              onLayout={getCellOnLayoutHandler(index)}
-              key={index}
-              style={[isFocused && styles.focusCell]}>
+            <View onLayout={getCellOnLayoutHandler(index)} key={index}>
               <Text style={styles.cell}>
                 {symbol || (isFocused ? <Cursor /> : null)}
               </Text>
@@ -156,42 +209,52 @@ const PhoneModal = () => {
           )}
         />
 
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: moderateScale(10),
-            justifyContent: 'center',
-          }}>
+        <View style={{marginTop: moderateScale(10)}}>
           <Text
             style={{
               fontFamily: fonts.regular,
-              fontSize: moderateScale(14),
               color: colors.black,
+              textAlign: 'center',
             }}>
             I didn't receive code?{' '}
-          </Text>
-          <Text
-            onPress={() => {
-              //@ts-expect-error
-              navigation.navigate('IndivisualRegister');
-            }}
-            style={{
-              color: '#27AE60',
-              fontFamily: fonts.regular,
-              fontSize: moderateScale(14),
-            }}>
-            Resend Code
+            <Text
+              onPress={() => {
+                setConfirm(null);
+                setError('');
+                setValue('');
+                sendOtp();
+              }}
+              style={{
+                color: '#27AE60',
+                fontFamily: fonts.regular,
+              }}>
+              Resend Code
+            </Text>
           </Text>
         </View>
       </ModalPoup>
-      <TouchableOpacity onPress={() => setVisible(!visible)}>
-        <Text
-          style={{
-            color: value1 ? '#6180F4' : 'gray',
-            fontFamily: fonts.regular,
-          }}>
-          Verify
-        </Text>
+      <TouchableOpacity
+        onPress={() => {
+          setVisible(!visible);
+          sendOtp();
+        }}>
+        {mobileVerified ? (
+          <Text
+            style={{
+              color: 'green',
+              fontFamily: fonts.regular,
+            }}>
+            Verified
+          </Text>
+        ) : (
+          <Text
+            style={{
+              color: active ? colors.primary : 'gray',
+              fontFamily: fonts.regular,
+            }}>
+            Verify
+          </Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -227,7 +290,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     height: CELL_SIZE,
     width: CELL_SIZE,
-    lineHeight: CELL_SIZE - 5,
     fontSize: 18,
     borderWidth: 1,
     borderColor: '#BDBDBD',
@@ -235,7 +297,6 @@ const styles = StyleSheet.create({
     borderRadius: CELL_BORDER_RADIUS,
     color: '#0C0900',
     backgroundColor: '#fff',
-    top: -20,
     // IOS
     shadowColor: '#000',
     shadowOffset: {

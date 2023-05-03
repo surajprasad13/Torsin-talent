@@ -23,6 +23,7 @@ import Logout from './Logout';
 import CircleProgress from './CircleProgress';
 import {colors, fonts} from '../theme';
 import {Divider} from 'react-native-paper';
+import {useAppSelector} from '../hooks';
 
 const List = [
   {
@@ -80,11 +81,13 @@ const List = [
 const CustomSidebarMenu = ({state, ...rest}: any) => {
   const navigation = useNavigation();
 
+  const {userInfo} = useAppSelector(state => state.auth);
+
   return (
     <SafeAreaView>
       <View style={styles.sideMenuContainer}>
         <View style={{flexDirection: 'row', alignItems: 'center', padding: 20}}>
-          <CircleProgress />
+          <CircleProgress image={userInfo?.profileImage} />
           <View
             style={{
               flexDirection: 'row',
@@ -94,7 +97,7 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
             }}>
             <View style={{marginLeft: 10}}>
               <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
-                John Smith
+                {userInfo?.fullName}
               </Text>
               <TouchableOpacity
                 onPress={() => {
@@ -217,4 +220,3 @@ const styles = StyleSheet.create({
 });
 
 export default CustomSidebarMenu;
-

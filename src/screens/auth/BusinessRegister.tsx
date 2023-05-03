@@ -22,6 +22,8 @@ import ProFile from '../../components/ProFile';
 import Feather from 'react-native-vector-icons/Feather';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {CustomButton} from '../../components';
+import PhoneModal from '../../components/modal/PhoneModal';
+import EmailModal from '../../components/modal/EmailModal';
 
 const {moderateScale} = metrics;
 
@@ -237,15 +239,10 @@ const BusinessRegister = ({}) => {
                 marginTop: 45,
                 right: 10,
               }}>
-              <Text
-                style={{
-                  color: 'gray',
-                  fontFamily: fonts.regular,
-                  display: 'flex',
-                  alignItems: 'center',
-                }}>
-                Verify
-              </Text>
+              <EmailModal
+                active={inputs.email.length > 0}
+                email={inputs.email}
+              />
             </Pressable>
           </View>
 
@@ -265,13 +262,10 @@ const BusinessRegister = ({}) => {
                 marginTop: 45,
                 right: 10,
               }}>
-              <Text
-                style={{
-                  color: 'gray',
-                  fontFamily: fonts.regular,
-                }}>
-                Verify
-              </Text>
+              <PhoneModal
+                active={inputs.mobileNo.length >= 10}
+                phone={inputs.mobileNo}
+              />
             </Pressable>
           </View>
 

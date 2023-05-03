@@ -34,13 +34,7 @@ const Setting = ({}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('EditProfile');
-            }}
-            style={{}}>
-            <Feather name="arrow-left" size={20} />
-          </TouchableOpacity>
+          <View />
           <Text
             style={{
               textAlign: 'center',
@@ -54,9 +48,13 @@ const Setting = ({}) => {
         </View>
 
         <View style={{backgroundColor: '#f9fbff', flex: 2}}>
-          <View style={{top: 24.33}}>
-            <ProFile image="" onPress={() => {}} />
-          </View>
+          <ProFile
+            image={
+              userInfo?.profileImage ??
+              'https://source.unsplash.com/400x400?user'
+            }
+            onPress={() => {}}
+          />
 
           <View
             style={{

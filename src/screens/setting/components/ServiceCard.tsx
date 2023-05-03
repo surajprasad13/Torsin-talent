@@ -2,8 +2,9 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
 import {appstyle, colors, fonts} from '../../../theme';
 import FastImage from 'react-native-fast-image';
+import {Service} from '../../../types/user';
 
-const ServiceCard = ({}) => {
+const ServiceCard = ({item}: Service) => {
   return (
     <View style={[styles.cardContainer]}>
       <FastImage
@@ -13,11 +14,10 @@ const ServiceCard = ({}) => {
       />
       <View style={{width: '80%'}}>
         <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
-          Song production
+          {item.serviceName}
         </Text>
         <Text style={{fontFamily: fonts.regular, color: '#1E202B'}}>
-          Job Description Complete your profile. Set your profile completely so
-          that recruiter will find your profile easily.
+          {item.serviceDescription}
         </Text>
         <View
           style={{

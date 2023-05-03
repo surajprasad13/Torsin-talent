@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-
 import {
   View,
   Text,
@@ -10,6 +9,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 
 // helpers
@@ -18,7 +18,6 @@ import {metrics, colors, fonts} from '../../../theme';
 // components
 import Input from '../../../components/Input';
 import Loader from '../../../components/Loader';
-import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '../../../hooks';
 
 const {moderateScale, verticalScale} = metrics;

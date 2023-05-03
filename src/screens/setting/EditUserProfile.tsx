@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, Dialog, Portal, RadioButton} from 'react-native-paper';
@@ -22,6 +23,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {CustomButton, CustomInput} from '../../components';
 import {userUpdate} from '../../redux/actions/authAction';
 import {resetSuccess} from '../../redux/reducers/authSlice';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 const EditUserProfile = ({}) => {
   const navigation = useNavigation();
@@ -38,11 +40,33 @@ const EditUserProfile = ({}) => {
     mobileNo: userInfo?.mobileNo,
     location: userInfo?.location,
     countryCodeId: userInfo?.countryCodeId,
+    profileImage: userInfo?.profileImage,
   });
 
   const [errors, setErrors] = React.useState<any>({});
-
   const [checked, setChecked] = React.useState('first');
+
+  const uploadImage = () => {
+    let options: any = {
+      mediaType: 'photo',
+      quality: 1,
+      includeBase64: true,
+    };
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+      } else if (response.errorCode == 'permission') {
+        Alert.alert('Please allow permissions');
+      } else if (response.errorCode == 'others') {
+        Alert.alert(String(response.errorMessage));
+      } else {
+        setInputs((prevState: any) => ({
+          ...prevState,
+          //@ts-expect-error
+          profileImage: response.assets[0].base64,
+        }));
+      }
+    });
+  };
 
   const update = () => {
     dispatch(userUpdate({inputs, userToken}));
@@ -94,9 +118,9 @@ const EditUserProfile = ({}) => {
       <ScrollView style={{padding: 10, backgroundColor: '#F9FBFF'}}>
         <ProFile
           image={
-            userInfo?.profileImage ?? 'https://source.unsplash.com/400x400?user'
+            inputs.profileImage ?? 'https://source.unsplash.com/400x400?user'
           }
-          onPress={() => {}}
+          onPress={uploadImage}
         />
 
         {!!error && (
@@ -112,6 +136,7 @@ const EditUserProfile = ({}) => {
         )}
 
         <CustomInput
+          value={inputs.fullName}
           onChangeText={(text: string) => handleOnchange(text, 'fullName')}
           onFocus={() => handleError(null, 'fullname')}
           label="Name"
@@ -121,6 +146,7 @@ const EditUserProfile = ({}) => {
         />
 
         <CustomInput
+          value={inputs.email}
           onChangeText={(text: string) => handleOnchange(text, 'email')}
           onFocus={() => handleError(null, 'email')}
           label="Email"
@@ -131,6 +157,7 @@ const EditUserProfile = ({}) => {
 
         <CustomInput
           keyboardType="phone-pad"
+          value={inputs.mobileNo}
           onChangeText={(text: string) => handleOnchange(text, 'mobileNo')}
           onFocus={() => handleError(null, 'phone')}
           label="Mobile Number"
@@ -170,6 +197,7 @@ const EditUserProfile = ({}) => {
         </View>
 
         <CustomInput
+          value={inputs.location}
           onChangeText={(text: string) => handleOnchange(text, 'location')}
           onFocus={() => handleError(null, 'location')}
           label="Location"

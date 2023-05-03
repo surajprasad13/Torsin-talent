@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from '../redux';
 
 const instance = axios.create({
-  baseURL: 'https://torsin-admin.apponward.com/v1/api/talent/',
+  baseURL: 'https://torsin-admin.apponward.com/v1/api/',
 });
 
 // instance.interceptors.request.use(

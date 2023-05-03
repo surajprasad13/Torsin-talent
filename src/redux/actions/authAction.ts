@@ -7,7 +7,7 @@ const registerIndivisual = createAsyncThunk(
   async (data: any, {rejectWithValue}) => {
     try {
       const {data: responseData} = await api.post(
-        `individual/registration`,
+        `talent/individual/registration`,
         data,
       );
       return responseData;
@@ -25,7 +25,7 @@ const registerBusiness = createAsyncThunk(
   'auth/register/business',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.post(`business/registration`, value);
+      const {data} = await api.post(`talent/business/registration`, value);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -41,7 +41,7 @@ const userLogin = createAsyncThunk(
   'auth/login',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.post(`user/login`, value);
+      const {data} = await api.post(`talent/user/login`, value);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -57,7 +57,7 @@ const userUpdate = createAsyncThunk(
   'auth/update',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.put(`user/update`, value.inputs, {
+      const {data} = await api.put(`talent/user/update`, value.inputs, {
         headers: {Authorization: `Bearer ${value.userToken}`},
       });
       return data;
@@ -71,6 +71,48 @@ const userUpdate = createAsyncThunk(
   },
 );
 
-export {userLogin, registerIndivisual, registerBusiness, userUpdate};
+const sendOtp = createAsyncThunk(
+  'auth/sendOtp',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`verify/email`, value.inputs);
+      console.log(data);
+      return data;
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const verifyOtp = createAsyncThunk(
+  'auth/verifyOtp',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      console.log(value);
+      const {data} = await api.post(`verify/otp`, value);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+export {
+  userLogin,
+  registerIndivisual,
+  registerBusiness,
+  userUpdate,
+  sendOtp,
+  verifyOtp,
+};
 
 export default {};

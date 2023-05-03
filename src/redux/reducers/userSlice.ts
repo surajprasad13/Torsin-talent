@@ -1,5 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {addService, addSkill} from '../actions/userAction';
+import {
+  addService,
+  addSkill,
+  fetchService,
+  fetchSkill,
+} from '../actions/userAction';
+import {Service} from '../../types/user';
 
 enum Status {
   pending = 'pending',
@@ -13,6 +19,8 @@ interface UserInterface {
   success: boolean; // for monitoring the registration process.
   status: null | Status;
   registerSuccess: false;
+  skills: Array<string>;
+  services: Array<Service>;
 }
 
 const initialState: UserInterface = {
@@ -21,6 +29,8 @@ const initialState: UserInterface = {
   success: false,
   status: null,
   registerSuccess: false,
+  skills: [],
+  services: [],
 };
 
 const userSlice = createSlice({
@@ -59,6 +69,36 @@ const userSlice = createSlice({
         state.success = true; // registration successful
       })
       .addCase(addSkill.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // fetch Skills
+      .addCase(fetchSkill.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(fetchSkill.fulfilled, (state, action) => {
+        state.loading = false;
+        state.skills = action.payload.response;
+      })
+      .addCase(fetchSkill.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // fetch service
+      .addCase(fetchService.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(fetchService.fulfilled, (state, action) => {
+        state.loading = false;
+        state.services = action.payload.response;
+      })
+      .addCase(fetchService.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
