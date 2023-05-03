@@ -3,9 +3,9 @@ import React from 'react';
 import {appstyle, colors, fonts} from '../../../theme';
 import FastImage from 'react-native-fast-image';
 
-const ServiceCard = () => {
+const ServiceCard = ({}) => {
   return (
-    <View style={styles.cardContainer}>
+    <View style={[styles.cardContainer]}>
       <FastImage
         source={{uri: 'https://source.unsplash.com/400x400?nature'}}
         resizeMode="contain"

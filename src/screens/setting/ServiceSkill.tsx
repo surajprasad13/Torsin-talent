@@ -84,7 +84,7 @@ const ServiceSkill = ({}) => {
           }}>
           {/*  */}
 
-          {[0, 1, 2, 3, 34, 45, 5, 6].map(item => {
+          {[0, 1, 2, 3, 4, 5, 6,7,8,9,10].map(item => {
             return (
               <View
                 key={item.toString()}
@@ -93,13 +93,13 @@ const ServiceSkill = ({}) => {
                   borderColor: '#08161433',
                   margin: 5,
                   padding: 10,
-                  borderRadius: 25,
+                  borderRadius: 30,
                 }}>
                 <Text
                   style={{
                     fontFamily: fonts.regular,
                     color: colors.black,
-                    opacity: 0.4,
+                    opacity: 0.3,
                   }}>
                   Singing
                 </Text>
@@ -134,7 +134,7 @@ const ServiceSkill = ({}) => {
         {/*  */}
 
         <View style={{marginTop: 20}}>
-          {[0, 1, 2, 3, 4, 5].map((item, index) => (
+          {[0, 1, 2, 3, 4, 5,6,7,8,9,10].map((item, index) => (
             <ServiceCard key={index.toString()} />
           ))}
         </View>

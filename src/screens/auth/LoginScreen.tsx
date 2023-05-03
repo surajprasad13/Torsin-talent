@@ -132,18 +132,6 @@ const LoginScreen = ({}) => {
           </Text>
 
           <View style={{marginVertical: 10, marginTop: 55}}>
-            {!!error && (
-              <Text
-                style={{
-                  marginTop: 20,
-                  textAlign: 'center',
-                  color: 'red',
-                  fontFamily: fonts.medium,
-                }}>
-                {error}
-              </Text>
-            )}
-
             <Input
               keyboardType="email-address"
               autoCapitalize="none"
@@ -171,6 +159,18 @@ const LoginScreen = ({}) => {
             />
           </View>
         </View>
+        {!!error && (
+            <Text
+              style={{
+                textAlign: 'left',
+                left: 10,
+                color: 'red',
+                bottom: 20,
+                fontFamily: fonts.medium,
+              }}>
+              {error}
+            </Text>
+          )}
 
         <TouchableOpacity
           style={{alignSelf: 'center'}}

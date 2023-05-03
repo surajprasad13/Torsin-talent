@@ -4,48 +4,98 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   SafeAreaView,
+  ScrollView,
+  Pressable,
 } from 'react-native';
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
+
 import {useNavigation} from '@react-navigation/native';
+
+// icons
+import Feather from 'react-native-vector-icons/Feather';
+import EvilIcon from 'react-native-vector-icons/EvilIcons';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // components
 import Logout from './Logout';
 import CircleProgress from './CircleProgress';
-import {fonts} from '../theme';
+import {colors, fonts} from '../theme';
+import {Divider} from 'react-native-paper';
 
-const CustomSidebarMenu = (props: any) => {
+const List = [
+  {
+    title: 'Notifications',
+    route: '',
+    icon: ({color}: {color: string}) => (
+      <EvilIcon name="bell" color={color} size={25} />
+    ),
+  },
+
+  {
+    title: 'Proposals',
+    route: '',
+    icon: ({color}: {color: string}) => (
+      <IonIcon name="newspaper-outline" color={color} size={25} />
+    ),
+  },
+  {
+    title: 'My Rating',
+    route: '',
+    icon: ({color}: {color: string}) => (
+      <EvilIcon name="star" color={color} size={25} />
+    ),
+  },
+  {
+    title: 'Payment',
+    route: '',
+    icon: ({color}: {color: string}) => (
+      <MaterialIcon name="payments" color={color} size={25} />
+    ),
+  },
+  {
+    title: 'About us',
+    route: '',
+    icon: ({color}: {color: string}) => (
+      <AntDesign name="infocirlceo" color={color} size={25} />
+    ),
+  },
+  {
+    title: 'Terms and Privacy',
+    route: '',
+    icon: ({color}: {color: string}) => (
+      <IonIcon name="shield-checkmark-outline" color={color} size={25} />
+    ),
+  },
+  {
+    title: 'Help and Support',
+    route: '',
+    icon: ({color}: {color: string}) => (
+      <IonIcon name="md-headset" color={color} size={25} />
+    ),
+  },
+];
+
+const CustomSidebarMenu = ({state, ...rest}: any) => {
   const navigation = useNavigation();
+
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={stylesSidebar.sideMenuContainer}>
-        <View>
+    <SafeAreaView>
+      <View style={styles.sideMenuContainer}>
+        <View style={{flexDirection: 'row', alignItems: 'center', padding: 20}}>
+          <CircleProgress />
           <View
             style={{
               flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flex: 1,
             }}>
-            <View
-              style={{
-                top: 20,
-                left: 10,
-              }}>
-              <CircleProgress />
-              <Text
-                style={{
-                  bottom: 65,
-                  left: 119,
-                  fontFamily: fonts.semibold,
-                  fontSize: 16,
-                  color: '#1E202B',
-                }}>
+            <View style={{marginLeft: 10}}>
+              <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
                 John Smith
               </Text>
-
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('SettingStack', {
@@ -54,8 +104,6 @@ const CustomSidebarMenu = (props: any) => {
                 }}>
                 <Text
                   style={{
-                    bottom: 65,
-                    left: 119,
                     fontFamily: fonts.medium,
                     color: '#14226D',
                   }}>
@@ -63,56 +111,67 @@ const CustomSidebarMenu = (props: any) => {
                 </Text>
               </TouchableOpacity>
             </View>
-
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('SettingStack', {
                   screen: 'EditProfile',
                 });
-              }}
-              style={{
-                marginTop: 60,
-                position: 'absolute',
-                right: 20,
               }}>
-              <Image
-                source={require('../assets/images/forward.png')}
-                style={{
-                  width: 6,
-                  height: 11,
-                }}
-              />
+              <Feather name="chevron-right" size={20} />
             </TouchableOpacity>
           </View>
         </View>
-        <View style={stylesSidebar.profileHeaderLine} />
 
-        <DrawerContentScrollView {...props}>
-          <DrawerItemList {...props} />
-          <DrawerItem
-            onPress={() => {}}
-            label={({}) => (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  bottom: 10,
-                  borderRadius: 10,
-                }}></View>
-            )}
-          />
-        </DrawerContentScrollView>
+        <View style={styles.profileHeaderLine} />
+        <ScrollView>
+          {List.map((item, index) => {
+            return (
+              <Pressable
+                key={index}
+                style={[
+                  styles.card,
+                  {
+                    backgroundColor:
+                      state.index == index ? colors.white : 'transparent',
+                  },
+                ]}
+                onPress={() => navigation.navigate(item.route)}>
+                <View>
+                  {item.icon({
+                    color: state.index == index ? colors.primary : colors.grey,
+                  })}
+                </View>
+                <View style={{flex: 1, marginLeft: 10}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <Text style={[styles.text]}>{item.title}</Text>
+                    <Feather
+                      name="chevron-right"
+                      size={20}
+                      color={colors.grey}
+                    />
+                  </View>
+                  <Divider style={{marginTop: 10}} />
+                </View>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
+
         <Logout />
       </View>
     </SafeAreaView>
   );
 };
 
-const stylesSidebar = StyleSheet.create({
+const styles = StyleSheet.create({
   sideMenuContainer: {
     height: '100%',
-    borderTopRightRadius: 10,
-    backgroundColor: '#ffffff',
+    borderTopRightRadius: 20,
   },
   profileHeader: {
     flexDirection: 'row',
@@ -142,6 +201,20 @@ const stylesSidebar = StyleSheet.create({
     marginTop: 15,
     width: '100%',
   },
+  card: {
+    margin: 5,
+    padding: 5,
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  text: {
+    fontFamily: fonts.medium,
+    fontSize: 16,
+    marginTop: 15,
+  },
 });
 
 export default CustomSidebarMenu;
+

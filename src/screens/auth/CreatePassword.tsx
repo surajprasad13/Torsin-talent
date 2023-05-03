@@ -151,17 +151,6 @@ const IndivisualCreatePassword = ({}) => {
           }}>
           Create New Password
         </Text>
-        {!!error && (
-          <Text
-            style={{
-              marginTop: 20,
-              textAlign: 'center',
-              fontFamily: fonts.medium,
-              color: colors.red,
-            }}>
-            {error}
-          </Text>
-        )}
         <CustomInput
           label="Password"
           placeholder="********"
@@ -186,6 +175,20 @@ const IndivisualCreatePassword = ({}) => {
             dispatch(loginValue());
           }}
         />
+
+        {!!error && (
+          <Text
+            style={{
+              textAlign: 'left',
+              left: 10,
+              color: 'red',
+              bottom: 20,
+              top: 10,
+              fontFamily: fonts.medium,
+            }}>
+            {error}
+          </Text>
+        )}
 
         <View style={{marginTop: 20}}>
           {passwordStrength.map((_item: string) => {
