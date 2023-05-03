@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.talent"
+    namespace "com.torsin.talent"
     defaultConfig {
-        applicationId "com.talent"
+        applicationId "com.torsin.talent"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
