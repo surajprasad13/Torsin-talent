@@ -1,4 +1,4 @@
-package com.talent;
+package com.torsin.talent;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

@@ -1,4 +1,4 @@
-package com.talent;
+package com.torsin.talent;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
