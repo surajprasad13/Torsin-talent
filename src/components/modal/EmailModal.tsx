@@ -19,7 +19,11 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import {useNavigation} from '@react-navigation/native';
+
+// icons
 import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {sendOtp, verifyOtp} from '../../redux/actions/authAction';
 
@@ -222,12 +226,12 @@ const EmailModal = ({active, email}) => {
         </Text>
       </ModalPoup>
 
-      <TouchableOpacity disabled={!active} onPress={() => setVisible(!visible)}>
-        {emailVerified ? (
-          <Text style={{fontFamily: fonts.medium, color: 'green'}}>
-            Veririfed
-          </Text>
-        ) : (
+      {emailVerified ? (
+        <AntDesign name="checkcircleo" size={20} color="green" />
+      ) : (
+        <TouchableOpacity
+          disabled={!active}
+          onPress={() => setVisible(!visible)}>
           <Text
             style={{
               color: active ? colors.primary : 'gray',
@@ -235,8 +239,8 @@ const EmailModal = ({active, email}) => {
             }}>
             Verify
           </Text>
-        )}
-      </TouchableOpacity>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

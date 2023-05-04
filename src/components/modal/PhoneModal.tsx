@@ -19,12 +19,12 @@ import auth from '@react-native-firebase/auth';
 
 // icons
 import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // helpers
 import {colors, fonts, metrics} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {phoneVerified, resetSuccess} from '../../redux/reducers/authSlice';
-import {useSelector} from 'react-redux';
 
 const {moderateScale} = metrics;
 
@@ -93,8 +93,9 @@ const PhoneModal = ({active, phone}) => {
 
   const sendOtp = async () => {
     try {
-      var mobilePhone = phone;
-      if (phone.length == 7) {
+      const newNumber = phone.replace(/^0+/, '');
+      var mobilePhone = newNumber;
+      if (newNumber.length === 9) {
         mobilePhone = '971' + phone;
       } else {
         mobilePhone = '91' + phone;
@@ -238,20 +239,15 @@ const PhoneModal = ({active, phone}) => {
           </Text>
         </View>
       </ModalPoup>
-      <TouchableOpacity
-        onPress={() => {
-          setVisible(!visible);
-          sendOtp();
-        }}>
-        {mobileVerified ? (
-          <Text
-            style={{
-              color: 'green',
-              fontFamily: fonts.regular,
-            }}>
-            Verified
-          </Text>
-        ) : (
+
+      {mobileVerified ? (
+        <AntDesign name="checkcircleo" size={20} color="green" />
+      ) : (
+        <TouchableOpacity
+          onPress={() => {
+            setVisible(!visible);
+            sendOtp();
+          }}>
           <Text
             style={{
               color: active ? colors.primary : 'gray',
@@ -259,8 +255,8 @@ const PhoneModal = ({active, phone}) => {
             }}>
             Verify
           </Text>
-        )}
-      </TouchableOpacity>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
