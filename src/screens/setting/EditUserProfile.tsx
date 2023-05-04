@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, Dialog, Portal, RadioButton} from 'react-native-paper';
@@ -23,7 +22,6 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {CustomButton, CustomInput} from '../../components';
 import {userUpdate} from '../../redux/actions/authAction';
 import {resetSuccess} from '../../redux/reducers/authSlice';
-import {launchImageLibrary} from 'react-native-image-picker';
 
 const EditUserProfile = ({}) => {
   const navigation = useNavigation();
@@ -45,28 +43,6 @@ const EditUserProfile = ({}) => {
 
   const [errors, setErrors] = React.useState<any>({});
   const [checked, setChecked] = React.useState('first');
-
-  const uploadImage = () => {
-    let options: any = {
-      mediaType: 'photo',
-      quality: 1,
-      includeBase64: true,
-    };
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-      } else if (response.errorCode == 'permission') {
-        Alert.alert('Please allow permissions');
-      } else if (response.errorCode == 'others') {
-        Alert.alert(String(response.errorMessage));
-      } else {
-        setInputs((prevState: any) => ({
-          ...prevState,
-          //@ts-expect-error
-          profileImage: response.assets[0].base64,
-        }));
-      }
-    });
-  };
 
   const update = () => {
     dispatch(userUpdate({inputs, userToken}));
@@ -120,7 +96,7 @@ const EditUserProfile = ({}) => {
           image={
             inputs.profileImage ?? 'https://source.unsplash.com/400x400?user'
           }
-          onPress={uploadImage}
+          onPress={() => {}}
         />
 
         {!!error && (

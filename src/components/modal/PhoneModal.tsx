@@ -102,12 +102,10 @@ const PhoneModal = ({active, phone}) => {
       setLoading(true);
       const mobile = '+' + mobilePhone;
       const confirmation = await auth().signInWithPhoneNumber(mobile);
-      console.log(confirmation.verificationId);
       setConfirm(confirmation);
       setMessage('Otp sent sucessfully');
       setLoading(false);
     } catch (err) {
-      console.log(err);
       setError(String(error));
       setLoading(false);
     }

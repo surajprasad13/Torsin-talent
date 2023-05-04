@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,8 @@ import {
   Keyboard,
   SafeAreaView,
   Pressable,
-  Alert,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import {Dropdown} from 'react-native-element-dropdown';
 import {useNavigation} from '@react-navigation/native';
 
 import {metrics, colors, fonts} from '../../theme';
@@ -20,7 +18,6 @@ import Input from '../../components/Input';
 import ProFile from '../../components/ProFile';
 
 import Feather from 'react-native-vector-icons/Feather';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {CustomButton} from '../../components';
 import PhoneModal from '../../components/modal/PhoneModal';
 import EmailModal from '../../components/modal/EmailModal';
@@ -30,20 +27,13 @@ const {moderateScale} = metrics;
 const BusinessRegister = ({}) => {
   const navigation = useNavigation();
 
-  const data = [
-    {label: 'India', value: '1'},
-    {label: 'Nepal', value: '2'},
-    {label: 'America', value: '3'},
-  ];
-
   const [inputs, setInputs] = React.useState({
     fullName: '',
     email: '',
     mobileNo: '',
     location: '',
-    countryCodeId: '1',
+    countryName: '',
   });
-  const [image, setImage] = useState<string>('');
   const [errors, setErrors] = React.useState<any>({});
 
   const [toggleCheckBox, setToggleCheckBox] = React.useState(false);
@@ -75,37 +65,9 @@ const BusinessRegister = ({}) => {
       isValid = false;
     }
 
-    if (!inputs.countryCodeId) {
-      handleError('Please input Country', 'country');
-      isValid = false;
-    }
-
     if (isValid) {
       register();
     }
-  };
-
-  const uploadImage = () => {
-    let options: any = {
-      mediaType: 'photo',
-      quality: 1,
-      includeBase64: true,
-    };
-
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-      } else if (response.errorCode == 'permission') {
-        Alert.alert('Please allow permissions');
-      } else if (response.errorCode == 'others') {
-        Alert.alert(String(response.errorMessage));
-        //@ts-expect-error
-      } else if (response.assets[0].fileSize > 1097152) {
-        Alert.alert('maximum size');
-      } else {
-        //@ts-expect-error
-        setImage(response.assets[0].base64);
-      }
-    });
   };
 
   const register = () => {
@@ -113,7 +75,6 @@ const BusinessRegister = ({}) => {
       screen: 'business',
       data: {
         ...inputs,
-        profileImage: image,
       },
     };
     navigation.navigate('CreatePassword', {
@@ -212,7 +173,7 @@ const BusinessRegister = ({}) => {
           Add Business Information
         </Text>
 
-        <ProFile image={image} onPress={uploadImage} />
+        <ProFile image="" onPress={() => {}} />
 
         <View style={{marginVertical: 10}}>
           <Input
@@ -277,41 +238,13 @@ const BusinessRegister = ({}) => {
             error={errors.location}
           />
 
-          <Text style={{color: '#4F4F4F', fontFamily: fonts.regular}}>
-            Country
-          </Text>
-
-          <View
-            style={{
-              height: 50,
-              borderWidth: 1,
-              borderColor: '#BDBDBD',
-              marginTop: 10,
-              borderRadius: 12,
-            }}>
-            <Dropdown
-              style={[styles.dropdown]}
-              data={data}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={'Country'}
-              placeholderStyle={{
-                marginLeft: 10,
-                marginTop: 10,
-              }}
-              searchPlaceholder="Search..."
-              value={inputs.countryCodeId}
-              iconStyle={{top: 5, right: 5}}
-              onChange={item => {
-                setInputs(prevState => ({
-                  ...prevState,
-                  countryCodeId: item.value,
-                }));
-              }}
-            />
-          </View>
+          <Input
+            onChangeText={text => handleOnchange(text, 'countryName')}
+            onFocus={() => handleError(null, 'country')}
+            label="Country"
+            placeholder="Enter your country"
+            error={errors.country}
+          />
 
           <View
             style={{

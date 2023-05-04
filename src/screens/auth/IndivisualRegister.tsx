@@ -8,12 +8,10 @@ import {
   Keyboard,
   SafeAreaView,
   Pressable,
-  Alert,
 } from 'react-native';
 import {Dialog, Portal, RadioButton} from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
 import {useSelector} from 'react-redux';
-import {Dropdown} from 'react-native-element-dropdown';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -31,7 +29,6 @@ import ProFile from '../../components/ProFile';
 // redux
 import {RootState} from '../../redux';
 import {} from '../../redux/actions/authAction';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/native';
 import {CustomButton} from '../../components';
 import {useAppDispatch} from '../../hooks';
@@ -44,7 +41,7 @@ type InputProp = {
   email: string;
   mobileNo: string;
   location: string;
-  countryCodeId: number;
+  countryName: string;
   gender: number;
   password: string;
   confirmPassword: string;
@@ -55,26 +52,16 @@ const IndivisualRegister = ({}) => {
   const dispatch = useAppDispatch();
   const {loading} = useSelector((state: RootState) => state.auth);
 
-  const data = [
-    {label: 'India', value: '1'},
-    {label: 'Nepal', value: '2'},
-    {label: 'America', value: '3'},
-  ];
-
-  const [countryValue, setIsCountryValue] = useState<string | null>(null);
-
   const [inputs, setInputs] = useState<InputProp>({
     fullName: '',
     email: '',
     mobileNo: '',
     location: '',
-    countryCodeId: 1,
+    countryName: '',
     gender: 1,
     password: '',
     confirmPassword: '',
   });
-
-  const [image, setImage] = useState<string>('');
 
   const [errors, setErrors] = useState<any>({});
 
@@ -110,7 +97,6 @@ const IndivisualRegister = ({}) => {
       screen: 'indivisual',
       data: {
         ...inputs,
-        profileImage: image,
       },
     };
 
@@ -124,26 +110,6 @@ const IndivisualRegister = ({}) => {
   };
   const handleError = (error: any, input: any) => {
     setErrors((prevState: any) => ({...prevState, [input]: error}));
-  };
-
-  const uploadImage = () => {
-    let options: any = {
-      mediaType: 'photo',
-      quality: 1,
-      includeBase64: true,
-    };
-
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-      } else if (response.errorCode == 'permission') {
-        Alert.alert('Please allow permissions');
-      } else if (response.errorCode == 'others') {
-        Alert.alert(String(response.errorMessage));
-      } else {
-        //@ts-expect-error
-        setImage(response.assets[0].base64);
-      }
-    });
   };
 
   const active: boolean =
@@ -228,7 +194,6 @@ const IndivisualRegister = ({}) => {
         <Text
           style={{
             fontFamily: fonts.regular,
-
             top: 50,
             alignItems: 'center',
             color: '#000F1A',
@@ -247,7 +212,7 @@ const IndivisualRegister = ({}) => {
         </Text>
 
         <View style={{top: 80}}>
-          <ProFile onPress={uploadImage} image={image} />
+          <ProFile onPress={() => {}} image="" />
         </View>
 
         <View style={{marginVertical: 47, marginTop: 84}}>
@@ -357,36 +322,15 @@ const IndivisualRegister = ({}) => {
               error={errors.location}
             />
           </View>
-          <Text style={{fontFamily: fonts.regular}}>Country</Text>
-          <View
-            style={{
-              width: '100%',
-              height: 50,
-              borderWidth: 1,
-              borderColor: '#BDBDBD',
-              marginTop: 10,
-              borderRadius: 12,
-            }}>
-            <Dropdown
-              style={[styles.dropdown, {borderColor: '#454545'}]}
-              data={data}
-              search
-              labelField="label"
-              valueField="value"
-              placeholder={'Select'}
-              placeholderStyle={{}}
-              searchPlaceholder="Search..."
-              value={countryValue}
-              onChange={item => {
-                setIsCountryValue(item.value);
-                setInputs(prevState => ({
-                  ...prevState,
-                  countryCodeId: Number(item.value),
-                }));
-              }}
-              onChangeText={() => {
-                //console.log(text);
-              }}
+
+          <View style={{marginTop: 10}}>
+            <Input
+              value={inputs.countryName}
+              onChangeText={(text: any) => handleOnchange(text, 'countryName')}
+              onFocus={() => handleError(null, 'country')}
+              label="Country"
+              placeholder="Enter your country"
+              error={errors.country}
             />
           </View>
 

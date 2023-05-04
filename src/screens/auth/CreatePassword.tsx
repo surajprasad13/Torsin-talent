@@ -22,7 +22,7 @@ import {
   registerBusiness,
   registerIndivisual,
 } from '../../redux/actions/authAction';
-import {loginValue} from '../../redux/reducers/authSlice';
+import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
 
 const {moderateScale} = metrics;
 
@@ -66,6 +66,7 @@ const IndivisualCreatePassword = ({}) => {
 
   useEffect(() => {
     if (userToken) {
+      dispatch(resetSuccess());
       navigation.navigate('DrawerNavigation');
     }
   }, [userToken]);

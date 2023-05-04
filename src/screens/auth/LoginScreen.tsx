@@ -22,7 +22,7 @@ import Loader from '../../components/Loader';
 
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {userLogin} from '../../redux/actions/authAction';
-import {loginValue} from '../../redux/reducers/authSlice';
+import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
 import {CustomButton} from '../../components';
 
 const {moderateScale, verticalScale} = metrics;
@@ -74,6 +74,7 @@ const LoginScreen = ({}) => {
 
   useEffect(() => {
     if (userToken) {
+      dispatch(resetSuccess());
       navigation.navigate('DrawerNavigation');
     }
   }, [userToken, navigation]);
@@ -160,17 +161,17 @@ const LoginScreen = ({}) => {
           </View>
         </View>
         {!!error && (
-            <Text
-              style={{
-                textAlign: 'left',
-                left: 10,
-                color: 'red',
-                bottom: 20,
-                fontFamily: fonts.medium,
-              }}>
-              {error}
-            </Text>
-          )}
+          <Text
+            style={{
+              textAlign: 'left',
+              left: 10,
+              color: 'red',
+              bottom: 20,
+              fontFamily: fonts.medium,
+            }}>
+            {error}
+          </Text>
+        )}
 
         <TouchableOpacity
           style={{alignSelf: 'center'}}

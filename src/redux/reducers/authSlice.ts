@@ -91,6 +91,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.success = true; // registration successful
         state.userToken = action.payload.response.data.token.access;
+        state.userInfo = action.payload.response.data;
       })
       .addCase(registerIndivisual.rejected, (state, action) => {
         state.loading = false;
@@ -107,6 +108,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.success = true; // registration successful
         state.userToken = action.payload.response.data.token.access;
+        state.userInfo = action.payload.response.data;
       })
       .addCase(registerBusiness.rejected, (state, action) => {
         state.loading = false;
