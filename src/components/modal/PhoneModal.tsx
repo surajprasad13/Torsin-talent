@@ -244,6 +244,7 @@ const PhoneModal = ({active, phone}) => {
         <AntDesign name="checkcircleo" size={20} color="green" />
       ) : (
         <TouchableOpacity
+        disabled={!active}
           onPress={() => {
             setVisible(!visible);
             sendOtp();
