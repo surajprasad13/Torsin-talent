@@ -25,7 +25,7 @@ export interface LoginResponseData {
   token: Token;
   gender?: number | null;
   location?: string;
-  countryCodeId?: string;
+  countryName?: string;
 }
 
 export interface LoginResponse {
