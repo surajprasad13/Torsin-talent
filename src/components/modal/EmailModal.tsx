@@ -200,7 +200,7 @@ const EmailModal = ({active, email}) => {
             <View
               onLayout={getCellOnLayoutHandler(index)}
               key={index}
-              style={[isFocused && styles.focusCell]}>
+              style={[isFocused && styles.focusCell,]}>
               <Text style={styles.cell}>
                 {symbol || (isFocused ? <Cursor /> : null)}
               </Text>
@@ -275,14 +275,15 @@ const styles = StyleSheet.create({
   },
   cell: {
     marginHorizontal: 5,
-    height: CELL_SIZE,
-    width: CELL_SIZE,
-    fontSize: 18,
-    borderWidth: 1,
-    borderColor: '#BDBDBD',
-    textAlign: 'center',
+    width: 40,
+    height: 40,
+    lineHeight: 35,
+    fontSize: 20,
+    borderWidth: .5,
+    borderRadius: 4,
     color: '#0C0900',
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
+    textAlign: 'center',
     // IOS
     shadowColor: '#000',
     shadowOffset: {
