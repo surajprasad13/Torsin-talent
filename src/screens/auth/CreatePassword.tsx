@@ -23,7 +23,11 @@ import {
   registerBusiness,
   registerIndivisual,
 } from '../../redux/actions/authAction';
-import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
+import {
+  loginValue,
+  resetSuccess,
+  resetVerified,
+} from '../../redux/reducers/authSlice';
 import {password} from '../../utils/regex';
 
 const {moderateScale} = metrics;
@@ -99,6 +103,7 @@ const CreatePassword = ({}) => {
   useEffect(() => {
     if (userToken) {
       dispatch(resetSuccess());
+      dispatch(resetVerified());
       navigation.navigate('DrawerNavigation');
     }
   }, [userToken]);
