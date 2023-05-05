@@ -30,7 +30,7 @@ const EditUserProfile = ({}) => {
 
   const dispatch = useAppDispatch();
 
-  const {userInfo, userToken, error, success} = useAppSelector(
+  const {userInfo, userToken, error, success, loading} = useAppSelector(
     state => state.auth,
   );
 
@@ -48,6 +48,7 @@ const EditUserProfile = ({}) => {
 
   const update = () => {
     dispatch(userUpdate({inputs, userToken}));
+    if (navigation.canGoBack()) navigation.goBack();
   };
 
   const handleOnchange = (text: string, input: any) => {
@@ -147,40 +148,41 @@ const EditUserProfile = ({}) => {
             containerStyle={{marginTop: 20}}
           />
 
-          <View style={{marginTop: 20}}>
-            <Text style={{color: '#4F4F4F', fontFamily: fonts.regular}}>
-              Gender
-            </Text>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <RadioButton
-                value="first"
-                color="#0E184D"
-                status={inputs.gender === 1 ? 'checked' : 'unchecked'}
-                onPress={() => {
-                  setInputs(prevState => ({...prevState, gender: 1}));
-                }}
-              />
-              <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
-                Male
+          {userInfo?.gender && (
+            <View style={{marginTop: 20}}>
+              <Text style={{color: '#4F4F4F', fontFamily: fonts.regular}}>
+                Gender
               </Text>
-            </View>
 
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <RadioButton
-                value="second"
-                color="#0E184D"
-                status={inputs.gender === 2 ? 'checked' : 'unchecked'}
-                onPress={() => {
-                  setInputs(prevState => ({...prevState, gender: 2}));
-                }}
-              />
-              <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
-                Female
-              </Text>
-            </View>
-          </View>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <RadioButton
+                  value="first"
+                  color="#0E184D"
+                  status={inputs.gender === 1 ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setInputs(prevState => ({...prevState, gender: 1}));
+                  }}
+                />
+                <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+                  Male
+                </Text>
+              </View>
 
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <RadioButton
+                  value="second"
+                  color="#0E184D"
+                  status={inputs.gender === 2 ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setInputs(prevState => ({...prevState, gender: 2}));
+                  }}
+                />
+                <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+                  Female
+                </Text>
+              </View>
+            </View>
+          )}
           <CustomInput
             value={inputs.location}
             onChangeText={(text: string) => handleOnchange(text, 'location')}
@@ -204,6 +206,7 @@ const EditUserProfile = ({}) => {
             style={{marginTop: 20}}
             disabled={true}
             onPress={update}
+            loading={loading}
           />
           <View style={{marginTop: 50}} />
         </ScrollView>

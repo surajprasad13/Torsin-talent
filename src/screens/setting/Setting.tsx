@@ -116,6 +116,13 @@ const Setting = ({}) => {
                 <Text style={styles.userText}>{userInfo?.location}</Text>
               </View>
             )}
+
+            {userInfo?.countryName && (
+              <View style={styles.listContainer}>
+                <Entypo name="flag" size={20} />
+                <Text style={styles.userText}>{userInfo?.countryName}</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>

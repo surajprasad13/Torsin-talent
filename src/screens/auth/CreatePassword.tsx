@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 import {Dialog, Portal} from 'react-native-paper';
 
@@ -23,26 +24,54 @@ import {
   registerIndivisual,
 } from '../../redux/actions/authAction';
 import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
+import {password} from '../../utils/regex';
 
 const {moderateScale} = metrics;
 
 const passwordStrength = [
-  'At least one upper case',
-  'At least one number',
-  'At least 8 character',
-  'At least one special character (E.g @%$)',
+  'Password should have atleast one upper character.',
+  'Password should have atleast one lower character.',
+  'Password should have atleast one numeric digit.',
+  'Password should have atleast one speical character (E.g @%$)',
+  'Password length must be 8 character or more',
 ];
 
-const IndivisualCreatePassword = ({}) => {
+const CreatePassword = ({}) => {
   const route = useRoute();
   const dispatch = useAppDispatch();
   const {loading, error, userToken} = useAppSelector(state => state.auth);
   const navigation = useNavigation();
+  const [errors, setErrors] = useState<any>({});
+
+  const [isValid, setIsValid] = useState(null);
 
   const [input, setInput] = useState({
     password: '',
     confirmPassword: '',
   });
+
+  const validate = () => {
+    Keyboard.dismiss();
+
+    let _isValid = true;
+
+    const validPassword = password(input.password);
+    const validConfirmPassword = password(input.confirmPassword);
+
+    if (!validPassword) {
+      handleError('Please enter valid password', 'password');
+      _isValid = false;
+    }
+    if (!validConfirmPassword) {
+      handleError('Please enter valid confirm password', 'confirmPassword');
+      _isValid = false;
+    }
+
+    if (_isValid) {
+      setErrors({});
+      register();
+    }
+  };
 
   const {item}: any = route.params;
 
@@ -62,6 +91,10 @@ const IndivisualCreatePassword = ({}) => {
 
   const handleChange = (text: string, key: any) => {
     setInput(previousState => ({...previousState, [key]: text}));
+  };
+
+  const handleError = (_error: any, _input: any) => {
+    setErrors((prevState: any) => ({...prevState, [_input]: _error}));
   };
 
   useEffect(() => {
@@ -163,7 +196,9 @@ const IndivisualCreatePassword = ({}) => {
             handleChange(text, 'password');
             dispatch(loginValue());
           }}
+          error={errors.password}
         />
+
         <CustomInput
           label="Confirm Password"
           placeholder="********"
@@ -175,6 +210,7 @@ const IndivisualCreatePassword = ({}) => {
             handleChange(text, 'confirmPassword');
             dispatch(loginValue());
           }}
+          error={errors.confirmPassword}
         />
 
         {!!error && (
@@ -211,7 +247,7 @@ const IndivisualCreatePassword = ({}) => {
 
         <CustomButton
           title="Create Account"
-          onPress={register}
+          onPress={validate}
           disabled={
             input.password.length >= 8 && input.confirmPassword.length >= 8
           }
@@ -238,4 +274,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default IndivisualCreatePassword;
+export default CreatePassword;

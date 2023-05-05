@@ -24,6 +24,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {userLogin} from '../../redux/actions/authAction';
 import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
 import {CustomButton} from '../../components';
+import {email, password} from '../../utils/regex';
 
 const {moderateScale, verticalScale} = metrics;
 
@@ -44,15 +45,20 @@ const LoginScreen = ({}) => {
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-    if (!inputs.email) {
-      handleError('Please enter email Id', 'gmail');
+
+    const validEmail = email(inputs.email);
+    const validPassword = password(inputs.password);
+
+    if (!validEmail) {
+      handleError('Please enter valid email Id', 'email');
       isValid = false;
     }
-    if (!inputs.password) {
-      handleError('Please enter password', 'password');
+    if (inputs.password.length < 8) {
+      handleError('Min password length of 8', 'password');
       isValid = false;
-    } else if (inputs.password.length < 5) {
-      handleError('Min password length of 5', 'password');
+    }
+    if (!validPassword && inputs.password.length >= 8) {
+      handleError('Please enter valid password', 'password');
       isValid = false;
     }
     if (isValid) {
@@ -81,19 +87,6 @@ const LoginScreen = ({}) => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <Portal>
-        <Dialog visible={loading}>
-          <Dialog.Content
-            style={{
-              height: 200,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Loader />
-          </Dialog.Content>
-        </Dialog>
-      </Portal>
-
       <TouchableOpacity
         onPress={() => navigation.navigate('OnboardingScreen')}
         style={{padding: 10}}>
@@ -102,24 +95,9 @@ const LoginScreen = ({}) => {
       <ScrollView contentContainerStyle={{padding: 10}}>
         <View style={{flex: 0.8}}>
           <View style={{}}>
-            <Text
-              style={{
-                fontFamily: fonts.bold,
-                fontSize: moderateScale(32),
-                color: colors.blue,
-              }}>
-              Login
-            </Text>
+            <Text style={styles.title}>Login</Text>
 
-            <Text
-              style={{
-                fontFamily: fonts.regular,
-                fontSize: moderateScale(14),
-                color: '#000F1A',
-                top: 18,
-              }}>
-              Welcome back!
-            </Text>
+            <Text style={styles.subtitle}>Welcome back!</Text>
           </View>
 
           <Text
@@ -141,10 +119,10 @@ const LoginScreen = ({}) => {
                 handleOnchange(text, 'email');
                 dispatch(loginValue());
               }}
-              onFocus={() => handleError(null, 'gmail')}
+              onFocus={() => handleError(null, 'email')}
               label="Email"
               placeholder="torsin@gmail.com"
-              error={errors.gmail}
+              error={errors.email}
             />
 
             <Input
@@ -192,6 +170,7 @@ const LoginScreen = ({}) => {
           onPress={validate}
           disabled={inputs.email && inputs.password ? true : false}
           style={{marginTop: verticalScale(200)}}
+          loading={loading}
         />
 
         <View
@@ -223,36 +202,16 @@ const LoginScreen = ({}) => {
 };
 
 const styles = StyleSheet.create({
-  inputText: {
-    width: '92%',
-    marginLeft: '4%',
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#BDBDBD',
-    marginTop: 10,
-    borderRadius: 12,
+  title: {
+    fontFamily: fonts.bold,
+    fontSize: moderateScale(32),
+    color: colors.blue,
   },
-  input: {
-    color: '#000000',
-    fontSize: moderateScale(14),
+  subtitle: {
     fontFamily: fonts.regular,
-  },
-  tinyLogo: {
-    width: 16,
-    height: 14,
-  },
-  errorTextStyle: {
-    color: 'red',
-    textAlign: 'center',
-    fontSize: 14,
-  },
-  buttonContainer: {
-    width: '85%',
-    height: 50,
-    marginTop: verticalScale(200),
-    justifyContent: 'center',
-    borderRadius: 8,
-    alignSelf: 'center',
+    fontSize: moderateScale(14),
+    color: '#000F1A',
+    top: 18,
   },
 });
 

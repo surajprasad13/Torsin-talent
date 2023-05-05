@@ -16,6 +16,7 @@ type CustomInputProp = {
   password?: boolean;
   style?: any;
   containerStyle?: ViewStyle;
+  error?: string;
 };
 
 const CustomInput = (props: TextInputProps & CustomInputProp) => {
@@ -48,6 +49,7 @@ const CustomInput = (props: TextInputProps & CustomInputProp) => {
           />
         )}
       </View>
+      {props.error && <Text style={styles.errorText}>{props.error}</Text>}
     </View>
   );
 };
@@ -71,6 +73,11 @@ const styles = StyleSheet.create({
     color: '#333333',
     backgroundColor: 'white',
     borderRadius: 10,
+  },
+  errorText: {
+    marginTop: 5,
+    color: colors.red,
+    fontFamily: fonts.regular,
   },
 });
 

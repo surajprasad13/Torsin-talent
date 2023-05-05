@@ -33,6 +33,7 @@ import {useNavigation} from '@react-navigation/native';
 import {CustomButton} from '../../components';
 import {useAppDispatch} from '../../hooks';
 import {resetVerified} from '../../redux/reducers/authSlice';
+import {email, alphabets, password, number} from '../../utils/regex';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
@@ -70,23 +71,30 @@ const IndivisualRegister = ({}) => {
 
   const validate = () => {
     Keyboard.dismiss();
+
     let isValid = true;
-    if (!inputs.fullName) {
-      handleError('Please input Name', 'fullname');
+
+    const validName = alphabets(inputs.fullName);
+    const validEmail = email(inputs.email);
+    const validNumber = number(inputs.mobileNo);
+
+    if (!validName) {
+      handleError('Please input Name', 'fullName');
       isValid = false;
     }
-    if (!inputs.email) {
+    if (!validEmail) {
       handleError('Please input email', 'email');
       isValid = false;
     }
-    if (!inputs.mobileNo) {
-      handleError('Please input Phone', 'phone');
+    if (!validNumber) {
+      handleError('Please input Phone', 'mobileNo');
       isValid = false;
     }
     if (!inputs.location) {
       handleError('Please input Location', 'location');
       isValid = false;
     }
+
     if (isValid) {
       register();
     }
@@ -218,10 +226,10 @@ const IndivisualRegister = ({}) => {
         <View style={{marginVertical: 47, marginTop: 84}}>
           <Input
             label="Name"
-            onFocus={() => handleError(null, 'fullname')}
+            onFocus={() => handleError(null, 'fullName')}
             placeholder="John smith"
-            error={errors.fullname}
             onChangeText={(text: any) => handleOnchange(text, 'fullName')}
+            error={errors.fullName}
           />
 
           <View>
@@ -250,7 +258,7 @@ const IndivisualRegister = ({}) => {
 
           <View>
             <Input
-              onFocus={() => handleError(null, 'phone')}
+              onFocus={() => handleError(null, 'mobileNo')}
               label="Mobile Number"
               placeholder="eg. 895204300"
               error={errors.phone}
@@ -327,10 +335,10 @@ const IndivisualRegister = ({}) => {
             <Input
               value={inputs.countryName}
               onChangeText={(text: any) => handleOnchange(text, 'countryName')}
-              onFocus={() => handleError(null, 'country')}
+              onFocus={() => handleError(null, 'countryName')}
               label="Country"
               placeholder="Enter your country"
-              error={errors.country}
+              error={errors.countryName}
             />
           </View>
 
