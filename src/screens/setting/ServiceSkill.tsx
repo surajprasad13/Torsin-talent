@@ -103,6 +103,7 @@ const ServiceSkill = ({}) => {
             padding: 10,
             flexWrap: 'wrap',
             flexDirection: 'row',
+            minHeight: 100,
           }}>
           {/*  */}
 
@@ -121,7 +122,7 @@ const ServiceSkill = ({}) => {
                   style={{
                     fontFamily: fonts.regular,
                     color: colors.black,
-                    opacity: 0.3,
+                    opacity: 0.4,
                   }}>
                   {item}
                 </Text>
@@ -136,7 +137,7 @@ const ServiceSkill = ({}) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginTop: 10,
+            marginTop: 30,
           }}>
           <Text
             style={{

@@ -8,6 +8,8 @@ import {
   Keyboard,
   SafeAreaView,
   Pressable,
+  Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {useNavigation} from '@react-navigation/native';
@@ -21,11 +23,14 @@ import Feather from 'react-native-vector-icons/Feather';
 import {CustomButton} from '../../components';
 import PhoneModal from '../../components/modal/PhoneModal';
 import EmailModal from '../../components/modal/EmailModal';
+import {email} from '../../utils/regex';
+import {useAppSelector} from '../../hooks';
 
 const {moderateScale} = metrics;
 
 const BusinessRegister = ({}) => {
   const navigation = useNavigation();
+  const {emailVerified, mobileVerified} = useAppSelector(state => state.auth);
 
   const [inputs, setInputs] = React.useState({
     fullName: '',
@@ -90,215 +95,230 @@ const BusinessRegister = ({}) => {
   };
 
   const active: boolean =
-    inputs.fullName && inputs.email && inputs.mobileNo && inputs.location
+    inputs.fullName &&
+    inputs.email &&
+    inputs.mobileNo &&
+    emailVerified &&
+    mobileVerified &&
+    inputs.location &&
+    inputs.countryName
       ? true
       : false;
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <ScrollView
-        contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <View
-            style={{
-              width: 20,
-              height: 20,
-              borderRadius: 10,
-              backgroundColor: '#14226D',
-              right: -1,
-            }}></View>
-
-          <View
-            style={{
-              width: 120,
-              height: 10,
-              backgroundColor: '#E0E0E0',
-              top: 5,
-            }}></View>
-
-          <View
-            style={{
-              width: 20,
-              height: 20,
-              borderRadius: 10,
-              backgroundColor: '#E0E0E0',
-              left: -2,
-            }}></View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: 20,
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              if (navigation.canGoBack()) {
-                navigation.goBack();
-              }
-            }}>
-            <Feather name="arrow-left" size={20} />
-          </TouchableOpacity>
-          <Text
-            style={{
-              color: colors.blue,
-              fontFamily: fonts.bold,
-              fontSize: moderateScale(32),
-            }}>
-            Create Account
-          </Text>
-          <View />
-        </View>
-        <Text
-          style={{
-            fontFamily: fonts.regular,
-            fontSize: moderateScale(14),
-            lineHeight: moderateScale(17),
-            alignItems: 'center',
-            color: '#000F1A',
-          }}>
-          Set up your account with us! Please fill the below details to create
-          account.
-        </Text>
-
-        <Text
-          style={{
-            fontFamily: fonts.medium,
-            color: colors.primary,
-            marginTop: 20,
-            marginBottom: 20,
-            fontSize: 16,
-          }}>
-          Add Business Information
-        </Text>
-
-        <ProFile image="" onPress={() => {}} />
-
-        <View style={{marginVertical: 10}}>
-          <Input
-            onChangeText={text => handleOnchange(text, 'fullName')}
-            onFocus={() => handleError(null, 'fullname')}
-            label="Name"
-            placeholder="Enter your full name"
-            error={errors.fullname}
-          />
-
-          <View>
-            <Input
-              onChangeText={text => handleOnchange(text, 'email')}
-              onFocus={() => handleError(null, 'email')}
-              label="Email"
-              placeholder="Enter your email address"
-              error={errors.email}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-            <Pressable
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+        <ScrollView
+          contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <View
               style={{
-                position: 'absolute',
-                marginTop: 45,
-                right: 10,
-              }}>
-              <EmailModal
-                active={inputs.email.length > 0}
-                email={inputs.email}
-              />
-            </Pressable>
-          </View>
+                width: 20,
+                height: 20,
+                borderRadius: 10,
+                backgroundColor: '#14226D',
+                right: -1,
+              }}></View>
 
-          <View>
-            <Input
-              label="Phone Number"
-              placeholder="Enter your phone no"
-              keyboardType="phone-pad"
-              onChangeText={e => handleOnchange(e, 'mobileNo')}
-              onFocus={() => handleError(null, 'phone')}
-              error={errors.phone}
-              maxLength={13}
-            />
-            <Pressable
+            <View
               style={{
-                position: 'absolute',
-                marginTop: 45,
-                right: 10,
-              }}>
-              <PhoneModal
-                active={inputs.mobileNo.length >= 7}
-                phone={inputs.mobileNo}
-              />
-            </Pressable>
+                width: 120,
+                height: 10,
+                backgroundColor: '#E0E0E0',
+                top: 5,
+              }}></View>
+
+            <View
+              style={{
+                width: 20,
+                height: 20,
+                borderRadius: 10,
+                backgroundColor: '#E0E0E0',
+                left: -2,
+              }}></View>
           </View>
-
-          <Input
-            onChangeText={text => handleOnchange(text, 'location')}
-            onFocus={() => handleError(null, 'location')}
-            label="Location"
-            placeholder="Enter your Location"
-            error={errors.location}
-          />
-
-          <Input
-            onChangeText={text => handleOnchange(text, 'countryName')}
-            onFocus={() => handleError(null, 'country')}
-            label="Country"
-            placeholder="Enter your country"
-            error={errors.country}
-          />
-
           <View
             style={{
               flexDirection: 'row',
-              marginTop: 20,
+              justifyContent: 'space-between',
               alignItems: 'center',
+              marginTop: 20,
             }}>
-            <View style={{marginTop: moderateScale(-5)}}>
-              <CheckBox
-                boxType="square"
-                style={styles.checkbox}
-                disabled={false}
-                onCheckColor="#14226D"
-                value={toggleCheckBox}
-                onValueChange={newValue => setToggleCheckBox(newValue)}
-              />
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                if (navigation.canGoBack()) {
+                  navigation.goBack();
+                }
+              }}>
+              <Feather name="arrow-left" size={20} />
+            </TouchableOpacity>
             <Text
               style={{
-                fontFamily: fonts.regular,
-                color: colors.black,
-                paddingLeft: 10,
+                color: colors.blue,
+                fontFamily: fonts.bold,
+                fontSize: moderateScale(32),
               }}>
-              I have accepted the{' '}
-              <Text style={{fontFamily: fonts.medium, color: colors.primary}}>
-                Terms and Conditions.
-              </Text>
+              Create Account
             </Text>
+            <View />
           </View>
-
-          <CustomButton
-            title="Next"
-            disabled={active}
-            onPress={validate}
-            style={{marginTop: 20}}
-          />
-
-          <View
+          <Text
             style={{
-              flexDirection: 'row',
-              marginTop: moderateScale(20),
-              justifyContent: 'center',
+              fontFamily: fonts.regular,
+              fontSize: moderateScale(14),
+              lineHeight: moderateScale(17),
+              alignItems: 'center',
+              color: '#000F1A',
             }}>
-            <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-              Already have an account?{' '}
+            Set up your account with us! Please fill the below details to create
+            account.
+          </Text>
+
+          <Text
+            style={{
+              fontFamily: fonts.medium,
+              color: colors.primary,
+              marginTop: 20,
+              marginBottom: 20,
+              fontSize: 16,
+            }}>
+            Add Business Information
+          </Text>
+
+          <ProFile image="" onPress={() => {}} />
+
+          <View style={{marginVertical: 10}}>
+            <Input
+              value={inputs.fullName}
+              onChangeText={text => {
+                const name = text.replace(/[^a-zA-Z ]/g, '');
+                handleOnchange(name, 'fullName');
+              }}
+              onFocus={() => handleError(null, 'fullname')}
+              label="Name"
+              placeholder="Enter your full name"
+              error={errors.fullname}
+            />
+
+            <View>
+              <Input
+                onChangeText={text => handleOnchange(text, 'email')}
+                onFocus={() => handleError(null, 'email')}
+                label="Email"
+                placeholder="Enter your email address"
+                error={errors.email}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+              <Pressable
+                style={{
+                  position: 'absolute',
+                  marginTop: 45,
+                  right: 10,
+                }}>
+                <EmailModal active={email(inputs.email)} email={inputs.email} />
+              </Pressable>
+            </View>
+
+            <View>
+              <Input
+                label="Phone Number"
+                placeholder="Enter your phone no"
+                keyboardType="phone-pad"
+                onChangeText={e => handleOnchange(e, 'mobileNo')}
+                onFocus={() => handleError(null, 'phone')}
+                error={errors.phone}
+                maxLength={13}
+              />
+              <Pressable
+                style={{
+                  position: 'absolute',
+                  marginTop: 45,
+                  right: 10,
+                }}>
+                <PhoneModal
+                  active={inputs.mobileNo.length >= 9}
+                  phone={inputs.mobileNo}
+                />
+              </Pressable>
+            </View>
+
+            <Input
+              onChangeText={text => handleOnchange(text, 'location')}
+              onFocus={() => handleError(null, 'location')}
+              label="Location"
+              placeholder="Enter your Location"
+              error={errors.location}
+            />
+
+            <Input
+              value={inputs.countryName}
+              onChangeText={text => {
+                const name = text.replace(/[^a-zA-Z ]/g, '');
+                handleOnchange(name, 'countryName');
+              }}
+              onFocus={() => handleError(null, 'country')}
+              label="Country"
+              placeholder="Enter your country"
+              error={errors.country}
+            />
+
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 20,
+                alignItems: 'center',
+              }}>
+              <View style={{marginTop: moderateScale(-5)}}>
+                <CheckBox
+                  boxType="square"
+                  style={styles.checkbox}
+                  disabled={false}
+                  onCheckColor="#14226D"
+                  value={toggleCheckBox}
+                  onValueChange={newValue => setToggleCheckBox(newValue)}
+                />
+              </View>
               <Text
-                onPress={() => navigation.navigate('LoginScreen')}
-                style={{color: colors.primary, fontFamily: fonts.bold}}>
-                Log In
+                style={{
+                  fontFamily: fonts.regular,
+                  color: colors.black,
+                  paddingLeft: 10,
+                }}>
+                I have accepted the{' '}
+                <Text style={{fontFamily: fonts.medium, color: colors.primary}}>
+                  Terms and Conditions.
+                </Text>
               </Text>
-            </Text>
+            </View>
+
+            <CustomButton
+              title="Next"
+              disabled={active}
+              onPress={validate}
+              style={{marginTop: 20}}
+            />
+
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: moderateScale(20),
+                justifyContent: 'center',
+              }}>
+              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+                Already have an account?{' '}
+                <Text
+                  onPress={() => navigation.navigate('LoginScreen')}
+                  style={{color: colors.primary, fontFamily: fonts.bold}}>
+                  Log In
+                </Text>
+              </Text>
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

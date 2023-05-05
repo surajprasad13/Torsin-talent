@@ -141,7 +141,10 @@ const PhoneModal = ({active, phone}) => {
       <ModalPoup visible={visible}>
         <TouchableOpacity
           style={{alignSelf: 'flex-end'}}
-          onPress={() => setVisible(false)}>
+          onPress={() => {
+            setVisible(false);
+            setValue('');
+          }}>
           <Entypo name="cross" size={20} />
         </TouchableOpacity>
         <View style={{alignItems: 'center'}}>
@@ -244,7 +247,7 @@ const PhoneModal = ({active, phone}) => {
         <AntDesign name="checkcircleo" size={20} color="green" />
       ) : (
         <TouchableOpacity
-        disabled={!active}
+          disabled={!active}
           onPress={() => {
             setVisible(!visible);
             sendOtp();

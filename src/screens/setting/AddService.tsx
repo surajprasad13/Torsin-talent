@@ -41,8 +41,8 @@ const AddService = ({}) => {
   });
 
   const data = [
-    {label: 'Weekly', value: '1'},
-    {label: 'Monthly', value: '2'},
+    {label: 'Fixed', value: '1'},
+    {label: 'Hourly', value: '2'},
   ];
 
   const handleOnchange = (text: string, input: any) => {
@@ -55,22 +55,12 @@ const AddService = ({}) => {
       userToken,
     };
     dispatch(addService(value));
+    if (navigation.canGoBack()) navigation.goBack();
   };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
       <Portal>
-        <Dialog visible={loading}>
-          <Dialog.Content
-            style={{
-              height: 200,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Loader />
-          </Dialog.Content>
-        </Dialog>
-
         <Dialog visible={success}>
           <Dialog.Title>Service Added</Dialog.Title>
           <Dialog.Actions>
@@ -361,6 +351,7 @@ const AddService = ({}) => {
           onPress={onPressAdd}
           style={{marginTop: 50}}
           disabled={true}
+          loading={loading}
         />
         <View style={{marginTop: 50}} />
       </ScrollView>

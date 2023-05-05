@@ -8,6 +8,8 @@ import {
   Keyboard,
   SafeAreaView,
   Pressable,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {Dialog, Portal, RadioButton} from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
@@ -51,7 +53,9 @@ type InputProp = {
 const IndivisualRegister = ({}) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const {loading} = useSelector((state: RootState) => state.auth);
+  const {loading, emailVerified, mobileVerified} = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   const [inputs, setInputs] = useState<InputProp>({
     fullName: '',
@@ -121,7 +125,13 @@ const IndivisualRegister = ({}) => {
   };
 
   const active: boolean =
-    inputs.fullName && inputs.email && inputs.mobileNo && inputs.location
+    inputs.fullName &&
+    inputs.email &&
+    inputs.mobileNo &&
+    emailVerified &&
+    mobileVerified &&
+    inputs.location &&
+    inputs.countryName
       ? true
       : false;
 
@@ -134,269 +144,269 @@ const IndivisualRegister = ({}) => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <Portal>
-        <Dialog visible={loading}>
-          <Dialog.Content
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+        <ScrollView contentContainerStyle={{padding: 10}}>
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <View
+              style={{
+                width: 20,
+                height: 20,
+                borderRadius: 10,
+                backgroundColor: '#14226D',
+                right: -1,
+              }}></View>
+
+            <View
+              style={{
+                width: 120,
+                height: 10,
+                backgroundColor: '#E0E0E0',
+                top: 5,
+              }}></View>
+
+            <View
+              style={{
+                width: 20,
+                height: 20,
+                borderRadius: 10,
+                backgroundColor: '#E0E0E0',
+                left: -2,
+              }}></View>
+          </View>
+
+          <View
             style={{
-              height: 200,
-              justifyContent: 'center',
+              flexDirection: 'row',
+              top: 36,
+              justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Loader />
-          </Dialog.Content>
-        </Dialog>
-      </Portal>
-
-      <ScrollView contentContainerStyle={{padding: 10}}>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <View
-            style={{
-              width: 20,
-              height: 20,
-              borderRadius: 10,
-              backgroundColor: '#14226D',
-              right: -1,
-            }}></View>
-
-          <View
-            style={{
-              width: 120,
-              height: 10,
-              backgroundColor: '#E0E0E0',
-              top: 5,
-            }}></View>
-
-          <View
-            style={{
-              width: 20,
-              height: 20,
-              borderRadius: 10,
-              backgroundColor: '#E0E0E0',
-              left: -2,
-            }}></View>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            top: 36,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ThroughRegister')}>
-            <Feather name="arrow-left" size={20} />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontFamily: fonts.bold,
-              fontSize: moderateScale(32),
-              color: colors.primary,
-              textAlign: 'center',
-            }}>
-            Create Account
-          </Text>
-          <View style={{flex: 0.2}} />
-        </View>
-
-        <Text
-          style={{
-            fontFamily: fonts.regular,
-            top: 50,
-            alignItems: 'center',
-            color: '#000F1A',
-          }}>
-          Set up your account with us! Please fill the below details to create
-          account.
-        </Text>
-
-        <Text
-          style={{
-            fontFamily: fonts.regular,
-            top: 70,
-            color: '#0E184D',
-          }}>
-          Add Personal Information.
-        </Text>
-
-        <View style={{top: 80}}>
-          <ProFile onPress={() => {}} image="" />
-        </View>
-
-        <View style={{marginVertical: 47, marginTop: 84}}>
-          <Input
-            label="Name"
-            onFocus={() => handleError(null, 'fullName')}
-            placeholder="John smith"
-            onChangeText={(text: any) => handleOnchange(text, 'fullName')}
-            error={errors.fullName}
-          />
-
-          <View>
-            <Input
-              onChangeText={(text: string) => handleOnchange(text, 'email')}
-              onFocus={() => handleError(null, 'email')}
-              label="Email"
-              keyboardType="email-address"
-              placeholder="john@gmail.com"
-              error={errors.email}
-              autoComplete="email"
-              autoCapitalize="none"
-            />
-            <Pressable
-              style={{
-                position: 'absolute',
-                marginTop: 45,
-                right: 10,
-              }}>
-              <EmailModal
-                active={inputs.email.length > 0}
-                email={inputs.email}
-              />
-            </Pressable>
-          </View>
-
-          <View>
-            <Input
-              onFocus={() => handleError(null, 'mobileNo')}
-              label="Mobile Number"
-              placeholder="eg. 895204300"
-              error={errors.phone}
-              onChangeText={(text: any) => handleOnchange(text, 'mobileNo')}
-              keyboardType="phone-pad"
-              maxLength={13}
-            />
-            <Pressable
-              style={{
-                position: 'absolute',
-                marginTop: 45,
-                right: 10,
-              }}>
-              <PhoneModal
-                active={inputs.mobileNo.length >= 7}
-                phone={inputs.mobileNo}
-              />
-            </Pressable>
-          </View>
-
-          <View style={{marginTop: verticalScale(10)}}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ThroughRegister')}>
+              <Feather name="arrow-left" size={20} />
+            </TouchableOpacity>
             <Text
               style={{
-                color: '#4F4F4F',
-                marginLeft: horizontalScale(15),
-                fontFamily: fonts.regular,
-                right: 10,
-                bottom: 20,
-                fontSize: moderateScale(16),
+                fontFamily: fonts.bold,
+                fontSize: moderateScale(32),
+                color: colors.primary,
+                textAlign: 'center',
               }}>
-              Gender
+              Create Account
             </Text>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <RadioButton
-                value="first"
-                color="#0E184D"
-                status={checked === 'first' ? 'checked' : 'unchecked'}
-                onPress={() => {
-                  setChecked('first');
-                  setInputs(prevState => ({...prevState, gender: 1}));
-                }}
-              />
-              <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
-                Male
-              </Text>
-            </View>
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <RadioButton
-                value="second"
-                color="#0E184D"
-                status={checked === 'second' ? 'checked' : 'unchecked'}
-                onPress={() => {
-                  setChecked('second');
-                  setInputs(prevState => ({...prevState, gender: 2}));
-                }}
-              />
-              <Text style={{fontFamily: fonts.regular}}>Female</Text>
-            </View>
+            <View style={{flex: 0.2}} />
           </View>
-
-          <View style={{marginTop: 10}}>
-            <Input
-              onChangeText={(text: any) => handleOnchange(text, 'location')}
-              onFocus={() => handleError(null, 'location')}
-              label="Location"
-              placeholder="Enter Location"
-              error={errors.location}
-            />
-          </View>
-
-          <View style={{marginTop: 10}}>
-            <Input
-              value={inputs.countryName}
-              onChangeText={(text: any) => handleOnchange(text, 'countryName')}
-              onFocus={() => handleError(null, 'countryName')}
-              label="Country"
-              placeholder="Enter your country"
-              error={errors.countryName}
-            />
-          </View>
-
-          <View
-            style={{flexDirection: 'row', marginTop: 10, alignItems: 'center'}}>
-            <CheckBox
-              boxType="square"
-              style={styles.checkbox}
-              disabled={false}
-              onCheckColor="#14226D"
-              value={toggleCheckBox}
-              onValueChange={newValue => setToggleCheckBox(newValue)}
-            />
-            <View style={{marginLeft: 10}}>
-              <Text style={{fontFamily: fonts.regular}}>
-                I have accepted the{' '}
-                <Text
-                  onPress={() => {
-                    navigation.navigate('RegisterScreen');
-                  }}
-                  style={{
-                    color: colors.blue,
-                    fontFamily: fonts.bold,
-                    left: 2,
-                  }}>
-                  Terms and Conditions.
-                </Text>
-              </Text>
-            </View>
-          </View>
-
-          <CustomButton
-            title="Next"
-            disabled={active}
-            onPress={validate}
-            style={{marginTop: 20}}
-          />
 
           <Text
             style={{
               fontFamily: fonts.regular,
-              textAlign: 'center',
-              marginTop: 10,
+              top: 50,
+              alignItems: 'center',
+              color: '#000F1A',
             }}>
-            Already have an account?{' '}
-            <Text
-              onPress={() => {
-                navigation.navigate('LoginScreen');
-              }}
-              style={{
-                color: '#0E184D',
-                fontFamily: fonts.bold,
-              }}>
-              Log In
-            </Text>
+            Set up your account with us! Please fill the below details to create
+            account.
           </Text>
-        </View>
-      </ScrollView>
+
+          <Text
+            style={{
+              fontFamily: fonts.regular,
+              top: 70,
+              color: '#0E184D',
+            }}>
+            Add Personal Information.
+          </Text>
+
+          <View style={{top: 80}}>
+            <ProFile onPress={() => {}} image="" />
+          </View>
+
+          <View style={{marginVertical: 47, marginTop: 84}}>
+            <Input
+              label="Name"
+              value={inputs.fullName}
+              onFocus={() => handleError(null, 'fullName')}
+              placeholder="John smith"
+              onChangeText={(text: any) => {
+                const name = text.replace(/[^a-zA-Z ]/g, '');
+                handleOnchange(name, 'fullName');
+              }}
+              error={errors.fullName}
+            />
+
+            <View>
+              <Input
+                onChangeText={(text: string) => handleOnchange(text, 'email')}
+                onFocus={() => handleError(null, 'email')}
+                label="Email"
+                keyboardType="email-address"
+                placeholder="john@gmail.com"
+                error={errors.email}
+                autoComplete="email"
+                autoCapitalize="none"
+              />
+              <Pressable
+                style={{
+                  position: 'absolute',
+                  marginTop: 45,
+                  right: 10,
+                }}>
+                <EmailModal active={email(inputs.email)} email={inputs.email} />
+              </Pressable>
+            </View>
+
+            <View>
+              <Input
+                onFocus={() => handleError(null, 'mobileNo')}
+                label="Mobile Number"
+                placeholder="eg. 895204300"
+                error={errors.phone}
+                onChangeText={(text: any) => handleOnchange(text, 'mobileNo')}
+                keyboardType="phone-pad"
+                maxLength={13}
+              />
+              <Pressable
+                style={{
+                  position: 'absolute',
+                  marginTop: 45,
+                  right: 10,
+                }}>
+                <PhoneModal
+                  active={inputs.mobileNo.length >= 9}
+                  phone={inputs.mobileNo}
+                />
+              </Pressable>
+            </View>
+
+            <View style={{marginTop: verticalScale(10)}}>
+              <Text
+                style={{
+                  color: '#4F4F4F',
+                  marginLeft: horizontalScale(15),
+                  fontFamily: fonts.regular,
+                  right: 10,
+                  bottom: 20,
+                  fontSize: moderateScale(16),
+                }}>
+                Gender
+              </Text>
+
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <RadioButton
+                  value="first"
+                  color="#0E184D"
+                  status={checked === 'first' ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked('first');
+                    setInputs(prevState => ({...prevState, gender: 1}));
+                  }}
+                />
+                <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+                  Male
+                </Text>
+              </View>
+
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <RadioButton
+                  value="second"
+                  color="#0E184D"
+                  status={checked === 'second' ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked('second');
+                    setInputs(prevState => ({...prevState, gender: 2}));
+                  }}
+                />
+                <Text style={{fontFamily: fonts.regular}}>Female</Text>
+              </View>
+            </View>
+
+            <View style={{marginTop: 10}}>
+              <Input
+                onChangeText={(text: any) => handleOnchange(text, 'location')}
+                onFocus={() => handleError(null, 'location')}
+                label="Location"
+                placeholder="Enter Location"
+                error={errors.location}
+              />
+            </View>
+
+            <View style={{marginTop: 10}}>
+              <Input
+                value={inputs.countryName}
+                onChangeText={(text: any) => {
+                  const name = text.replace(/[^a-zA-Z ]/g, '');
+                  handleOnchange(name, 'countryName');
+                }}
+                onFocus={() => handleError(null, 'countryName')}
+                label="Country"
+                placeholder="Enter your country"
+                error={errors.countryName}
+              />
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 10,
+                alignItems: 'center',
+              }}>
+              <CheckBox
+                boxType="square"
+                style={styles.checkbox}
+                disabled={false}
+                onCheckColor="#14226D"
+                value={toggleCheckBox}
+                onValueChange={newValue => setToggleCheckBox(newValue)}
+              />
+              <View style={{marginLeft: 10}}>
+                <Text style={{fontFamily: fonts.regular}}>
+                  I have accepted the{' '}
+                  <Text
+                    onPress={() => {
+                      navigation.navigate('RegisterScreen');
+                    }}
+                    style={{
+                      color: colors.blue,
+                      fontFamily: fonts.bold,
+                      left: 2,
+                    }}>
+                    Terms and Conditions.
+                  </Text>
+                </Text>
+              </View>
+            </View>
+
+            <CustomButton
+              title="Next"
+              disabled={active}
+              onPress={validate}
+              style={{marginTop: 20}}
+              loading={loading}
+            />
+
+            <Text
+              style={{
+                fontFamily: fonts.regular,
+                textAlign: 'center',
+                marginTop: 10,
+              }}>
+              Already have an account?{' '}
+              <Text
+                onPress={() => {
+                  navigation.navigate('LoginScreen');
+                }}
+                style={{
+                  color: '#0E184D',
+                  fontFamily: fonts.bold,
+                }}>
+                Log In
+              </Text>
+            </Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

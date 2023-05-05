@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Keyboard,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, Dialog, Portal, RadioButton} from 'react-native-paper';
@@ -23,7 +24,8 @@ import {colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {CustomButton, CustomInput} from '../../components';
 import {userUpdate} from '../../redux/actions/authAction';
-import {resetSuccess} from '../../redux/reducers/authSlice';
+import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
+import {alphabets, email, number} from '../../utils/regex';
 
 const EditUserProfile = ({}) => {
   const navigation = useNavigation();
@@ -35,9 +37,9 @@ const EditUserProfile = ({}) => {
   );
 
   const [inputs, setInputs] = useState({
-    fullName: userInfo?.fullName,
-    email: userInfo?.email,
-    mobileNo: userInfo?.mobileNo,
+    fullName: userInfo?.fullName ?? '',
+    email: userInfo?.email ?? '',
+    mobileNo: userInfo?.mobileNo ?? '',
     location: userInfo?.location,
     profileImage: userInfo?.profileImage,
     gender: userInfo?.gender ?? 1,
@@ -45,6 +47,41 @@ const EditUserProfile = ({}) => {
   });
 
   const [errors, setErrors] = React.useState<any>({});
+
+  const validate = () => {
+    Keyboard.dismiss();
+
+    let isValid = true;
+
+    const validName = alphabets(inputs.fullName);
+    const validEmail = email(inputs.email);
+    const validNumber = number(inputs.mobileNo);
+
+    if (!validName) {
+      handleError('Please Enter Name', 'fullName');
+      isValid = false;
+    }
+    if (!validEmail) {
+      handleError('Please enter valid email', 'email');
+      isValid = false;
+    }
+    if (!validNumber) {
+      handleError('Please enter Phone', 'mobileNo');
+      isValid = false;
+    }
+    if (!inputs.location) {
+      handleError('Please enter location', 'location');
+      isValid = false;
+    }
+    if (!inputs.countryName) {
+      handleError('Please enter country', 'countryName');
+      isValid = false;
+    }
+
+    if (isValid) {
+      update();
+    }
+  };
 
   const update = () => {
     dispatch(userUpdate({inputs, userToken}));
@@ -57,6 +94,14 @@ const EditUserProfile = ({}) => {
   const handleError = (_error: any, input: any) => {
     setErrors((prevState: any) => ({...prevState, [input]: _error}));
   };
+
+  useEffect(() => {
+    const listener = navigation.addListener('focus', () => {
+      dispatch(loginValue());
+      dispatch(resetSuccess());
+    });
+    return () => listener;
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -105,26 +150,18 @@ const EditUserProfile = ({}) => {
             onPress={() => {}}
           />
 
-          {!!error && (
-            <Text
-              style={{
-                marginTop: 40,
-                textAlign: 'center',
-                fontFamily: fonts.medium,
-                color: colors.red,
-              }}>
-              {error}
-            </Text>
-          )}
-
           <CustomInput
             value={inputs.fullName}
-            onChangeText={(text: string) => handleOnchange(text, 'fullName')}
+            onChangeText={(text: string) => {
+              const name = text.replace(/[^a-zA-Z ]/g, '');
+              handleOnchange(name, 'fullName');
+            }}
             onFocus={() => handleError(null, 'fullname')}
             label="Name"
             placeholder={inputs.fullName}
             placeholderTextColor="#333333"
             containerStyle={{marginTop: 40}}
+            error={errors.fullName}
           />
 
           <CustomInput
@@ -135,6 +172,7 @@ const EditUserProfile = ({}) => {
             placeholder={inputs.email}
             placeholderTextColor="#333333"
             containerStyle={{marginTop: 20}}
+            error={errors.email}
           />
 
           <CustomInput
@@ -146,6 +184,7 @@ const EditUserProfile = ({}) => {
             placeholder="895204300"
             placeholderTextColor="#333333"
             containerStyle={{marginTop: 20}}
+            error={errors.mobileNo}
           />
 
           {userInfo?.gender && (
@@ -190,22 +229,39 @@ const EditUserProfile = ({}) => {
             label="Location"
             placeholder={inputs.location}
             containerStyle={{marginTop: 20}}
+            error={errors.location}
           />
 
           <CustomInput
             value={inputs.countryName}
-            onChangeText={(text: string) => handleOnchange(text, 'countryName')}
+            onChangeText={(text: string) => {
+              const name = text.replace(/[^a-zA-Z ]/g, '');
+              handleOnchange(name, 'countryName');
+            }}
             onFocus={() => handleError(null, 'location')}
             label="Country"
             placeholder={inputs.countryName}
             containerStyle={{marginTop: 20}}
+            error={errors.countryName}
           />
+
+          {!!error && (
+            <Text
+              style={{
+                marginTop: 40,
+                textAlign: 'center',
+                fontFamily: fonts.medium,
+                color: colors.red,
+              }}>
+              {error}
+            </Text>
+          )}
 
           <CustomButton
             title="Save Changes"
             style={{marginTop: 20}}
             disabled={true}
-            onPress={update}
+            onPress={validate}
             loading={loading}
           />
           <View style={{marginTop: 50}} />

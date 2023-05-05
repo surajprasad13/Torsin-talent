@@ -126,7 +126,10 @@ const EmailModal = ({active, email}) => {
       <ModalPoup visible={visible}>
         <TouchableOpacity
           style={{alignSelf: 'flex-end'}}
-          onPress={() => setVisible(false)}>
+          onPress={() => {
+            setVisible(false);
+            setValue('');
+          }}>
           <Entypo name="cross" size={20} />
         </TouchableOpacity>
         <View style={{alignItems: 'center'}}>

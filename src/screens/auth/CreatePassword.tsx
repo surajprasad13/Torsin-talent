@@ -29,11 +29,10 @@ import {password} from '../../utils/regex';
 const {moderateScale} = metrics;
 
 const passwordStrength = [
-  'Password should have atleast one upper character.',
-  'Password should have atleast one lower character.',
-  'Password should have atleast one numeric digit.',
-  'Password should have atleast one speical character (E.g @%$)',
-  'Password length must be 8 character or more',
+  'Atleast one upper character.',
+  'Atleast one numeric digit.',
+  'Atleast one speical character (E.g @%$)',
+  'Atleast 8 character',
 ];
 
 const CreatePassword = ({}) => {
@@ -106,20 +105,7 @@ const CreatePassword = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Portal>
-        <Dialog visible={loading}>
-          <Dialog.Content
-            style={{
-              height: 200,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Loader />
-          </Dialog.Content>
-        </Dialog>
-      </Portal>
-
-      <ScrollView style={{padding: 10}}>
+      <ScrollView style={{padding: 10, backgroundColor: 'white'}}>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <View
             style={{
@@ -172,16 +158,22 @@ const CreatePassword = ({}) => {
           </Text>
           <View />
         </View>
-        <Text style={{fontFamily: fonts.regular, color: colors.cyanBlue}}>
-          Set up your account with us! Please fill the below details to create
-          account.
+        <Text
+          style={{
+            fontFamily: fonts.regular,
+            color: colors.cyanBlue,
+            marginTop: 10,
+          }}>
+          {
+            ' Set up your account with us!\n Please fill the below details to create  account.'
+          }
         </Text>
         <Text
           style={{
             fontFamily: fonts.regular,
-            color: colors.primary,
-            marginTop: 10,
-            fontSize: 16,
+            color: '#0E184D',
+            marginTop: 15,
+            fontSize: 18,
           }}>
           Create New Password
         </Text>
@@ -190,7 +182,7 @@ const CreatePassword = ({}) => {
           placeholder="********"
           password
           secureTextEntry
-          containerStyle={{marginTop: 10}}
+          containerStyle={{marginTop: 15}}
           value={input.password}
           onChangeText={text => {
             handleChange(text, 'password');
@@ -252,6 +244,7 @@ const CreatePassword = ({}) => {
             input.password.length >= 8 && input.confirmPassword.length >= 8
           }
           style={{marginTop: 50}}
+          loading={loading}
         />
         <Text
           style={{
