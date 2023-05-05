@@ -16,7 +16,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {appstyle, colors, fonts} from '../../theme';
 import ServiceCard from './components/ServiceCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {Dialog, Provider} from 'react-native-paper';
+import {Dialog, Portal} from 'react-native-paper';
 import {fetchService, fetchSkill} from '../../redux/actions/userAction';
 import {Service} from '../../types/user';
 
@@ -28,19 +28,20 @@ const ServiceSkill = ({}) => {
   const {skills, services, loading} = useAppSelector(state => state.user);
 
   useEffect(() => {
-    dispatch(fetchSkill({userToken}));
-  }, []);
-  useEffect(() => {
-    dispatch(fetchService({userToken}));
+    const listener = navigation.addListener('focus', () => {
+      dispatch(fetchSkill({userToken}));
+      dispatch(fetchService({userToken}));
+    });
+    return () => listener;
   }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
-      <Provider>
+      <Portal>
         <Dialog visible={loading}>
           <ActivityIndicator />
         </Dialog>
-      </Provider>
+      </Portal>
       <View
         style={{
           flexDirection: 'row',
