@@ -27,6 +27,9 @@ import {RootStackParamList} from './RouteType';
 
 import {useAppSelector} from '../hooks';
 import CreatePassword from '../screens/auth/CreatePassword';
+import SearchJob from '../screens/jobs/components/SearchJob';
+import MusicJob from '../screens/jobs/components/MusicJob';
+import OpenModal from '../screens/jobs/components/OpenModal';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -129,6 +132,21 @@ export default function Appnavigator({}) {
           <Stack.Screen
             name="DrawerNavigation"
             component={DrawerNavigation}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="SearchJob"
+            component={SearchJob}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="MusicJob"
+            component={MusicJob}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="OpenModal"
+            component={OpenModal}
             options={{headerShown: false}}
           />
         </Stack.Group>

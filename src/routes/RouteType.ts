@@ -28,6 +28,9 @@ export type RootStackParamList = {
   PostDetails: {id: string};
   NotFound: undefined;
   BottomScreens: undefined;
+  SearchJob: undefined;
+  MusicJob: undefined;
+  OpenModal: undefined;
   CreatePassword: {item: string} | undefined;
 };
 

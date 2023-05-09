@@ -149,14 +149,6 @@ const OnboardingScreen = ({}) => {
             Create an Account
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('WithoutSignupHome');
-          }}
-          style={{marginTop: 10}}>
-          <Text style={styles.title}>Continue without signup</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

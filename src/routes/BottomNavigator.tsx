@@ -2,7 +2,7 @@ import React from 'react';
 import {} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/home/HomeScreen';
-import Jobs from '../screens/bottomScreen/Jobs';
+import Jobs from '../screens/jobs/Jobs';
 import Chat from '../screens/bottomScreen/Chat';
 import Setting from '../screens/setting/Setting';
 

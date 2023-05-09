@@ -213,6 +213,7 @@ const AddService = ({}) => {
                 borderRadius: 8,
                 borderColor: colors.light,
                 marginTop: 10,
+                backgroundColor: colors.white
               }}>
               <TextInput
                 placeholder="Type description here..."
@@ -222,7 +223,7 @@ const AddService = ({}) => {
                 onChangeText={text =>
                   handleOnchange(text, 'serviceDescription')
                 }
-                style={{padding: 15}}
+                style={{padding: 15, }}
               />
             </View>
           </View>
