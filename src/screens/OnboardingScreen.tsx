@@ -9,14 +9,13 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
-import {fonts} from '../theme';
+import {colors, fonts} from '../theme';
 
 const OnboardingScreen = ({}) => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1, backgroundColor: '#ffffff'}}>
+    <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
         <Onboarding
           pages={[
             {
@@ -49,28 +48,14 @@ const OnboardingScreen = ({}) => {
                 'Find the best talents in Media and Entertainment services',
             },
           ]}
-          imageContainerStyles={{
-            width: 276,
-            height: 276,
-            marginTop: -200,
-          }}
           titleStyles={{
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '700',
+            fontFamily: fonts.bold,
             fontSize: 24,
-            lineHeight: 26,
             textAlign: 'center',
             color: '#0E184D',
-            top: 10,
           }}
           subTitleStyles={{
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '400',
-            fontSize: 12,
-            width: 300,
-            lineHeight: 20,
+            fontFamily: fonts.regular,
             textAlign: 'center',
             color: '#595959',
           }}
@@ -91,7 +76,6 @@ const OnboardingScreen = ({}) => {
         <View
           style={{
             borderBottomWidth: 0.5,
-            marginBottom: 20,
             backgroundColor: '#0E184D',
           }}></View>
 
@@ -100,13 +84,9 @@ const OnboardingScreen = ({}) => {
             navigation.navigate('LoginScreen');
           }}
           style={{
-            marginTop: 10,
-            alignItems: 'center',
-            width: '90%',
-            height: 50,
-            marginLeft: '5%',
+            padding: 15,
+            margin: 10,
             backgroundColor: '#DFE6FD',
-            justifyContent: 'center',
             borderRadius: 8,
           }}>
           <Text
@@ -114,9 +94,7 @@ const OnboardingScreen = ({}) => {
               fontSize: 16,
               textAlign: 'center',
               color: '#6180F4',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '700',
+              fontFamily: fonts.bold
             }}>
             Login
           </Text>
@@ -127,14 +105,9 @@ const OnboardingScreen = ({}) => {
             navigation.navigate('ThroughRegister');
           }}
           style={{
-            marginTop: 20,
-
-            alignItems: 'center',
-            width: '90%',
-            height: 50,
-            marginLeft: '5%',
-            backgroundColor: '#14226D',
-            justifyContent: 'center',
+            padding: 15,
+            margin: 10,
+            backgroundColor: colors.primary,
             borderRadius: 8,
           }}>
           <Text
@@ -142,14 +115,11 @@ const OnboardingScreen = ({}) => {
               fontSize: 16,
               textAlign: 'center',
               color: '#ffffff',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '700',
+              fontFamily: fonts.bold,
             }}>
             Create an Account
           </Text>
         </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 };
@@ -160,7 +130,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#6180F4',
     fontFamily: fonts.bold,
-    marginBottom: 20,
   },
 });
 
