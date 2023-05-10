@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -21,16 +21,22 @@ import ImageSlider from '../../components/ImageSlider';
 import CircleProgress from '../../components/CircleProgress';
 import {colors, fonts} from '../../theme';
 import ExpertiseCard from './components/ExpertiseCard';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {profileDetail} from '../../redux/actions/authAction';
 
 const {} = Dimensions.get('window');
 
 const HomeScreen = ({}) => {
+  const dispatch = useAppDispatch();
   const {userInfo} = useAppSelector(state => state.auth);
 
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = (query: any) => setSearchQuery(query);
+
+  useEffect(() => {
+    dispatch(profileDetail(userInfo?.token.access));
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>

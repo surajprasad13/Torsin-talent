@@ -106,6 +106,25 @@ const verifyOtp = createAsyncThunk(
   },
 );
 
+const profileDetail = createAsyncThunk(
+  'user/profileDetail',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`user/details`, {
+        headers: {Authorization: `Bearer ${value}`},
+      });
+      return data;
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   userLogin,
   registerIndivisual,
@@ -113,6 +132,7 @@ export {
   userUpdate,
   sendOtp,
   verifyOtp,
+  profileDetail,
 };
 
 export default {};

@@ -12,6 +12,9 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 
+// icons
+import Feather from 'react-native-vector-icons/Feather';
+
 // helpers
 import {metrics, colors, fonts} from '../../../theme';
 
@@ -19,6 +22,7 @@ import {metrics, colors, fonts} from '../../../theme';
 import Input from '../../../components/Input';
 import Loader from '../../../components/Loader';
 import {useAppSelector} from '../../../hooks';
+import {CustomInput} from '../../../components';
 
 const {moderateScale, verticalScale} = metrics;
 
@@ -33,7 +37,7 @@ const ResetPassword = ({}) => {
 
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<any>({});
 
   const validate = () => {
     Keyboard.dismiss();
@@ -62,7 +66,7 @@ const ResetPassword = ({}) => {
 
   const register = async () => {
     const article = {
-      mobileNo: inputs.mobileNo,
+      mobileNo: inputs.password,
       password: inputs.password,
     };
   };
@@ -76,7 +80,6 @@ const ResetPassword = ({}) => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      {loading && <Loader />}
       <TouchableOpacity
         onPress={() => navigation.navigate('LostPassword')}
         style={{
@@ -85,10 +88,7 @@ const ResetPassword = ({}) => {
           paddingVertical: 10,
           marginTop: moderateScale(40),
         }}>
-        <Image
-          style={styles.tinyLogo}
-          source={require('../../../assets/images/backarrow.png')}
-        />
+        <Feather name="arrow-left" />
       </TouchableOpacity>
       <ScrollView
         contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
@@ -99,13 +99,9 @@ const ResetPassword = ({}) => {
             }}>
             <Text
               style={{
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '700',
-                // fontFamily: 'Poppins-ExtraBold',
+                fontFamily: fonts.bold,
                 fontSize: moderateScale(32),
-                lineHeight: moderateScale(35),
-                color: '#0E184D',
+                color: colors.primary,
               }}>
               Reset Password
             </Text>
@@ -123,7 +119,7 @@ const ResetPassword = ({}) => {
           </View>
 
           <View style={{marginVertical: 10, marginTop: 50}}>
-            <Input
+            <CustomInput
               onChangeText={text => handleOnchange(text, 'password')}
               onFocus={() => handleError(null, 'password')}
               // iconName="lock-outline"
@@ -131,11 +127,9 @@ const ResetPassword = ({}) => {
               placeholder="********"
               error={errors.password}
               password
-              keyboardType="password"
             />
 
             <Input
-              keyboardType="password"
               onChangeText={(text: any) => handleOnchange(text, 'phone')}
               onFocus={() => handleError(null, 'phone')}
               // iconName="phone-outline"
@@ -193,7 +187,6 @@ const ResetPassword = ({}) => {
 
         <TouchableOpacity
           onPress={() => {
-            //@ts-expect-error
             navigation.navigate('Successfull');
           }}
           style={{

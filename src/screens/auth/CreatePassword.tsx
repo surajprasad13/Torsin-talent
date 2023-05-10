@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -8,7 +9,6 @@ import {
   TouchableOpacity,
   Keyboard,
 } from 'react-native';
-import {Dialog, Portal} from 'react-native-paper';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -16,7 +16,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 
 // components
 import {colors, fonts, metrics} from '../../theme';
-import {CustomButton, CustomInput, Loader} from '../../components';
+import {CustomButton, CustomInput} from '../../components';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {
@@ -46,12 +46,34 @@ const CreatePassword = ({}) => {
   const navigation = useNavigation();
   const [errors, setErrors] = useState<any>({});
 
-  const [isValid, setIsValid] = useState(null);
+  const [isValid, setIsValid] = useState<Array<boolean>>([]);
 
   const [input, setInput] = useState({
     password: '',
     confirmPassword: '',
   });
+
+  function handleValidation(value: string) {
+    const pattern = [
+      '(?=.*[A-Z])', // uppercase letter
+      '(?=.*\\d)', // number required
+      '[^a-zA-Z0-9]',
+      '^.{8,}$', // min 8 chars
+    ];
+    if (!pattern) return true;
+
+    // string pattern, one validation rule
+    if (typeof pattern === 'string') {
+      const condition = new RegExp(pattern, 'g');
+      return condition.test(value);
+    }
+
+    // array patterns, multiple validation rules
+    if (typeof pattern === 'object') {
+      const conditions = pattern.map(rule => new RegExp(rule, 'g'));
+      return conditions.map(condition => condition.test(value));
+    }
+  }
 
   const validate = () => {
     Keyboard.dismiss();
@@ -107,6 +129,21 @@ const CreatePassword = ({}) => {
       navigation.navigate('DrawerNavigation');
     }
   }, [userToken]);
+
+  function checkStatus(index: number) {
+    switch (index) {
+      case 0:
+        return isValid[index];
+      case 1:
+        return isValid[index];
+      case 2:
+        return isValid[index];
+      case 3:
+        return isValid[index];
+      default:
+        return false;
+    }
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -190,6 +227,7 @@ const CreatePassword = ({}) => {
           containerStyle={{marginTop: 15}}
           value={input.password}
           onChangeText={text => {
+            setIsValid(handleValidation(text));
             handleChange(text, 'password');
             dispatch(loginValue());
           }}
@@ -225,14 +263,19 @@ const CreatePassword = ({}) => {
         )}
 
         <View style={{marginTop: 20}}>
-          {passwordStrength.map((_item: string) => {
+          {passwordStrength.map((_item: string, index: number) => {
+            const active = checkStatus(index);
             return (
               <View key={_item} style={styles.checkContainer}>
-                <IonIcon name="checkbox" size={25} color={colors.primary} />
+                <IonIcon
+                  name={active ? 'checkbox' : 'square-outline'}
+                  size={25}
+                  color={active ? colors.primary : '#BDBDBD'}
+                />
                 <Text
                   style={{
                     fontFamily: fonts.regular,
-                    color: colors.grey2,
+                    color: active ? colors.primary : '#BDBDBD',
                     paddingLeft: 10,
                   }}>
                   {_item}
