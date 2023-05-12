@@ -26,7 +26,7 @@ const ServiceCard = ({item}: Service) => {
             alignItems: 'center',
             marginTop: 10,
           }}>
-          <Text style={styles.text}>$500</Text>
+          <Text style={styles.text}>$ {item.serviceCharge}</Text>
           <TouchableOpacity>
             <Text
               style={{

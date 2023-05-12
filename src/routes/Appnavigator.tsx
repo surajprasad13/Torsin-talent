@@ -33,13 +33,19 @@ import OpenModal from '../screens/jobs/components/OpenModal';
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function Appnavigator({}) {
-  const {userToken} = useAppSelector(state => state.auth);
+  const {userToken, isFirstOpen} = useAppSelector(state => state.auth);
 
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{}}
-        initialRouteName={userToken ? 'DrawerNavigation' : 'OnboardingScreen'}>
+        initialRouteName={
+          userToken
+            ? 'DrawerNavigation'
+            : isFirstOpen
+            ? 'OnboardingScreen'
+            : 'LoginScreen'
+        }>
         <Stack.Group>
           <Stack.Screen
             name="OnboardingScreen"

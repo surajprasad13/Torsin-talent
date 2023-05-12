@@ -27,6 +27,7 @@ interface AuthState {
   message: null | string;
   emailVerified: boolean;
   mobileVerified: boolean;
+  isFirstOpen: boolean;
 }
 
 const initialState: AuthState = {
@@ -40,6 +41,7 @@ const initialState: AuthState = {
   message: '',
   emailVerified: false,
   mobileVerified: false,
+  isFirstOpen: true,
 };
 
 const authSlice = createSlice({
@@ -62,6 +64,9 @@ const authSlice = createSlice({
     },
     phoneVerified: state => {
       state.mobileVerified = true;
+    },
+    resetFirst: state => {
+      state.isFirstOpen = false;
     },
   },
   extraReducers: builder => {
@@ -187,7 +192,7 @@ const authSlice = createSlice({
   },
 });
 
-export const {loginValue, logout, resetSuccess, resetVerified, phoneVerified} =
+export const {loginValue, logout, resetSuccess, resetVerified, phoneVerified,resetFirst} =
   authSlice.actions;
 
 export default authSlice.reducer;

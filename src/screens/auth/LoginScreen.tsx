@@ -8,7 +8,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {StackActions, useNavigation} from '@react-navigation/native';
 import {Dialog, Portal} from 'react-native-paper';
 
 // icons
@@ -81,7 +81,10 @@ const LoginScreen = ({}) => {
   useEffect(() => {
     if (userToken) {
       dispatch(resetSuccess());
-      navigation.navigate('DrawerNavigation');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'DrawerNavigation'}],
+      });
     }
   }, [userToken, navigation]);
 
