@@ -263,10 +263,22 @@ const IndivisualRegister = ({}) => {
                 label="Mobile Number"
                 placeholder="eg. 895204300"
                 error={errors.phone}
-                onChangeText={(text: any) => handleOnchange(text, 'mobileNo')}
+                value={inputs.mobileNo}
+                defaultValue="+"
+                onChangeText={(text: any) => {
+                  const pattern = /^[0-9]*$/;
+                  const pass = pattern.test(text);
+                  if (pass) {
+                    handleOnchange(text, 'mobileNo');
+                  }
+                }}
                 keyboardType="phone-pad"
                 maxLength={13}
+                style={{paddingLeft: 10}}
               />
+              <View style={{position: 'absolute', marginTop: 45, left: 10}}>
+                <Text>+</Text>
+              </View>
               <Pressable
                 style={{
                   position: 'absolute',
@@ -274,7 +286,7 @@ const IndivisualRegister = ({}) => {
                   right: 10,
                 }}>
                 <PhoneModal
-                  active={inputs.mobileNo.length >= 9}
+                  active={inputs.mobileNo.length >= 10}
                   phone={inputs.mobileNo}
                 />
               </Pressable>

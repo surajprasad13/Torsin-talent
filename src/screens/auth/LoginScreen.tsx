@@ -112,6 +112,7 @@ const LoginScreen = ({}) => {
 
           <View style={{marginVertical: 10, marginTop: 55}}>
             <Input
+              value={inputs.email}
               keyboardType="email-address"
               autoCapitalize="none"
               autoComplete="email"
@@ -121,11 +122,12 @@ const LoginScreen = ({}) => {
               }}
               onFocus={() => handleError(null, 'email')}
               label="Email"
-              placeholder="torsin@gmail.com"
+              placeholder="Email"
               error={errors.email}
             />
 
             <Input
+              value={inputs.password}
               onChangeText={(text: string) => {
                 handleOnchange(text, 'password');
                 dispatch(loginValue());

@@ -227,11 +227,22 @@ const BusinessRegister = ({}) => {
                 label="Phone Number"
                 placeholder="Enter your phone no"
                 keyboardType="phone-pad"
-                onChangeText={e => handleOnchange(e, 'mobileNo')}
+                value={inputs.mobileNo}
+                onChangeText={text => {
+                  const pattern = /^[0-9]*$/;
+                  const pass = pattern.test(text);
+                  if (pass) {
+                    handleOnchange(text, 'mobileNo');
+                  }
+                }}
                 onFocus={() => handleError(null, 'phone')}
                 error={errors.phone}
                 maxLength={13}
+                style={{paddingLeft: 10}}
               />
+              <View style={{position: 'absolute', marginTop: 45, left: 10}}>
+                <Text>+</Text>
+              </View>
               <Pressable
                 style={{
                   position: 'absolute',

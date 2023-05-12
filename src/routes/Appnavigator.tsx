@@ -18,7 +18,6 @@ import WalkthroughScreen from '../screens/WalkthroughScreen';
 import ThroughRegister from '../screens/ThroughRegister';
 import IndivisualRegister from '../screens/auth/IndivisualRegister';
 import BusinessRegister from '../screens/auth/BusinessRegister';
-import BusinessPassword from '../screens/auth/BusinessPassword';
 import BusinessStart from '../screens/BusinessStart';
 import WithoutSignupHome from '../screens/WithoutSignupHome';
 
@@ -109,12 +108,6 @@ export default function Appnavigator({}) {
           <Stack.Screen
             name="BusinessRegister"
             component={BusinessRegister}
-            options={{headerShown: false}}
-          />
-
-          <Stack.Screen
-            name="BusinessPassword"
-            component={BusinessPassword}
             options={{headerShown: false}}
           />
 
