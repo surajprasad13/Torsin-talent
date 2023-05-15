@@ -60,20 +60,24 @@ const Logout = () => {
               Are you sure you want to logout?
             </Text>
           </Dialog.Content>
-          <Dialog.Actions style={{alignSelf: 'center'}}>
+          <Dialog.Actions style={{justifyContent: 'space-evenly'}}>
             <Button
-              style={{backgroundColor: 'red'}}
-              labelStyle={{color: colors.white}}
-              onPress={toggleModal}>
-              Cancel
-            </Button>
-            <Button
+              mode="text"
+              style={{}}
+              labelStyle={{color: colors.primary, fontFamily: fonts.bold}}
               onPress={() => {
                 dispatch(logout());
                 toggleModal();
-                navigation.dispatch(StackActions.replace('OnboardingScreen'));
+                navigation.navigate('OnboardingScreen');
               }}>
               Logout
+            </Button>
+            <Button
+              mode="contained"
+              labelStyle={{fontFamily: fonts.bold}}
+              style={{backgroundColor: colors.red, borderRadius: 10}}
+              onPress={toggleModal}>
+              Cancel
             </Button>
           </Dialog.Actions>
         </Dialog>
