@@ -144,7 +144,8 @@ const styles = StyleSheet.create({
   bottomNavigationView: {
     backgroundColor: '#fff',
     width: '100%',
-    borderRadius: 28,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     flex: 0.5,
   },
   innerSearch: {

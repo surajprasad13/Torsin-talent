@@ -42,7 +42,6 @@ const Jobs = ({}) => {
             justifyContent: 'space-evenly',
             flexDirection: 'row',
             alignItems: 'center',
-            padding: 10,
           }}>
           <Searchbar
             placeholder="Search Jobs"
@@ -69,7 +68,7 @@ const Jobs = ({}) => {
         <View
           style={{
             padding: 10,
-            marginTop: 30,
+            marginTop: 10,
           }}>
           <Text
             style={{
