@@ -10,6 +10,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity": "^3.332.0",
+    "@aws-sdk/client-s3": "^3.332.0",
+    "@aws-sdk/credential-provider-cognito-identity": "^3.332.0",
     "@react-native-async-storage/async-storage": "react-native-async-storage/async-storage",
     "@react-native-community/checkbox": "^0.5.15",
     "@react-native-community/push-notification-ios": "^1.11.0",

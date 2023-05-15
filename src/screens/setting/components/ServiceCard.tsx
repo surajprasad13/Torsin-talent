@@ -4,7 +4,12 @@ import {appstyle, colors, fonts} from '../../../theme';
 import FastImage from 'react-native-fast-image';
 import {Service} from '../../../types/user';
 
-const ServiceCard = ({item}: Service) => {
+type ServiceProp = {
+  item: Service;
+  index?: number;
+};
+
+const ServiceCard = ({item}: ServiceProp) => {
   return (
     <View style={[styles.cardContainer]}>
       <FastImage

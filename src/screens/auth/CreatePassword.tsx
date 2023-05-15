@@ -126,7 +126,10 @@ const CreatePassword = ({}) => {
     if (userToken) {
       dispatch(resetSuccess());
       dispatch(resetVerified());
-      navigation.navigate('DrawerNavigation');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'DrawerNavigation'}],
+      });
     }
   }, [userToken]);
 
@@ -229,6 +232,7 @@ const CreatePassword = ({}) => {
           onChangeText={text => {
             setIsValid(handleValidation(text));
             handleChange(text, 'password');
+            handleError('', 'password');
             dispatch(loginValue());
           }}
           error={errors.password}
@@ -243,6 +247,7 @@ const CreatePassword = ({}) => {
           value={input.confirmPassword}
           onChangeText={text => {
             handleChange(text, 'confirmPassword');
+            handleError('', 'confirmPassword');
             dispatch(loginValue());
           }}
           error={errors.confirmPassword}
@@ -289,7 +294,9 @@ const CreatePassword = ({}) => {
           title="Create Account"
           onPress={validate}
           disabled={
-            input.password.length >= 8 && input.confirmPassword.length >= 8
+            input.password.length >= 8 &&
+            input.confirmPassword.length >= 8 &&
+            isValid.every(_item => _item == true)
           }
           style={{marginTop: 50}}
           loading={loading}

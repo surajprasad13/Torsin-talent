@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {Dialog, Portal, RadioButton} from 'react-native-paper';
+import {RadioButton} from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
 import {useSelector} from 'react-redux';
 
@@ -23,7 +23,6 @@ import {metrics, colors, fonts} from '../../theme';
 
 // components
 import Input from '../../components/Input';
-import Loader from '../../components/Loader';
 import EmailModal from '../../components/modal/EmailModal';
 import PhoneModal from '../../components/modal/PhoneModal';
 import ProFile from '../../components/ProFile';
@@ -35,7 +34,7 @@ import {useNavigation} from '@react-navigation/native';
 import {CustomButton} from '../../components';
 import {useAppDispatch} from '../../hooks';
 import {resetVerified} from '../../redux/reducers/authSlice';
-import {email, alphabets, password, number} from '../../utils/regex';
+import {email, alphabets, number} from '../../utils/regex';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 

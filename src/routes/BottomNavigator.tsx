@@ -1,32 +1,37 @@
 import React from 'react';
 import {} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/home/HomeScreen';
-import Jobs from '../screens/jobs/Jobs';
-import Chat from '../screens/bottomScreen/Chat';
-import Setting from '../screens/setting/Setting';
+import {createStackNavigator} from '@react-navigation/stack';
 
 // icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+
+// helpers
 import {colors} from '../theme';
-import {createStackNavigator} from '@react-navigation/stack';
+
+// screens
+import HomeScreen from '../screens/home/HomeScreen';
+import Jobs from '../screens/jobs/Jobs';
+import Chat from '../screens/bottomScreen/Chat';
+import Setting from '../screens/setting/Setting';
 import EditProfile from '../screens/setting/EditProfile';
 import EditUserProfile from '../screens/setting/EditUserProfile';
 import AddService from '../screens/setting/AddService';
 import AddSkill from '../screens/setting/AddSkill';
+
 import {BottomScreenParamList, SettingScreenParamList} from './RouteType';
 import ServiceSkill from '../screens/setting/ServiceSkill';
 
 const Bottom = createBottomTabNavigator<BottomScreenParamList>();
 const Stack = createStackNavigator<SettingScreenParamList>();
 
-const SettingStack = () => {
+export const SettingStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="EditUserProfile" component={EditUserProfile} />
       <Stack.Screen name="Setting" component={Setting} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
-      <Stack.Screen name="EditUserProfile" component={EditUserProfile} />
       <Stack.Screen name="AddService" component={AddService} />
       <Stack.Screen name="AddSkill" component={AddSkill} />
       <Stack.Screen name="ServiceSkill" component={ServiceSkill} />
