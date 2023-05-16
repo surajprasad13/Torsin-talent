@@ -65,6 +65,7 @@ export type DrawerScreenParamaList = {
   TermsPrivacy: undefined;
   HelpSupport: undefined;
   BottomNavigation: BottomScreenParamList;
+  DrawerSetting: undefined;
 };
 
 export type BottomScreenParamList = {

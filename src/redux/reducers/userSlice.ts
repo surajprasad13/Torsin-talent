@@ -39,6 +39,7 @@ const userSlice = createSlice({
   reducers: {
     updateSuccess: state => {
       state.success = false;
+      state.error = '';
     },
   },
   extraReducers: builder => {

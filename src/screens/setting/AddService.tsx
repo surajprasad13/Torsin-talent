@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,10 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -16,7 +20,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // components
-import {CustomButton, CustomInput, Loader} from '../../components';
+import {CustomButton, CustomInput} from '../../components';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
@@ -24,7 +28,6 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {addService} from '../../redux/actions/userAction';
 import {Button, Dialog, Portal} from 'react-native-paper';
 import {updateSuccess} from '../../redux/reducers/userSlice';
-// import AddImage from './components/AddImage';
 
 const AddService = ({}) => {
   const navigation = useNavigation();
@@ -34,10 +37,10 @@ const AddService = ({}) => {
   const {userToken} = useAppSelector(state => state.auth);
   const {loading, success, error} = useAppSelector(state => state.user);
 
-  const [inputs, setInputs] = useState({
+  const [inputs, setInputs] = useState<any>({
     serviceName: '',
-    chargeType: 0,
-    serviceCharge: 0,
+    chargeType: '',
+    serviceCharge: '',
     serviceDescription: '',
   });
 
@@ -47,7 +50,7 @@ const AddService = ({}) => {
   ];
 
   const handleOnchange = (text: string, input: any) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
+    setInputs((prevState: any) => ({...prevState, [input]: text}));
   };
 
   const onPressAdd = () => {
@@ -56,146 +59,180 @@ const AddService = ({}) => {
       userToken,
     };
     dispatch(addService(value));
-    if (navigation.canGoBack()) navigation.goBack();
+  };
+
+  useEffect(() => {
+    const listener = navigation.addListener('beforeRemove', () => {
+      dispatch(updateSuccess());
+    });
+    return () => listener;
+  }, []);
+
+  const uploadImage = () => {
+    let options: any = {
+      mediaType: 'photo',
+      quality: 1,
+      includeBase64: true,
+    };
+    launchImageLibrary(options, async response => {
+      const uniqueFileName = `${new Date()}`;
+      try {
+        var base64data = decode(response.assets[0].base64);
+        const url = await uploadFileToS3(
+          base64data,
+          `${uniqueFileName + response.assets[0].fileName}`,
+        );
+        console.log(url);
+      } catch (error: any) {
+        console.log('Error uploading file:', error);
+      }
+    });
   };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
-      <Portal>
-        <Dialog visible={success}>
-          <Dialog.Title>Service Added</Dialog.Title>
-          <Dialog.Actions>
-            <Button
-              onPress={() => {
-                dispatch(updateSuccess());
-              }}>
-              Ok
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+        <Portal>
+          <Dialog visible={success} style={{backgroundColor: 'white'}}>
+            <Dialog.Title>Service Added</Dialog.Title>
+            <Dialog.Actions>
+              <Button
+                onPress={() => {
+                  dispatch(updateSuccess());
+                  if (navigation.canGoBack()) {
+                    navigation.goBack();
+                  }
+                }}>
+                Ok
+              </Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: colors.white,
-          padding: 10,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-            }
-          }}
-          style={{padding: 10}}>
-          <Feather name="arrow-left" size={20} />
-        </TouchableOpacity>
-        <Text
+        <View
           style={{
-            fontFamily: fonts.medium,
-            color: '#000C14',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            backgroundColor: colors.white,
+            padding: 10,
           }}>
-          Add Service
-        </Text>
-        <View />
-      </View>
-
-      <ScrollView>
-        <View style={styles.textContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              }
+            }}
+            style={{padding: 10}}>
+            <Feather name="arrow-left" size={20} />
+          </TouchableOpacity>
           <Text
             style={{
-              fontFamily: fonts.semibold,
-              color: colors.black,
-              fontSize: 16,
-            }}>
-            Add services
-          </Text>
-          <Text
-            style={{
-              fontFamily: fonts.regular,
-              color: '#1E202B',
-              marginTop: 12,
-            }}>
-            Job Description Complete your profile. Set your profile completely .
-          </Text>
-        </View>
-        {!!error && (
-          <Text
-            style={{
-              textAlign: 'center',
-              color: colors.red,
               fontFamily: fonts.medium,
+              color: '#000C14',
             }}>
-            {error}
+            Add Service
           </Text>
-        )}
-        <View style={styles.inputContainer}>
-          <CustomInput
-            label="Service Name"
-            placeholder="eg. Song Production"
-            value={inputs.serviceName}
-            onChangeText={text => handleOnchange(text, 'serviceName')}
-            containerStyle={{}}
-          />
-          <View style={{marginTop: 10}}>
+          <View />
+        </View>
+
+        <ScrollView>
+          <View style={styles.textContainer}>
+            <Text
+              style={{
+                fontFamily: fonts.semibold,
+                color: colors.black,
+                fontSize: 16,
+              }}>
+              Add services
+            </Text>
             <Text
               style={{
                 fontFamily: fonts.regular,
-                color: '#4F4F4F',
-                fontSize: 16,
+                color: '#1E202B',
+                marginTop: 12,
               }}>
-              Project Type
+              Job Description Complete your profile. Set your profile completely
+              .
             </Text>
-            <View
-              style={{
-                height: 50,
-                borderWidth: 1,
-                borderColor: '#BDBDBD',
-                marginTop: 10,
-                borderRadius: 12,
-              }}>
-              <Dropdown
-                style={[
-                  {
-                    borderColor: '#454545',
-                    backgroundColor: 'white',
-                    borderRadius: 12,
-                    padding: 5,
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                  },
-                ]}
-                data={data}
-                search
-                labelField="label"
-                valueField="value"
-                placeholder={'Select'}
-                placeholderStyle={{}}
-                searchPlaceholder="Search..."
-                value={String(inputs.chargeType)}
-                onChange={item => {
-                  setInputs(prevState => ({
-                    ...prevState,
-                    chargeType: Number(item.value),
-                  }));
-                }}
-                onChangeText={() => {
-                  //console.log(text);
-                }}
-              />
-            </View>
           </View>
+          {!!error && (
+            <Text
+              style={{
+                textAlign: 'center',
+                color: colors.red,
+                fontFamily: fonts.medium,
+              }}>
+              {error}
+            </Text>
+          )}
+          <View style={styles.inputContainer}>
+            <CustomInput
+              label="Service Name"
+              placeholder="eg. Song Production"
+              value={inputs.serviceName}
+              onChangeText={text => handleOnchange(text, 'serviceName')}
+              containerStyle={{}}
+            />
+            <View style={{marginTop: 10}}>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  color: '#4F4F4F',
+                  fontSize: 16,
+                }}>
+                Project Type
+              </Text>
+              <View
+                style={{
+                  height: 50,
+                  borderWidth: 1,
+                  borderColor: '#BDBDBD',
+                  marginTop: 10,
+                  borderRadius: 12,
+                }}>
+                <Dropdown
+                  style={[
+                    {
+                      borderColor: '#454545',
+                      backgroundColor: 'white',
+                      borderRadius: 12,
+                      padding: 5,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                    },
+                  ]}
+                  data={data}
+                  search
+                  labelField="label"
+                  valueField="value"
+                  placeholder={'Select'}
+                  placeholderStyle={{}}
+                  searchPlaceholder="Search..."
+                  value={String(inputs.chargeType)}
+                  onChange={item => {
+                    setInputs(prevState => ({
+                      ...prevState,
+                      chargeType: Number(item.value),
+                    }));
+                  }}
+                  onChangeText={() => {
+                    //console.log(text);
+                  }}
+                />
+              </View>
+            </View>
 
-          <CustomInput
-            label="Service Charge"
-            placeholder="eg. $500"
-            keyboardType="number-pad"
-            value={String(inputs.serviceCharge)}
-            onChangeText={text => handleOnchange(text, 'serviceCharge')}
-            containerStyle={{marginTop: 10}}
-          />
+            <CustomInput
+              label="Service Charge"
+              placeholder="eg. $500"
+              keyboardType="number-pad"
+              value={String(inputs.serviceCharge)}
+              onChangeText={text => handleOnchange(text, 'serviceCharge')}
+              containerStyle={{marginTop: 10}}
+            />
 
           <View style={{marginTop: 10}}>
             <Text
@@ -214,7 +251,7 @@ const AddService = ({}) => {
                 borderRadius: 8,
                 borderColor: colors.light,
                 marginTop: 10,
-                backgroundColor: colors.white,
+                backgroundColor: colors.white
               }}>
               <TextInput
                 placeholder="Type description here..."
@@ -224,7 +261,7 @@ const AddService = ({}) => {
                 onChangeText={text =>
                   handleOnchange(text, 'serviceDescription')
                 }
-                style={{padding: 15}}
+                style={{padding: 15, }}
               />
             </View>
           </View>
@@ -297,7 +334,6 @@ const AddService = ({}) => {
             padding: 10,
           }}>
           {/*  */}
-          {/* <AddImage/> */}
           <View style={styles.photoContainer}>
             <View style={styles.innerPhotos}>
               <Feather name="image" size={30} color="#14226D" />

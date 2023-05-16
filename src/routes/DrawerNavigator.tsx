@@ -11,10 +11,11 @@ import Payment from '../screens/drawerScreens/Payment';
 import SwitchAccount from '../screens/drawerScreens/SwitchAccount';
 import Terms from '../screens/drawerScreens/Terms';
 
-import BottomNavigation from './BottomNavigator';
+import BottomNavigation, {SettingStack} from './BottomNavigator';
 
 import {DrawerScreenParamaList} from './RouteType';
 import Notification from '../screens/Notification';
+import {fonts} from '../theme';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
@@ -35,11 +36,8 @@ const DrawerNavigation = () => {
         drawerActiveTintColor: '#000C14',
 
         drawerLabelStyle: {
-          fontFamily: 'Inter',
-          fontStyle: 'normal',
-          fontWeight: '400',
+          fontFamily: fonts.regular,
           fontSize: 16,
-          lineHeight: 24,
           color: '#000C14',
         },
       }}>
@@ -62,6 +60,7 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="AboutUs" component={AboutUs} options={{}} />
       <Drawer.Screen name="TermsPrivacy" component={Terms} options={{}} />
       <Drawer.Screen name="HelpSupport" component={Terms} options={{}} />
+      <Drawer.Screen name="DrawerSetting" component={SettingStack} />
     </Drawer.Navigator>
   );
 };

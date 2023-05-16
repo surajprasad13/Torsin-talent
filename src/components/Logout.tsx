@@ -68,7 +68,14 @@ const Logout = () => {
               onPress={() => {
                 dispatch(logout());
                 toggleModal();
+<<<<<<< HEAD
                 navigation.navigate('OnboardingScreen');
+=======
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'OnboardingScreen'}],
+                });
+>>>>>>> origin/main
               }}>
               Logout
             </Button>

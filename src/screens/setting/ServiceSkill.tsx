@@ -16,7 +16,6 @@ import Feather from 'react-native-vector-icons/Feather';
 import {appstyle, colors, fonts} from '../../theme';
 import ServiceCard from './components/ServiceCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {Dialog, Portal} from 'react-native-paper';
 import {fetchService, fetchSkill} from '../../redux/actions/userAction';
 import {Service} from '../../types/user';
 
@@ -37,11 +36,6 @@ const ServiceSkill = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
-      <Portal>
-        <Dialog visible={loading}>
-          <ActivityIndicator />
-        </Dialog>
-      </Portal>
       <View
         style={{
           flexDirection: 'row',
@@ -71,6 +65,7 @@ const ServiceSkill = ({}) => {
       </View>
 
       <ScrollView style={{padding: 10}}>
+        {loading && <ActivityIndicator />}
         <View
           style={{
             flexDirection: 'row',
@@ -103,7 +98,7 @@ const ServiceSkill = ({}) => {
             padding: 10,
             flexWrap: 'wrap',
             flexDirection: 'row',
-            minHeight: 100,
+            minHeight: skills.length > 0 ? 0 : 100,
           }}>
           {/*  */}
 
@@ -146,7 +141,11 @@ const ServiceSkill = ({}) => {
             }}>
             Services
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('AddService')}>
+          <TouchableOpacity
+            onPress={() => {
+              //@ts-expect-error
+              navigation.navigate('AddService');
+            }}>
             <Text style={{color: colors.primary}}>
               <Feather name="plus-circle" size={15} color={colors.primary} />{' '}
               Add new services

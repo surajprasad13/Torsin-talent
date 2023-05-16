@@ -18,7 +18,7 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import {useNavigation} from '@react-navigation/native';
+import {} from '@react-navigation/native';
 
 // icons
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -72,12 +72,12 @@ const ModalPoup = ({visible, children}: any) => {
   );
 };
 
-const EmailModal = ({active, email}) => {
-  const navigation = useNavigation();
+const EmailModal = ({active, email}: any) => {
   const dispatch = useAppDispatch();
 
-  const {loading, error, success, userToken, message, emailVerified} =
-    useAppSelector(state => state.auth);
+  const {loading, error, userToken, message, emailVerified} = useAppSelector(
+    state => state.auth,
+  );
 
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -139,8 +139,6 @@ const EmailModal = ({active, email}) => {
           />
         </View>
 
-        {loading && <ActivityIndicator />}
-
         <View style={{marginTop: 10}}>
           <Text
             style={{
@@ -187,6 +185,8 @@ const EmailModal = ({active, email}) => {
           </Text>
         )}
 
+        {loading && <ActivityIndicator style={{marginTop: 10}} />}
+
         <CodeField
           ref={ref}
           {...props}
@@ -200,7 +200,7 @@ const EmailModal = ({active, email}) => {
             <View
               onLayout={getCellOnLayoutHandler(index)}
               key={index}
-              style={[isFocused && styles.focusCell,]}>
+              style={[isFocused && styles.focusCell]}>
               <Text style={styles.cell}>
                 {symbol || (isFocused ? <Cursor /> : null)}
               </Text>
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     height: 40,
     lineHeight: 35,
     fontSize: 20,
-    borderWidth: .5,
+    borderWidth: 0.5,
     borderRadius: 4,
     color: '#0C0900',
     backgroundColor: colors.white,
