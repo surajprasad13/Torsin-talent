@@ -1,19 +1,30 @@
-import 'react-native-get-random-values';
-import 'react-native-url-polyfill/auto';
+import AWS from 'aws-sdk';
 
-import {S3Client} from '@aws-sdk/client-s3';
-import {fromCognitoIdentityPool} from '@aws-sdk/credential-providers';
-
-const client = new S3Client({
-  // The AWS Region where the Amazon Simple Storage Service (Amazon S3) bucket will be created. Replace this with your Region.
+// Configure AWS SDK with your credentials and region
+AWS.config.update({
+  accessKeyId: 'AKIA3HTEPTYVVR7VTC5L',
+  secretAccessKey: 'AAq6gq+lOUafJIHZFmyrdlnXV2hWC83b79pvW7EH',
   region: 'ap-south-1',
-  credentials: fromCognitoIdentityPool({
-    // Replace the value of 'identityPoolId' with the ID of an Amazon Cognito identity pool in your Amazon Cognito Region.
-    identityPoolId: 'ap-south-1:43edf383-1a21-4970-a46a-029234d616f6',
-    // Replace the value of 'region' with your Amazon Cognito Region.
-    clientConfig: {region: 'ap-south-1'},
-  }),
 });
 
-export default client;
+// Create an S3 instance
+const s3 = new AWS.S3();
 
+export default s3;
+
+export const uploadFileToS3 = async (file, fileName) => {
+  const params = {
+    Bucket: 'torsin-bucket',
+    Key: fileName,
+    Body: file,
+  };
+
+  try {
+    const data = await s3.upload(params).promise();
+    // console.log('File uploaded successfully:', data.Location);
+    return data.Location;
+  } catch (error) {
+    // console.error('Error uploading file:', error);
+    throw error;
+  }
+};

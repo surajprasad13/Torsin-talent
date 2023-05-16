@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -27,6 +28,9 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {addService} from '../../redux/actions/userAction';
 import {Button, Dialog, Portal} from 'react-native-paper';
 import {updateSuccess} from '../../redux/reducers/userSlice';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {uploadFileToS3} from '../../services/s3';
+import {decode} from 'base64-arraybuffer';
 
 const AddService = ({}) => {
   const navigation = useNavigation();
@@ -66,6 +70,27 @@ const AddService = ({}) => {
     });
     return () => listener;
   }, []);
+
+  const uploadImage = () => {
+    let options: any = {
+      mediaType: 'photo',
+      quality: 1,
+      includeBase64: true,
+    };
+    launchImageLibrary(options, async response => {
+      const uniqueFileName = `${new Date()}`;
+      try {
+        var base64data = decode(response.assets[0].base64);
+        const url = await uploadFileToS3(
+          base64data,
+          `${uniqueFileName + response.assets[0].fileName}`,
+        );
+        console.log(url);
+      } catch (error: any) {
+        console.log('Error uploading file:', error);
+      }
+    });
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
@@ -318,7 +343,7 @@ const AddService = ({}) => {
             }}>
             {/*  */}
             <View style={styles.photoContainer}>
-              <View style={styles.innerPhotos}>
+              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
                 <Feather name="image" size={30} color="#14226D" />
                 <Text style={{fontFamily: fonts.regular, color: colors.black}}>
                   Click{' '}
@@ -326,7 +351,7 @@ const AddService = ({}) => {
                     here{' '}
                   </Text>
                 </Text>
-              </View>
+              </Pressable>
               <View style={styles.innerPhotos}>
                 <Feather name="image" size={30} color="#14226D" />
                 <Text style={{fontFamily: fonts.regular, color: colors.black}}>
