@@ -42,7 +42,7 @@ const Setting = ({}) => {
               fontSize: 16,
               color: '#000C14',
             }}>
-            View Profile
+            {userInfo?.fullName}’s Profile
           </Text>
           <View />
         </View>

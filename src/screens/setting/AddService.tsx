@@ -24,6 +24,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {addService} from '../../redux/actions/userAction';
 import {Button, Dialog, Portal} from 'react-native-paper';
 import {updateSuccess} from '../../redux/reducers/userSlice';
+// import AddImage from './components/AddImage';
 
 const AddService = ({}) => {
   const navigation = useNavigation();
@@ -213,7 +214,7 @@ const AddService = ({}) => {
                 borderRadius: 8,
                 borderColor: colors.light,
                 marginTop: 10,
-                backgroundColor: colors.white
+                backgroundColor: colors.white,
               }}>
               <TextInput
                 placeholder="Type description here..."
@@ -223,7 +224,7 @@ const AddService = ({}) => {
                 onChangeText={text =>
                   handleOnchange(text, 'serviceDescription')
                 }
-                style={{padding: 15, }}
+                style={{padding: 15}}
               />
             </View>
           </View>
@@ -296,6 +297,7 @@ const AddService = ({}) => {
             padding: 10,
           }}>
           {/*  */}
+          {/* <AddImage/> */}
           <View style={styles.photoContainer}>
             <View style={styles.innerPhotos}>
               <Feather name="image" size={30} color="#14226D" />
