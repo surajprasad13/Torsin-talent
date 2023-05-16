@@ -28,6 +28,9 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {addService} from '../../redux/actions/userAction';
 import {Button, Dialog, Portal} from 'react-native-paper';
 import {updateSuccess} from '../../redux/reducers/userSlice';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {uploadFileToS3} from '../../services/s3';
+import {decode} from 'base64-arraybuffer';
 
 const AddService = ({}) => {
   const navigation = useNavigation();
@@ -234,166 +237,172 @@ const AddService = ({}) => {
               containerStyle={{marginTop: 10}}
             />
 
-          <View style={{marginTop: 10}}>
+            <View style={{marginTop: 10}}>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  color: '#4F4F4F',
+                  fontSize: 16,
+                }}>
+                Service Description
+              </Text>
+              <View
+                style={{
+                  width: '100%',
+                  height: 170,
+                  borderWidth: 0.5,
+                  borderRadius: 8,
+                  borderColor: colors.light,
+                  marginTop: 10,
+                  backgroundColor: colors.white,
+                }}>
+                <TextInput
+                  placeholder="Type description here..."
+                  multiline={true}
+                  placeholderTextColor="#333333"
+                  value={inputs.serviceDescription}
+                  onChangeText={text =>
+                    handleOnchange(text, 'serviceDescription')
+                  }
+                  blurOnSubmit={true}
+                  onSubmitEditing={() => {
+                    Keyboard.dismiss();
+                  }}
+                  style={{padding: 15}}
+                />
+              </View>
+            </View>
+          </View>
+          <View style={styles.textContainer}>
+            <Text
+              style={{
+                fontFamily: fonts.semibold,
+                color: colors.black,
+                fontSize: 16,
+              }}>
+              Add Portfolio of your service
+            </Text>
             <Text
               style={{
                 fontFamily: fonts.regular,
-                color: '#4F4F4F',
+                color: '#1E202B',
+                marginTop: 12,
+              }}>
+              Job Description Complete your profile. Set your profile completely
+              .
+            </Text>
+          </View>
+          <View style={styles.textContainer}>
+            <Text
+              style={{
+                fontFamily: fonts.semibold,
+                color: colors.black,
                 fontSize: 16,
               }}>
-              Service Description
+              Add Video
             </Text>
+          </View>
+          <View style={styles.videoInput}>
             <View
               style={{
-                width: '100%',
-                height: 170,
-                borderWidth: 0.5,
-                borderRadius: 8,
-                borderColor: colors.light,
-                marginTop: 10,
-                backgroundColor: colors.white
+                backgroundColor: '#EBEFFF',
+                minHeight: 150,
+                borderRadius: 10,
+                borderColor: colors.primary,
+                borderWidth: 1,
+                borderStyle: 'dashed',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}>
-              <TextInput
-                placeholder="Type description here..."
-                multiline={true}
-                placeholderTextColor="#333333"
-                value={inputs.serviceDescription}
-                onChangeText={text =>
-                  handleOnchange(text, 'serviceDescription')
-                }
-                style={{padding: 15, }}
-              />
+              <AntDesign name="cloudupload" size={40} color="#14226D" />
+              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+                Click{' '}
+                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
+                  here{' '}
+                </Text>
+                <Text>upload</Text>
+              </Text>
             </View>
           </View>
-        </View>
-        <View style={styles.textContainer}>
-          <Text
-            style={{
-              fontFamily: fonts.semibold,
-              color: colors.black,
-              fontSize: 16,
-            }}>
-            Add Portfolio of your service
-          </Text>
-          <Text
-            style={{
-              fontFamily: fonts.regular,
-              color: '#1E202B',
-              marginTop: 12,
-            }}>
-            Job Description Complete your profile. Set your profile completely .
-          </Text>
-        </View>
-        <View style={styles.textContainer}>
-          <Text
-            style={{
-              fontFamily: fonts.semibold,
-              color: colors.black,
-              fontSize: 16,
-            }}>
-            Add Video
-          </Text>
-        </View>
-        <View style={styles.videoInput}>
-          <View
-            style={{
-              backgroundColor: '#EBEFFF',
-              minHeight: 150,
-              borderRadius: 10,
-              borderColor: colors.primary,
-              borderWidth: 1,
-              borderStyle: 'dashed',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <AntDesign name="cloudupload" size={40} color="#14226D" />
-            <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-              Click{' '}
-              <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                here{' '}
-              </Text>
-              <Text>upload</Text>
+          <View style={styles.textContainer}>
+            <Text
+              style={{
+                fontFamily: fonts.semibold,
+                color: colors.black,
+                fontSize: 16,
+              }}>
+              Add Photos
             </Text>
           </View>
-        </View>
-        <View style={styles.textContainer}>
-          <Text
+          <View
             style={{
-              fontFamily: fonts.semibold,
-              color: colors.black,
-              fontSize: 16,
+              ...appstyle.shadow,
+              borderRadius: 10,
+              margin: 10,
+              padding: 10,
             }}>
-            Add Photos
-          </Text>
-        </View>
-        <View
-          style={{
-            ...appstyle.shadow,
-            borderRadius: 10,
-            margin: 10,
-            padding: 10,
-          }}>
-          {/*  */}
-          <View style={styles.photoContainer}>
-            <View style={styles.innerPhotos}>
-              <Feather name="image" size={30} color="#14226D" />
-              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                Click{' '}
-                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                  here{' '}
+            {/*  */}
+            <View style={styles.photoContainer}>
+              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
+                <Feather name="image" size={30} color="#14226D" />
+                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+                  Click{' '}
+                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
+                    here{' '}
+                  </Text>
                 </Text>
-              </Text>
+              </Pressable>
+              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
+                <Feather name="image" size={30} color="#14226D" />
+                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+                  Click{' '}
+                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
+                    here{' '}
+                  </Text>
+                </Text>
+              </Pressable>
+              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
+                <Feather name="image" size={30} color="#14226D" />
+                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+                  Click{' '}
+                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
+                    here{' '}
+                  </Text>
+                </Text>
+              </Pressable>
             </View>
-            <View style={styles.innerPhotos}>
-              <Feather name="image" size={30} color="#14226D" />
-              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                Click{' '}
-                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                  here{' '}
+            {/*  */}
+            <View style={{flexDirection: 'row'}}>
+              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
+                <Feather name="image" size={30} color="#14226D" />
+                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+                  Click{' '}
+                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
+                    here{' '}
+                  </Text>
                 </Text>
-              </Text>
-            </View>
-            <View style={styles.innerPhotos}>
-              <Feather name="image" size={30} color="#14226D" />
-              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                Click{' '}
-                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                  here{' '}
+              </Pressable>
+              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
+                <Feather name="image" size={30} color="#14226D" />
+                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+                  Click{' '}
+                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
+                    here{' '}
+                  </Text>
                 </Text>
-              </Text>
-            </View>
-          </View>
-          {/*  */}
-          <View style={{flexDirection: 'row'}}>
-            <View style={styles.innerPhotos}>
-              <Feather name="image" size={30} color="#14226D" />
-              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                Click{' '}
-                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                  here{' '}
-                </Text>
-              </Text>
-            </View>
-            <View style={styles.innerPhotos}>
-              <Feather name="image" size={30} color="#14226D" />
-              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                Click{' '}
-                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                  here{' '}
-                </Text>
-              </Text>
+              </Pressable>
             </View>
           </View>
-        </View>
-        <CustomButton
-          title="Add Service"
-          onPress={onPressAdd}
-          style={{marginTop: 50}}
-          disabled={true}
-          loading={loading}
-        />
-        <View style={{marginTop: 50}} />
-      </ScrollView>
+          <CustomButton
+            title="Add Service"
+            onPress={onPressAdd}
+            style={{marginTop: 50}}
+            disabled={true}
+            loading={loading}
+          />
+          <View style={{marginTop: 50}} />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
