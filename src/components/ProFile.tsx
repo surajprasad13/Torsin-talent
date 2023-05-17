@@ -64,11 +64,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   icon: {
-    width: 34,
-    height: 34,
+    width: 20,
+    height: 20,
     position: 'absolute',
-    marginLeft: 50,
-    marginTop: 45,
+    marginLeft: 60,
+    marginTop: 55,
   },
 });
 
