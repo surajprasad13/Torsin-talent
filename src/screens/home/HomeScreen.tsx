@@ -28,14 +28,14 @@ const {} = Dimensions.get('window');
 
 const HomeScreen = ({}) => {
   const dispatch = useAppDispatch();
-  const {userInfo} = useAppSelector(state => state.auth);
+  const {userInfo, userToken} = useAppSelector(state => state.auth);
 
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = (query: any) => setSearchQuery(query);
 
   useEffect(() => {
-    dispatch(profileDetail(userInfo?.token.access));
+    dispatch(profileDetail(userToken));
   }, []);
 
   return (
