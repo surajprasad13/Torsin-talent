@@ -15,11 +15,7 @@ const CircleProgress = ({image}: any) => {
         backgroundColor="#ffffff"
       />
       <Image
-        source={
-          image
-            ? {uri: 'data:image/png;base64,' + image}
-            : require('../assets/images/profile.png')
-        }
+        source={image ? {uri: image} : require('../assets/images/profile.png')}
         style={{
           width: 40,
           height: 40,
