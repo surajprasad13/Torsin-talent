@@ -26,6 +26,9 @@ import {CustomButton, CustomInput} from '../../components';
 import {userUpdate} from '../../redux/actions/authAction';
 import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
 import {alphabets, email, number} from '../../utils/regex';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {uploadFileToS3} from '../../services/s3';
+import {decode} from 'base64-arraybuffer';
 
 const EditUserProfile = ({}) => {
   const navigation = useNavigation();
@@ -35,6 +38,27 @@ const EditUserProfile = ({}) => {
   const {userInfo, userToken, error, success, loading} = useAppSelector(
     state => state.auth,
   );
+
+  const uploadImage = () => {
+    let options: any = {
+      mediaType: 'photo',
+      quality: 1,
+      includeBase64: true,
+    };
+    launchImageLibrary(options, async response => {
+      const uniqueFileName = `${new Date()}`;
+      try {
+        var base64data = decode(response.assets[0].base64);
+        const url = await uploadFileToS3(
+          base64data,
+          `${uniqueFileName + response.assets[0].fileName}`,
+        );
+        console.log(url);
+      } catch (error: any) {
+        console.log('Error uploading file:', error);
+      }
+    });
+  };
 
   const [inputs, setInputs] = useState({
     fullName: userInfo?.fullName ?? '',
@@ -147,7 +171,7 @@ const EditUserProfile = ({}) => {
             image={
               inputs.profileImage ?? 'https://source.unsplash.com/400x400?user'
             }
-            onPress={() => {}}
+            onPress={uploadImage}
           />
 
           <CustomInput

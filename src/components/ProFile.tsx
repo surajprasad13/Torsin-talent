@@ -15,14 +15,14 @@ function ProFile({onPress, image}: ProfilePorp) {
           size={80}
           style={{backgroundColor: 'grey'}}
           source={
-            image.length > 10
+            image
               ? {uri: 'data:image/png;base64,' + image}
               : require('../assets/images/profile.png')
           }
         />
         <Image
           source={
-            image.length > 10
+            image
               ? require('../assets/images/check.png')
               : require('../assets/images/camera.png')
           }
