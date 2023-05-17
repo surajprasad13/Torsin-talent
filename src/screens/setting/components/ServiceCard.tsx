@@ -10,13 +10,22 @@ type ServiceProp = {
 };
 
 const ServiceCard = ({item}: ServiceProp) => {
+  const {serviceImage} = item;
   return (
     <View style={[styles.cardContainer]}>
-      <FastImage
-        source={{uri: 'https://source.unsplash.com/400x400?nature'}}
-        resizeMode="contain"
-        style={{width: 50, height: 50, borderRadius: 25}}
-      />
+      {serviceImage && serviceImage.length > 0 ? (
+        <FastImage
+          source={{uri: serviceImage[0]}}
+          resizeMode="contain"
+          style={{width: 50, height: 50, borderRadius: 25}}
+        />
+      ) : (
+        <FastImage
+          source={{uri: 'https://source.unsplash.com/400x400?nature'}}
+          resizeMode="contain"
+          style={{width: 50, height: 50, borderRadius: 25}}
+        />
+      )}
       <View style={{width: '80%'}}>
         <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
           {item.serviceName}
