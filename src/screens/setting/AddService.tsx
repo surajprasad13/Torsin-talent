@@ -11,6 +11,7 @@ import {
   Platform,
   Keyboard,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -31,6 +32,17 @@ import {updateSuccess} from '../../redux/reducers/userSlice';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {uploadFileToS3} from '../../services/s3';
 import {decode} from 'base64-arraybuffer';
+import Video from 'react-native-video';
+import FastImage from 'react-native-fast-image';
+
+type InputProps = {
+  serviceName: string;
+  chargeType: string;
+  serviceCharge: string;
+  serviceDescription: string;
+  serviceImage: Array<string>;
+  serviceVideo: string;
+};
 
 const AddService = ({}) => {
   const navigation = useNavigation();
@@ -40,12 +52,21 @@ const AddService = ({}) => {
   const {userToken} = useAppSelector(state => state.auth);
   const {loading, success, error} = useAppSelector(state => state.user);
 
-  const [inputs, setInputs] = useState<any>({
+  const [inputs, setInputs] = useState<InputProps>({
     serviceName: '',
     chargeType: '',
     serviceCharge: '',
     serviceDescription: '',
+    serviceImage: [],
+    serviceVideo: '',
   });
+
+  const [errors, setErrors] = useState<any>({});
+
+  const [image, setImage] = useState(['', '', '', '', '']);
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
+  const [videoLoading, setVideoLoading] = useState<boolean>(false);
+  const [video, setVideo] = useState('');
 
   const data = [
     {label: 'Fixed', value: '1'},
@@ -56,7 +77,31 @@ const AddService = ({}) => {
     setInputs((prevState: any) => ({...prevState, [input]: text}));
   };
 
-  const onPressAdd = () => {
+  const validate = () => {
+    Keyboard.dismiss();
+
+    let isValid = true;
+
+    if (inputs.serviceVideo.length == 0) {
+      handleError('Please add video', 'video');
+      isValid = false;
+    }
+
+    if (inputs.serviceImage.length == 0) {
+      handleError('Please add atleast one image', 'image');
+      isValid = false;
+    }
+
+    if (isValid) {
+      postService();
+    }
+  };
+
+  const handleError = (_error: any, input: any) => {
+    setErrors((prevState: any) => ({...prevState, [input]: _error}));
+  };
+
+  const postService = () => {
     let value = {
       inputs,
       userToken,
@@ -71,44 +116,67 @@ const AddService = ({}) => {
     return () => listener;
   }, []);
 
-  const uploadImage = () => {
+  const uploadImage = (index: number) => {
+    handleError('', 'image');
     let options: any = {
       mediaType: 'photo',
       quality: 1,
       includeBase64: true,
     };
     launchImageLibrary(options, async response => {
-      try {
-        var base64data = decode(response.assets[0].base64);
-        const url = await uploadFileToS3(
-          base64data,
-          `${response.assets[0].fileName}`,
-          'image/jpeg',
-        );
-      } catch (error: any) {
-        console.log('Error uploading file:', error);
+      if (response.didCancel) {
+        return false;
+      } else {
+        try {
+          setImageLoading(true);
+          var base64data = decode(response.assets[0].base64);
+          const url = await uploadFileToS3(
+            base64data,
+            `${response.assets[0].fileName}`,
+            'image/jpeg',
+          );
+          setInputs((prevState: any) => ({
+            ...prevState,
+            serviceImage: [...inputs.serviceImage, url.Location],
+          }));
+          image[index] = response.assets[0].base64;
+          setImageLoading(false);
+        } catch (_error: any) {
+          setImageLoading(false);
+          console.log('Error uploading file:', _error);
+        }
       }
     });
   };
 
   const uploadVideo = () => {
+    handleError('', 'video');
     let options: any = {
       mediaType: 'video',
       quality: 1,
-      includeBase64: true,
       formatAsMp4: true,
     };
     launchImageLibrary(options, async response => {
-      try {
-        var base64data = decode(response.assets[0].base64);
-        const url = await uploadFileToS3(
-          base64data,
-          `${response.assets[0].fileName}`,
-          'video/mp4',
-        );
-        console.log(url);
-      } catch (error: any) {
-        console.log('Error uploading file:', error);
+      if (response.didCancel) {
+        return false;
+      } else {
+        try {
+          setVideoLoading(true);
+          const url = await uploadFileToS3(
+            response.assets[0].uri,
+            response.assets[0].fileName,
+            response.assets[0].type,
+          );
+          setInputs((prevState: any) => ({
+            ...prevState,
+            serviceVideo: url.Location,
+          }));
+          setVideo(response.assets[0].uri);
+          setVideoLoading(false);
+        } catch (_error: any) {
+          setVideoLoading(false);
+          console.log('Error uploading file:', _error);
+        }
       }
     });
   };
@@ -237,7 +305,7 @@ const AddService = ({}) => {
                   searchPlaceholder="Search..."
                   value={String(inputs.chargeType)}
                   onChange={item => {
-                    setInputs(prevState => ({
+                    setInputs((prevState: any) => ({
                       ...prevState,
                       chargeType: Number(item.value),
                     }));
@@ -325,26 +393,53 @@ const AddService = ({}) => {
           </View>
 
           <Pressable onPress={uploadVideo} style={styles.videoInput}>
-            <View
-              style={{
-                backgroundColor: '#EBEFFF',
-                minHeight: 150,
-                borderRadius: 10,
-                borderColor: colors.primary,
-                borderWidth: 1,
-                borderStyle: 'dashed',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <AntDesign name="cloudupload" size={40} color="#14226D" />
-              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                Click{' '}
-                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                  here{' '}
+            {videoLoading && <ActivityIndicator style={{margin: 20}} />}
+
+            {video ? (
+              <Video
+                source={{uri: video}}
+                resizeMode="contain"
+                style={{
+                  width: '100%',
+                  height: 150,
+                  borderWidth: 0.3,
+                  borderRadius: 2,
+                  backgroundColor: 'black',
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  backgroundColor: '#EBEFFF',
+                  minHeight: 150,
+                  borderRadius: 10,
+                  borderColor: colors.primary,
+                  borderWidth: 1,
+                  borderStyle: 'dashed',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <AntDesign name="cloudupload" size={40} color="#14226D" />
+                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+                  Click{' '}
+                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
+                    here{' '}
+                  </Text>
+                  upload
                 </Text>
-                upload
+              </View>
+            )}
+
+            {errors.video && (
+              <Text
+                style={{
+                  marginTop: 5,
+                  fontFamily: fonts.medium,
+                  color: colors.red,
+                }}>
+                {errors.video}
               </Text>
-            </View>
+            )}
           </Pressable>
 
           <View style={styles.textContainer}>
@@ -364,61 +459,154 @@ const AddService = ({}) => {
               margin: 10,
               padding: 10,
             }}>
-            {/*  */}
+            {imageLoading && <ActivityIndicator style={{margin: 20}} />}
+
             <View style={styles.photoContainer}>
-              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
-                <Feather name="image" size={30} color="#14226D" />
-                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                  Click{' '}
-                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                    here{' '}
+              {image[0].length > 0 ? (
+                <Pressable
+                  onPress={() => uploadImage(0)}
+                  style={styles.innerPhotos}>
+                  <FastImage
+                    source={{uri: 'data:image/png;base64,' + image[0]}}
+                    resizeMode="cover"
+                    style={{width: '100%', height: 100, borderRadius: 10}}
+                  />
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => uploadImage(0)}
+                  style={styles.innerPhotos}>
+                  <Feather name="image" size={30} color="#14226D" />
+                  <Text
+                    style={{fontFamily: fonts.regular, color: colors.black}}>
+                    Click{' '}
+                    <Text
+                      style={{color: colors.primary, fontFamily: fonts.bold}}>
+                      here{' '}
+                    </Text>
                   </Text>
-                </Text>
-              </Pressable>
-              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
-                <Feather name="image" size={30} color="#14226D" />
-                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                  Click{' '}
-                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                    here{' '}
+                </Pressable>
+              )}
+
+              {image[1].length > 0 ? (
+                <Pressable
+                  onPress={() => uploadImage(0)}
+                  style={styles.innerPhotos}>
+                  <FastImage
+                    source={{uri: 'data:image/png;base64,' + image[1]}}
+                    resizeMode="cover"
+                    style={{width: '100%', height: 100, borderRadius: 10}}
+                  />
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => uploadImage(1)}
+                  style={styles.innerPhotos}>
+                  <Feather name="image" size={30} color="#14226D" />
+                  <Text
+                    style={{fontFamily: fonts.regular, color: colors.black}}>
+                    Click{' '}
+                    <Text
+                      style={{color: colors.primary, fontFamily: fonts.bold}}>
+                      here{' '}
+                    </Text>
                   </Text>
-                </Text>
-              </Pressable>
-              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
-                <Feather name="image" size={30} color="#14226D" />
-                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                  Click{' '}
-                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                    here{' '}
+                </Pressable>
+              )}
+
+              {image[2].length > 0 ? (
+                <Pressable
+                  onPress={() => uploadImage(0)}
+                  style={styles.innerPhotos}>
+                  <FastImage
+                    source={{uri: 'data:image/png;base64,' + image[2]}}
+                    resizeMode="cover"
+                    style={{width: '100%', height: 100, borderRadius: 10}}
+                  />
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => uploadImage(2)}
+                  style={styles.innerPhotos}>
+                  <Feather name="image" size={30} color="#14226D" />
+                  <Text
+                    style={{fontFamily: fonts.regular, color: colors.black}}>
+                    Click{' '}
+                    <Text
+                      style={{color: colors.primary, fontFamily: fonts.bold}}>
+                      here{' '}
+                    </Text>
                   </Text>
-                </Text>
-              </Pressable>
+                </Pressable>
+              )}
             </View>
             {/*  */}
             <View style={{flexDirection: 'row'}}>
-              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
-                <Feather name="image" size={30} color="#14226D" />
-                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                  Click{' '}
-                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                    here{' '}
+              {image[3].length > 0 ? (
+                <Pressable
+                  onPress={() => uploadImage(0)}
+                  style={styles.innerPhotos}>
+                  <FastImage
+                    source={{uri: 'data:image/png;base64,' + image[3]}}
+                    resizeMode="cover"
+                    style={{width: '100%', height: 100, borderRadius: 10}}
+                  />
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => uploadImage(3)}
+                  style={styles.innerPhotos}>
+                  <Feather name="image" size={30} color="#14226D" />
+                  <Text
+                    style={{fontFamily: fonts.regular, color: colors.black}}>
+                    Click{' '}
+                    <Text
+                      style={{color: colors.primary, fontFamily: fonts.bold}}>
+                      here{' '}
+                    </Text>
                   </Text>
-                </Text>
-              </Pressable>
-              <Pressable onPress={uploadImage} style={styles.innerPhotos}>
-                <Feather name="image" size={30} color="#14226D" />
-                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                  Click{' '}
-                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                    here{' '}
+                </Pressable>
+              )}
+              {image[4].length > 0 ? (
+                <Pressable
+                  onPress={() => uploadImage(0)}
+                  style={styles.innerPhotos}>
+                  <FastImage
+                    source={{uri: 'data:image/png;base64,' + image[4]}}
+                    resizeMode="cover"
+                    style={{width: '100%', height: 100, borderRadius: 10}}
+                  />
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => uploadImage(4)}
+                  style={styles.innerPhotos}>
+                  <Feather name="image" size={30} color="#14226D" />
+                  <Text
+                    style={{fontFamily: fonts.regular, color: colors.black}}>
+                    Click{' '}
+                    <Text
+                      style={{color: colors.primary, fontFamily: fonts.bold}}>
+                      here{' '}
+                    </Text>
                   </Text>
-                </Text>
-              </Pressable>
+                </Pressable>
+              )}
             </View>
+            {errors.image && (
+              <Text
+                style={{
+                  marginTop: 5,
+                  fontFamily: fonts.medium,
+                  color: colors.red,
+                }}>
+                {errors.image}
+              </Text>
+            )}
           </View>
           <CustomButton
             title="Add Service"
-            onPress={onPressAdd}
+            onPress={validate}
             style={{marginTop: 50}}
             disabled={true}
             loading={loading}
