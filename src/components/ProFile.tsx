@@ -9,12 +9,15 @@ import React from 'react';
 import {Avatar} from 'react-native-paper';
 
 type ProfilePorp = {
-  image: string;
+  image?: string;
   onPress: () => void;
   loading?: boolean;
 };
 
 function ProFile({onPress, image, loading}: ProfilePorp) {
+  const pattern = /https/;
+  const url = pattern.test(image ?? '');
+
   return (
     <View style={styles.centerContent}>
       <Pressable onPress={onPress}>
@@ -29,7 +32,9 @@ function ProFile({onPress, image, loading}: ProfilePorp) {
               style={{backgroundColor: 'grey'}}
               source={
                 image
-                  ? {uri: 'data:image/png;base64,' + image}
+                  ? url
+                    ? {uri: image}
+                    : {uri: 'data:image/png;base64,' + image}
                   : require('../assets/images/profile.png')
               }
             />

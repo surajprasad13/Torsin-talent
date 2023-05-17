@@ -192,7 +192,13 @@ const authSlice = createSlice({
   },
 });
 
-export const {loginValue, logout, resetSuccess, resetVerified, phoneVerified,resetFirst} =
-  authSlice.actions;
+export const {
+  loginValue,
+  logout,
+  resetSuccess,
+  resetVerified,
+  phoneVerified,
+  resetFirst,
+} = authSlice.actions;
 
 export default authSlice.reducer;

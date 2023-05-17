@@ -32,33 +32,10 @@ import {decode} from 'base64-arraybuffer';
 
 const EditUserProfile = ({}) => {
   const navigation = useNavigation();
-
   const dispatch = useAppDispatch();
-
   const {userInfo, userToken, error, success, loading} = useAppSelector(
     state => state.auth,
   );
-
-  const uploadImage = () => {
-    let options: any = {
-      mediaType: 'photo',
-      quality: 1,
-      includeBase64: true,
-    };
-    launchImageLibrary(options, async response => {
-      const uniqueFileName = `${new Date()}`;
-      try {
-        var base64data = decode(response.assets[0].base64);
-        const url = await uploadFileToS3(
-          base64data,
-          `${uniqueFileName + response.assets[0].fileName}`,
-        );
-        console.log(url);
-      } catch (error: any) {
-        console.log('Error uploading file:', error);
-      }
-    });
-  };
 
   const [inputs, setInputs] = useState({
     fullName: userInfo?.fullName ?? '',
@@ -71,6 +48,33 @@ const EditUserProfile = ({}) => {
   });
 
   const [errors, setErrors] = React.useState<any>({});
+  const [image, setImage] = useState('');
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
+
+  const uploadImage = () => {
+    let options: any = {
+      mediaType: 'photo',
+      quality: 1,
+      includeBase64: true,
+    };
+    launchImageLibrary(options, async response => {
+      try {
+        setImageLoading(true);
+        var base64data = decode(response.assets[0].base64);
+        const url = await uploadFileToS3(
+          base64data,
+          `${response.assets[0].fileName}`,
+          'image/jpeg',
+        );
+        setImage(response.assets[0].base64);
+        setInputs(prevState => ({...prevState, profileImage: url.Location}));
+        setImageLoading(false);
+      } catch (_error: any) {
+        setImageLoading(false);
+        console.log('Error uploading file:', _error);
+      }
+    });
+  };
 
   const validate = () => {
     Keyboard.dismiss();
@@ -109,7 +113,6 @@ const EditUserProfile = ({}) => {
 
   const update = () => {
     dispatch(userUpdate({inputs, userToken}));
-    if (navigation.canGoBack()) navigation.goBack();
   };
 
   const handleOnchange = (text: string, input: any) => {
@@ -136,6 +139,9 @@ const EditUserProfile = ({}) => {
             <Button
               onPress={() => {
                 dispatch(resetSuccess());
+                if (navigation.canGoBack()) {
+                  navigation.goBack();
+                }
               }}>
               Ok
             </Button>
@@ -168,10 +174,9 @@ const EditUserProfile = ({}) => {
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
         <ScrollView style={{padding: 10, backgroundColor: '#F9FBFF'}}>
           <ProFile
-            image={
-              inputs.profileImage ?? 'https://source.unsplash.com/400x400?user'
-            }
+            image={image.length > 0 ? image : inputs.profileImage}
             onPress={uploadImage}
+            loading={imageLoading}
           />
 
           <CustomInput

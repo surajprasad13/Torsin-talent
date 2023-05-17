@@ -101,9 +101,6 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  // navigation.navigate('SettingStack', {
-                  //   screen: 'EditProfile',
-                  // });
                   navigation.navigate('DrawerSetting', {
                     screen: 'EditProfile',
                   });
