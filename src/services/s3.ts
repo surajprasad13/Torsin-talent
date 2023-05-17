@@ -12,19 +12,22 @@ const s3 = new AWS.S3();
 
 export default s3;
 
-export const uploadFileToS3 = async (file, fileName) => {
+export const uploadFileToS3 = async (
+  file: any,
+  fileName: string,
+  ContentType: string,
+) => {
   const params = {
     Bucket: 'torsin-bucket',
     Key: fileName,
     Body: file,
+    ContentType: ContentType,
   };
 
   try {
     const data = await s3.upload(params).promise();
-    // console.log('File uploaded successfully:', data.Location);
-    return data.Location;
+    return data;
   } catch (error) {
-    // console.error('Error uploading file:', error);
     throw error;
   }
 };

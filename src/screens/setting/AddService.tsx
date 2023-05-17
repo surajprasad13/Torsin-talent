@@ -78,12 +78,33 @@ const AddService = ({}) => {
       includeBase64: true,
     };
     launchImageLibrary(options, async response => {
-      const uniqueFileName = `${new Date()}`;
       try {
         var base64data = decode(response.assets[0].base64);
         const url = await uploadFileToS3(
           base64data,
-          `${uniqueFileName + response.assets[0].fileName}`,
+          `${response.assets[0].fileName}`,
+          'image/jpeg',
+        );
+      } catch (error: any) {
+        console.log('Error uploading file:', error);
+      }
+    });
+  };
+
+  const uploadVideo = () => {
+    let options: any = {
+      mediaType: 'video',
+      quality: 1,
+      includeBase64: true,
+      formatAsMp4: true,
+    };
+    launchImageLibrary(options, async response => {
+      try {
+        var base64data = decode(response.assets[0].base64);
+        const url = await uploadFileToS3(
+          base64data,
+          `${response.assets[0].fileName}`,
+          'video/mp4',
         );
         console.log(url);
       } catch (error: any) {
@@ -302,7 +323,8 @@ const AddService = ({}) => {
               Add Video
             </Text>
           </View>
-          <View style={styles.videoInput}>
+
+          <Pressable onPress={uploadVideo} style={styles.videoInput}>
             <View
               style={{
                 backgroundColor: '#EBEFFF',
@@ -320,10 +342,11 @@ const AddService = ({}) => {
                 <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
                   here{' '}
                 </Text>
-                <Text>upload</Text>
+                upload
               </Text>
             </View>
-          </View>
+          </Pressable>
+
           <View style={styles.textContainer}>
             <Text
               style={{
