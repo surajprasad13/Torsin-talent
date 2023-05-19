@@ -22,6 +22,7 @@ import AddSkill from '../screens/setting/AddSkill';
 
 import {BottomScreenParamList, SettingScreenParamList} from './RouteType';
 import ServiceSkill from '../screens/setting/ServiceSkill';
+import ServiceDetail from '../screens/setting/ServiceDetail';
 
 const Bottom = createBottomTabNavigator<BottomScreenParamList>();
 const Stack = createStackNavigator<SettingScreenParamList>();
@@ -35,6 +36,7 @@ export const SettingStack = () => {
       <Stack.Screen name="AddService" component={AddService} />
       <Stack.Screen name="AddSkill" component={AddSkill} />
       <Stack.Screen name="ServiceSkill" component={ServiceSkill} />
+      <Stack.Screen name="ServiceDetail" component={ServiceDetail} />
     </Stack.Navigator>
   );
 };
@@ -45,6 +47,7 @@ const BottomNavigator = () => {
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.light,
+        tabBarHideOnKeyboard: true,
       }}>
       <Bottom.Screen
         name="Home"

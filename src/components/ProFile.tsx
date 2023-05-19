@@ -14,7 +14,7 @@ type ProfilePorp = {
   loading?: boolean;
 };
 
-function ProFile({onPress, image, loading}: ProfilePorp) {
+function Profile({onPress, image, loading}: ProfilePorp) {
   const pattern = /https/;
   const url = pattern.test(image ?? '');
 
@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProFile;
+export default Profile;

@@ -11,4 +11,5 @@ export default {
   grey2: '#4F4F4F',
   disabled: '#E0E0E0',
   cyanBlue: '#000F1A',
+  almostBlack: '#000C14',
 };

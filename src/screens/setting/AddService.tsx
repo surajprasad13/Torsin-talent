@@ -34,6 +34,7 @@ import {uploadFileToS3} from '../../services/s3';
 import {decode} from 'base64-arraybuffer';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image';
+import RNFetchBlob from 'rn-fetch-blob';
 
 type InputProps = {
   serviceName: string;
@@ -81,11 +82,6 @@ const AddService = ({}) => {
     Keyboard.dismiss();
 
     let isValid = true;
-
-    if (inputs.serviceVideo.length == 0) {
-      handleError('Please add video', 'video');
-      isValid = false;
-    }
 
     if (inputs.serviceImage.length == 0) {
       handleError('Please add atleast one image', 'image');
@@ -152,6 +148,7 @@ const AddService = ({}) => {
   const uploadVideo = () => {
     handleError('', 'video');
     let options: any = {
+      includeBase64: true,
       mediaType: 'video',
       quality: 1,
       formatAsMp4: true,
@@ -162,11 +159,18 @@ const AddService = ({}) => {
       } else {
         try {
           setVideoLoading(true);
-          const url = await uploadFileToS3(
+          const blob = await RNFetchBlob.fetch(
+            'GET',
             response.assets[0].uri,
+            {},
+          );
+
+          const url = await uploadFileToS3(
+            blob.base64(),
             response.assets[0].fileName,
             response.assets[0].type,
           );
+          console.log(url.Location);
           setInputs((prevState: any) => ({
             ...prevState,
             serviceVideo: url.Location,

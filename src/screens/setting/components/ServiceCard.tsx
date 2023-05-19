@@ -3,6 +3,7 @@ import React from 'react';
 import {appstyle, colors, fonts} from '../../../theme';
 import FastImage from 'react-native-fast-image';
 import {Service} from '../../../types/user';
+import {useNavigation} from '@react-navigation/native';
 
 type ServiceProp = {
   item: Service;
@@ -10,20 +11,16 @@ type ServiceProp = {
 };
 
 const ServiceCard = ({item}: ServiceProp) => {
+  const navigation = useNavigation();
   const {serviceImage} = item;
+
   return (
     <View style={[styles.cardContainer]}>
-      {serviceImage && serviceImage.length > 0 ? (
+      {serviceImage && serviceImage.length > 0 && (
         <FastImage
           source={{uri: serviceImage[0]}}
           resizeMode="contain"
-          style={{width: 50, height: 50, borderRadius: 25}}
-        />
-      ) : (
-        <FastImage
-          source={{uri: 'https://source.unsplash.com/400x400?nature'}}
-          resizeMode="contain"
-          style={{width: 50, height: 50, borderRadius: 25}}
+          style={{width: 50, height: 50, borderRadius: 25, borderWidth: 0.5}}
         />
       )}
       <View style={{width: '80%'}}>
@@ -41,7 +38,8 @@ const ServiceCard = ({item}: ServiceProp) => {
             marginTop: 10,
           }}>
           <Text style={styles.text}>$ {item.serviceCharge}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ServiceDetail', {item})}>
             <Text
               style={{
                 fontFamily: fonts.medium,

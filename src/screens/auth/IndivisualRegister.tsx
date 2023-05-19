@@ -25,7 +25,7 @@ import {metrics, colors, fonts} from '../../theme';
 import Input from '../../components/Input';
 import EmailModal from '../../components/modal/EmailModal';
 import PhoneModal from '../../components/modal/PhoneModal';
-import ProFile from '../../components/ProFile';
+import ProFile from '../../components/Profile';
 
 // redux
 import {RootState} from '../../redux';
@@ -149,6 +149,7 @@ const IndivisualRegister = ({}) => {
   };
 
   const handleOnchange = (text: any, input: any) => {
+    dispatch(resetVerified());
     setInputs(prevState => ({...prevState, [input]: text}));
   };
   const handleError = (error: any, input: any) => {

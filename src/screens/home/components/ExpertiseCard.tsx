@@ -45,19 +45,25 @@ const ExpertiseCard = ({item}: any) => {
           justifyContent: 'space-between',
           marginTop: 15,
         }}>
-        <View style={{flexDirection: 'row'}}>
-          <Entypo name="location-pin" size={15} />
-          <Text>South Dakota</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Entypo name="location-pin" size={12} />
+          <Text style={{fontFamily: fonts.regular, paddingLeft: 5}}>
+            South Dakota
+          </Text>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
-          <AntDesign name="clockcircleo" size={15} />
-          <Text>3d ago</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <AntDesign name="clockcircleo" size={12} />
+          <Text style={{fontFamily: fonts.regular, paddingLeft: 5}}>
+            3d ago
+          </Text>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
-          <AntDesign name="user" size={15} />
-          <Text>James Cameroon</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <AntDesign name="user" size={12} />
+          <Text style={{fontFamily: fonts.regular, paddingLeft: 5}}>
+            James Cameroon
+          </Text>
         </View>
       </View>
     </View>
@@ -84,7 +90,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 16,
     justifyContent: 'center',
-  }
+  },
 });
 
 export default ExpertiseCard;

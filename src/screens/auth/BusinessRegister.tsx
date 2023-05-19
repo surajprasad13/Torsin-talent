@@ -17,7 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 import {metrics, colors, fonts} from '../../theme';
 
 import Input from '../../components/Input';
-import ProFile from '../../components/ProFile';
+import ProFile from '../../components/Profile';
 
 import Feather from 'react-native-vector-icons/Feather';
 import {CustomButton} from '../../components';

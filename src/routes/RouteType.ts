@@ -82,6 +82,7 @@ export type SettingScreenParamList = {
   AddService: undefined;
   AddSkill: undefined;
   ServiceSkill: undefined;
+  ServiceDetail: undefined;
 };
 
 export type HomeTabParamList = {

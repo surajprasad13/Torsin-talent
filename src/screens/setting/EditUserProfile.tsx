@@ -17,7 +17,7 @@ import {Button, Dialog, Portal, RadioButton} from 'react-native-paper';
 import Feather from 'react-native-vector-icons/Feather';
 
 // components
-import ProFile from '../../components/ProFile';
+import ProFile from '../../components/Profile';
 
 // helpers
 import {colors, fonts} from '../../theme';
