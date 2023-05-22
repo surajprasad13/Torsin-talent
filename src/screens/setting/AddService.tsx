@@ -98,11 +98,14 @@ const AddService = ({}) => {
   };
 
   const postService = () => {
-    let value = {
-      inputs,
-      userToken,
-    };
-    dispatch(addService(value));
+    if (inputs.serviceVideo == '') {
+      delete inputs.serviceVideo;
+      let value = {
+        inputs,
+        userToken,
+      };
+      dispatch(addService(value));
+    }
   };
 
   useEffect(() => {
