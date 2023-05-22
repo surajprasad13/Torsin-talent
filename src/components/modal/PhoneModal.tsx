@@ -293,9 +293,7 @@ const styles = StyleSheet.create({
   },
   cell: {
     marginHorizontal: 5,
-    width: 40,
-    height: 40,
-    lineHeight: 35,
+    padding: 20,
     fontSize: 20,
     borderWidth: 0.5,
     borderRadius: 4,

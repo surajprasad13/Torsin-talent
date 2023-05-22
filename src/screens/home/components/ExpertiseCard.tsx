@@ -47,21 +47,21 @@ const ExpertiseCard = ({item}: any) => {
         }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Entypo name="location-pin" size={12} />
-          <Text style={{fontFamily: fonts.regular, paddingLeft: 5}}>
+          <Text style={{fontFamily: fonts.regular, padding: 5}}>
             South Dakota
           </Text>
         </View>
 
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <AntDesign name="clockcircleo" size={12} />
-          <Text style={{fontFamily: fonts.regular, paddingLeft: 5}}>
+          <Text style={{fontFamily: fonts.regular, padding: 5}}>
             3d ago
           </Text>
         </View>
 
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <AntDesign name="user" size={12} />
-          <Text style={{fontFamily: fonts.regular, paddingLeft: 5}}>
+          <Text style={{fontFamily: fonts.regular, padding: 5}}>
             James Cameroon
           </Text>
         </View>
