@@ -37,11 +37,7 @@ const SearchJob = ({}) => {
   }, []);
 
   const searchFilterFunction = text => {
-    // Check if searched text is not blank
     if (text) {
-      // Inserted text is not blank
-      // Filter the masterDataSource
-      // Update FilteredDataSource
       const newData = masterDataSource.filter(function (item) {
         const itemData = item.title
           ? item.title.toUpperCase()
@@ -52,8 +48,6 @@ const SearchJob = ({}) => {
       setFilteredDataSource(newData);
       setSearch(text);
     } else {
-      // Inserted text is blank
-      // Update FilteredDataSource with masterDataSource
       setFilteredDataSource(masterDataSource);
       setSearch(text);
     }
@@ -61,10 +55,7 @@ const SearchJob = ({}) => {
 
   const ItemView = ({item}) => {
     return (
-      // Flat List Item
       <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-        {item.id}
-        {'.'}
         {item.title.toUpperCase()}
       </Text>
     );
@@ -72,7 +63,6 @@ const SearchJob = ({}) => {
 
   const ItemSeparatorView = () => {
     return (
-      // Flat List Item Separator
       <View
         style={{
           height: 0.5,
@@ -97,6 +87,11 @@ const SearchJob = ({}) => {
             alignItems: 'center',
             padding: 10,
           }}>
+          <Feather
+            name="arrow-left"
+            size={20}
+            onPress={() => navigation.navigate('DrawerNavigation')}
+          />
           <Searchbar
             placeholder="Search Jobs"
             onChangeText={text => searchFilterFunction(text)}
@@ -129,7 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   itemStyle: {
-    padding: 10,
+    padding: 15,
   },
   textInputStyle: {
     backgroundColor: colors.white,

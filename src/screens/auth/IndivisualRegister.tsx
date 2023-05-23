@@ -33,7 +33,10 @@ import {} from '../../redux/actions/authAction';
 import {useNavigation} from '@react-navigation/native';
 import {CustomButton} from '../../components';
 import {useAppDispatch} from '../../hooks';
-import {resetVerified} from '../../redux/reducers/authSlice';
+import {
+  resetEmailVerified,
+  resetVerified,
+} from '../../redux/reducers/authSlice';
 import {email, alphabets, number} from '../../utils/regex';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {decode} from 'base64-arraybuffer';
@@ -149,7 +152,6 @@ const IndivisualRegister = ({}) => {
   };
 
   const handleOnchange = (text: any, input: any) => {
-    dispatch(resetVerified());
     setInputs(prevState => ({...prevState, [input]: text}));
   };
   const handleError = (error: any, input: any) => {
@@ -166,13 +168,6 @@ const IndivisualRegister = ({}) => {
     inputs.countryName
       ? true
       : false;
-
-  useEffect(() => {
-    const listener = navigation.addListener('beforeRemove', () => {
-      dispatch(resetVerified());
-    });
-    return () => listener;
-  }, []);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
@@ -216,9 +211,14 @@ const IndivisualRegister = ({}) => {
               alignItems: 'center',
             }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('ThroughRegister')}>
+              onPress={() => {
+                if (navigation.canGoBack()) {
+                  navigation.goBack();
+                }
+              }}>
               <Feather name="arrow-left" size={20} />
             </TouchableOpacity>
+
             <Text
               style={{
                 fontFamily: fonts.bold,
@@ -274,7 +274,9 @@ const IndivisualRegister = ({}) => {
 
             <View>
               <Input
-                onChangeText={(text: string) => handleOnchange(text, 'email')}
+                onChangeText={(text: string) => {
+                  handleOnchange(text, 'email');
+                }}
                 onFocus={() => handleError(null, 'email')}
                 label="Email"
                 keyboardType="email-address"

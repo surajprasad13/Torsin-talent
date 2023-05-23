@@ -29,7 +29,7 @@ function Profile({onPress, image, loading}: ProfilePorp) {
           <View>
             <Avatar.Image
               size={80}
-              style={{backgroundColor: 'grey'}}
+              style={{backgroundColor: 'white'}}
               source={
                 image
                   ? url

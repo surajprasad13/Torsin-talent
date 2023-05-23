@@ -25,6 +25,8 @@ import {
 } from '../../redux/actions/authAction';
 import {
   loginValue,
+  resetEmailVerified,
+  resetMobileVerified,
   resetSuccess,
   resetVerified,
 } from '../../redux/reducers/authSlice';
@@ -124,8 +126,9 @@ const CreatePassword = ({}) => {
 
   useEffect(() => {
     if (userToken) {
+      dispatch(resetEmailVerified());
+      dispatch(resetMobileVerified());
       dispatch(resetSuccess());
-      dispatch(resetVerified());
       navigation.reset({
         index: 0,
         routes: [{name: 'DrawerNavigation'}],

@@ -58,8 +58,12 @@ const authSlice = createSlice({
     resetSuccess: state => {
       state.success = false;
     },
-    resetVerified: state => {
+    resetEmailVerified: state => {
       state.emailVerified = false;
+      
+    },
+    resetMobileVerified: state => {
+      
       state.mobileVerified = false;
     },
     phoneVerified: state => {
@@ -196,7 +200,8 @@ export const {
   loginValue,
   logout,
   resetSuccess,
-  resetVerified,
+  resetEmailVerified,
+  resetMobileVerified,
   phoneVerified,
   resetFirst,
 } = authSlice.actions;

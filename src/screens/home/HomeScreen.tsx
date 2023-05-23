@@ -13,8 +13,6 @@ import {Searchbar} from 'react-native-paper';
 
 //icons
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // components
 import ImageSlider from '../../components/ImageSlider';
