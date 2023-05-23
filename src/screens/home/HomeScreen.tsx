@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,12 +7,14 @@ import {
   ScrollView,
   Dimensions,
   SafeAreaView,
+  TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Searchbar} from 'react-native-paper';
+import {} from 'react-native-paper';
 
 //icons
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
 
 // components
 import ImageSlider from '../../components/ImageSlider';
@@ -29,8 +31,6 @@ const HomeScreen = ({}) => {
   const {userInfo} = useAppSelector(state => state.auth);
 
   const navigation = useNavigation();
-  const [searchQuery, setSearchQuery] = useState('');
-  const onChangeSearch = (query: any) => setSearchQuery(query);
 
   useEffect(() => {
     dispatch(profileDetail(userInfo?.token.access));
@@ -41,10 +41,10 @@ const HomeScreen = ({}) => {
       <ScrollView style={{padding: 10}}>
         <View
           style={{
-            justifyContent: 'space-evenly',
             flexDirection: 'row',
             alignItems: 'center',
             padding: 10,
+            justifyContent: 'space-between',
           }}>
           <TouchableOpacity
             onPress={() => {
@@ -53,21 +53,31 @@ const HomeScreen = ({}) => {
             }}>
             <MaterialIcons name="sort" size={20} color="#14226D" />
           </TouchableOpacity>
-          <Searchbar
-            placeholder="Search Jobs"
-            onChangeText={onChangeSearch}
-            value={searchQuery}
-            placeholderTextColor="#BDBDBD"
-            iconColor="#333333"
+          <TouchableOpacity
             style={{
-              backgroundColor: colors.white,
-              borderWidth: 1,
               flex: 0.9,
-              borderRadius: 30,
-              borderColor: '#BDBDBD',
-            }}
-            inputStyle={styles.searchInput}
-          />
+              backgroundColor: colors.white,
+              borderRadius: 15,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Feather
+              name="search"
+              size={18}
+              color={colors.primary}
+              style={{marginLeft: 10}}
+            />
+
+            <TextInput
+              placeholder="Search Talent"
+              disableFullscreenUI
+              placeholderTextColor="#BDBDBD"
+              style={{
+                padding: 10,
+                flex: 1,
+              }}
+            />
+          </TouchableOpacity>
         </View>
 
         <View

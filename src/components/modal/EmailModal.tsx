@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Animated,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import {colors, fonts} from '../../theme';
 
@@ -34,6 +35,8 @@ export const NOT_EMPTY_CELL_BG_COLOR = '#3557b7';
 export const ACTIVE_CELL_BG_COLOR = '#f7fafe';
 
 const CELL_COUNT = 6;
+
+const {width, height} = Dimensions.get('window');
 
 const ModalPoup = ({visible, children}: any) => {
   const [showModal, setShowModal] = React.useState(visible);
@@ -275,8 +278,10 @@ const styles = StyleSheet.create({
   },
   cell: {
     marginHorizontal: 5,
-    width: 40,
-    height: 40,
+    width: width * 0.09,
+    height: width * 0.09,
+    maxWidth: 35,
+    maxHeight: 35,
     lineHeight: 35,
     fontSize: 20,
     borderWidth: 0.5,

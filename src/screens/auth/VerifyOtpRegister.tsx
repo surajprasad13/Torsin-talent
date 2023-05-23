@@ -52,9 +52,7 @@ const VerifyOtpRegister = ({}) => {
           }}>
           <Text
             style={{
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '700',
+              fontFamily: fonts.bold,
               fontSize: moderateScale(32),
               lineHeight: moderateScale(35),
               color: '#0E184D',

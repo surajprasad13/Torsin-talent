@@ -28,7 +28,6 @@ import {
   resetEmailVerified,
   resetMobileVerified,
   resetSuccess,
-  resetVerified,
 } from '../../redux/reducers/authSlice';
 import {password} from '../../utils/regex';
 
@@ -135,6 +134,14 @@ const CreatePassword = ({}) => {
       });
     }
   }, [userToken]);
+
+  useEffect(() => {
+    const listener = navigation.addListener('beforeRemove', () => {
+      dispatch(resetEmailVerified());
+      dispatch(resetMobileVerified());
+    });
+    return () => listener;
+  }, []);
 
   function checkStatus(index: number) {
     switch (index) {

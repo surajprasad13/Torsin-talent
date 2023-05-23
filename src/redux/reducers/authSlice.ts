@@ -60,10 +60,8 @@ const authSlice = createSlice({
     },
     resetEmailVerified: state => {
       state.emailVerified = false;
-      
     },
     resetMobileVerified: state => {
-      
       state.mobileVerified = false;
     },
     phoneVerified: state => {
