@@ -1,5 +1,4 @@
 import React from 'react';
-import {} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -23,6 +22,7 @@ import AddSkill from '../screens/setting/AddSkill';
 import {BottomScreenParamList, SettingScreenParamList} from './RouteType';
 import ServiceSkill from '../screens/setting/ServiceSkill';
 import ServiceDetail from '../screens/setting/ServiceDetail';
+import {} from '@react-navigation/native';
 
 const Bottom = createBottomTabNavigator<BottomScreenParamList>();
 const Stack = createStackNavigator<SettingScreenParamList>();

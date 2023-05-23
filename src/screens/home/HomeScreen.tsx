@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   ScrollView,
   Dimensions,
@@ -150,15 +149,3 @@ const HomeScreen = ({}) => {
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-  searchInput: {
-    color: '#454545',
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-});

@@ -33,10 +33,7 @@ import {} from '../../redux/actions/authAction';
 import {useNavigation} from '@react-navigation/native';
 import {CustomButton} from '../../components';
 import {useAppDispatch} from '../../hooks';
-import {
-  resetEmailVerified,
-  resetVerified,
-} from '../../redux/reducers/authSlice';
+import {} from '../../redux/reducers/authSlice';
 import {email, alphabets, number} from '../../utils/regex';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {decode} from 'base64-arraybuffer';
@@ -58,7 +55,6 @@ type InputProp = {
 
 const IndivisualRegister = ({}) => {
   const navigation = useNavigation();
-  const dispatch = useAppDispatch();
   const {loading, emailVerified, mobileVerified} = useSelector(
     (state: RootState) => state.auth,
   );
@@ -154,9 +150,26 @@ const IndivisualRegister = ({}) => {
   const handleOnchange = (text: any, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));
   };
-  const handleError = (error: any, input: any) => {
-    setErrors((prevState: any) => ({...prevState, [input]: error}));
+  const handleError = (_error: any, input: any) => {
+    setErrors((prevState: any) => ({...prevState, [input]: _error}));
   };
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {},
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {},
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const active: boolean =
     inputs.fullName &&
@@ -410,8 +423,8 @@ const IndivisualRegister = ({}) => {
                 value={toggleCheckBox}
                 onValueChange={newValue => setToggleCheckBox(newValue)}
               />
-              <View style={{marginLeft: 10}}>
-                <Text style={{fontFamily: fonts.regular}}>
+              <View style={{paddingLeft: 5}}>
+                <Text style={{fontFamily: fonts.regular, fontSize: 13}}>
                   I have accepted the{' '}
                   <Text
                     onPress={() => {
@@ -420,7 +433,6 @@ const IndivisualRegister = ({}) => {
                     style={{
                       color: colors.blue,
                       fontFamily: fonts.bold,
-                      left: 2,
                     }}>
                     Terms and Conditions.
                   </Text>

@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {appstyle, colors, fonts} from '../../../theme';
 import FastImage from 'react-native-fast-image';
@@ -45,23 +45,40 @@ const ExpertiseCard = ({item}: any) => {
           justifyContent: 'space-between',
           marginTop: 15,
         }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Entypo name="location-pin" size={12} />
-          <Text style={{fontFamily: fonts.regular, padding: 5}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            flex: 1,
+          }}>
+          <Entypo name="location-pin" size={10} />
+          <Text
+            style={{fontFamily: fonts.regular, fontSize: 12}}
+            numberOfLines={1}>
             South Dakota
           </Text>
         </View>
 
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <AntDesign name="clockcircleo" size={12} />
-          <Text style={{fontFamily: fonts.regular, padding: 5}}>
-            3d ago
-          </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            flex: 1,
+            justifyContent: 'center',
+          }}>
+          <AntDesign name="clockcircleo" size={10} />
+          <Text style={{fontFamily: fonts.regular, fontSize: 12}}>3d ago</Text>
         </View>
 
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <AntDesign name="user" size={12} />
-          <Text style={{fontFamily: fonts.regular, padding: 5}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <AntDesign name="user" size={10} />
+          <Text
+            style={{fontFamily: fonts.regular, fontSize: 12}}
+            numberOfLines={1}>
             James Cameroon
           </Text>
         </View>
