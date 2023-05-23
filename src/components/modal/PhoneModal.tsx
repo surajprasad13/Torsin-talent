@@ -147,6 +147,7 @@ const PhoneModal = ({active, phone}) => {
           onPress={() => {
             setVisible(false);
             setValue('');
+            setMessage('');
           }}>
           <Entypo name="cross" size={20} />
         </TouchableOpacity>
@@ -234,6 +235,7 @@ const PhoneModal = ({active, phone}) => {
                 setConfirm(null);
                 setError('');
                 setValue('');
+                setMessage('');
                 sendOtp();
               }}
               style={{

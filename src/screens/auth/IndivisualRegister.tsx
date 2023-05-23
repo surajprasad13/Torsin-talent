@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   ScrollView,
   Keyboard,
@@ -12,11 +11,14 @@ import {
   Platform,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
-import CheckBox from '@react-native-community/checkbox';
 import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {decode} from 'base64-arraybuffer';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import {metrics, colors, fonts} from '../../theme';
@@ -30,14 +32,15 @@ import ProFile from '../../components/Profile';
 // redux
 import {RootState} from '../../redux';
 import {} from '../../redux/actions/authAction';
-import {useNavigation} from '@react-navigation/native';
 import {CustomButton} from '../../components';
-import {useAppDispatch} from '../../hooks';
-import {} from '../../redux/reducers/authSlice';
+
 import {email, alphabets, number} from '../../utils/regex';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {decode} from 'base64-arraybuffer';
 import {uploadFileToS3} from '../../services/s3';
+import {useAppDispatch} from '../../hooks';
+import {
+  resetEmailVerified,
+  resetMobileVerified,
+} from '../../redux/reducers/authSlice';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
@@ -55,6 +58,7 @@ type InputProp = {
 
 const IndivisualRegister = ({}) => {
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
   const {loading, emailVerified, mobileVerified} = useSelector(
     (state: RootState) => state.auth,
   );
@@ -133,6 +137,14 @@ const IndivisualRegister = ({}) => {
       }
     });
   };
+
+  useEffect(() => {
+    const listener = navigation.addListener('beforeRemove', () => {
+      dispatch(resetEmailVerified());
+      dispatch(resetMobileVerified());
+    });
+    return () => listener;
+  }, []);
 
   const register = () => {
     const field = {
@@ -415,14 +427,17 @@ const IndivisualRegister = ({}) => {
                 marginTop: 10,
                 alignItems: 'center',
               }}>
-              <CheckBox
-                boxType="square"
-                style={styles.checkbox}
-                disabled={false}
-                onCheckColor="#14226D"
-                value={toggleCheckBox}
-                onValueChange={newValue => setToggleCheckBox(newValue)}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  setToggleCheckBox(!toggleCheckBox);
+                }}>
+                <IonIcon
+                  name={toggleCheckBox ? 'checkbox' : 'square-outline'}
+                  size={25}
+                  color={toggleCheckBox ? colors.primary : '#BDBDBD'}
+                />
+              </TouchableOpacity>
+
               <View style={{paddingLeft: 5}}>
                 <Text style={{fontFamily: fonts.regular, fontSize: 13}}>
                   I have accepted the{' '}
@@ -472,48 +487,5 @@ const IndivisualRegister = ({}) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  inputText: {
-    width: '92%',
-    marginLeft: '4%',
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#BDBDBD',
-    marginTop: 10,
-    borderRadius: 12,
-  },
-
-  input: {
-    color: '#000000',
-    fontSize: moderateScale(14),
-    fontFamily: fonts.regular,
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 15,
-    marginTop: 5,
-  },
-
-  tinyLogo: {
-    width: 16,
-    height: 14,
-  },
-  title: {},
-  label: {
-    color: '#4F4F4F',
-    fontFamily: fonts.medium,
-    fontSize: 16,
-  },
-  dropdown: {
-    marginTop: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  checkbox: {},
-});
 
 export default IndivisualRegister;

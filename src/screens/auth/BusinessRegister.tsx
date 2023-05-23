@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   ScrollView,
   Keyboard,
@@ -11,8 +10,10 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
 import {useNavigation} from '@react-navigation/native';
+
+// icons
+import IonIcon from 'react-native-vector-icons/Ionicons';
 
 import {metrics, colors, fonts} from '../../theme';
 
@@ -24,15 +25,20 @@ import {CustomButton} from '../../components';
 import PhoneModal from '../../components/modal/PhoneModal';
 import EmailModal from '../../components/modal/EmailModal';
 import {email} from '../../utils/regex';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {decode} from 'base64-arraybuffer';
 import {uploadFileToS3} from '../../services/s3';
+import {
+  resetEmailVerified,
+  resetMobileVerified,
+} from '../../redux/reducers/authSlice';
 
 const {moderateScale} = metrics;
 
 const BusinessRegister = ({}) => {
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
   const {emailVerified, mobileVerified} = useAppSelector(state => state.auth);
 
   const [inputs, setInputs] = React.useState({
@@ -82,6 +88,14 @@ const BusinessRegister = ({}) => {
       register();
     }
   };
+
+  useEffect(() => {
+    const listener = navigation.addListener('beforeRemove', () => {
+      dispatch(resetEmailVerified());
+      dispatch(resetMobileVerified());
+    });
+    return () => listener;
+  }, []);
 
   const uploadImage = () => {
     let options: any = {
@@ -315,16 +329,17 @@ const BusinessRegister = ({}) => {
                 marginTop: 20,
                 alignItems: 'center',
               }}>
-              <View style={{marginTop: moderateScale(-5)}}>
-                <CheckBox
-                  boxType="square"
-                  style={styles.checkbox}
-                  disabled={false}
-                  onCheckColor="#14226D"
-                  value={toggleCheckBox}
-                  onValueChange={newValue => setToggleCheckBox(newValue)}
+              <TouchableOpacity
+                onPress={() => {
+                  setToggleCheckBox(!toggleCheckBox);
+                }}>
+                <IonIcon
+                  name={toggleCheckBox ? 'checkbox' : 'square-outline'}
+                  size={25}
+                  color={toggleCheckBox ? colors.primary : '#BDBDBD'}
                 />
-              </View>
+              </TouchableOpacity>
+
               <Text
                 style={{
                   fontFamily: fonts.regular,
@@ -366,30 +381,5 @@ const BusinessRegister = ({}) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  inputText: {
-    width: '92%',
-    marginLeft: '4%',
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#BDBDBD',
-    marginTop: 10,
-    borderRadius: 12,
-  },
-
-  input: {
-    color: '#000000',
-    fontSize: moderateScale(14),
-    fontFamily: fonts.regular,
-  },
-
-  tinyLogo: {
-    width: 25,
-    height: 25,
-  },
-  dropdown: {},
-  checkbox: {},
-});
 
 export default BusinessRegister;
