@@ -7,14 +7,11 @@ import FastImage from 'react-native-fast-image';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Divider} from 'react-native-paper';
+import {JobDetail} from '../../../types/user';
 
-const ExpertiseCard = ({item}: any) => {
+const ExpertiseCard = ({item}: {item: JobDetail}) => {
   return (
-    <View
-      style={[
-        styles.cardContainer,
-        {backgroundColor: item % 2 !== 0 ? '#F5F5F5' : colors.white},
-      ]}>
+    <View style={[styles.cardContainer, {}]}>
       <View
         style={{
           flexDirection: 'row',
@@ -22,18 +19,15 @@ const ExpertiseCard = ({item}: any) => {
           alignItems: 'center',
         }}>
         <FastImage
-          source={{uri: 'https://source.unsplash.com/400x400?nature'}}
-          resizeMode="contain"
+          source={{uri: item.photos[0]}}
+          resizeMode="cover"
           style={{width: 50, height: 50, borderRadius: 25}}
         />
         <View style={{width: '80%'}}>
-          <Text style={styles.headertext}>Music Composer</Text>
+          <Text style={styles.headertext}>{item.jobName}</Text>
 
-          <Text style={styles.text}>
-            As a musician minim mollit non deseruntAmet minim mollit non
-            deserunt
-          </Text>
-          <Text style={styles.text}>$500.00-$ 600.00</Text>
+          <Text style={styles.text}>{item.jobDescription}</Text>
+          <Text style={styles.text}>${item.priceRate}</Text>
         </View>
       </View>
 
@@ -49,13 +43,12 @@ const ExpertiseCard = ({item}: any) => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            flex: 1,
           }}>
           <Entypo name="location-pin" size={10} />
           <Text
             style={{fontFamily: fonts.regular, fontSize: 12}}
             numberOfLines={1}>
-            South Dakota
+            {item.location}
           </Text>
         </View>
 
@@ -63,23 +56,19 @@ const ExpertiseCard = ({item}: any) => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            flex: 1,
+
             justifyContent: 'center',
           }}>
           <AntDesign name="clockcircleo" size={10} />
           <Text style={{fontFamily: fonts.regular, fontSize: 12}}>3d ago</Text>
         </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <AntDesign name="user" size={10} />
           <Text
             style={{fontFamily: fonts.regular, fontSize: 12}}
             numberOfLines={1}>
-            James Cameroon
+            {item.countryName}
           </Text>
         </View>
       </View>

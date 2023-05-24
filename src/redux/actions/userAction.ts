@@ -70,8 +70,44 @@ const fetchService = createAsyncThunk(
       }
     }
   },
+)
+
+const jobCorrespondSkill = createAsyncThunk(
+  'skill/corresponding/job',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`skill/corresponding/job`, {
+        headers: {Authorization: `Bearer ${value}`},
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+)
+
+const notJobCorrespondSkill = createAsyncThunk(
+  'skill/exclude/job',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`skill/exclude/job`, {
+        headers: {Authorization: `Bearer ${value}`},
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
 );
 
-export {addService, addSkill, fetchSkill, fetchService};
+export {addService, addSkill, fetchSkill, fetchService, jobCorrespondSkill, notJobCorrespondSkill};
 
 export default {};

@@ -4,8 +4,10 @@ import {
   addSkill,
   fetchService,
   fetchSkill,
+  jobCorrespondSkill,
+  notJobCorrespondSkill,
 } from '../actions/userAction';
-import {Service} from '../../types/user';
+import {JobDetail, Service} from '../../types/user';
 
 enum Status {
   pending = 'pending',
@@ -21,6 +23,8 @@ interface UserInterface {
   registerSuccess: false;
   skills: Array<string>;
   services: Array<Service>;
+  correspond: Array<JobDetail>
+  notCorrespond: Array<JobDetail>
 }
 
 const initialState: UserInterface = {
@@ -31,6 +35,8 @@ const initialState: UserInterface = {
   registerSuccess: false,
   skills: [],
   services: [],
+  correspond:[],
+  notCorrespond:[]
 };
 
 const userSlice = createSlice({
@@ -102,9 +108,41 @@ const userSlice = createSlice({
       .addCase(fetchService.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+
+      // job correspond Skills
+      .addCase(jobCorrespondSkill.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(jobCorrespondSkill.fulfilled, (state, action) => {
+        state.loading = false;
+        state.correspond = action.payload.response;
+      })
+      .addCase(jobCorrespondSkill.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // not job correspond Skills
+      .addCase(notJobCorrespondSkill.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(notJobCorrespondSkill.fulfilled, (state, action) => {
+        state.loading = false;
+        state.notCorrespond = action.payload.response;
+      })
+      .addCase(notJobCorrespondSkill.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
   },
 });
+
+
 
 export const {updateSuccess} = userSlice.actions;
 

@@ -22,17 +22,23 @@ import {colors, fonts} from '../../theme';
 import ExpertiseCard from './components/ExpertiseCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {profileDetail} from '../../redux/actions/authAction';
+import {jobCorrespondSkill} from '../../redux/actions/userAction';
 
 const {} = Dimensions.get('window');
 
 const HomeScreen = ({}) => {
   const dispatch = useAppDispatch();
-  const {userInfo} = useAppSelector(state => state.auth);
+  const {userInfo, userToken} = useAppSelector(state => state.auth);
+  const {correspond} = useAppSelector(state => state.user);
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(profileDetail(userInfo?.token.access));
+    dispatch(profileDetail(userToken));
+  }, []);
+
+  useEffect(() => {
+    dispatch(jobCorrespondSkill(userToken));
   }, []);
 
   return (
@@ -139,7 +145,7 @@ const HomeScreen = ({}) => {
           </Text>
         </View>
         <View style={{marginTop: 20}}>
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
+          {correspond.map((item, index) => (
             <ExpertiseCard item={item} key={index.toString()} />
           ))}
         </View>
