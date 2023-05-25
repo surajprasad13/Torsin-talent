@@ -19,6 +19,7 @@ import {decode} from 'base64-arraybuffer';
 // icons
 import Feather from 'react-native-vector-icons/Feather';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // helpers
 import {metrics, colors, fonts} from '../../theme';
@@ -361,7 +362,7 @@ const IndivisualRegister = ({}) => {
               </Pressable>
             </View>
 
-            <View style={{marginTop: verticalScale(10)}}>
+            <View style={{marginTop: verticalScale(80)}}>
               <Text
                 style={{
                   color: '#4F4F4F',
@@ -370,37 +371,58 @@ const IndivisualRegister = ({}) => {
                   right: 10,
                   bottom: 20,
                   fontSize: moderateScale(16),
+                  lineHeight: 22,
                 }}>
                 Gender
               </Text>
 
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <RadioButton
-                  value="first"
-                  color="#0E184D"
-                  status={checked === 'first' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setChecked('first');
-                    setInputs(prevState => ({...prevState, gender: 1}));
-                  }}
+              <Pressable
+                style={{flexDirection: 'row', alignItems: 'center'}}
+                onPress={() => {
+                  setChecked('first');
+                  setInputs(prevState => ({...prevState, gender: 1}));
+                }}>
+                <FontAwesome
+                  name={checked === 'first' ? 'dot-circle-o' : 'circle-o'}
+                  color={checked === 'first' ? colors.primary : '#E0E0E0'}
+                  size={24}
                 />
-                <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    color: '#4F4F4F',
+                    marginLeft: 10,
+                  }}>
                   Male
                 </Text>
-              </View>
+              </Pressable>
 
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <RadioButton
-                  value="second"
-                  color="#0E184D"
-                  status={checked === 'second' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setChecked('second');
-                    setInputs(prevState => ({...prevState, gender: 2}));
-                  }}
+              <Pressable
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}
+                onPress={() => {
+                  setChecked('second');
+                  setInputs(prevState => ({...prevState, gender: 2}));
+                }}>
+                <FontAwesome
+                  name={checked === 'second' ? 'dot-circle-o' : 'circle-o'}
+                  color={checked === 'second' ? colors.primary : '#E0E0E0'}
+                  size={24}
                 />
-                <Text style={{fontFamily: fonts.regular}}>Female</Text>
-              </View>
+
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    color: '#4F4F4F',
+                    marginLeft: 10,
+                  }}>
+                  Female
+                </Text>
+              </Pressable>
             </View>
 
             <View style={{marginTop: 10}}>
