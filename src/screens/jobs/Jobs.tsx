@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -21,44 +21,51 @@ import ImageSlider from '../../components/ImageSlider';
 import CircleProgress from '../../components/CircleProgress';
 import {colors, fonts} from '../../theme';
 import ExpertiseCard from '../../screens/home/components/ExpertiseCard';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {notJobCorrespondSkill} from '../../redux/actions/userAction';
 
 const {} = Dimensions.get('window');
 
 const Jobs = ({}) => {
-  const {userInfo} = useAppSelector(state => state.auth);
+  const {userInfo, userToken} = useAppSelector(state => state.auth);
+  const {notCorrespond} = useAppSelector(state => state.user);
+
+  const dispatch = useAppDispatch();
 
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = (query: any) => setSearchQuery(query);
 
+  useEffect(() => {
+    dispatch(notJobCorrespondSkill(userToken));
+  }, []);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView style={{padding: 10}}>
-        
         <TouchableOpacity onPress={() => navigation.navigate('SearchJob')}>
-        <View
-          style={{
-            justifyContent: 'space-evenly',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <Searchbar
-            placeholder="Search Jobs"
-            onChangeText={onChangeSearch}
-            value={searchQuery}
-            placeholderTextColor="#BDBDBD"
-            iconColor="#333333"
+          <View
             style={{
-              backgroundColor: colors.white,
-              borderWidth: 1,
-              flex: 1,
-              borderRadius: 30,
-              borderColor: '#BDBDBD',
-            }}
-            inputStyle={styles.searchInput}
-          />
-        </View>
+              justifyContent: 'space-evenly',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Searchbar
+              placeholder="Search Jobs"
+              onChangeText={onChangeSearch}
+              value={searchQuery}
+              placeholderTextColor="#BDBDBD"
+              iconColor="#333333"
+              style={{
+                backgroundColor: colors.white,
+                borderWidth: 1,
+                flex: 1,
+                borderRadius: 30,
+                borderColor: '#BDBDBD',
+              }}
+              inputStyle={styles.searchInput}
+            />
+          </View>
         </TouchableOpacity>
 
         <View style={{top: 8}}>
@@ -78,10 +85,9 @@ const Jobs = ({}) => {
             }}>
             Jobs based on your expertise
           </Text>
-          
         </View>
         <View style={{marginTop: 20}}>
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
+          {notCorrespond.map((item, index) => (
             <ExpertiseCard item={item} key={index.toString()} />
           ))}
         </View>
