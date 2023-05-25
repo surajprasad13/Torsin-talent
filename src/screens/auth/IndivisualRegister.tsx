@@ -13,7 +13,6 @@ import {
 import {RadioButton} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {decode} from 'base64-arraybuffer';
 
 // icons
@@ -75,7 +74,6 @@ const IndivisualRegister = ({}) => {
     confirmPassword: '',
     profileImage: '',
   });
-  
 
   const [errors, setErrors] = useState<any>({});
 
@@ -141,8 +139,6 @@ const IndivisualRegister = ({}) => {
       setImageLoading(false);
     }
   };
-
- 
 
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {
