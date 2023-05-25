@@ -41,6 +41,7 @@ import {
   resetEmailVerified,
   resetMobileVerified,
 } from '../../redux/reducers/authSlice';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
@@ -74,8 +75,7 @@ const IndivisualRegister = ({}) => {
     confirmPassword: '',
     profileImage: '',
   });
-  const [image, setImage] = useState('');
-  const [imageLoading, setImageLoading] = useState<boolean>(false);
+  
 
   const [errors, setErrors] = useState<any>({});
 
@@ -113,30 +113,36 @@ const IndivisualRegister = ({}) => {
     }
   };
 
-  const uploadImage = () => {
-    let options: any = {
-      mediaType: 'photo',
-      quality: 1,
+  const [image, setImage] = useState('');
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
+
+  const uploadImage = async () => {
+    setImageLoading(true);
+
+    const response = await ImageCropPicker.openPicker({
+      width: 400,
+      height: 300,
       includeBase64: true,
-    };
-    launchImageLibrary(options, async response => {
-      try {
-        setImageLoading(true);
-        var base64data = decode(response.assets[0].base64);
-        const url = await uploadFileToS3(
-          base64data,
-          `${response.assets[0].fileName}`,
-          'image/jpeg',
-        );
-        setImage(response.assets[0].base64);
-        setInputs(prevState => ({...prevState, profileImage: url.Location}));
-        setImageLoading(false);
-      } catch (error: any) {
-        setImageLoading(false);
-        console.log('Error uploading file:', error);
-      }
+      mediaType: 'photo',
+      cropping: true,
     });
+
+    if (response) {
+      setImage(response.data as any);
+      var base64data = decode(response.data as any);
+      const url = await uploadFileToS3(
+        base64data,
+        `${response.filename}`,
+        'image/jpeg',
+      );
+      setInputs(prevState => ({...prevState, profileImage: url.Location}));
+      setImageLoading(false);
+    } else {
+      setImageLoading(false);
+    }
   };
+
+ 
 
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {

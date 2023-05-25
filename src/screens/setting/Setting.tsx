@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -19,11 +19,44 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import ProFile from '../../components/Profile';
 import {colors, fonts} from '../../theme';
 import {useAppSelector} from '../../hooks';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import {decode} from 'base64-arraybuffer';
+import {uploadFileToS3} from '../../services/s3';
+import Profile from '../../components/Profile';
 
 const Setting = ({}) => {
   const navigation = useNavigation();
 
   const {userInfo} = useAppSelector(state => state.auth);
+
+  const [image, setImage] = useState('');
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
+  const [disable, setDisable] = useState(false);
+
+  const uploadImage = async () => {
+    setImageLoading(true);
+
+    const response = await ImageCropPicker.openPicker({
+      width: 400,
+      height: 300,
+      includeBase64: true,
+      mediaType: 'photo',
+      cropping: true,
+    });
+
+    if (response) {
+      setImage(response.data as any);
+      var base64data = decode(response.data as any);
+      const url = await uploadFileToS3(
+        base64data,
+        `${response.filename}`,
+        'image/jpeg',
+      );
+      setImageLoading(false);
+    } else {
+      setImageLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -48,12 +81,14 @@ const Setting = ({}) => {
         </View>
 
         <View style={{backgroundColor: '#f9fbff', flex: 2}}>
-          <ProFile
-            image={
-              userInfo?.profileImage ??
-              'https://source.unsplash.com/400x400?user'
-            }
-            onPress={() => {}}
+          <Profile
+            image={image.length > 0 ? image : userInfo?.profileImage}
+            onPress={() => {
+              if (disable) {
+                uploadImage();
+              }
+            }}
+            loading={imageLoading}
           />
 
           <View

@@ -2,6 +2,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {appstyle, colors, fonts} from '../../../theme';
 import FastImage from 'react-native-fast-image';
+import moment from 'moment';
 
 //icons
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -60,7 +61,9 @@ const ExpertiseCard = ({item}: {item: JobDetail}) => {
             justifyContent: 'center',
           }}>
           <AntDesign name="clockcircleo" size={10} />
-          <Text style={{fontFamily: fonts.regular, fontSize: 12}}>3d ago</Text>
+          <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
+            {moment(item.createdAt).format('lll')}
+          </Text>
         </View>
 
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
