@@ -97,6 +97,14 @@ const BusinessRegister = ({}) => {
     return () => listener;
   }, []);
 
+  useEffect(() => {
+    const listener = navigation.addListener('focus', () => {
+      dispatch(resetEmailVerified());
+      dispatch(resetMobileVerified());
+    });
+    return () => listener;
+  }, []);
+
   const uploadImage = () => {
     let options: any = {
       mediaType: 'photo',
