@@ -113,6 +113,8 @@ const EditUserProfile = ({}) => {
     }
   };
 
+  console.log(inputs.gender);
+
   const update = () => {
     dispatch(userUpdate({inputs, userToken}));
   };
@@ -231,12 +233,10 @@ const EditUserProfile = ({}) => {
                   marginTop: 10,
                 }}
                 onPress={() => {
-                  if (disable) {
-                    setInputs(previousState => ({
-                      ...previousState,
-                      gender: 1,
-                    }));
-                  }
+                  setInputs(previousState => ({
+                    ...previousState,
+                    gender: 1,
+                  }));
                 }}>
                 <FontAwesome
                   name={inputs.gender === 1 ? 'dot-circle-o' : 'circle-o'}
@@ -261,12 +261,10 @@ const EditUserProfile = ({}) => {
                   marginTop: 10,
                 }}
                 onPress={() => {
-                  if (disable) {
-                    setInputs(previousState => ({
-                      ...previousState,
-                      gender: 2,
-                    }));
-                  }
+                  setInputs(previousState => ({
+                    ...previousState,
+                    gender: 2,
+                  }));
                 }}>
                 <FontAwesome
                   name={inputs.gender === 2 ? 'dot-circle-o' : 'circle-o'}
@@ -311,8 +309,7 @@ const EditUserProfile = ({}) => {
           {!!error && (
             <Text
               style={{
-                marginTop: 40,
-                textAlign: 'center',
+                margin: 10,
                 fontFamily: fonts.medium,
                 color: colors.red,
               }}>

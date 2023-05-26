@@ -76,7 +76,6 @@ const IndivisualRegister = ({}) => {
     confirmPassword: '',
     profileImage: '',
   });
-  
 
   const [errors, setErrors] = useState<any>({});
 
@@ -142,8 +141,6 @@ const IndivisualRegister = ({}) => {
       setImageLoading(false);
     }
   };
-
- 
 
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {
@@ -362,16 +359,13 @@ const IndivisualRegister = ({}) => {
               </Pressable>
             </View>
 
-            <View style={{marginTop: verticalScale(80)}}>
+            <View>
               <Text
                 style={{
                   color: '#4F4F4F',
-                  marginLeft: horizontalScale(15),
                   fontFamily: fonts.regular,
-                  right: 10,
-                  bottom: 20,
                   fontSize: moderateScale(16),
-                  lineHeight: 22,
+                  bottom: 10,
                 }}>
                 Gender
               </Text>
