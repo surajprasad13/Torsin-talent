@@ -249,16 +249,7 @@ const AddService = ({}) => {
               .
             </Text>
           </View>
-          {!!error && (
-            <Text
-              style={{
-                textAlign: 'center',
-                color: colors.red,
-                fontFamily: fonts.medium,
-              }}>
-              {error}
-            </Text>
-          )}
+
           <View style={styles.inputContainer}>
             <CustomInput
               label="Service Name"
@@ -603,10 +594,20 @@ const AddService = ({}) => {
               </Text>
             )}
           </View>
+          {!!error && (
+            <Text
+              style={{
+                margin: 10,
+                color: colors.red,
+                fontFamily: fonts.medium,
+              }}>
+              {error}
+            </Text>
+          )}
           <CustomButton
             title="Add Service"
             onPress={validate}
-            style={{marginTop: 50}}
+            style={{marginTop: 20}}
             disabled={true}
             loading={loading}
           />
@@ -628,7 +629,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputContainer: {
-    marginLeft: 10,
     padding: 10,
   },
   videoInput: {

@@ -9,12 +9,14 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, Dialog, Portal, RadioButton} from 'react-native-paper';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // components
 import ProFile from '../../components/Profile';
@@ -111,6 +113,8 @@ const EditUserProfile = ({}) => {
       update();
     }
   };
+
+  console.log(inputs.gender);
 
   const update = () => {
     dispatch(userUpdate({inputs, userToken}));
@@ -223,33 +227,61 @@ const EditUserProfile = ({}) => {
                 Gender
               </Text>
 
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <RadioButton
-                  value="first"
-                  color="#0E184D"
-                  status={inputs.gender === 1 ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setInputs(prevState => ({...prevState, gender: 1}));
-                  }}
+              <Pressable
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}
+                onPress={() => {
+                  setInputs(previousState => ({
+                    ...previousState,
+                    gender: 1,
+                  }));
+                }}>
+                <FontAwesome
+                  name={inputs.gender === 1 ? 'dot-circle-o' : 'circle-o'}
+                  color={inputs.gender === 1 ? colors.primary : '#E0E0E0'}
+                  size={24}
                 />
-                <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    color: '#4F4F4F',
+                    marginLeft: 10,
+                  }}>
                   Male
                 </Text>
-              </View>
+              </Pressable>
 
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <RadioButton
-                  value="second"
-                  color="#0E184D"
-                  status={inputs.gender === 2 ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setInputs(prevState => ({...prevState, gender: 2}));
-                  }}
+              <Pressable
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}
+                onPress={() => {
+                  setInputs(previousState => ({
+                    ...previousState,
+                    gender: 2,
+                  }));
+                }}>
+                <FontAwesome
+                  name={inputs.gender === 2 ? 'dot-circle-o' : 'circle-o'}
+                  color={inputs.gender === 2 ? colors.primary : '#E0E0E0'}
+                  size={24}
                 />
-                <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    color: '#4F4F4F',
+                    marginLeft: 10,
+                  }}>
                   Female
                 </Text>
-              </View>
+              </Pressable>
             </View>
           )}
           <CustomInput
@@ -278,8 +310,7 @@ const EditUserProfile = ({}) => {
           {!!error && (
             <Text
               style={{
-                marginTop: 40,
-                textAlign: 'center',
+                margin: 10,
                 fontFamily: fonts.medium,
                 color: colors.red,
               }}>
