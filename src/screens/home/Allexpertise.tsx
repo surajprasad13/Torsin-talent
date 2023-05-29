@@ -3,7 +3,6 @@ import {
   Text,
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   FlatList,
   Pressable,
 } from 'react-native';

@@ -33,6 +33,7 @@ export type RootStackParamList = {
   OpenModal: undefined;
   CreatePassword: {item: string} | undefined;
   Allexpertise: undefined;
+  MusicComposer: undefined;
 };
 
 export type AuthScreenParamList = {

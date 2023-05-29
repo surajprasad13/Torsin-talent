@@ -30,6 +30,7 @@ import SearchJob from '../screens/jobs/components/SearchJob';
 import MusicJob from '../screens/jobs/components/MusicJob';
 import OpenModal from '../screens/jobs/components/OpenModal';
 import Allexpertise from '../screens/home/Allexpertise';
+import MusicComposer from '../screens/jobs/components/MusicComposer';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -152,6 +153,11 @@ export default function AppNavigator({}) {
           <Stack.Screen
             name="Allexpertise"
             component={Allexpertise}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="MusicComposer"
+            component={MusicComposer}
             options={{headerShown: false}}
           />
         </Stack.Group>

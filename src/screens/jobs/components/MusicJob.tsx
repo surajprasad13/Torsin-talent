@@ -8,7 +8,6 @@ import {
   Dimensions,
   SafeAreaView,
   FlatList,
-  Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -18,13 +17,11 @@ import {RadioButton} from 'react-native-paper';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // components
 
 import {colors, fonts} from '../../../theme';
 import ExpertiseCard from '../../../screens/home/components/ExpertiseCard';
-import OpenModal from './OpenModal';
 import {useAppSelector} from '../../../hooks';
 
 const {} = Dimensions.get('window');

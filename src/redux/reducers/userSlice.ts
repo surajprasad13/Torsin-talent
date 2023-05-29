@@ -8,6 +8,7 @@ import {
   notJobCorrespondSkill,
 } from '../actions/userAction';
 import {JobDetail, Service} from '../../types/user';
+import {searchJob} from '../actions/userAction';
 
 enum Status {
   pending = 'pending',
@@ -23,8 +24,9 @@ interface UserInterface {
   registerSuccess: false;
   skills: Array<string>;
   services: Array<Service>;
-  correspond: Array<JobDetail>
-  notCorrespond: Array<JobDetail>
+  correspond: Array<JobDetail>;
+  notCorrespond: Array<JobDetail>;
+  search: Array<JobDetail>;
 }
 
 const initialState: UserInterface = {
@@ -35,8 +37,9 @@ const initialState: UserInterface = {
   registerSuccess: false,
   skills: [],
   services: [],
-  correspond:[],
-  notCorrespond:[]
+  correspond: [],
+  notCorrespond: [],
+  search: [],
 };
 
 const userSlice = createSlice({
@@ -139,10 +142,23 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
+      // not job correspond Skills
+      .addCase(searchJob.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(searchJob.fulfilled, (state, action) => {
+        state.loading = false;
+        state.search = action.payload;
+      })
+      .addCase(searchJob.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
-
-
 
 export const {updateSuccess} = userSlice.actions;
 
