@@ -135,6 +135,7 @@ const HomeScreen = ({}) => {
             John based on your expertise
           </Text>
           <Text
+            onPress={() => navigation.navigate('Allexpertise')}
             style={{
               height: 20,
               fontFamily: fonts.semibold,

@@ -105,7 +105,7 @@ const ServiceSkill = ({}) => {
           {skills.map((item, index) => {
             return (
               <View
-                key={index.toString()}
+          
                 style={{
                   borderWidth: 1,
                   borderColor: '#08161433',

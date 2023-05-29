@@ -39,13 +39,14 @@ const ExpertiseCard = ({item}: {item: JobDetail}) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           marginTop: 15,
+          margin: 10,
         }}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <Entypo name="location-pin" size={10} />
+          <Entypo name="location-pin" size={10} style={styles.icon} />
           <Text
             style={{fontFamily: fonts.regular, fontSize: 12}}
             numberOfLines={1}>
@@ -57,17 +58,16 @@ const ExpertiseCard = ({item}: {item: JobDetail}) => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-
             justifyContent: 'center',
           }}>
-          <AntDesign name="clockcircleo" size={10} />
+          <AntDesign name="clockcircleo" size={10} style={styles.icon} />
           <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
             {moment(item.createdAt).format('lll')}
           </Text>
         </View>
 
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <AntDesign name="user" size={10} />
+          <AntDesign name="user" size={10} style={styles.icon} />
           <Text
             style={{fontFamily: fonts.regular, fontSize: 12}}
             numberOfLines={1}>
@@ -99,6 +99,9 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 16,
     justifyContent: 'center',
+  },
+  icon: {
+    right: 2,
   },
 });
 

@@ -13,7 +13,6 @@ import {Searchbar} from 'react-native-paper';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo';
 import {colors} from '../../../theme';
 import {useNavigation} from '@react-navigation/native';
 

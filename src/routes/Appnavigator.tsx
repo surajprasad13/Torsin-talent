@@ -29,6 +29,8 @@ import CreatePassword from '../screens/auth/CreatePassword';
 import SearchJob from '../screens/jobs/components/SearchJob';
 import MusicJob from '../screens/jobs/components/MusicJob';
 import OpenModal from '../screens/jobs/components/OpenModal';
+import ExpertiseCard from '../screens/home/components/ExpertiseCard';
+import Allexpertise from '../screens/home/Allexpertise';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -146,6 +148,11 @@ export default function Appnavigator({}) {
           <Stack.Screen
             name="OpenModal"
             component={OpenModal}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Allexpertise"
+            component={Allexpertise}
             options={{headerShown: false}}
           />
         </Stack.Group>
