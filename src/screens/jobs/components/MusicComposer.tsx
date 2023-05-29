@@ -18,8 +18,13 @@ import FastImage from 'react-native-fast-image';
 import {Divider} from 'react-native-paper';
 import {CustomButton} from '../../../components';
 import {JobDetail} from '../../../types/user';
+import moment from 'moment';
 
-const MusicComposer = ({item}: {item: JobDetail}) => {
+const projectType = ['', 'Fixed', 'Hourly'];
+
+const MusicComposer = ({route}) => {
+  const {item} = route.params as JobDetail;
+
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -40,12 +45,12 @@ const MusicComposer = ({item}: {item: JobDetail}) => {
             <Feather name="arrow-left" size={20} />
           </Pressable>
           <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-            Music Composer jobs
+            Job details
           </Text>
         </View>
         <View style={styles.cardContainer}>
           <Text style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
-            Music Composer(Song Writer)
+            {item.adminService}
           </Text>
           <View
             style={{
@@ -62,16 +67,14 @@ const MusicComposer = ({item}: {item: JobDetail}) => {
               style={{width: 50, height: 50, borderRadius: 25}}
             />
             <View style={{width: '80%'}}>
-              <Text style={styles.headertext}>
-                PIE Management Consultancy by James Cameroon
+              <Text style={styles.headertext}>{item.jobName}</Text>
+              <Text
+                style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
+                Project type : {projectType[item.projectType]}
               </Text>
               <Text
                 style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
-                Project type :
-              </Text>
-              <Text
-                style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
-                Cost : $500.00
+                Cost : {item.priceRate}
               </Text>
             </View>
           </View>
@@ -87,11 +90,11 @@ const MusicComposer = ({item}: {item: JobDetail}) => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <Entypo name="location-pin" size={10} style={styles.icon} />
+              <AntDesign name="clockcircleo" size={10} style={styles.icon} />
               <Text
                 style={{fontFamily: fonts.regular, fontSize: 12}}
                 numberOfLines={1}>
-                5h ago
+                {moment(item.createdAt).format('lll')}
               </Text>
             </View>
 
@@ -101,9 +104,9 @@ const MusicComposer = ({item}: {item: JobDetail}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <AntDesign name="clockcircleo" size={10} style={styles.icon} />
+              <Entypo name="location-pin" size={10} style={styles.icon} />
               <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
-                2715 Ash, South Dakota
+                {item.location},{item.countryName}
               </Text>
             </View>
           </View>
@@ -122,23 +125,16 @@ const MusicComposer = ({item}: {item: JobDetail}) => {
                 fontSize: 12,
                 color: '#1E202B',
               }}>
-              As a musician minim mollit non deseruntAmet minim mollit non
-              deserunt . Job Description Complete your profile. Set your profile
-              completely so that recruiter will find your profile easily. Amet
-              minim mollit non deserunt ullamco est sit aliqua dolor do amet
-              sint. Velit officia consequat duis enim velit mollit. Exercitation
-              veniam consequat sunt nostrud amet. Amet minim mollit non deserunt
-              ullamco est sit aliqua dolor do amet sint. Velit officia consequat
-              duis enim velit mollit. Exercitation veniam consequat sunt nostrud
-              amet. Amet minim mollit non deserunt ullamco est sit aliqua dolor
-              do amet sint.{' '}
+              {item.jobDescription}
             </Text>
           </View>
+
+          <Divider style={{marginTop: 20}} />
 
           <View
             style={{
               borderRadius: 10,
-              marginTop: 10,
+              marginTop: 20,
             }}>
             <Text
               style={{
@@ -155,22 +151,13 @@ const MusicComposer = ({item}: {item: JobDetail}) => {
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
               }}>
-              <FastImage
-                source={require('../../../assets/images/men.png')}
-                style={styles.innerImage}
-              />
-              <FastImage
-                source={require('../../../assets/images/men.png')}
-                style={styles.innerImage}
-              />
-              <FastImage
-                source={require('../../../assets/images/men.png')}
-                style={styles.innerImage}
-              />
-              <FastImage
-                source={require('../../../assets/images/men.png')}
-                style={styles.innerImage}
-              />
+              {item.photos.map((_item, _index) => (
+                <FastImage
+                  source={{uri: _item}}
+                  key={_index.toString()}
+                  style={styles.innerImage}
+                />
+              ))}
             </View>
           </View>
 

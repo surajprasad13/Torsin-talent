@@ -148,13 +148,11 @@ const HomeScreen = ({}) => {
             view all
           </Text>
         </View>
-        <TouchableOpacity
-          style={{marginTop: 20}}
-          onPress={() => navigation.navigate('MusicComposer')}>
+        <View style={{marginTop: 20}}>
           {correspond.map((item, index) => (
             <ExpertiseCard item={item} key={index.toString()} />
           ))}
-        </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

@@ -8,13 +8,13 @@ export interface Service {
 }
 
 export interface JobDetail {
-  location: string;
-  countryName: string;
   jobName: string;
   jobDescription: string;
-  photos:  string[];
+  location: string;
+  countryName: string;
+  photos: string[];
   adminService: number;
-  projectType: number
+  projectType: number;
   priceRate: number;
   createdAt: Date;
 }
