@@ -38,7 +38,10 @@ const HomeScreen = ({}) => {
   }, []);
 
   useEffect(() => {
-    dispatch(jobCorrespondSkill(userToken));
+    const listener = navigation.addListener('focus', () => {
+      dispatch(jobCorrespondSkill(userToken));
+    });
+    return () => listener;
   }, []);
 
   return (

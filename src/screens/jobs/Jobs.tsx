@@ -41,13 +41,15 @@ const Jobs = ({}) => {
   const [bottomIndex, setBottomIndex] = useState(-1);
   const [checked, setChecked] = useState('first');
 
-  const onChangeSearch = (query: any) => {
-    const value = {
-      search: query,
-      userToken,
-    };
-    dispatch(searchJob(value));
+  const onChangeSearch = (query: string) => {
     setSearchQuery(query);
+    if (query.length > 0) {
+      const value = {
+        search: query,
+        userToken,
+      };
+      dispatch(searchJob(value));
+    }
   };
 
   useEffect(() => {
@@ -95,8 +97,11 @@ const Jobs = ({}) => {
             />
           </View>
         </TouchableOpacity>
-        {search.length > 0 && (
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        {search.length > 0 && searchQuery.length > 0 && (
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{marginTop: 10}}>
             <View
               style={{
                 justifyContent: 'center',
@@ -121,7 +126,7 @@ const Jobs = ({}) => {
             </TouchableOpacity>
             <TouchableOpacity style={styles.innerSearch}>
               <Text style={styles.innerText}>
-                Avilability
+                Availability
                 <AntDesign name="down" size={12} />
               </Text>
             </TouchableOpacity>
@@ -146,6 +151,12 @@ const Jobs = ({}) => {
           </View>
         )}
       </View>
+
+      {search.length > 0 && searchQuery.length > 0 && (
+        <View style={{padding: 10}}>
+          <Text style={{fontFamily: fonts.medium}}>Search Results</Text>
+        </View>
+      )}
 
       <FlatList
         ListHeaderComponent={<View>{loading && <ActivityIndicator />}</View>}

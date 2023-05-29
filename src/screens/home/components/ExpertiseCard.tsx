@@ -50,7 +50,7 @@ const ExpertiseCard = ({item}: {item: JobDetail}) => {
           <Text
             style={{fontFamily: fonts.regular, fontSize: 12}}
             numberOfLines={1}>
-            {item.location}
+            {item.location}/{item.countryName}
           </Text>
         </View>
 
@@ -63,15 +63,6 @@ const ExpertiseCard = ({item}: {item: JobDetail}) => {
           <AntDesign name="clockcircleo" size={10} style={styles.icon} />
           <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
             {moment(item.createdAt).format('lll')}
-          </Text>
-        </View>
-
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <AntDesign name="user" size={10} style={styles.icon} />
-          <Text
-            style={{fontFamily: fonts.regular, fontSize: 12}}
-            numberOfLines={1}>
-            {item.countryName}
           </Text>
         </View>
       </View>

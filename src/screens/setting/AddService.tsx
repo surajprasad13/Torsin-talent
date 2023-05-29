@@ -602,7 +602,7 @@ const AddService = ({}) => {
             title="Add Service"
             onPress={validate}
             style={{marginTop: 20}}
-            disabled={true}
+            disabled={!loading}
             loading={loading}
           />
           <View style={{marginTop: 50}} />
