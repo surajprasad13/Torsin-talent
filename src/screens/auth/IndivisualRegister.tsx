@@ -150,6 +150,14 @@ const IndivisualRegister = ({}) => {
     return () => listener;
   }, []);
 
+  useEffect(() => {
+    const listener = navigation.addListener('focus', () => {
+      dispatch(resetEmailVerified());
+      dispatch(resetMobileVerified());
+    });
+    return () => listener;
+  }, []);
+
   const register = () => {
     const field = {
       screen: 'indivisual',

@@ -124,6 +124,38 @@ const BusinessRegister = ({}) => {
     return () => listener;
   }, []);
 
+  useEffect(() => {
+    const listener = navigation.addListener('focus', () => {
+      dispatch(resetEmailVerified());
+      dispatch(resetMobileVerified());
+    });
+    return () => listener;
+  }, []);
+
+  const uploadImage = () => {
+    let options: any = {
+      mediaType: 'photo',
+      quality: 1,
+      includeBase64: true,
+    };
+    launchImageLibrary(options, async response => {
+      try {
+        setImageLoading(true);
+        var base64data = decode(response.assets[0].base64);
+        const url = await uploadFileToS3(
+          base64data,
+          `${response.assets[0].fileName}`,
+          'image/jpeg',
+        );
+        setImage(response.assets[0].base64);
+        setInputs(prevState => ({...prevState, profileImage: url.Location}));
+        setImageLoading(false);
+      } catch (error: any) {
+        setImageLoading(false);
+        console.log('Error uploading file:', error);
+      }
+    });
+  };
 
   const register = () => {
     const field = {

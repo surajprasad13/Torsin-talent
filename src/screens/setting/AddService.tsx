@@ -30,7 +30,7 @@ import {addService} from '../../redux/actions/userAction';
 import {Button, Dialog, Portal} from 'react-native-paper';
 import {updateSuccess} from '../../redux/reducers/userSlice';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {uploadFileToS3} from '../../services/s3';
+import {uploadFileToS3, uploadVideoToS3, videoUrl} from '../../services/s3';
 import {decode} from 'base64-arraybuffer';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image';
@@ -150,7 +150,6 @@ const AddService = ({}) => {
   const uploadVideo = () => {
     handleError('', 'video');
     let options: any = {
-      includeBase64: true,
       mediaType: 'video',
       quality: 1,
       formatAsMp4: true,
@@ -162,16 +161,15 @@ const AddService = ({}) => {
         try {
           setVideoLoading(true);
 
-          const url = await uploadFileToS3(
+          const url = await uploadVideoToS3(
             response.assets[0].uri,
             response.assets[0].fileName,
-            response.assets[0].type,
           );
-
           setInputs((prevState: any) => ({
             ...prevState,
             serviceVideo: url.Location,
           }));
+
           setVideo(response.assets[0].uri);
           setVideoLoading(false);
         } catch (_error: any) {
@@ -666,3 +664,12 @@ const styles = StyleSheet.create({
 });
 
 export default AddService;
+
+// const options = {
+//   keyPrefix: 'videos/',
+//   bucket: 'torsin-bucket',
+//   region: 'ap-south-1',
+//   accessKey: 'AKIA3HTEPTYVVR7VTC5L',
+//   secretKey: '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',
+//   successActionStatus: '201',
+// };
