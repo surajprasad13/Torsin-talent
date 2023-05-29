@@ -34,6 +34,7 @@ export type RootStackParamList = {
   CreatePassword: {item: string} | undefined;
   Allexpertise: undefined;
   MusicComposer: undefined;
+  PurposalSent: undefined;
 };
 
 export type AuthScreenParamList = {
