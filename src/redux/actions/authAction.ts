@@ -76,10 +76,9 @@ const sendOtp = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.post(`verify/email`, value.inputs);
-      console.log(data);
+
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -93,7 +92,6 @@ const verifyOtp = createAsyncThunk(
   'auth/verifyOtp',
   async (value: any, {rejectWithValue}) => {
     try {
-      console.log(value);
       const {data} = await api.post(`verify/otp`, value);
       return data;
     } catch (error: any) {
@@ -115,7 +113,6 @@ const profileDetail = createAsyncThunk(
       });
       return data;
     } catch (error: any) {
-      
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {

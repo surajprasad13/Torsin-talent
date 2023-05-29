@@ -114,8 +114,6 @@ const EditUserProfile = ({}) => {
     }
   };
 
-  console.log(inputs.gender);
-
   const update = () => {
     dispatch(userUpdate({inputs, userToken}));
   };
