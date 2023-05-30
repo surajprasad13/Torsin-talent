@@ -105,6 +105,12 @@ const AddService = ({}) => {
         userToken,
       };
       dispatch(addService(value));
+    } else {
+      let value = {
+        inputs,
+        userToken,
+      };
+      dispatch(addService(value));
     }
   };
 
