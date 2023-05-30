@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text} from 'react-native';
 import {GiftedChat, Bubble} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
-import {colors} from '../../theme';
+import {colors, fonts} from '../../theme';
 
 // helpers
 
@@ -66,9 +66,13 @@ const ChatUser = ({route}) => {
         textStyle={{
           right: {
             color: 'black',
+            fontSize: 12,
+            fontFamily: fonts.regular,
           },
           left: {
             color: 'white',
+            fontSize: 12,
+            fontFamily: fonts.regular,
           },
         }}
       />
