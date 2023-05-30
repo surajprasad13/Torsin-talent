@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text} from 'react-native';
 import {GiftedChat, Bubble} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
-import {colors, fonts} from '../../theme';
+import {appstyle, colors, fonts} from '../../theme';
 
 // helpers
 
@@ -54,8 +54,8 @@ const ChatUser = ({route}) => {
         wrapperStyle={{
           right: {
             // Here is the color change
-            backgroundColor: 'white',
             margin: 5,
+            ...appstyle.shadow,
           },
           left: {
             // Here is the color change
@@ -68,6 +68,7 @@ const ChatUser = ({route}) => {
             color: 'black',
             fontSize: 12,
             fontFamily: fonts.regular,
+            textAlign: 'center',
           },
           left: {
             color: 'white',
@@ -80,7 +81,7 @@ const ChatUser = ({route}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, justifyContent: 'space-between'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <GiftedChat
         messages={messages}
         onSend={newMessages => onSend(newMessages)}
