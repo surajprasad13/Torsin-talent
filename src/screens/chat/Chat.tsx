@@ -87,10 +87,11 @@ const Chat = ({}) => {
           <TextInput
             placeholder="Search"
             disableFullscreenUI
+            value={list}
             placeholderTextColor="#D3D3D3"
             style={{
               padding: 10,
-              flex: .95,
+              flex: 0.95,
             }}
           />
         </TouchableOpacity>

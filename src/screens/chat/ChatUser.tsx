@@ -1,14 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, Text} from 'react-native';
+import {SafeAreaView, Text, View} from 'react-native';
 import {GiftedChat, Bubble} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
 import {appstyle, colors, fonts} from '../../theme';
+
+//icons
+import Feather from 'react-native-vector-icons/Feather';
+import moment from 'moment';
+import {useNavigation} from '@react-navigation/native';
 
 // helpers
 
 const ChatUser = ({route}) => {
   const [messages, setMessages] = useState([]);
   const {chatRoomId} = route.params;
+  const navigation = useNavigation();
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -82,6 +88,30 @@ const ChatUser = ({route}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
+      <View
+        style={{
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'center',
+          padding: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: '#d3d3d3',
+        }}>
+        <Feather
+          onPress={() => navigation.goBack()}
+          name="arrow-left"
+          size={20}
+        />
+        <View style={{alignItems: 'center'}}>
+          <Text style={{textTransform: 'capitalize', fontSize: 16}}>
+            {chatRoomId}
+          </Text>
+          <Text style={{fontFamily: fonts.regular, fontSize: 9}}>
+            Last seen {moment().format('lll')}
+          </Text>
+        </View>
+        <Feather name="more-vertical" size={20} />
+      </View>
       <GiftedChat
         messages={messages}
         onSend={newMessages => onSend(newMessages)}

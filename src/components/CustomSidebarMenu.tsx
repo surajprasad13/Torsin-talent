@@ -17,6 +17,7 @@ import EvilIcon from 'react-native-vector-icons/EvilIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // components
 import Logout from './Logout';
@@ -30,7 +31,7 @@ const List = [
     title: 'Notifications',
     route: '',
     icon: ({color}: {color: string}) => (
-      <EvilIcon name="bell" color={color} size={25} />
+      <EvilIcon name="bell" color={color} size={20} />
     ),
   },
 
@@ -38,42 +39,49 @@ const List = [
     title: 'Proposals',
     route: '',
     icon: ({color}: {color: string}) => (
-      <IonIcon name="newspaper-outline" color={color} size={25} />
+      <IonIcon name="newspaper-outline" color={color} size={20} />
+    ),
+  },
+  {
+    title: 'My Jobs',
+    route: '',
+    icon: ({color}: {color: string}) => (
+      <FontAwesome name="calendar-check-o" color={color} size={20} />
     ),
   },
   {
     title: 'My Rating',
     route: '',
     icon: ({color}: {color: string}) => (
-      <EvilIcon name="star" color={color} size={25} />
+      <EvilIcon name="star" color={color} size={20} />
     ),
   },
   {
     title: 'Payment',
     route: '',
     icon: ({color}: {color: string}) => (
-      <MaterialIcon name="payments" color={color} size={25} />
+      <MaterialIcon name="payments" color={color} size={20} />
     ),
   },
   {
     title: 'About us',
     route: '',
     icon: ({color}: {color: string}) => (
-      <AntDesign name="infocirlceo" color={color} size={25} />
+      <AntDesign name="infocirlceo" color={color} size={20} />
     ),
   },
   {
     title: 'Terms and Privacy',
     route: '',
     icon: ({color}: {color: string}) => (
-      <IonIcon name="shield-checkmark-outline" color={color} size={25} />
+      <IonIcon name="shield-checkmark-outline" color={color} size={20} />
     ),
   },
   {
     title: 'Help and Support',
     route: '',
     icon: ({color}: {color: string}) => (
-      <IonIcon name="md-headset" color={color} size={25} />
+      <IonIcon name="md-headset" color={color} size={20} />
     ),
   },
 ];
@@ -138,7 +146,7 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                       state.index == index ? colors.white : 'transparent',
                   },
                 ]}
-                onPress={() => navigation.navigate(item.route)}>
+                onPress={() => navigation.navigate('Myjob')}>
                 <View>
                   {item.icon({
                     color: state.index == index ? colors.primary : colors.grey,

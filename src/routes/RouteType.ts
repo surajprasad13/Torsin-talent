@@ -36,6 +36,7 @@ export type RootStackParamList = {
   MusicComposer: undefined;
   PurposalSent: undefined;
   ChatUser: undefined;
+  Myjob: undefined;
 };
 
 export type AuthScreenParamList = {

@@ -36,10 +36,11 @@ import Allexpertise from '../screens/home/Allexpertise';
 import MusicComposer from '../screens/jobs/components/MusicComposer';
 import PurposalSent from '../screens/jobs/components/PurposalSent';
 import ChatUser from '../screens/chat/ChatUser';
+import Myjob from '../screens/jobs/MyAllJob';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export default function AppNavigator({navigation}) {
+export default function AppNavigator() {
   const {userToken, isFirstOpen} = useAppSelector(state => state.auth);
 
   return (
@@ -173,16 +174,18 @@ export default function AppNavigator({navigation}) {
           <Stack.Screen
             name="ChatUser"
             component={ChatUser}
-            options={({route}: any) => ({
-              title: route.params.chatRoomId,
+            options={{
               ...TransitionPresets.SlideFromRightIOS,
-              headerRight: () => (
-                <Feather name="more-vertical" size={20} style={{right: 10}} />
-              ),
-              headerLeft: () => (
-                <Feather name="arrow-left" size={20} style={{left: 10}} />
-              ),
-            })}
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Myjob"
+            component={Myjob}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
           />
         </Stack.Group>
       </Stack.Navigator>
