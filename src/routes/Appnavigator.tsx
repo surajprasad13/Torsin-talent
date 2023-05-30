@@ -1,7 +1,10 @@
 import React from 'react';
-import {} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {Text} from 'react-native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
+
+//icons
+import Feather from 'react-native-vector-icons/Feather';
 
 /**
  * Screens
@@ -32,10 +35,11 @@ import OpenModal from '../screens/jobs/components/OpenModal';
 import Allexpertise from '../screens/home/Allexpertise';
 import MusicComposer from '../screens/jobs/components/MusicComposer';
 import PurposalSent from '../screens/jobs/components/PurposalSent';
+import ChatUser from '../screens/chat/ChatUser';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export default function AppNavigator({}) {
+export default function AppNavigator({navigation}) {
   const {userToken, isFirstOpen} = useAppSelector(state => state.auth);
 
   return (
@@ -161,10 +165,24 @@ export default function AppNavigator({}) {
             component={MusicComposer}
             options={{headerShown: false}}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="PurposalSent"
             component={PurposalSent}
             options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ChatUser"
+            component={ChatUser}
+            options={({route}: any) => ({
+              title: route.params.chatRoomId,
+              ...TransitionPresets.SlideFromRightIOS,
+              headerRight: () => (
+                <Feather name="more-vertical" size={20} style={{right: 10}} />
+              ),
+              headerLeft: () => (
+                <Feather name="arrow-left" size={20} style={{left: 10}} />
+              ),
+            })}
           />
         </Stack.Group>
       </Stack.Navigator>

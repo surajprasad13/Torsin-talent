@@ -35,6 +35,7 @@ export type RootStackParamList = {
   Allexpertise: undefined;
   MusicComposer: undefined;
   PurposalSent: undefined;
+  ChatUser: undefined;
 };
 
 export type AuthScreenParamList = {

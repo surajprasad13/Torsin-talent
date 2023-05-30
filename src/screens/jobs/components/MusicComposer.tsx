@@ -61,7 +61,7 @@ const MusicComposer = ({route}) => {
             }}>
             <FastImage
               source={{
-                uri: 'https://www.adorama.com/alc/wp-content/uploads/2017/10/shutterstock_76086133.jpg',
+                uri: item.photos[0],
               }}
               resizeMode="cover"
               style={{width: 50, height: 50, borderRadius: 25}}
