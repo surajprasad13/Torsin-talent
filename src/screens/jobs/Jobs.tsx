@@ -142,11 +142,11 @@ const Jobs = ({}) => {
           <View style={{padding: 10, marginTop: 10}}>
             <Text
               style={{
-                fontFamily: fonts.regular,
+                fontFamily: fonts.semibold,
                 fontSize: 16,
                 color: '#1E202B',
               }}>
-              Jobs based on your expertise
+              All Jobs
             </Text>
           </View>
         )}

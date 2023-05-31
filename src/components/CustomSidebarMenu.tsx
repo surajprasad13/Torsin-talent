@@ -29,7 +29,7 @@ import {useAppSelector} from '../hooks';
 const List = [
   {
     title: 'Notifications',
-    route: '',
+    route: 'Notifications',
     icon: ({color}: {color: string}) => (
       <EvilIcon name="bell" color={color} size={20} />
     ),
@@ -37,49 +37,56 @@ const List = [
 
   {
     title: 'Proposals',
-    route: '',
+    route: 'Proposals',
     icon: ({color}: {color: string}) => (
       <IonIcon name="newspaper-outline" color={color} size={20} />
     ),
   },
   {
     title: 'My Jobs',
-    route: '',
+    route: 'MyJobs',
     icon: ({color}: {color: string}) => (
       <FontAwesome name="calendar-check-o" color={color} size={20} />
     ),
   },
   {
     title: 'My Rating',
-    route: '',
+    route: 'MyRatings',
+    icon: ({color}: {color: string}) => (
+      <EvilIcon name="star" color={color} size={20} />
+    ),
+  },
+  {
+    title: 'My Services',
+    route: 'MyServices',
     icon: ({color}: {color: string}) => (
       <EvilIcon name="star" color={color} size={20} />
     ),
   },
   {
     title: 'Payment',
-    route: '',
+    route: 'Payments',
     icon: ({color}: {color: string}) => (
       <MaterialIcon name="payments" color={color} size={20} />
     ),
   },
   {
     title: 'About us',
-    route: '',
+    route: 'AboutUs',
     icon: ({color}: {color: string}) => (
       <AntDesign name="infocirlceo" color={color} size={20} />
     ),
   },
   {
     title: 'Terms and Privacy',
-    route: '',
+    route: 'TermsPrivacy',
     icon: ({color}: {color: string}) => (
       <IonIcon name="shield-checkmark-outline" color={color} size={20} />
     ),
   },
   {
     title: 'Help and Support',
-    route: '',
+    route: 'HelpSupport',
     icon: ({color}: {color: string}) => (
       <IonIcon name="md-headset" color={color} size={20} />
     ),
@@ -146,7 +153,7 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                       state.index == index ? colors.white : 'transparent',
                   },
                 ]}
-                onPress={() => navigation.navigate('Myjob')}>
+                onPress={() => navigation.navigate(item.route)}>
                 <View>
                   {item.icon({
                     color: state.index == index ? colors.primary : colors.grey,

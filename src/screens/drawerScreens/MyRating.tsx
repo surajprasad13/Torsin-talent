@@ -1,14 +1,20 @@
-import React from "react"
-import {View, Text, StyleSheet} from "react-native"
+import React from 'react';
+import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 
 const MyRating = () => {
   return (
-    <View>
-     <Text>Hello</Text>
-    </View>
-  )
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Text>Hello</Text>
+      </View>
+    </SafeAreaView>
+  );
 };
 
-export default MyRating;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
-const styles = StyleSheet.create({})
+export default MyRating;

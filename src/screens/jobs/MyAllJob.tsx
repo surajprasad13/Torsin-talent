@@ -1,5 +1,5 @@
-import {View, Text, SafeAreaView, Pressable, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
+import {View, Text, SafeAreaView, Pressable, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 //icons
@@ -11,21 +11,28 @@ import ActiveJob from './ActiveJob';
 import PastJob from './PastJob';
 import NewJob from './NewJob';
 
-const Myjob = () => {
+const jobs = [
+  {
+    title: 'Active Jobs',
+    section: 'active',
+    component: (index: number) => <ActiveJob key={index.toString()} />,
+  },
+  {
+    title: 'Past Jobs',
+    section: 'past',
+    component: (index: number) => <PastJob key={index.toString()} />,
+  },
+  {
+    title: 'New Jobs',
+    section: 'new',
+    component: (index: number) => <NewJob key={index.toString()} />,
+  },
+];
+
+const MyAlljob = () => {
   const navigation = useNavigation();
-  const [section, setSection] = useState('basic');
-  const withBorder = {
-    color: colors.primary,
-    backgroundColor: colors.white,
-    fontSize: 15,
-    padding: 8,
-  };
-  const withoutBorder = {
-    color: colors.white,
-    fontSize: 15,
-    fontFamily: fonts.regular,
-    padding: 8,
-  };
+  const [section, setSection] = useState('active');
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <View style={{backgroundColor: colors.white, padding: 10}}>
@@ -45,46 +52,31 @@ const Myjob = () => {
           My Jobs
         </Text>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          padding: 10,
-          backgroundColor: colors.primary,
-        }}>
-        <Pressable onPress={() => setSection('active')}>
-          <Text
-            style={[
-              styles.jobText,
-              section == 'active' ? withBorder : withoutBorder,
-            ]}>
-            Active Jobs
-          </Text>
-        </Pressable>
-
-        <Pressable onPress={() => setSection('past')}>
-          <Text
-            style={[
-              styles.jobText,
-              section == 'past' ? withBorder : withoutBorder,
-            ]}>
-            Past Jobs
-          </Text>
-        </Pressable>
-
-        <Pressable onPress={() => setSection('new')}>
-          <Text
-            style={[
-              styles.jobText,
-              section == 'new' ? withBorder : withoutBorder,
-            ]}>
-            New Jobs
-          </Text>
-        </Pressable>
+      <View style={styles.topContainer}>
+        {jobs.map((item, index) => (
+          <Pressable
+            key={index.toString()}
+            onPress={() => setSection(item.section)}
+            style={{
+              padding: 8,
+              backgroundColor:
+                section == item.section ? colors.white : colors.primary,
+              borderRadius: 8,
+            }}>
+            <Text
+              style={{
+                fontFamily: fonts.regular,
+                color: section == item.section ? colors.primary : colors.white,
+              }}>
+              {item.title}
+            </Text>
+          </Pressable>
+        ))}
       </View>
-      <View>{section == 'active' ? <ActiveJob /> : null}</View>
-      <View>{section == 'past' ? <PastJob /> : null}</View>
-      <View>{section == 'new' ? <NewJob /> : null}</View>
+
+      {jobs
+        .filter(item => item.section == section)
+        .map((_item, index) => _item.component(index))}
     </SafeAreaView>
   );
 };
@@ -95,8 +87,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     fontSize: 16,
   },
+  topContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: colors.primary,
+  },
 });
 
-export default Myjob;
-
-//{section == "basic" ? < BasicView /> : null}
+export default MyAlljob;
