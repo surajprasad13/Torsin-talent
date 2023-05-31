@@ -1,15 +1,14 @@
-import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
 import React from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
-const WebScreen = ({route}) => {
+import WebView from 'react-native-webview';
+
+const WebScreen = ({route}: any) => {
   const {item} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
-        
-      <View>
-        <Text>WebScreen</Text>
-      </View>
+      <WebView source={{uri: item}} style={{flex: 1}} />
     </SafeAreaView>
   );
 };

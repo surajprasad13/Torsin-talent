@@ -37,14 +37,27 @@ import MusicComposer from '../screens/jobs/components/MusicComposer';
 import PurposalSent from '../screens/jobs/components/PurposalSent';
 import ChatUser from '../screens/chat/ChatUser';
 import Myjob from '../screens/jobs/MyAllJob';
+import WebScreen from '../screens/WebScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   const {userToken, isFirstOpen} = useAppSelector(state => state.auth);
 
+  const config = {
+    screens: {
+      LoginScreen: 'login',
+      ChatUser: 'chat',
+    },
+  };
+
+  const linking = {
+    prefixes: ['talent://'],
+    config,
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator
         screenOptions={{}}
         initialRouteName={
@@ -186,6 +199,15 @@ export default function AppNavigator() {
               ...TransitionPresets.SlideFromRightIOS,
               headerShown: false,
             }}
+          />
+          <Stack.Screen
+            name="WebScreen"
+            component={WebScreen}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+            initialParams={{item: ''}}
           />
         </Stack.Group>
       </Stack.Navigator>

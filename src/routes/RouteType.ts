@@ -37,6 +37,9 @@ export type RootStackParamList = {
   PurposalSent: undefined;
   ChatUser: undefined;
   Myjob: undefined;
+  WebScreen: {
+    item: string;
+  };
 };
 
 export type AuthScreenParamList = {

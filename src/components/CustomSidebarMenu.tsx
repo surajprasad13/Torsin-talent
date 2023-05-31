@@ -8,7 +8,7 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native';
-
+import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
 // icons
@@ -23,7 +23,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Logout from './Logout';
 import CircleProgress from './CircleProgress';
 import {colors, fonts} from '../theme';
-import {Divider} from 'react-native-paper';
 import {useAppSelector} from '../hooks';
 
 const List = [
@@ -153,7 +152,27 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                       state.index == index ? colors.white : 'transparent',
                   },
                 ]}
-                onPress={() => navigation.navigate(item.route)}>
+                onPress={() => {
+                  switch (item.route) {
+                    case 'AboutUs':
+                      navigation.navigate('WebScreen', {
+                        item: 'https://google.com',
+                      });
+                      break;
+                    case 'TermsPrivacy':
+                      navigation.navigate('WebScreen', {
+                        item: 'https://facebook.com',
+                      });
+                      break;
+                    case 'HelpSupport':
+                      navigation.navigate('WebScreen', {
+                        item: 'https://github.com',
+                      });
+                      break;
+                    default:
+                      navigation.navigate(item.route);
+                  }
+                }}>
                 <View>
                   {item.icon({
                     color: state.index == index ? colors.primary : colors.grey,
