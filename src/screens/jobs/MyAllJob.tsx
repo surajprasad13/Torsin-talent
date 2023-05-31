@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, SafeAreaView, Pressable, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -29,9 +29,14 @@ const jobs = [
   },
 ];
 
-const MyAlljob = () => {
+const MyAlljob = ({route}) => {
+  const {sectionId} = route.params;
   const navigation = useNavigation();
   const [section, setSection] = useState('active');
+
+  useEffect(() => {
+    setSection(sectionId);
+  }, [sectionId]);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>

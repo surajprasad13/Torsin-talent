@@ -154,9 +154,19 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                 ]}
                 onPress={() => {
                   switch (item.route) {
+                    case 'Proposals':
+                      navigation.navigate('Proposals', {
+                        sectionId: 'new',
+                      });
+                      break;
+                    case 'MyJobs':
+                      navigation.navigate('MyJobs', {
+                        sectionId: 'active',
+                      });
+                      break;
                     case 'AboutUs':
                       navigation.navigate('WebScreen', {
-                        item: 'https://google.com',
+                        item: 'https://talent-torsin.apponward.com',
                       });
                       break;
                     case 'TermsPrivacy':

@@ -3,7 +3,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import AboutUs from '../screens/drawerScreens/AboutUs';
 import CustomSidebarMenu from '../components/CustomSidebarMenu';
-import Proposals from '../screens/drawerScreens/Proposals';
 import MyRating from '../screens/drawerScreens/MyRating';
 import MyService from '../screens/drawerScreens/MyService';
 import Payment from '../screens/drawerScreens/Payment';
@@ -46,7 +45,7 @@ const DrawerNavigation = () => {
         component={Notification}
         options={{}}
       />
-      <Drawer.Screen name="Proposals" component={Proposals} options={{}} />
+      <Drawer.Screen name="Proposals" component={MyAlljob} options={{}} />
       <Drawer.Screen name="MyJobs" component={MyAlljob} options={{}} />
       <Drawer.Screen name="MyRatings" component={MyRating} options={{}} />
       <Drawer.Screen name="Payments" component={Payment} options={{}} />

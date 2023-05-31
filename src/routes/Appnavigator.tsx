@@ -38,6 +38,11 @@ import PurposalSent from '../screens/jobs/components/PurposalSent';
 import ChatUser from '../screens/chat/ChatUser';
 import Myjob from '../screens/jobs/MyAllJob';
 import WebScreen from '../screens/WebScreen';
+import DetailActiveJob from '../screens/jobs/components/DetailActiveJob';
+import RatingReview from '../screens/jobs/services/RatingReview';
+import ReportProblem from '../screens/jobs/services/ReportProblem';
+import DetailPastJob from '../screens/jobs/components/DetailPastJob';
+import DetailNewJob from '../screens/jobs/components/DetailNewJob';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -195,6 +200,46 @@ export default function AppNavigator() {
           <Stack.Screen
             name="Myjob"
             component={Myjob}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DetailActiveJob"
+            component={DetailActiveJob}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="RatingReview"
+            component={RatingReview}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ReportProblem"
+            component={ReportProblem}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DetailPastJob"
+            component={DetailPastJob}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DetailNewJob"
+            component={DetailNewJob}
             options={{
               ...TransitionPresets.SlideFromRightIOS,
               headerShown: false,
