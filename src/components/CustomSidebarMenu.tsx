@@ -156,7 +156,7 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                   switch (item.route) {
                     case 'Proposals':
                       navigation.navigate('Proposals', {
-                        sectionId: 'new',
+                        sectionId: 'sent',
                       });
                       break;
                     case 'MyJobs':
@@ -166,7 +166,7 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                       break;
                     case 'AboutUs':
                       navigation.navigate('WebScreen', {
-                        item: 'https://talent-torsin.apponward.com',
+                        item: 'https://google.com',
                       });
                       break;
                     case 'TermsPrivacy':

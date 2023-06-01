@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   FlatList,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {RadioButton, Searchbar} from 'react-native-paper';
@@ -39,7 +40,29 @@ const Jobs = ({}) => {
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [bottomIndex, setBottomIndex] = useState(-1);
-  const [checked, setChecked] = useState('first');
+
+  const [reason, setReasons] = useState([
+    {
+      title: 'Anytime',
+      checked: false,
+    },
+    {
+      title: 'Past 24 hours',
+      checked: false,
+    },
+    {
+      title: 'Past 3 days',
+      checked: false,
+    },
+    {
+      title: 'Past Week',
+      checked: false,
+    },
+    {
+      title: 'Past month',
+      checked: false,
+    },
+  ]);
 
   const onChangeSearch = (query: string) => {
     setSearchQuery(query);
@@ -199,60 +222,43 @@ const Jobs = ({}) => {
             borderBottomColor: colors.light,
             marginTop: 10,
           }}></View>
-        <View style={styles.toggleText}>
-          <Text style={styles.radioText}>Anytime</Text>
-          <RadioButton
-            value="first"
-            color="#0E184D"
-            status={checked === 'first' ? 'checked' : 'unchecked'}
-            onPress={() => {
-              setChecked('first');
-            }}
-          />
-        </View>
-        <View style={styles.toggleText}>
-          <Text style={styles.radioText}>Past 24 hours</Text>
-          <RadioButton
-            value="second"
-            color="#0E184D"
-            status={checked === 'second' ? 'checked' : 'unchecked'}
-            onPress={() => {
-              setChecked('second');
-            }}
-          />
-        </View>
-        <View style={styles.toggleText}>
-          <Text style={styles.radioText}>Past 3 days</Text>
-          <RadioButton
-            value="third"
-            color="#0E184D"
-            status={checked === 'third' ? 'checked' : 'unchecked'}
-            onPress={() => {
-              setChecked('third');
-            }}
-          />
-        </View>
-        <View style={styles.toggleText}>
-          <Text style={styles.radioText}>Past week</Text>
-          <RadioButton
-            value="four"
-            color="#0E184D"
-            status={checked === 'four' ? 'checked' : 'unchecked'}
-            onPress={() => {
-              setChecked('four');
-            }}
-          />
-        </View>
-        <View style={styles.toggleText}>
-          <Text style={styles.radioText}>Past month</Text>
-          <RadioButton
-            value="five"
-            color="#0E184D"
-            status={checked === 'five' ? 'checked' : 'unchecked'}
-            onPress={() => {
-              setChecked('five');
-            }}
-          />
+        <View style={{margin: 10}}>
+          {reason.map(({title, checked}, index) => {
+            return (
+              <Pressable
+                onPress={() => {
+                  reason[index].checked = !reason[index].checked;
+                  setReasons([...reason]);
+                }}
+                style={{
+                  margin: 5,
+                  padding: 10,
+                  borderRadius: 10,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  // borderWidth: 1,
+                  // borderColor: checked ? colors.primary : 'white',
+                }}
+                key={index.toString()}>
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    textTransform: 'capitalize',
+                  }}>
+                  {title}
+                </Text>
+
+                <MaterialIcons
+                  name={
+                    checked ? 'radio-button-checked' : 'radio-button-unchecked'
+                  }
+                  color={checked ? colors.primary : '#D9D9D9'}
+                  size={25}
+                />
+              </Pressable>
+            );
+          })}
         </View>
         <View
           style={{

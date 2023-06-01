@@ -39,6 +39,9 @@ export type RootStackParamList = {
   ReportProblem: undefined;
   DetailPastJob: undefined;
   DetailNewJob: undefined;
+  AddJobDetails: undefined;
+  ProposalDetail: undefined;
+  ProposalAcceptDetail: undefined;
   WebScreen: {
     item: string;
   };

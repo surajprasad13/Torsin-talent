@@ -165,6 +165,7 @@ const MusicComposer = ({route}) => {
             <CustomButton
               disabled={true}
               title="Apply for job"
+              onPress={() => navigation.navigate('AddJobDetails')}
               // onPress={() => navigation.navigate('PurposalSent')}
             />
           </View>

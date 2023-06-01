@@ -34,7 +34,7 @@ import MusicJob from '../screens/jobs/components/MusicJob';
 import OpenModal from '../screens/jobs/components/OpenModal';
 import Allexpertise from '../screens/home/Allexpertise';
 import MusicComposer from '../screens/jobs/components/MusicComposer';
-import PurposalSent from '../screens/jobs/components/PurposalSent';
+import PurposalSent from '../screens/proposals/PurposalSentSuccess';
 import ChatUser from '../screens/chat/ChatUser';
 import Myjob from '../screens/jobs/MyAllJob';
 import WebScreen from '../screens/WebScreen';
@@ -43,6 +43,9 @@ import RatingReview from '../screens/jobs/services/RatingReview';
 import ReportProblem from '../screens/jobs/services/ReportProblem';
 import DetailPastJob from '../screens/jobs/components/DetailPastJob';
 import DetailNewJob from '../screens/jobs/components/DetailNewJob';
+import AddJobDetails from '../screens/proposals/AddJobDetails';
+import ProposalDetail from '../screens/proposals/ProposalSentDetail';
+import ProposalAcceptDetail from '../screens/proposals/ProposalAcceptDetail';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -240,6 +243,30 @@ export default function AppNavigator() {
           <Stack.Screen
             name="DetailNewJob"
             component={DetailNewJob}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AddJobDetails"
+            component={AddJobDetails}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ProposalDetail"
+            component={ProposalDetail}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ProposalAcceptDetail"
+            component={ProposalAcceptDetail}
             options={{
               ...TransitionPresets.SlideFromRightIOS,
               headerShown: false,
