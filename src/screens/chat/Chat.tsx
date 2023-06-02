@@ -7,6 +7,7 @@ import {
   TextInput,
   SafeAreaView,
   ScrollView,
+  Animated,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -62,39 +63,85 @@ const list = [
 
 const Chat = ({}) => {
   const navigation = useNavigation();
+  const [isTextInputVisible, setTextInputVisible] = useState(false);
+
+  const handleSearchIconPress = () => {
+    setTextInputVisible(true);
+  };
+  const cancelSearchIconPress = () => {
+    setTextInputVisible(false);
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
-      <ScrollView>
-        <TouchableOpacity
+      {!isTextInputVisible ? (
+        <View
           style={{
-            padding: 5,
-            margin: 10,
-            backgroundColor: colors.white,
-            borderRadius: 30,
-            flexDirection: 'row',
+            justifyContent: 'center',
             alignItems: 'center',
-            borderWidth: 0.5,
-            borderColor: '#D3D3D3',
+            padding: 20,
+            backgroundColor: colors.white,
+          }}>
+          <Text
+            style={{
+              fontFamily: fonts.medium,
+              color: colors.black,
+              fontSize: 16,
+            }}>
+            Chats
+          </Text>
+          <Feather
+            onPress={handleSearchIconPress}
+            name="search"
+            size={15}
+            style={{position: 'absolute', right: 10, top: 15}}
+          />
+        </View>
+      ) : (
+        <Animated.View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            padding: 10,
+            alignItems: 'center',
           }}>
           <Feather
+            onPress={handleSearchIconPress}
             name="search"
-            size={18}
-            color={colors.black}
-            style={{marginLeft: 10}}
+            size={15}
+            style={{position: 'absolute', left: 20, top: 20}}
           />
-
-          <TextInput
-            placeholder="Search"
-            disableFullscreenUI
-            value={list}
-            placeholderTextColor="#D3D3D3"
+          <View
             style={{
-              padding: 10,
-              flex: 0.95,
-            }}
-          />
-        </TouchableOpacity>
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: colors.white,
+              borderWidth: 1,
+              borderRadius: 30,
+              borderColor: '#BDBDBD',
+              flex: 0.9,
+            }}>
+            <Feather
+              name="search"
+              size={18}
+              color={colors.primary}
+              style={{marginLeft: 10}}
+            />
+            <TextInput
+              placeholder="Search"
+              placeholderTextColor="#BDBDBD"
+              style={{
+                padding: 10,
+                flex: 1,
+              }}
+            />
+          </View>
+          <Text onPress={cancelSearchIconPress} style={{color: colors.red}}>
+            Cancel
+          </Text>
+        </Animated.View>
+      )}
+      <ScrollView>
         <View
           style={{
             ...appstyle.shadow,

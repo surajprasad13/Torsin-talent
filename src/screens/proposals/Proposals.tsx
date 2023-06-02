@@ -13,7 +13,7 @@ import ProposalsReject from './ProposalsReject';
 
 const jobs = [
   {
-    title: 'Sent',
+    title: 'Proposed',
     section: 'sent',
     component: (index: number) => <ProposalSent key={index.toString()} />,
   },
