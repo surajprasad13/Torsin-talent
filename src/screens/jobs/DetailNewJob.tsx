@@ -8,20 +8,17 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {appstyle, colors, fonts} from '../../../theme';
+import {appstyle, colors, fonts} from '../../theme';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import FastImage from 'react-native-fast-image';
 import {Divider} from 'react-native-paper';
-import {CustomButton} from '../../../components';
-import moment from 'moment';
 
-const DetailActiveJob = ({route}) => {
+const DetailNewJob = ({route}) => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -42,7 +39,7 @@ const DetailActiveJob = ({route}) => {
             <Feather name="arrow-left" size={20} />
           </Pressable>
           <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-            Active Job details
+            New Job details
           </Text>
         </View>
         <View style={styles.cardContainer}>
@@ -57,7 +54,7 @@ const DetailActiveJob = ({route}) => {
               marginTop: 20,
             }}>
             <FastImage
-              source={require('../../../assets/images/men.png')}
+              source={require('../../assets/images/men.png')}
               resizeMode="cover"
               style={{width: 50, height: 50, borderRadius: 25}}
             />
@@ -125,35 +122,6 @@ const DetailActiveJob = ({route}) => {
             </Text>
           </View>
 
-          <Divider style={{marginTop: 20}} />
-
-          <View
-            style={{
-              borderRadius: 10,
-              marginTop: 20,
-            }}>
-            <Text
-              style={{
-                fontFamily: fonts.semibold,
-                color: colors.black,
-                fontSize: 16,
-              }}>
-              Photos
-            </Text>
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-              }}>
-              <FastImage
-                source={require('../../../assets/images/men.png')}
-                style={styles.innerImage}
-              />
-            </View>
-          </View>
-
           <View
             style={{
               marginTop: 30,
@@ -166,16 +134,16 @@ const DetailActiveJob = ({route}) => {
                 backgroundColor: colors.primary,
                 borderRadius: 12,
                 justifyContent: 'center',
-                width: '60%',
+                width: '45%',
               }}>
               <Text
                 style={{
                   fontFamily: fonts.bold,
                   color: colors.white,
-                  fontSize: 14,
+                  fontSize: 15,
                   textAlign: 'center',
                 }}>
-                Request Payment
+                Accept
               </Text>
             </Pressable>
 
@@ -185,113 +153,20 @@ const DetailActiveJob = ({route}) => {
                 backgroundColor: colors.red,
                 borderRadius: 10,
                 justifyContent: 'center',
-                width: '35%',
-                height: 50,
+                width: '45%',
               }}>
               <Text
                 style={{
                   fontFamily: fonts.bold,
                   color: colors.white,
-                  fontSize: 14,
+                  fontSize: 15,
                   textAlign: 'center',
                 }}>
-                Cancel
+                Reject
               </Text>
             </Pressable>
           </View>
         </View>
-
-        <Pressable
-          onPress={() => navigation.navigate('RatingReview')}
-          style={{
-            ...appstyle.shadow,
-            marginTop: 10,
-            padding: 15,
-            margin: 10,
-            flexDirection: 'row',
-            borderRadius: 15,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              backgroundColor: '#D6DFFF',
-              padding: 15,
-              borderRadius: 100,
-            }}>
-            <AntDesign name="star" size={30} style={{color: colors.primary}} />
-          </View>
-          <View
-            style={{
-              width: '80%',
-            }}>
-            <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-              Add Rating & Review
-            </Text>
-            <Text
-              style={{
-                fontFamily: fonts.regular,
-                marginTop: 5,
-                fontSize: 10,
-                opacity: 0.8,
-                color: '#1E202B',
-                lineHeight: 15,
-              }}>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Blanditiis labore iusto velit aspernatur deleniti necessitatibus
-              molestias ad, dolores nisi harum placeat quis consequuntur hic
-              libero laboriosam nam iste, ipsam accusantium.
-            </Text>
-          </View>
-        </Pressable>
-
-        <Pressable
-          onPress={() => navigation.navigate('ReportProblem')}
-          style={{
-            ...appstyle.shadow,
-            marginTop: 10,
-            padding: 15,
-            margin: 10,
-            flexDirection: 'row',
-            borderRadius: 15,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              backgroundColor: '#D6DFFF',
-              padding: 15,
-              borderRadius: 100,
-            }}>
-            <Ionicons
-              name="md-shield-checkmark"
-              size={30}
-              style={{color: colors.primary}}
-            />
-          </View>
-          <View
-            style={{
-              width: '80%',
-            }}>
-            <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-              Report a problems
-            </Text>
-            <Text
-              style={{
-                fontFamily: fonts.regular,
-                marginTop: 5,
-                fontSize: 10,
-                opacity: 0.8,
-                color: '#1E202B',
-                lineHeight: 15,
-              }}>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Blanditiis labore iusto velit aspernatur deleniti necessitatibus
-              molestias ad, dolores nisi harum placeat quis consequuntur hic
-              libero laboriosam nam iste, ipsam accusantium.
-            </Text>
-          </View>
-        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
@@ -334,4 +209,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailActiveJob;
+export default DetailNewJob;

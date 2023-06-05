@@ -1,10 +1,9 @@
 import React from 'react';
-import {Text} from 'react-native';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 
 //icons
-import Feather from 'react-native-vector-icons/Feather';
 
 /**
  * Screens
@@ -33,16 +32,16 @@ import SearchJob from '../screens/jobs/components/SearchJob';
 import MusicJob from '../screens/jobs/components/MusicJob';
 import OpenModal from '../screens/jobs/components/OpenModal';
 import Allexpertise from '../screens/home/Allexpertise';
-import MusicComposer from '../screens/jobs/components/MusicComposer';
-import PurposalSent from '../screens/proposals/PurposalSentSuccess';
+import MusicComposer from '../screens/jobs/JobDetail';
+import ProposalSentSuccess from '../screens/proposals/ProposalSentSuccess';
 import ChatUser from '../screens/chat/ChatUser';
 import Myjob from '../screens/jobs/MyAllJob';
 import WebScreen from '../screens/WebScreen';
-import DetailActiveJob from '../screens/jobs/components/DetailActiveJob';
+import DetailActiveJob from '../screens/jobs/DetailActiveJob';
 import RatingReview from '../screens/jobs/services/RatingReview';
 import ReportProblem from '../screens/jobs/services/ReportProblem';
-import DetailPastJob from '../screens/jobs/components/DetailPastJob';
-import DetailNewJob from '../screens/jobs/components/DetailNewJob';
+import DetailPastJob from '../screens/jobs/DetailPastJob';
+import DetailNewJob from '../screens/jobs/DetailNewJob';
 import AddJobDetails from '../screens/proposals/AddJobDetails';
 import ProposalDetail from '../screens/proposals/ProposalSentDetail';
 import ProposalAcceptDetail from '../screens/proposals/ProposalAcceptDetail';
@@ -188,8 +187,8 @@ export default function AppNavigator() {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="PurposalSent"
-            component={PurposalSent}
+            name="ProposalSentSuccess"
+            component={ProposalSentSuccess}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -254,6 +253,9 @@ export default function AppNavigator() {
             options={{
               ...TransitionPresets.SlideFromRightIOS,
               headerShown: false,
+            }}
+            initialParams={{
+              id: 0,
             }}
           />
           <Stack.Screen

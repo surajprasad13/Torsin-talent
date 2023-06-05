@@ -2,16 +2,20 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
 import {GiftedChat, Bubble} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
+
+// Helpers
 import {appstyle, colors, fonts} from '../../theme';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
-import moment from 'moment';
-import {useNavigation} from '@react-navigation/native';
+import {useAppSelector} from '../../hooks';
 
 // helpers
 
-const ChatUser = ({route}) => {
+const ChatUser = ({route}: any) => {
+  const {} = useAppSelector(state => state.user);
   const [messages, setMessages] = useState([]);
   const {chatRoomId} = route.params;
   const navigation = useNavigation();
@@ -23,7 +27,7 @@ const ChatUser = ({route}) => {
       .collection('messages')
       .orderBy('createdAt', 'desc')
       .onSnapshot(querySnapshot => {
-        const messages = querySnapshot.docs.map(doc => {
+        const _messages = querySnapshot.docs.map(doc => {
           const firebaseData = doc.data();
           const data = {
             _id: doc.id,
@@ -33,14 +37,22 @@ const ChatUser = ({route}) => {
           };
           return data;
         });
-        setMessages(messages);
+        setMessages(_messages);
       });
 
     return () => unsubscribe();
   }, []);
 
+  // useEffect(() => {
+  //   const unsubscribe = firestore()
+  //     .collection('chat')
+  //     .onSnapshot(querySnapshot => {
+  //       console.log(querySnapshot.docs.map(doc => doc.data()));
+  //     });
+  //   return () => unsubscribe();
+  // }, []);
+
   const onSend = async (newMessages = []) => {
-    const {chatRoomId} = route.params;
     const message = newMessages[0];
     await firestore()
       .collection('chat')
@@ -52,7 +64,7 @@ const ChatUser = ({route}) => {
       });
   };
 
-  const renderBubble = props => {
+  const renderBubble = (props: any) => {
     return (
       // Step 3: return the component
       <Bubble

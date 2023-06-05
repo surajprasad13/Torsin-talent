@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, SafeAreaView, Pressable, StyleSheet} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {} from '@react-navigation/native';
 
 //icons
-import Feather from 'react-native-vector-icons/Feather';
 
 //import
-import {appstyle, colors, fonts} from '../../theme';
+import {colors, fonts} from '../../theme';
 import ProposalAccept from './ProposalAccept';
 import ProposalSent from './ProposalSent';
 import ProposalsReject from './ProposalsReject';
+import {Title} from '../../components';
 
 const jobs = [
   {
@@ -30,9 +30,9 @@ const jobs = [
   },
 ];
 
-const Proposals = ({route}) => {
+const Proposals = ({route}: any) => {
   const {sectionId} = route.params;
-  const navigation = useNavigation();
+
   const [section, setSection] = useState('');
 
   useEffect(() => {
@@ -41,23 +41,8 @@ const Proposals = ({route}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
-      <View style={{backgroundColor: colors.white, padding: 10}}>
-        <Feather
-          onPress={() => navigation.goBack()}
-          name="arrow-left"
-          size={20}
-          style={{left: 10, padding: 10, position: 'absolute'}}
-        />
-        <Text
-          style={{
-            alignSelf: 'center',
-            textAlign: 'center',
-            fontFamily: fonts.regular,
-            fontSize: 16,
-          }}>
-          Proposals
-        </Text>
-      </View>
+      <Title title="Proposals" />
+
       <View style={styles.topContainer}>
         {jobs.map((item, index) => (
           <Pressable

@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  TouchableOpacity,
   ScrollView,
   TextInput,
   KeyboardAvoidingView,
@@ -21,14 +20,13 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // components
-import {CustomButton, CustomInput} from '../../components';
+import {CustomButton, CustomInput, Title} from '../../components';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {addService} from '../../redux/actions/userAction';
-import {Button, Dialog, Portal} from 'react-native-paper';
-import {updateSuccess} from '../../redux/reducers/userSlice';
+import {addProposal} from '../../redux/actions/userAction';
+import {resetSuccess} from '../../redux/reducers/userSlice';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {uploadFileToS3, uploadVideoToS3} from '../../services/s3';
 import {decode} from 'base64-arraybuffer';
@@ -37,44 +35,50 @@ import FastImage from 'react-native-fast-image';
 import ImageCropPicker from 'react-native-image-crop-picker';
 
 type InputProps = {
-  serviceName: string;
-  chargeType: string;
-  serviceCharge: string;
-  serviceDescription: string;
-  serviceImage: Array<string>;
-  serviceVideo: string;
+  job: number;
+  message: string;
+  video: string;
+  portfolio: string;
+  projectType: number;
+  charge: number;
+  images: Array<string>;
 };
 
-const AddService = ({}) => {
+const AddService = ({route}: any) => {
+  const {id} = route.params;
+
   const navigation = useNavigation();
 
   const dispatch = useAppDispatch();
 
   const {userToken} = useAppSelector(state => state.auth);
-  const {loading, success, error} = useAppSelector(state => state.user);
+  const {loading, addSuccess} = useAppSelector(state => state.user);
 
-  const [inputs, setInputs] = useState<InputProps>({
-    serviceName: '',
-    chargeType: '',
-    serviceCharge: '',
-    serviceDescription: '',
-    serviceImage: [],
-    serviceVideo: '',
+  const [inputs, setInputs] = useState({
+    message: '',
+    video: '',
+    portfolio: '',
+    projectType: '',
+    charge: '',
+    images: [],
   });
+
+  const [data, setData] = useState<InputProps | object>({job: id ?? 0});
 
   const [errors, setErrors] = useState<any>({});
 
-  const [image, setImage] = useState(['', '', '', '', '']);
+  const [image, setImage] = useState(['', '', '']);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
   const [videoLoading, setVideoLoading] = useState<boolean>(false);
   const [video, setVideo] = useState('');
 
-  const data = [
+  const projectTypes = [
     {label: 'Fixed', value: '1'},
     {label: 'Hourly', value: '2'},
   ];
 
   const handleOnchange = (text: string, input: any) => {
+    setData((prevState: any) => ({...prevState, [input]: text}));
     setInputs((prevState: any) => ({...prevState, [input]: text}));
   };
 
@@ -83,8 +87,8 @@ const AddService = ({}) => {
 
     let isValid = true;
 
-    if (inputs.serviceImage.length == 0) {
-      handleError('Please add atleast one image', 'image');
+    if (inputs.message.length == 0) {
+      handleError('Please add message', 'message');
       isValid = false;
     }
 
@@ -98,25 +102,16 @@ const AddService = ({}) => {
   };
 
   const postService = () => {
-    if (inputs.serviceVideo == '') {
-      delete inputs.serviceVideo;
-      let value = {
-        inputs,
-        userToken,
-      };
-      dispatch(addService(value));
-    } else {
-      let value = {
-        inputs,
-        userToken,
-      };
-      dispatch(addService(value));
-    }
+    let value = {
+      inputs: data,
+      userToken,
+    };
+    dispatch(addProposal(value));
   };
 
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {
-      dispatch(updateSuccess());
+      dispatch(resetSuccess());
     });
     return () => listener;
   }, []);
@@ -142,13 +137,13 @@ const AddService = ({}) => {
           );
           setInputs((prevState: any) => ({
             ...prevState,
-            serviceImage: [...inputs.serviceImage, url.Location],
+            images: [...inputs.images, url.Location],
           }));
+          //@ts-ignore
           image[index] = response.assets[0].base64;
           setImageLoading(false);
         } catch (_error: any) {
           setImageLoading(false);
-          console.log('Error uploading file:', _error);
         }
       }
     });
@@ -167,50 +162,31 @@ const AddService = ({}) => {
         response.sourceURL as string,
         response.filename as string,
       );
-      console.log(url.body.postResponse.location, 'Url');
+
       setInputs((prevState: any) => ({
         ...prevState,
         serviceVideo: url.body.postResponse.location,
       }));
 
-      setVideo(response.sourceURL);
+      setVideo(response.sourceURL as string);
       setVideoLoading(false);
     } else {
       setVideoLoading(false);
     }
   };
 
+  useEffect(() => {
+    if (addSuccess) {
+      navigation.navigate('ProposalSentSuccess');
+    }
+  }, [addSuccess]);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: colors.white,
-            padding: 10,
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              if (navigation.canGoBack()) {
-                navigation.goBack();
-              }
-            }}
-            style={{padding: 10}}>
-            <Feather name="arrow-left" size={20} />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              color: '#000C14',
-            }}>
-            Add proposal details
-          </Text>
-          <View />
-        </View>
+        <Title title="Add Proposal Detail" />
 
         <ScrollView>
           <View style={{marginTop: 0, margin: 15}}>
@@ -222,32 +198,43 @@ const AddService = ({}) => {
               }}>
               Message
             </Text>
-            <View
+
+            <TextInput
+              placeholder="I am writing to submit a proposal on behalf of your requirement for  ..."
+              multiline={true}
+              placeholderTextColor="#4F4F4F"
+              value={inputs.message}
+              onChangeText={text => {
+                handleOnchange(text, 'message');
+              }}
+              onFocus={() => {
+                handleError('', 'message');
+              }}
+              blurOnSubmit={true}
+              onSubmitEditing={() => {
+                Keyboard.dismiss();
+              }}
               style={{
-                width: '100%',
+                marginTop: 10,
+                padding: 15,
                 height: 170,
                 borderWidth: 0.5,
                 borderRadius: 8,
                 borderColor: colors.light,
-                marginTop: 10,
                 backgroundColor: colors.white,
-              }}>
-              <TextInput
-                placeholder="Type here..."
-                multiline={true}
-                placeholderTextColor="#4F4F4F"
-                value={inputs.serviceDescription}
-                onChangeText={text =>
-                  handleOnchange(text, 'serviceDescription')
-                }
-                blurOnSubmit={true}
-                onSubmitEditing={() => {
-                  Keyboard.dismiss();
-                }}
-                style={{padding: 15, top: 10, fontSize: 14}}
-              />
-            </View>
+              }}
+            />
+            {errors && (
+              <Text
+                style={{
+                  marginTop: 5,
+                  color: 'red',
+                }}>
+                {errors.message}
+              </Text>
+            )}
           </View>
+
           <View
             style={{
               flexDirection: 'row',
@@ -282,18 +269,20 @@ const AddService = ({}) => {
                       paddingRight: 10,
                     },
                   ]}
-                  data={data}
-                  search
+                  data={projectTypes}
                   labelField="label"
                   valueField="value"
                   placeholder={'Select'}
                   placeholderStyle={{color: '#828282'}}
-                  searchPlaceholder="Search..."
-                  value={String(inputs.chargeType)}
+                  value={String(inputs.projectType)}
                   onChange={item => {
+                    setData((prevState: any) => ({
+                      ...prevState,
+                      projectType: Number(item.value),
+                    }));
                     setInputs((prevState: any) => ({
                       ...prevState,
-                      chargeType: Number(item.value),
+                      projectType: Number(item.value),
                     }));
                   }}
                   onChangeText={() => {
@@ -307,8 +296,10 @@ const AddService = ({}) => {
               label="Service Charge"
               placeholder="eg. $500"
               keyboardType="number-pad"
-              value={String(inputs.serviceCharge)}
-              onChangeText={text => handleOnchange(text, 'serviceCharge')}
+              value={String(inputs.charge)}
+              onChangeText={text => {
+                handleOnchange(text, 'charge');
+              }}
               containerStyle={{marginTop: 10, width: '45%'}}
             />
           </View>
@@ -333,83 +324,49 @@ const AddService = ({}) => {
             {imageLoading && <ActivityIndicator style={{margin: 20}} />}
 
             <View style={styles.photoContainer}>
-              {image[0].length > 0 ? (
-                <Pressable
-                  onPress={() => uploadImage(0)}
-                  style={styles.innerPhotos}>
-                  <FastImage
-                    source={{uri: 'data:image/png;base64,' + image[0]}}
-                    resizeMode="cover"
-                    style={{width: '100%', height: 100, borderRadius: 10}}
-                  />
-                </Pressable>
-              ) : (
-                <Pressable
-                  onPress={() => uploadImage(0)}
-                  style={styles.innerPhotos}>
-                  <Feather name="image" size={30} color="#14226D" />
-                  <Text
-                    style={{fontFamily: fonts.regular, color: colors.black}}>
-                    Click{' '}
-                    <Text
-                      style={{color: colors.primary, fontFamily: fonts.bold}}>
-                      here{' '}
-                    </Text>
-                  </Text>
-                </Pressable>
-              )}
-
-              {image[1].length > 0 ? (
-                <Pressable
-                  onPress={() => uploadImage(0)}
-                  style={styles.innerPhotos}>
-                  <FastImage
-                    source={{uri: 'data:image/png;base64,' + image[1]}}
-                    resizeMode="cover"
-                    style={{width: '100%', height: 100, borderRadius: 10}}
-                  />
-                </Pressable>
-              ) : (
-                <Pressable
-                  onPress={() => uploadImage(1)}
-                  style={styles.innerPhotos}>
-                  <Feather name="image" size={30} color="#14226D" />
-                  <Text
-                    style={{fontFamily: fonts.regular, color: colors.black}}>
-                    Click{' '}
-                    <Text
-                      style={{color: colors.primary, fontFamily: fonts.bold}}>
-                      here{' '}
-                    </Text>
-                  </Text>
-                </Pressable>
-              )}
-
-              {image[2].length > 0 ? (
-                <Pressable
-                  onPress={() => uploadImage(0)}
-                  style={styles.innerPhotos}>
-                  <FastImage
-                    source={{uri: 'data:image/png;base64,' + image[2]}}
-                    resizeMode="cover"
-                    style={{width: '100%', height: 100, borderRadius: 10}}
-                  />
-                </Pressable>
-              ) : (
-                <Pressable
-                  onPress={() => uploadImage(2)}
-                  style={styles.innerPhotos}>
-                  <Feather name="image" size={30} color="#14226D" />
-                  <Text
-                    style={{fontFamily: fonts.regular, color: colors.black}}>
-                    Click{' '}
-                    <Text
-                      style={{color: colors.primary, fontFamily: fonts.bold}}>
-                      here{' '}
-                    </Text>
-                  </Text>
-                </Pressable>
-              )}
+              {image.map((item: string, index: number) => {
+                return (
+                  <View key={index.toString()} style={{flex: 1}}>
+                    {item.length > 0 ? (
+                      <Pressable
+                        onPress={() => uploadImage(0)}
+                        style={styles.innerPhotos}>
+                        <FastImage
+                          source={{
+                            uri: 'data:image/png;base64,' + item,
+                          }}
+                          resizeMode="cover"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: 10,
+                          }}
+                        />
+                      </Pressable>
+                    ) : (
+                      <Pressable
+                        onPress={() => uploadImage(index)}
+                        style={styles.innerPhotos}>
+                        <Feather name="image" size={30} color="#14226D" />
+                        <Text
+                          style={{
+                            fontFamily: fonts.regular,
+                            color: colors.black,
+                          }}>
+                          Click{' '}
+                          <Text
+                            style={{
+                              color: colors.primary,
+                              fontFamily: fonts.bold,
+                            }}>
+                            here{' '}
+                          </Text>
+                        </Text>
+                      </Pressable>
+                    )}
+                  </View>
+                );
+              })}
             </View>
           </View>
 
@@ -455,10 +412,12 @@ const AddService = ({}) => {
             label="Add Portfolio link"
             placeholder="https://portfolio.link.com"
             containerStyle={{marginTop: 10, margin: 15}}
+            value={inputs.portfolio}
+            onChangeText={text => handleOnchange(text, 'portfolio')}
           />
           <CustomButton
             title="Submit"
-            onPress={() => navigation.navigate('PurposalSent')}
+            onPress={validate}
             style={{marginTop: 20}}
             disabled={!loading}
             loading={loading}

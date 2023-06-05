@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -87,7 +87,6 @@ const Chat = ({}) => {
           <TextInput
             placeholder="Search"
             disableFullscreenUI
-            value={list}
             placeholderTextColor="#D3D3D3"
             style={{
               padding: 10,
@@ -103,7 +102,7 @@ const Chat = ({}) => {
             backgroundColor: 'white',
             margin: 10,
           }}>
-          {list.map((item, index, item1) => {
+          {list.map((item, index) => {
             return (
               <TouchableOpacity
                 key={index.toString()}

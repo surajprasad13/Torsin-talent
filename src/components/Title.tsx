@@ -8,7 +8,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {colors, fonts} from '../theme';
 import {useNavigation} from '@react-navigation/native';
 
-const Title = ({title}: any) => {
+const Title = ({title}: {title: string}) => {
   const navigation = useNavigation();
 
   return (

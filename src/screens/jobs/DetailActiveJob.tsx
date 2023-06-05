@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {appstyle, colors, fonts} from '../../../theme';
+import {appstyle, colors, fonts} from '../../theme';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -18,10 +18,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import FastImage from 'react-native-fast-image';
 import {Divider} from 'react-native-paper';
-import {CustomButton} from '../../../components';
-import moment from 'moment';
 
-const DetailPastJob = ({route}) => {
+const DetailActiveJob = ({route}) => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -42,7 +40,7 @@ const DetailPastJob = ({route}) => {
             <Feather name="arrow-left" size={20} />
           </Pressable>
           <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-            Past Job details
+            Active Job details
           </Text>
         </View>
         <View style={styles.cardContainer}>
@@ -57,7 +55,7 @@ const DetailPastJob = ({route}) => {
               marginTop: 20,
             }}>
             <FastImage
-              source={require('../../../assets/images/men.png')}
+              source={require('../../assets/images/men.png')}
               resizeMode="cover"
               style={{width: 50, height: 50, borderRadius: 25}}
             />
@@ -148,10 +146,56 @@ const DetailPastJob = ({route}) => {
                 flexWrap: 'wrap',
               }}>
               <FastImage
-                source={require('../../../assets/images/men.png')}
+                source={require('../../assets/images/men.png')}
                 style={styles.innerImage}
               />
             </View>
+          </View>
+
+          <View
+            style={{
+              marginTop: 30,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Pressable
+              style={{
+                padding: 10,
+                backgroundColor: colors.primary,
+                borderRadius: 12,
+                justifyContent: 'center',
+                width: '60%',
+              }}>
+              <Text
+                style={{
+                  fontFamily: fonts.bold,
+                  color: colors.white,
+                  fontSize: 14,
+                  textAlign: 'center',
+                }}>
+                Request Payment
+              </Text>
+            </Pressable>
+
+            <Pressable
+              style={{
+                padding: 10,
+                backgroundColor: colors.red,
+                borderRadius: 10,
+                justifyContent: 'center',
+                width: '35%',
+                height: 50,
+              }}>
+              <Text
+                style={{
+                  fontFamily: fonts.bold,
+                  color: colors.white,
+                  fontSize: 14,
+                  textAlign: 'center',
+                }}>
+                Cancel
+              </Text>
+            </Pressable>
           </View>
         </View>
 
@@ -181,54 +225,6 @@ const DetailPastJob = ({route}) => {
             }}>
             <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
               Add Rating & Review
-            </Text>
-            <Text
-              style={{
-                fontFamily: fonts.regular,
-                marginTop: 5,
-                fontSize: 10,
-                opacity: 0.8,
-                lineHeight: 15,
-                color: '#1E202B',
-              }}>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Blanditiis labore iusto velit aspernatur deleniti necessitatibus
-              molestias ad, dolores nisi harum placeat quis consequuntur hic
-              libero laboriosam nam iste, ipsam accusantium.
-            </Text>
-          </View>
-        </Pressable>
-
-        <Pressable
-          // onPress={() => navigation.navigate('ReportProblem')}
-          style={{
-            ...appstyle.shadow,
-            marginTop: 10,
-            padding: 15,
-            margin: 10,
-            flexDirection: 'row',
-            borderRadius: 15,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              backgroundColor: '#D6DFFF',
-              padding: 15,
-              borderRadius: 100,
-            }}>
-            <Ionicons
-              name="ios-chatbox-ellipses-outline"
-              size={30}
-              style={{color: colors.primary}}
-            />
-          </View>
-          <View
-            style={{
-              width: '80%',
-            }}>
-            <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-              Chat History
             </Text>
             <Text
               style={{
@@ -266,7 +262,7 @@ const DetailPastJob = ({route}) => {
               borderRadius: 100,
             }}>
             <Ionicons
-              name="ios-chatbox-ellipses-outline"
+              name="md-shield-checkmark"
               size={30}
               style={{color: colors.primary}}
             />
@@ -336,4 +332,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailPastJob;
+export default DetailActiveJob;

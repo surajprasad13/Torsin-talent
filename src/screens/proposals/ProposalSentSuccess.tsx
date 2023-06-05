@@ -1,19 +1,23 @@
-import {View, Text, Image, SafeAreaView, StyleSheet, Alert} from 'react-native';
+import {Text, Image, SafeAreaView, StyleSheet} from 'react-native';
 import React, {useEffect} from 'react';
 import {colors, fonts} from '../../theme';
 import {useNavigation} from '@react-navigation/native';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {resetSuccess} from '../../redux/reducers/authSlice';
 
-const PurposalSent = () => {
+const ProposalSentSuccess = () => {
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+  const {} = useAppSelector(state => state.user);
 
   useEffect(() => {
+    dispatch(resetSuccess());
     const timeout = setTimeout(() => {
-      // Navigate to the desired screen after a specified delay
-      Alert.alert('Proposal sent successfully');
-      navigation.navigate('DrawerNavigation');
-    }, 1000); // Timeout duration in milliseconds
-
-    // Clean up the timeout when the component unmounts or the effect re-runs
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'DrawerNavigation'}],
+      });
+    }, 1000);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -45,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PurposalSent;
+export default ProposalSentSuccess;
