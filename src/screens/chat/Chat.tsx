@@ -19,44 +19,9 @@ import FastImage from 'react-native-fast-image';
 
 const list = [
   {
-    name: 'Vaibhav',
-    email: 'vaibhav@gmail.com',
-    id: 'vaibhav',
-  },
-  {
-    name: 'Shreyash',
-    email: 'shreyash@gmail.com',
-    id: 'shreyash',
-  },
-  {
-    name: 'Tarzan',
-    email: 'tarzan@gmail.com',
-    id: 'tarzan',
-  },
-  {
-    name: 'Apponward',
-    email: 'apponward@gmail.com',
-    id: 'apponward',
-  },
-  {
-    name: 'Amisha',
-    email: 'amisha@gmail.com',
-    id: 'vaibhav',
-  },
-  {
-    name: 'Mayank',
-    email: 'shreyash@gmail.com',
-    id: 'shreyash',
-  },
-  {
-    name: 'Tarzan',
-    email: 'tarzan@gmail.com',
-    id: 'tarzan',
-  },
-  {
-    name: 'Apponward',
-    email: 'apponward@gmail.com',
-    id: 'apponward',
+    name: 'ChatRoom1',
+    email: 'Chat',
+    id: 'ChatRoom1',
   },
 ];
 

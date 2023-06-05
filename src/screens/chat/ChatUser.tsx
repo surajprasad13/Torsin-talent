@@ -16,14 +16,15 @@ import {useAppSelector} from '../../hooks';
 
 const ChatUser = ({route}: any) => {
   const {} = useAppSelector(state => state.user);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any>([]);
+  const {userInfo} = useAppSelector(state => state.auth);
   const {chatRoomId} = route.params;
   const navigation = useNavigation();
 
   useEffect(() => {
     const unsubscribe = firestore()
-      .collection('chat')
-      .doc(chatRoomId)
+      .collection('ChatRooms')
+      .doc('ChatRoom1')
       .collection('messages')
       .orderBy('createdAt', 'desc')
       .onSnapshot(querySnapshot => {
@@ -39,44 +40,37 @@ const ChatUser = ({route}: any) => {
         });
         setMessages(_messages);
       });
-
     return () => unsubscribe();
   }, []);
 
-  // useEffect(() => {
-  //   const unsubscribe = firestore()
-  //     .collection('chat')
-  //     .onSnapshot(querySnapshot => {
-  //       console.log(querySnapshot.docs.map(doc => doc.data()));
-  //     });
-  //   return () => unsubscribe();
-  // }, []);
-
-  const onSend = async (newMessages = []) => {
+  const onSend = async (newMessages: any) => {
     const message = newMessages[0];
     await firestore()
-      .collection('chat')
-      .doc(chatRoomId)
+      .collection('ChatRooms')
+      .doc('ChatRoom1')
       .collection('messages')
       .add({
         ...message,
         createdAt: new Date().getTime(),
+      })
+      .then(() => {
+        //console.log('Messeged');
+      })
+      .catch(() => {
+        //console.log(error);
       });
   };
 
   const renderBubble = (props: any) => {
     return (
-      // Step 3: return the component
       <Bubble
         {...props}
         wrapperStyle={{
           right: {
-            // Here is the color change
             margin: 5,
             ...appstyle.shadow,
           },
           left: {
-            // Here is the color change
             backgroundColor: colors.primary,
             margin: 5,
           },
@@ -128,7 +122,9 @@ const ChatUser = ({route}: any) => {
         messages={messages}
         onSend={newMessages => onSend(newMessages)}
         user={{
-          _id: chatRoomId, // replace with your own user ID
+          _id: String(userInfo?.id),
+          name: userInfo?.fullName,
+          avatar: userInfo?.profileImage,
         }}
         renderBubble={renderBubble}
       />
