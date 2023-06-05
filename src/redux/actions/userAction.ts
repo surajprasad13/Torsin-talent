@@ -149,6 +149,25 @@ const addProposal = createAsyncThunk(
   },
 );
 
+const getAccepted = createAsyncThunk(
+  'user/proposal/accept',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`talent/proposal/accept`, {
+        headers: {Authorization: `Bearer ${value.userToken}`},
+      });
+      return data;
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -158,6 +177,7 @@ export {
   notJobCorrespondSkill,
   searchJob,
   addProposal,
+  getAccepted,
 };
 
 export default {};

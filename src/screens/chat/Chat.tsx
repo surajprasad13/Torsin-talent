@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,9 @@ import Feather from 'react-native-vector-icons/Feather';
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
 import FastImage from 'react-native-fast-image';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {getAccepted} from '../../redux/actions/userAction';
+import moment from 'moment';
 
 const list = [
   {
@@ -27,6 +30,13 @@ const list = [
 
 const Chat = ({}) => {
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+  const {userToken} = useAppSelector(state => state.auth);
+  const {acceptList, loading} = useAppSelector(state => state.user);
+
+  useEffect(() => {
+    dispatch(getAccepted({userToken}));
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
@@ -67,19 +77,23 @@ const Chat = ({}) => {
             backgroundColor: 'white',
             margin: 10,
           }}>
-          {list.map((item, index) => {
+          {acceptList.map((item, index) => {
             return (
               <TouchableOpacity
                 key={index.toString()}
                 onPress={() => {
-                  //@ts-expect-error
-                  navigation.navigate('ChatUser', {chatRoomId: item.id});
+                  navigation.navigate('ChatUser', {item});
                 }}
                 style={styles.container}>
                 <FastImage
-                  source={{uri: 'https://source.unsplash.com/400x400?user'}}
-                  resizeMode="contain"
-                  style={{width: 50, height: 50, borderRadius: 25}}
+                  source={{uri: item.image[0]}}
+                  resizeMode="cover"
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 25,
+                    borderWidth: 0.5,
+                  }}
                 />
                 <View
                   style={{
@@ -91,7 +105,7 @@ const Chat = ({}) => {
                   <View style={{}}>
                     <Text
                       style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
-                      {item.name}
+                      {item.jobName}
                     </Text>
                     <Text
                       style={{
@@ -100,7 +114,7 @@ const Chat = ({}) => {
                         top: 10,
                         opacity: 0.6,
                       }}>
-                      Artist
+                      {item.jobDescription}
                     </Text>
                   </View>
                   <View>
@@ -110,7 +124,7 @@ const Chat = ({}) => {
                         color: '#BDBDBD',
                         textAlign: 'right',
                       }}>
-                      4 hours ago
+                      {moment(item.createdAt).fromNow()}
                     </Text>
                     <View
                       style={{

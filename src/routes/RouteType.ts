@@ -32,7 +32,9 @@ export type RootStackParamList = {
   Allexpertise: undefined;
   MusicComposer: undefined;
   ProposalSentSuccess: undefined;
-  ChatUser: undefined;
+  ChatUser: {
+    item: undefined | {};
+  };
   Myjob: undefined;
   DetailActiveJob: undefined;
   RatingReview: undefined;
