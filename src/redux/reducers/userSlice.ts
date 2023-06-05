@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {
+  addProposal,
   addService,
   addSkill,
   fetchService,
@@ -19,7 +20,7 @@ enum Status {
 interface UserInterface {
   loading: boolean;
   error: null | string | any;
-  success: boolean; // for monitoring the registration process.
+  success: boolean;
   status: null | Status;
   registerSuccess: false;
   skills: Array<string>;
@@ -27,6 +28,7 @@ interface UserInterface {
   correspond: Array<JobDetail>;
   notCorrespond: Array<JobDetail>;
   search: Array<JobDetail>;
+  addSuccess: string;
 }
 
 const initialState: UserInterface = {
@@ -40,6 +42,7 @@ const initialState: UserInterface = {
   correspond: [],
   notCorrespond: [],
   search: [],
+  addSuccess: '',
 };
 
 const userSlice = createSlice({
@@ -50,9 +53,11 @@ const userSlice = createSlice({
       state.success = false;
       state.error = '';
     },
+    resetSuccess: state => {
+      state.addSuccess = '';
+    },
   },
   extraReducers: builder => {
-    //login
     builder
       .addCase(addService.pending, (state, action) => {
         state.status = Status.pending;
@@ -61,7 +66,7 @@ const userSlice = createSlice({
       })
       .addCase(addService.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true; // registration successful
+        state.success = true;
       })
       .addCase(addService.rejected, (state, action) => {
         state.loading = false;
@@ -76,7 +81,7 @@ const userSlice = createSlice({
       })
       .addCase(addSkill.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true; // registration successful
+        state.success = true;
       })
       .addCase(addSkill.rejected, (state, action) => {
         state.loading = false;
@@ -156,10 +161,26 @@ const userSlice = createSlice({
       .addCase(searchJob.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // add propsal
+      .addCase(addProposal.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(addProposal.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.addSuccess = action.payload.response.message.successMessage;
+      })
+      .addCase(addProposal.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const {updateSuccess} = userSlice.actions;
+export const {updateSuccess, resetSuccess} = userSlice.actions;
 
 export default userSlice.reducer;

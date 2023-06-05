@@ -8,6 +8,7 @@ export interface Service {
 }
 
 export interface JobDetail {
+  id?: number;
   jobName: string;
   jobDescription: string;
   location: string;

@@ -28,7 +28,11 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <StatusBar animated={true} barStyle="dark-content" />
+      <StatusBar
+        animated={true}
+        barStyle="dark-content"
+        backgroundColor="white"
+      />
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <PaperProvider>

@@ -31,7 +31,7 @@ export type RootStackParamList = {
   CreatePassword: {item: string} | undefined;
   Allexpertise: undefined;
   MusicComposer: undefined;
-  PurposalSent: undefined;
+  ProposalSentSuccess: undefined;
   ChatUser: undefined;
   Myjob: undefined;
   DetailActiveJob: undefined;
@@ -39,7 +39,7 @@ export type RootStackParamList = {
   ReportProblem: undefined;
   DetailPastJob: undefined;
   DetailNewJob: undefined;
-  AddJobDetails: undefined;
+  AddJobDetails: {id: number};
   ProposalDetail: undefined;
   ProposalAcceptDetail: undefined;
   WebScreen: {

@@ -1,53 +1,27 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Pressable,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import {View, Text, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {appstyle, colors, fonts} from '../../../theme';
+import {appstyle, colors, fonts} from '../../theme';
 
 //icons
-import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FastImage from 'react-native-fast-image';
 import {Divider} from 'react-native-paper';
-import {CustomButton} from '../../../components';
-import {JobDetail} from '../../../types/user';
+import {CustomButton, Title} from '../../components';
+import {JobDetail} from '../../types/user';
 import moment from 'moment';
 
 const projectType = ['', 'Fixed', 'Hourly'];
 
-const MusicComposer = ({route}) => {
-  const {item} = route.params as JobDetail;
+const JobDetails = ({route}: any) => {
+  const {item} = route.params as {item: JobDetail};
 
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
+      <Title title="Job Details" />
       <ScrollView>
-        <View
-          style={{
-            flexDirection: 'row',
-            padding: 10,
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-          }}>
-          <Pressable
-            style={{position: 'absolute', left: 10}}
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <Feather name="arrow-left" size={20} />
-          </Pressable>
-          <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-            Job details
-          </Text>
-        </View>
         <View style={styles.cardContainer}>
           <Text style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
             {item.adminService}
@@ -165,7 +139,9 @@ const MusicComposer = ({route}) => {
             <CustomButton
               disabled={true}
               title="Apply for job"
-              onPress={() => navigation.navigate('AddJobDetails')}
+              onPress={() =>
+                navigation.navigate('AddJobDetails', {id: item.id ?? 0})
+              }
               // onPress={() => navigation.navigate('PurposalSent')}
             />
           </View>
@@ -212,4 +188,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MusicComposer;
+export default JobDetails;

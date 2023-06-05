@@ -129,6 +129,26 @@ const searchJob = createAsyncThunk(
   },
 );
 
+const addProposal = createAsyncThunk(
+  'user/addProposal',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`talent/proposal/job`, value.inputs, {
+        headers: {Authorization: `Bearer ${value.userToken}`},
+      });
+
+      return data;
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -137,6 +157,7 @@ export {
   jobCorrespondSkill,
   notJobCorrespondSkill,
   searchJob,
+  addProposal,
 };
 
 export default {};
