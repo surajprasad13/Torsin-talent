@@ -42,7 +42,9 @@ export type RootStackParamList = {
   DetailPastJob: undefined;
   DetailNewJob: undefined;
   AddJobDetails: {id: number};
-  ProposalDetail: undefined;
+  ProposalDetail: {
+    item: undefined | {};
+  };
   ProposalAcceptDetail: undefined;
   WebScreen: {
     item: string;

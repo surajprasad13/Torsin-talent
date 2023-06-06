@@ -1,43 +1,58 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, SafeAreaView, Pressable, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Pressable,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import {} from '@react-navigation/native';
 
 //icons
 
 //import
 import {colors, fonts} from '../../theme';
-import ProposalAccept from './ProposalAccept';
-import ProposalSent from './ProposalSent';
-import ProposalsReject from './ProposalsReject';
+
+import ProposalStatus from './components/ProposalStatus';
+
 import {Title} from '../../components';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {getProposalStatus} from '../../redux/actions/userAction';
 
 const jobs = [
   {
-    title: 'Sent',
+    title: 'Proposed',
     section: 'sent',
-    component: (index: number) => <ProposalSent key={index.toString()} />,
   },
   {
     title: 'Accepted',
     section: 'accepted',
-    component: (index: number) => <ProposalAccept key={index.toString()} />,
   },
-
   {
     title: 'Rejected',
     section: 'reject',
-    component: (index: number) => <ProposalsReject key={index.toString()} />,
   },
 ];
 
 const Proposals = ({route}: any) => {
   const {sectionId} = route.params;
 
+  const dispatch = useAppDispatch();
+  const {userToken} = useAppSelector(state => state.auth);
+  const {proposalStatus, loading} = useAppSelector(state => state.user);
+  const [filtered, setFiltered] = useState(proposalStatus);
+
   const [section, setSection] = useState('');
 
   useEffect(() => {
     setSection(sectionId);
   }, [sectionId]);
+
+  useEffect(() => {
+    dispatch(getProposalStatus({userToken}));
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
@@ -47,7 +62,22 @@ const Proposals = ({route}: any) => {
         {jobs.map((item, index) => (
           <Pressable
             key={index.toString()}
-            onPress={() => setSection(item.section)}
+            onPress={() => {
+              setSection(item.section);
+              if (item.section == 'accepted') {
+                const data = proposalStatus.filter(
+                  _item => _item.proposalStatus == 2,
+                );
+                setFiltered(data);
+              } else if (item.section == 'reject') {
+                const data = proposalStatus.filter(
+                  _item => _item.proposalStatus == 3,
+                );
+                setFiltered(data);
+              } else {
+                setFiltered(proposalStatus);
+              }
+            }}
             style={{
               padding: 8,
               backgroundColor:
@@ -68,9 +98,14 @@ const Proposals = ({route}: any) => {
         ))}
       </View>
 
-      {jobs
-        .filter(item => item.section == section)
-        .map((_item, index) => _item.component(index))}
+      <FlatList
+        data={filtered}
+        ListEmptyComponent={<View>{loading && <ActivityIndicator />}</View>}
+        renderItem={({item, index}) => {
+          return <ProposalStatus item={item} key={index} />;
+        }}
+        keyExtractor={(_, index) => index.toString()}
+      />
     </SafeAreaView>
   );
 };

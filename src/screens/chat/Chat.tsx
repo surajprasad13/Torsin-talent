@@ -7,6 +7,7 @@ import {
   TextInput,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -19,14 +20,6 @@ import FastImage from 'react-native-fast-image';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAccepted} from '../../redux/actions/userAction';
 import moment from 'moment';
-
-const list = [
-  {
-    name: 'ChatRoom1',
-    email: 'Chat',
-    id: 'ChatRoom1',
-  },
-];
 
 const Chat = ({}) => {
   const navigation = useNavigation();
@@ -69,6 +62,9 @@ const Chat = ({}) => {
             }}
           />
         </TouchableOpacity>
+
+        {loading && <ActivityIndicator />}
+
         <View
           style={{
             ...appstyle.shadow,
