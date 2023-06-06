@@ -10,11 +10,8 @@ import {
 } from 'react-native';
 import {} from '@react-navigation/native';
 
-//icons
-
-//import
+//helpers
 import {colors, fonts} from '../../theme';
-
 import ProposalStatus from './components/ProposalStatus';
 
 import {Title} from '../../components';
@@ -54,6 +51,13 @@ const Proposals = ({route}: any) => {
     dispatch(getProposalStatus({userToken}));
   }, []);
 
+  useEffect(() => {
+    if (section == 'sent') {
+      const data = proposalStatus.filter(_item => _item.proposalStatus == 1);
+      setFiltered(data);
+    }
+  }, [proposalStatus]);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <Title title="Proposals" />
@@ -64,18 +68,21 @@ const Proposals = ({route}: any) => {
             key={index.toString()}
             onPress={() => {
               setSection(item.section);
-              if (item.section == 'accepted') {
+              if (index == 1) {
                 const data = proposalStatus.filter(
                   _item => _item.proposalStatus == 2,
                 );
                 setFiltered(data);
-              } else if (item.section == 'reject') {
+              } else if (index == 2) {
                 const data = proposalStatus.filter(
                   _item => _item.proposalStatus == 3,
                 );
                 setFiltered(data);
               } else {
-                setFiltered(proposalStatus);
+                const data = proposalStatus.filter(
+                  _item => _item.proposalStatus == 1,
+                );
+                setFiltered(data);
               }
             }}
             style={{

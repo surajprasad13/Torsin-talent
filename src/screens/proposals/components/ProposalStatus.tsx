@@ -48,7 +48,12 @@ const ProposalStatus = ({item}: any) => {
           alignItems: 'center',
         }}>
         <FastImage
-          source={{uri: 'https://source.unsplash.com/400x400?user'}}
+          source={{
+            uri:
+              item.images !== null
+                ? item.images[0]
+                : 'https://source.unsplash.com/400x400?user',
+          }}
           resizeMode="cover"
           style={{width: 50, height: 50, borderRadius: 25}}
         />
@@ -59,17 +64,17 @@ const ProposalStatus = ({item}: any) => {
             flex: 1,
             marginLeft: 10,
           }}>
-          <View style={{}}>
+          <View style={{width: '70%'}}>
             <Text style={{fontFamily: fonts.semibold, color: colors.black}}>
-              Java Developer
+              {item.jobName}
             </Text>
             <Text style={[styles.headertext, {marginTop: 10}]}>
-              Testing Java
+              {item.jobDescription}
             </Text>
-            <Text style={styles.text}>Test YourSelf</Text>
+            <Text style={styles.text}>{item.message}</Text>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.text}>$22222</Text>
+              <Text style={styles.text}>${item.charges}</Text>
             </View>
           </View>
           {renderStatus(item.proposalStatus)}
@@ -93,7 +98,7 @@ const ProposalStatus = ({item}: any) => {
           }}>
           <AntDesign name="clockcircleo" size={10} style={styles.icon} />
           <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
-            {moment().format('lll')}
+            {moment(item.createdAt).format('lll')}
           </Text>
         </View>
 
@@ -106,7 +111,7 @@ const ProposalStatus = ({item}: any) => {
           <Text
             style={{fontFamily: fonts.regular, fontSize: 12}}
             numberOfLines={1}>
-            Noida, India
+            {item.location}
           </Text>
         </View>
       </View>
