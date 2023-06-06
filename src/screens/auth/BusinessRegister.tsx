@@ -26,13 +26,13 @@ import PhoneModal from '../../components/modal/PhoneModal';
 import EmailModal from '../../components/modal/EmailModal';
 import {email} from '../../utils/regex';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {decode} from 'base64-arraybuffer';
 import {uploadFileToS3} from '../../services/s3';
 import {
   resetEmailVerified,
   resetMobileVerified,
 } from '../../redux/reducers/authSlice';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const {moderateScale} = metrics;
 
@@ -52,6 +52,32 @@ const BusinessRegister = ({}) => {
 
   const [image, setImage] = useState('');
   const [imageLoading, setImageLoading] = useState<boolean>(false);
+
+  const uploadImage = async () => {
+    setImageLoading(true);
+
+    const response = await ImageCropPicker.openPicker({
+      width: 400,
+      height: 300,
+      includeBase64: true,
+      mediaType: 'photo',
+      cropping: true,
+    });
+
+    if (response) {
+      setImage(response.data as any);
+      var base64data = decode(response.data as any);
+      const url = await uploadFileToS3(
+        base64data,
+        `${response.filename}`,
+        'image/jpeg',
+      );
+      setInputs(prevState => ({...prevState, profileImage: url.Location}));
+      setImageLoading(false);
+    } else {
+      setImageLoading(false);
+    }
+  };
 
   const [errors, setErrors] = React.useState<any>({});
 
@@ -104,31 +130,6 @@ const BusinessRegister = ({}) => {
     });
     return () => listener;
   }, []);
-
-  const uploadImage = () => {
-    let options: any = {
-      mediaType: 'photo',
-      quality: 1,
-      includeBase64: true,
-    };
-    launchImageLibrary(options, async response => {
-      try {
-        setImageLoading(true);
-        var base64data = decode(response.assets[0].base64);
-        const url = await uploadFileToS3(
-          base64data,
-          `${response.assets[0].fileName}`,
-          'image/jpeg',
-        );
-        setImage(response.assets[0].base64);
-        setInputs(prevState => ({...prevState, profileImage: url.Location}));
-        setImageLoading(false);
-      } catch (error: any) {
-        setImageLoading(false);
-        console.log('Error uploading file:', error);
-      }
-    });
-  };
 
   const register = () => {
     const field = {

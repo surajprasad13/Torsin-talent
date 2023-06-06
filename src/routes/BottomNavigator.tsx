@@ -5,6 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 // icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 
 // helpers
 import {colors} from '../theme';
@@ -12,7 +13,7 @@ import {colors} from '../theme';
 // screens
 import HomeScreen from '../screens/home/HomeScreen';
 import Jobs from '../screens/jobs/Jobs';
-import Chat from '../screens/bottomScreen/Chat';
+import Chat from '../screens/chat/Chat';
 import Setting from '../screens/setting/Setting';
 import EditProfile from '../screens/setting/EditProfile';
 import EditUserProfile from '../screens/setting/EditUserProfile';
@@ -22,7 +23,7 @@ import AddSkill from '../screens/setting/AddSkill';
 import {BottomScreenParamList, SettingScreenParamList} from './RouteType';
 import ServiceSkill from '../screens/setting/ServiceSkill';
 import ServiceDetail from '../screens/setting/ServiceDetail';
-import {} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const Bottom = createBottomTabNavigator<BottomScreenParamList>();
 const Stack = createStackNavigator<SettingScreenParamList>();
@@ -42,6 +43,7 @@ export const SettingStack = () => {
 };
 
 const BottomNavigator = () => {
+  const navigation = useNavigation();
   return (
     <Bottom.Navigator
       screenOptions={{
@@ -73,12 +75,29 @@ const BottomNavigator = () => {
         name="Chat"
         component={Chat}
         options={{
-          headerShown: false,
+          headerShown: true,
           tabBarIcon: ({size, color}) => (
             <IonIcon
               name="chatbubble-ellipses-outline"
               size={size}
               color={color}
+            />
+          ),
+          headerRight: ({color}) => (
+            <AntDesign
+              name="search1"
+              size={20}
+              style={{right: 10}}
+              color={colors.primary}
+            />
+          ),
+          headerLeft: ({color}) => (
+            <Feather
+              onPress={() => navigation.goBack()}
+              name="arrow-left"
+              size={20}
+              color={colors.black}
+              style={{left: 10}}
             />
           ),
         }}

@@ -1,13 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {
-  Button,
-  Image,
-  View,
-  Platform,
-  TouchableOpacity,
-  Text,
-  StyleSheet
-} from 'react-native';
+import React, {useState} from 'react';
+import {Image, View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import * as ImagePicker from 'react-native-image-picker';
 
 const AddImage = () => {
@@ -21,8 +13,6 @@ const AddImage = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -41,6 +31,6 @@ const AddImage = () => {
   );
 };
 
-const styles = StyleSheet.create({}) 
+const styles = StyleSheet.create({});
 
 export default AddImage;

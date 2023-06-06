@@ -94,17 +94,6 @@ const AddSkill = () => {
             Job Description Complete your profile. Set your profile completely .
           </Text>
 
-          {!!error && (
-            <Text
-              style={{
-                textAlign: 'center',
-                color: colors.red,
-                fontFamily: fonts.medium,
-              }}>
-              {error}
-            </Text>
-          )}
-
           <CustomInput
             label="Skill"
             placeholder="eg. Song Production"
@@ -112,7 +101,18 @@ const AddSkill = () => {
             onChangeText={text => setSkill(text)}
             containerStyle={{marginTop: 20}}
           />
+          {!!error && (
+            <Text
+              style={{
+                padding: 10,
+                color: colors.red,
+                fontFamily: fonts.medium,
+              }}>
+              {error}
+            </Text>
+          )}
         </View>
+
         <CustomButton
           title="Add skill"
           loading={loading}

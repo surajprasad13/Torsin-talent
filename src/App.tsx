@@ -1,17 +1,38 @@
 import 'react-native-gesture-handler';
-import React from 'react';
-
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import AppNavigator from './routes/AppNavigator';
+import React, {useEffect} from 'react';
+import {StatusBar} from 'react-native';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Provider} from 'react-redux';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {PersistGate} from 'redux-persist/integration/react';
+import messaging from '@react-native-firebase/messaging';
+
+import AppNavigator from './routes/AppNavigator';
 
 import store, {persistor} from './redux';
 
+async function onAppBootstrap() {
+  // Register the device with FCM
+  await messaging().registerDeviceForRemoteMessages();
+
+  // Get the token
+  const token = await messaging().getToken();
+
+  // Save the token
+}
+
 const App = () => {
+  // useEffect(() => {
+  //   onAppBootstrap();
+  // }, []);
+
   return (
     <SafeAreaProvider>
+      <StatusBar
+        animated={true}
+        barStyle="dark-content"
+        backgroundColor="white"
+      />
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <PaperProvider>

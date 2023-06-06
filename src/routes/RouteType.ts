@@ -1,8 +1,5 @@
 import type {CompositeScreenProps} from '@react-navigation/native';
-import type {
-  StackNavigationProp,
-  StackScreenProps,
-} from '@react-navigation/stack';
+import type {StackScreenProps} from '@react-navigation/stack';
 import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 
 export type RootStackParamList = {
@@ -32,6 +29,26 @@ export type RootStackParamList = {
   MusicJob: undefined;
   OpenModal: undefined;
   CreatePassword: {item: string} | undefined;
+  Allexpertise: undefined;
+  MusicComposer: undefined;
+  ProposalSentSuccess: undefined;
+  ChatUser: {
+    item: undefined | {};
+  };
+  Myjob: undefined;
+  DetailActiveJob: undefined;
+  RatingReview: undefined;
+  ReportProblem: undefined;
+  DetailPastJob: undefined;
+  DetailNewJob: undefined;
+  AddJobDetails: {id: number};
+  ProposalDetail: {
+    item: undefined | {};
+  };
+  ProposalAcceptDetail: undefined;
+  WebScreen: {
+    item: string;
+  };
 };
 
 export type AuthScreenParamList = {
@@ -99,11 +116,6 @@ export type HomeTabScreenProps<T extends keyof HomeTabParamList> =
     BottomTabScreenProps<HomeTabParamList, T>,
     RootScreenProps
   >;
-
-export type GlobalScreenProps = CompositeScreenProps<
-  StackNavigationProp<RootStackParamList, 'DrawerNavigation'>,
-  BottomTabScreenProps<BottomScreenParamList, 'SettingStack'>
->;
 
 declare global {
   namespace ReactNavigation {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 
 /**
  * Screens
@@ -29,14 +29,39 @@ import CreatePassword from '../screens/auth/CreatePassword';
 import SearchJob from '../screens/jobs/components/SearchJob';
 import MusicJob from '../screens/jobs/components/MusicJob';
 import OpenModal from '../screens/jobs/components/OpenModal';
+import Allexpertise from '../screens/home/Allexpertise';
+import MusicComposer from '../screens/jobs/JobDetail';
+import ProposalSentSuccess from '../screens/proposals/ProposalSentSuccess';
+import ChatUser from '../screens/chat/ChatUser';
+import Myjob from '../screens/jobs/MyAllJob';
+import WebScreen from '../screens/WebScreen';
+import DetailActiveJob from '../screens/jobs/DetailActiveJob';
+import RatingReview from '../screens/jobs/services/RatingReview';
+import ReportProblem from '../screens/jobs/services/ReportProblem';
+import DetailPastJob from '../screens/jobs/DetailPastJob';
+import DetailNewJob from '../screens/jobs/DetailNewJob';
+import AddJobDetails from '../screens/proposals/AddJobDetails';
+import ProposalDetail from '../screens/proposals/ProposalDetail';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export default function Appnavigator({}) {
+export default function AppNavigator() {
   const {userToken, isFirstOpen} = useAppSelector(state => state.auth);
 
+  const config = {
+    screens: {
+      LoginScreen: 'login',
+      ChatUser: 'chat',
+    },
+  };
+
+  const linking = {
+    prefixes: ['talent://'],
+    config,
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator
         screenOptions={{}}
         initialRouteName={
@@ -147,6 +172,110 @@ export default function Appnavigator({}) {
             name="OpenModal"
             component={OpenModal}
             options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Allexpertise"
+            component={Allexpertise}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="MusicComposer"
+            component={MusicComposer}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ProposalSentSuccess"
+            component={ProposalSentSuccess}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ChatUser"
+            component={ChatUser}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+            initialParams={{
+              item: {},
+            }}
+          />
+          <Stack.Screen
+            name="Myjob"
+            component={Myjob}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DetailActiveJob"
+            component={DetailActiveJob}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="RatingReview"
+            component={RatingReview}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ReportProblem"
+            component={ReportProblem}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DetailPastJob"
+            component={DetailPastJob}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DetailNewJob"
+            component={DetailNewJob}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AddJobDetails"
+            component={AddJobDetails}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+            initialParams={{
+              id: 0,
+            }}
+          />
+          <Stack.Screen
+            name="ProposalDetail"
+            component={ProposalDetail}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+              headerShown: false,
+            }}
+            initialParams={{item: {}}}
+          />
+
+          <Stack.Screen
+            name="WebScreen"
+            component={WebScreen}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+            initialParams={{item: ''}}
           />
         </Stack.Group>
       </Stack.Navigator>

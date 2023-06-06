@@ -54,11 +54,7 @@ const ServiceSkill = ({}) => {
           <Feather name="arrow-left" size={20} />
         </TouchableOpacity>
 
-        <Text
-          style={{
-            fontFamily: fonts.medium,
-            color: '#000C14',
-          }}>
+        <Text style={{fontFamily: fonts.medium, color: '#000C14'}}>
           Skills & Services
         </Text>
         <View />
@@ -66,16 +62,8 @@ const ServiceSkill = ({}) => {
 
       <ScrollView style={{padding: 10}}>
         {loading && <ActivityIndicator />}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text
-            style={{
-              fontFamily: fonts.semibold,
-              color: colors.black,
-            }}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={{fontFamily: fonts.semibold, color: colors.black}}>
             Skills
           </Text>
           <TouchableOpacity

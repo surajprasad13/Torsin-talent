@@ -9,12 +9,14 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, Dialog, Portal, RadioButton} from 'react-native-paper';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // components
 import ProFile from '../../components/Profile';
@@ -26,9 +28,9 @@ import {CustomButton, CustomInput} from '../../components';
 import {userUpdate} from '../../redux/actions/authAction';
 import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
 import {alphabets, email, number} from '../../utils/regex';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {uploadFileToS3} from '../../services/s3';
 import {decode} from 'base64-arraybuffer';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const EditUserProfile = ({}) => {
   const navigation = useNavigation();
@@ -51,29 +53,30 @@ const EditUserProfile = ({}) => {
   const [image, setImage] = useState('');
   const [imageLoading, setImageLoading] = useState<boolean>(false);
 
-  const uploadImage = () => {
-    let options: any = {
-      mediaType: 'photo',
-      quality: 1,
+  const uploadImage = async () => {
+    setImageLoading(true);
+
+    const response = await ImageCropPicker.openPicker({
+      width: 400,
+      height: 300,
       includeBase64: true,
-    };
-    launchImageLibrary(options, async response => {
-      try {
-        setImageLoading(true);
-        var base64data = decode(response.assets[0].base64);
-        const url = await uploadFileToS3(
-          base64data,
-          `${response.assets[0].fileName}`,
-          'image/jpeg',
-        );
-        setImage(response.assets[0].base64);
-        setInputs(prevState => ({...prevState, profileImage: url.Location}));
-        setImageLoading(false);
-      } catch (_error: any) {
-        setImageLoading(false);
-        console.log('Error uploading file:', _error);
-      }
+      mediaType: 'photo',
+      cropping: true,
     });
+
+    if (response) {
+      setImage(response.data as any);
+      var base64data = decode(response.data as any);
+      const url = await uploadFileToS3(
+        base64data,
+        `${response.filename}`,
+        'image/jpeg',
+      );
+      setInputs(prevState => ({...prevState, profileImage: url.Location}));
+      setImageLoading(false);
+    } else {
+      setImageLoading(false);
+    }
   };
 
   const validate = () => {
@@ -222,33 +225,61 @@ const EditUserProfile = ({}) => {
                 Gender
               </Text>
 
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <RadioButton
-                  value="first"
-                  color="#0E184D"
-                  status={inputs.gender === 1 ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setInputs(prevState => ({...prevState, gender: 1}));
-                  }}
+              <Pressable
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}
+                onPress={() => {
+                  setInputs(previousState => ({
+                    ...previousState,
+                    gender: 1,
+                  }));
+                }}>
+                <FontAwesome
+                  name={inputs.gender === 1 ? 'dot-circle-o' : 'circle-o'}
+                  color={inputs.gender === 1 ? colors.primary : '#E0E0E0'}
+                  size={24}
                 />
-                <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    color: '#4F4F4F',
+                    marginLeft: 10,
+                  }}>
                   Male
                 </Text>
-              </View>
+              </Pressable>
 
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <RadioButton
-                  value="second"
-                  color="#0E184D"
-                  status={inputs.gender === 2 ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setInputs(prevState => ({...prevState, gender: 2}));
-                  }}
+              <Pressable
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}
+                onPress={() => {
+                  setInputs(previousState => ({
+                    ...previousState,
+                    gender: 2,
+                  }));
+                }}>
+                <FontAwesome
+                  name={inputs.gender === 2 ? 'dot-circle-o' : 'circle-o'}
+                  color={inputs.gender === 2 ? colors.primary : '#E0E0E0'}
+                  size={24}
                 />
-                <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    color: '#4F4F4F',
+                    marginLeft: 10,
+                  }}>
                   Female
                 </Text>
-              </View>
+              </Pressable>
             </View>
           )}
           <CustomInput
@@ -277,8 +308,7 @@ const EditUserProfile = ({}) => {
           {!!error && (
             <Text
               style={{
-                marginTop: 40,
-                textAlign: 'center',
+                margin: 10,
                 fontFamily: fonts.medium,
                 color: colors.red,
               }}>

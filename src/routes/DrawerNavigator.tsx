@@ -3,12 +3,9 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import AboutUs from '../screens/drawerScreens/AboutUs';
 import CustomSidebarMenu from '../components/CustomSidebarMenu';
-import Proposals from '../screens/drawerScreens/Proposals';
 import MyRating from '../screens/drawerScreens/MyRating';
 import MyService from '../screens/drawerScreens/MyService';
-import MyJobs from '../screens/drawerScreens/MyJobs';
 import Payment from '../screens/drawerScreens/Payment';
-import SwitchAccount from '../screens/drawerScreens/SwitchAccount';
 import Terms from '../screens/drawerScreens/Terms';
 
 import BottomNavigation, {SettingStack} from './BottomNavigator';
@@ -16,6 +13,8 @@ import BottomNavigation, {SettingStack} from './BottomNavigator';
 import {DrawerScreenParamaList} from './RouteType';
 import Notification from '../screens/Notification';
 import {fonts} from '../theme';
+import MyAlljob from '../screens/jobs/MyAllJob';
+import Proposals from '../screens/proposals/Proposals';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
@@ -48,16 +47,11 @@ const DrawerNavigation = () => {
         options={{}}
       />
       <Drawer.Screen name="Proposals" component={Proposals} options={{}} />
+      <Drawer.Screen name="MyJobs" component={MyAlljob} options={{}} />
       <Drawer.Screen name="MyRatings" component={MyRating} options={{}} />
-      <Drawer.Screen name="MyServices" component={MyService} options={{}} />
-      <Drawer.Screen name="MyJobs" component={MyJobs} options={{}} />
       <Drawer.Screen name="Payments" component={Payment} options={{}} />
-      <Drawer.Screen
-        name="SwitchAccount"
-        component={SwitchAccount}
-        options={{}}
-      />
       <Drawer.Screen name="AboutUs" component={AboutUs} options={{}} />
+      <Drawer.Screen name="MyServices" component={MyService} options={{}} />
       <Drawer.Screen name="TermsPrivacy" component={Terms} options={{}} />
       <Drawer.Screen name="HelpSupport" component={Terms} options={{}} />
       <Drawer.Screen name="DrawerSetting" component={SettingStack} />

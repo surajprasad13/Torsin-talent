@@ -60,13 +60,7 @@ const Logout = () => {
               Are you sure you want to logout?
             </Text>
           </Dialog.Content>
-          <Dialog.Actions style={{alignSelf: 'center'}}>
-            <Button
-              style={{backgroundColor: 'red'}}
-              labelStyle={{color: colors.white}}
-              onPress={toggleModal}>
-              Cancel
-            </Button>
+          <Dialog.Actions style={{justifyContent: 'space-evenly'}}>
             <Button
               onPress={() => {
                 dispatch(logout());
@@ -77,6 +71,12 @@ const Logout = () => {
                 });
               }}>
               Logout
+            </Button>
+            <Button
+              style={{backgroundColor: 'red'}}
+              labelStyle={{color: colors.white}}
+              onPress={toggleModal}>
+              Cancel
             </Button>
           </Dialog.Actions>
         </Dialog>

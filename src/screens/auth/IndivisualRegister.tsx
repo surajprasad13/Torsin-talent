@@ -13,12 +13,12 @@ import {
 import {RadioButton} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {decode} from 'base64-arraybuffer';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // helpers
 import {metrics, colors, fonts} from '../../theme';
@@ -41,6 +41,7 @@ import {
   resetEmailVerified,
   resetMobileVerified,
 } from '../../redux/reducers/authSlice';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const {horizontalScale, moderateScale, verticalScale} = metrics;
 
@@ -74,8 +75,6 @@ const IndivisualRegister = ({}) => {
     confirmPassword: '',
     profileImage: '',
   });
-  const [image, setImage] = useState('');
-  const [imageLoading, setImageLoading] = useState<boolean>(false);
 
   const [errors, setErrors] = useState<any>({});
 
@@ -113,29 +112,33 @@ const IndivisualRegister = ({}) => {
     }
   };
 
-  const uploadImage = () => {
-    let options: any = {
-      mediaType: 'photo',
-      quality: 1,
+  const [image, setImage] = useState('');
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
+
+  const uploadImage = async () => {
+    setImageLoading(true);
+
+    const response = await ImageCropPicker.openPicker({
+      width: 400,
+      height: 300,
       includeBase64: true,
-    };
-    launchImageLibrary(options, async response => {
-      try {
-        setImageLoading(true);
-        var base64data = decode(response.assets[0].base64);
-        const url = await uploadFileToS3(
-          base64data,
-          `${response.assets[0].fileName}`,
-          'image/jpeg',
-        );
-        setImage(response.assets[0].base64);
-        setInputs(prevState => ({...prevState, profileImage: url.Location}));
-        setImageLoading(false);
-      } catch (error: any) {
-        setImageLoading(false);
-        console.log('Error uploading file:', error);
-      }
+      mediaType: 'photo',
+      cropping: true,
     });
+
+    if (response) {
+      setImage(response.data as any);
+      var base64data = decode(response.data as any);
+      const url = await uploadFileToS3(
+        base64data,
+        `${response.filename}`,
+        'image/jpeg',
+      );
+      setInputs(prevState => ({...prevState, profileImage: url.Location}));
+      setImageLoading(false);
+    } else {
+      setImageLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -363,46 +366,64 @@ const IndivisualRegister = ({}) => {
               </Pressable>
             </View>
 
-            <View style={{marginTop: verticalScale(10)}}>
+            <View>
               <Text
                 style={{
                   color: '#4F4F4F',
-                  marginLeft: horizontalScale(15),
                   fontFamily: fonts.regular,
-                  right: 10,
-                  bottom: 20,
                   fontSize: moderateScale(16),
+                  bottom: 10,
                 }}>
                 Gender
               </Text>
 
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <RadioButton
-                  value="first"
-                  color="#0E184D"
-                  status={checked === 'first' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setChecked('first');
-                    setInputs(prevState => ({...prevState, gender: 1}));
-                  }}
+              <Pressable
+                style={{flexDirection: 'row', alignItems: 'center'}}
+                onPress={() => {
+                  setChecked('first');
+                  setInputs(prevState => ({...prevState, gender: 1}));
+                }}>
+                <FontAwesome
+                  name={checked === 'first' ? 'dot-circle-o' : 'circle-o'}
+                  color={checked === 'first' ? colors.primary : '#E0E0E0'}
+                  size={24}
                 />
-                <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    color: '#4F4F4F',
+                    marginLeft: 10,
+                  }}>
                   Male
                 </Text>
-              </View>
+              </Pressable>
 
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <RadioButton
-                  value="second"
-                  color="#0E184D"
-                  status={checked === 'second' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setChecked('second');
-                    setInputs(prevState => ({...prevState, gender: 2}));
-                  }}
+              <Pressable
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}
+                onPress={() => {
+                  setChecked('second');
+                  setInputs(prevState => ({...prevState, gender: 2}));
+                }}>
+                <FontAwesome
+                  name={checked === 'second' ? 'dot-circle-o' : 'circle-o'}
+                  color={checked === 'second' ? colors.primary : '#E0E0E0'}
+                  size={24}
                 />
-                <Text style={{fontFamily: fonts.regular}}>Female</Text>
-              </View>
+
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    color: '#4F4F4F',
+                    marginLeft: 10,
+                  }}>
+                  Female
+                </Text>
+              </Pressable>
             </View>
 
             <View style={{marginTop: 10}}>

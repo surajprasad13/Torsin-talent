@@ -29,7 +29,7 @@ function Publish() {
           pagingEnabled
           onScroll={e => {
             const x = e.nativeEvent.contentOffset.x;
-            console.log(x / width - 50);
+
             setCurrentIndex((x / (width - 50)).toFixed(0));
           }}
           horizontal

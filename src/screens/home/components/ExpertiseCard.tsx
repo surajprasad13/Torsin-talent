@@ -1,20 +1,23 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Pressable} from 'react-native';
 import React from 'react';
 import {appstyle, colors, fonts} from '../../../theme';
 import FastImage from 'react-native-fast-image';
+import moment from 'moment';
 
 //icons
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Divider} from 'react-native-paper';
+import {JobDetail} from '../../../types/user';
+import {useNavigation} from '@react-navigation/native';
 
-const ExpertiseCard = ({item}: any) => {
+const ExpertiseCard = ({item}: {item: JobDetail}) => {
+  const navigation = useNavigation();
+
   return (
-    <View
-      style={[
-        styles.cardContainer,
-        {backgroundColor: item % 2 !== 0 ? '#F5F5F5' : colors.white},
-      ]}>
+    <Pressable
+      style={[styles.cardContainer, {}]}
+      onPress={() => navigation.navigate('MusicComposer', {item})}>
       <View
         style={{
           flexDirection: 'row',
@@ -22,18 +25,19 @@ const ExpertiseCard = ({item}: any) => {
           alignItems: 'center',
         }}>
         <FastImage
-          source={{uri: 'https://source.unsplash.com/400x400?nature'}}
-          resizeMode="contain"
+          source={{uri: item.photos[0]}}
+          resizeMode="cover"
           style={{width: 50, height: 50, borderRadius: 25}}
         />
         <View style={{width: '80%'}}>
-          <Text style={styles.headertext}>Music Composer</Text>
-
-          <Text style={styles.text}>
-            As a musician minim mollit non deseruntAmet minim mollit non
-            deserunt
+          <Text style={{fontFamily: fonts.semibold, color: colors.black}}>
+            {item.adminService}
           </Text>
-          <Text style={styles.text}>$500.00-$ 600.00</Text>
+          <Text style={[styles.headertext, {marginTop: 10}]}>
+            {item.jobName}
+          </Text>
+          <Text style={styles.text}>{item.jobDescription}</Text>
+          <Text style={styles.text}>${item.priceRate}</Text>
         </View>
       </View>
 
@@ -44,18 +48,17 @@ const ExpertiseCard = ({item}: any) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           marginTop: 15,
+          margin: 10,
         }}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            flex: 1,
+            justifyContent: 'center',
           }}>
-          <Entypo name="location-pin" size={10} />
-          <Text
-            style={{fontFamily: fonts.regular, fontSize: 12}}
-            numberOfLines={1}>
-            South Dakota
+          <AntDesign name="clockcircleo" size={10} style={styles.icon} />
+          <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
+            {moment(item.createdAt).format('lll')}
           </Text>
         </View>
 
@@ -63,27 +66,22 @@ const ExpertiseCard = ({item}: any) => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            flex: 1,
-            justifyContent: 'center',
           }}>
-          <AntDesign name="clockcircleo" size={10} />
-          <Text style={{fontFamily: fonts.regular, fontSize: 12}}>3d ago</Text>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <AntDesign name="user" size={10} />
+          <Entypo name="location-pin" size={10} style={styles.icon} />
           <Text
             style={{fontFamily: fonts.regular, fontSize: 12}}
             numberOfLines={1}>
-            James Cameroon
+            {item.location.length > 10
+              ? item.location.substring(0, 10) + '...'
+              : item.location}
+            ,
+            {item.countryName.length > 10
+              ? item.countryName.substring(0, 10) + '...'
+              : item.countryName}
           </Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -107,6 +105,9 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 16,
     justifyContent: 'center',
+  },
+  icon: {
+    right: 2,
   },
 });
 

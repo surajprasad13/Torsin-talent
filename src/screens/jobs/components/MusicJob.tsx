@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,11 @@ import {
   ScrollView,
   Dimensions,
   SafeAreaView,
+  FlatList,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import BottomSheet from '@gorhom/bottom-sheet';
+import {RadioButton} from 'react-native-paper';
 
 //icons
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -19,12 +22,29 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {colors, fonts} from '../../../theme';
 import ExpertiseCard from '../../../screens/home/components/ExpertiseCard';
-import OpenModal from './OpenModal';
+import {useAppSelector} from '../../../hooks';
 
 const {} = Dimensions.get('window');
 
 const MusicJob = ({}) => {
   const navigation = useNavigation();
+  const {correspond} = useAppSelector(state => state.user);
+  const [bottomIndex, setBottomIndex] = useState(-1);
+  const renderItem = ({item, index}) => <ExpertiseCard item={item} />;
+  const [checked, setChecked] = useState('first');
+
+  // ref
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
+
+  // callbacks
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index == 0) {
+      bottomSheetRef.current.close();
+    }
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -36,8 +56,7 @@ const MusicJob = ({}) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('DrawerNavigation')}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Feather name="arrow-left" size={20} />
           </TouchableOpacity>
           <Text
@@ -71,8 +90,12 @@ const MusicJob = ({}) => {
               }}>
               <Octicons name="git-compare" size={15} />
             </View>
-            <OpenModal />
-            <TouchableOpacity style={styles.innerSearch}>
+            <TouchableOpacity
+              style={styles.innerSearch}
+              onPress={() => {
+                setBottomIndex(1);
+                bottomSheetRef.current?.expand();
+              }}>
               <Text style={styles.innerText}>
                 Budget <AntDesign name="down" size={12} />
               </Text>
@@ -105,12 +128,107 @@ const MusicJob = ({}) => {
             Search results
           </Text>
         </View>
-        <View style={{marginTop: 20}}>
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
-            <ExpertiseCard item={item} key={index.toString()} />
-          ))}
+        <View style={{marginTop: 10}}>
+          <FlatList
+            data={correspond}
+            renderItem={renderItem}
+            keyExtractor={(_, index) => index.toString()}
+          />
         </View>
       </ScrollView>
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={bottomIndex}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            padding: 10,
+          }}>
+          <Text style={{fontSize: 16, fontFamily: fonts.semibold}}>
+            Time Posted
+          </Text>
+          <Text
+            style={{
+              color: '#FF0000',
+              fontFamily: fonts.regular,
+              fontSize: 14,
+            }}>
+            Clear
+          </Text>
+        </View>
+        <View
+          style={{
+            borderBottomWidth: 0.2,
+            borderBottomColor: colors.light,
+            marginTop: 10,
+          }}></View>
+        <View style={styles.toggleText}>
+          <Text style={styles.radioText}>Anytime</Text>
+          <RadioButton
+            value="first"
+            color="#0E184D"
+            status={checked === 'first' ? 'checked' : 'unchecked'}
+            onPress={() => {
+              setChecked('first');
+            }}
+          />
+        </View>
+        <View style={styles.toggleText}>
+          <Text style={styles.radioText}>Past 24 hours</Text>
+          <RadioButton
+            value="second"
+            color="#0E184D"
+            status={checked === 'second' ? 'checked' : 'unchecked'}
+            onPress={() => {
+              setChecked('second');
+            }}
+          />
+        </View>
+        <View style={styles.toggleText}>
+          <Text style={styles.radioText}>Past 3 days</Text>
+          <RadioButton
+            value="third"
+            color="#0E184D"
+            status={checked === 'third' ? 'checked' : 'unchecked'}
+            onPress={() => {
+              setChecked('third');
+            }}
+          />
+        </View>
+        <View style={styles.toggleText}>
+          <Text style={styles.radioText}>Past week</Text>
+          <RadioButton
+            value="four"
+            color="#0E184D"
+            status={checked === 'four' ? 'checked' : 'unchecked'}
+            onPress={() => {
+              setChecked('four');
+            }}
+          />
+        </View>
+        <View style={styles.toggleText}>
+          <Text style={styles.radioText}>Past month</Text>
+          <RadioButton
+            value="five"
+            color="#0E184D"
+            status={checked === 'five' ? 'checked' : 'unchecked'}
+            onPress={() => {
+              setChecked('five');
+            }}
+          />
+        </View>
+        <View
+          style={{
+            borderRadius: 10,
+            margin: 10,
+            padding: 10,
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+          }}></View>
+      </BottomSheet>
     </SafeAreaView>
   );
 };
@@ -136,5 +254,15 @@ const styles = StyleSheet.create({
   innerText: {
     fontFamily: fonts.regular,
     color: '#1E202B',
+  },
+  radioText: {
+    fontFamily: fonts.regular,
+    color: '#000C14',
+    fontSize: 16,
+  },
+  toggleText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 15,
   },
 });

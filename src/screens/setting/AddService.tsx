@@ -30,10 +30,11 @@ import {addService} from '../../redux/actions/userAction';
 import {Button, Dialog, Portal} from 'react-native-paper';
 import {updateSuccess} from '../../redux/reducers/userSlice';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {uploadFileToS3, uploadVideoToS3, videoUrl} from '../../services/s3';
+import {uploadFileToS3, uploadVideoToS3} from '../../services/s3';
 import {decode} from 'base64-arraybuffer';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 type InputProps = {
   serviceName: string;
@@ -104,6 +105,12 @@ const AddService = ({}) => {
         userToken,
       };
       dispatch(addService(value));
+    } else {
+      let value = {
+        inputs,
+        userToken,
+      };
+      dispatch(addService(value));
     }
   };
 
@@ -147,37 +154,30 @@ const AddService = ({}) => {
     });
   };
 
-  const uploadVideo = () => {
+  const uploadVideo = async () => {
     handleError('', 'video');
-    let options: any = {
+
+    const response = await ImageCropPicker.openPicker({
       mediaType: 'video',
-      quality: 1,
-      formatAsMp4: true,
-    };
-    launchImageLibrary(options, async response => {
-      if (response.didCancel) {
-        return false;
-      } else {
-        try {
-          setVideoLoading(true);
-
-          const url = await uploadVideoToS3(
-            response.assets[0].uri,
-            response.assets[0].fileName,
-          );
-          setInputs((prevState: any) => ({
-            ...prevState,
-            serviceVideo: url.Location,
-          }));
-
-          setVideo(response.assets[0].uri);
-          setVideoLoading(false);
-        } catch (_error: any) {
-          setVideoLoading(false);
-          console.log('Error uploading file:', _error);
-        }
-      }
+      includeBase64: true,
     });
+    if (response) {
+      setVideoLoading(true);
+      const url = await uploadVideoToS3(
+        response.sourceURL as string,
+        response.filename as string,
+      );
+      console.log(url.body.postResponse.location, 'Url');
+      setInputs((prevState: any) => ({
+        ...prevState,
+        serviceVideo: url.body.postResponse.location,
+      }));
+
+      setVideo(response.sourceURL);
+      setVideoLoading(false);
+    } else {
+      setVideoLoading(false);
+    }
   };
 
   return (
@@ -249,16 +249,7 @@ const AddService = ({}) => {
               .
             </Text>
           </View>
-          {!!error && (
-            <Text
-              style={{
-                textAlign: 'center',
-                color: colors.red,
-                fontFamily: fonts.medium,
-              }}>
-              {error}
-            </Text>
-          )}
+
           <View style={styles.inputContainer}>
             <CustomInput
               label="Service Name"
@@ -603,11 +594,21 @@ const AddService = ({}) => {
               </Text>
             )}
           </View>
+          {!!error && (
+            <Text
+              style={{
+                margin: 10,
+                color: colors.red,
+                fontFamily: fonts.medium,
+              }}>
+              {error}
+            </Text>
+          )}
           <CustomButton
             title="Add Service"
             onPress={validate}
-            style={{marginTop: 50}}
-            disabled={true}
+            style={{marginTop: 20}}
+            disabled={!loading}
             loading={loading}
           />
           <View style={{marginTop: 50}} />
@@ -628,7 +629,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputContainer: {
-    marginLeft: 10,
     padding: 10,
   },
   videoInput: {

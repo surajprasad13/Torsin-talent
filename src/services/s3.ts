@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import {RNS3} from 'react-native-aws3';
 
 // Configure AWS SDK with your credentials and region
 AWS.config.update({
@@ -32,24 +33,29 @@ export const uploadFileToS3 = async (
   }
 };
 
-export const uploadVideoToS3 = async (file: any, fileName: string) => {
-  const params = {
-    Bucket: 'torsin-bucket',
-    Key: fileName,
-    Body: file,
-    ContentType: 'video/mp4',
+export const uploadVideoToS3 = (uri: string, fileName: string) => {
+  const file = {
+    uri: uri,
+    name: fileName, // Customize the file name here
+    type: 'video/mp4', // Customize the file type here
+  };
+
+  const options = {
+    keyPrefix: '',
+    bucket: 'torsin-bucket',
+    region: 'ap-south-1',
+    accessKey: 'AKIA3HTEPTYVVR7VTC5L',
+    secretKey: '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',
+    successActionStatus: '201',
   };
 
   try {
-    const data = await s3.upload(params).promise();
-    return data;
+    const data = RNS3.put(file, options);
+    if (data.status !== 201) {
+      return data;
+    }
+    return data.body;
   } catch (error) {
-    throw error;
+    console.log('Error in uploading video');
   }
 };
-
-export const videoUrl = s3.getSignedUrl('getObject', {
-  Bucket: 'torsin-bucket',
-  Key: 'myTestVideo.mp4',
-  Expires: 3600, // Optional: Expiration time in seconds (e.g., 1 hour)
-});

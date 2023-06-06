@@ -8,7 +8,7 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native';
-
+import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
 // icons
@@ -17,63 +17,77 @@ import EvilIcon from 'react-native-vector-icons/EvilIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // components
 import Logout from './Logout';
 import CircleProgress from './CircleProgress';
 import {colors, fonts} from '../theme';
-import {Divider} from 'react-native-paper';
 import {useAppSelector} from '../hooks';
 
 const List = [
   {
     title: 'Notifications',
-    route: '',
+    route: 'Notifications',
     icon: ({color}: {color: string}) => (
-      <EvilIcon name="bell" color={color} size={25} />
+      <EvilIcon name="bell" color={color} size={20} />
     ),
   },
 
   {
     title: 'Proposals',
-    route: '',
+    route: 'Proposals',
     icon: ({color}: {color: string}) => (
-      <IonIcon name="newspaper-outline" color={color} size={25} />
+      <IonIcon name="newspaper-outline" color={color} size={20} />
+    ),
+  },
+  {
+    title: 'My Jobs',
+    route: 'MyJobs',
+    icon: ({color}: {color: string}) => (
+      <FontAwesome name="calendar-check-o" color={color} size={20} />
     ),
   },
   {
     title: 'My Rating',
-    route: '',
+    route: 'MyRatings',
     icon: ({color}: {color: string}) => (
-      <EvilIcon name="star" color={color} size={25} />
+      <EvilIcon name="star" color={color} size={20} />
+    ),
+  },
+  {
+    title: 'My Services',
+    route: 'MyServices',
+    icon: ({color}: {color: string}) => (
+      <EvilIcon name="star" color={color} size={20} />
     ),
   },
   {
     title: 'Payment',
-    route: '',
+    route: 'Payments',
     icon: ({color}: {color: string}) => (
-      <MaterialIcon name="payments" color={color} size={25} />
+      <MaterialIcon name="payments" color={color} size={20} />
     ),
   },
   {
     title: 'About us',
-    route: '',
+    route: 'AboutUs',
     icon: ({color}: {color: string}) => (
-      <AntDesign name="infocirlceo" color={color} size={25} />
+      <AntDesign name="infocirlceo" color={color} size={20} />
     ),
   },
   {
     title: 'Terms and Privacy',
-    route: '',
+    route: 'TermsPrivacy',
     icon: ({color}: {color: string}) => (
-      <IonIcon name="shield-checkmark-outline" color={color} size={25} />
+      <IonIcon name="shield-checkmark-outline" color={color} size={20} />
     ),
   },
   {
     title: 'Help and Support',
-    route: '',
+    route: 'HelpSupport',
     icon: ({color}: {color: string}) => (
-      <IonIcon name="md-headset" color={color} size={25} />
+      <IonIcon name="md-headset" color={color} size={20} />
     ),
   },
 ];
@@ -138,7 +152,37 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                       state.index == index ? colors.white : 'transparent',
                   },
                 ]}
-                onPress={() => navigation.navigate(item.route)}>
+                onPress={() => {
+                  switch (item.route) {
+                    case 'Proposals':
+                      navigation.navigate('Proposals', {
+                        sectionId: 'sent',
+                      });
+                      break;
+                    case 'MyJobs':
+                      navigation.navigate('MyJobs', {
+                        sectionId: 'active',
+                      });
+                      break;
+                    case 'AboutUs':
+                      navigation.navigate('WebScreen', {
+                        item: 'https://google.com',
+                      });
+                      break;
+                    case 'TermsPrivacy':
+                      navigation.navigate('WebScreen', {
+                        item: 'https://facebook.com',
+                      });
+                      break;
+                    case 'HelpSupport':
+                      navigation.navigate('WebScreen', {
+                        item: 'https://github.com',
+                      });
+                      break;
+                    default:
+                      navigation.navigate(item.route);
+                  }
+                }}>
                 <View>
                   {item.icon({
                     color: state.index == index ? colors.primary : colors.grey,
