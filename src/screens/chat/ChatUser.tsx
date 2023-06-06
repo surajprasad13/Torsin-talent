@@ -7,10 +7,10 @@ import moment from 'moment';
 
 // Helpers
 import {appstyle, colors, fonts} from '../../theme';
+import {useAppSelector} from '../../hooks';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
-import {useAppSelector} from '../../hooks';
 
 // helpers
 
@@ -18,19 +18,19 @@ const ChatUser = ({route}: any) => {
   const {} = useAppSelector(state => state.user);
   const [messages, setMessages] = useState<any>([]);
   const {userInfo} = useAppSelector(state => state.auth);
-  const {chatRoomId} = route.params;
+  const {item} = route.params;
   const navigation = useNavigation();
 
   useEffect(() => {
     const unsubscribe = firestore()
       .collection('ChatRooms')
-      .doc('ChatRoom1')
+      .doc(String(item.jobId))
       .collection('messages')
       .orderBy('createdAt', 'desc')
       .onSnapshot(querySnapshot => {
         const _messages = querySnapshot.docs.map(doc => {
           const firebaseData = doc.data();
-          const data = {
+          const data: any = {
             _id: doc.id,
             text: '',
             createdAt: new Date().getTime(),
@@ -38,7 +38,11 @@ const ChatUser = ({route}: any) => {
           };
           return data;
         });
-        setMessages(_messages);
+        const newMessage = _messages.filter(
+          _item =>
+            _item.jobId == item.jobId && _item.proposalId == item.proposalId,
+        );
+        setMessages(newMessage);
       });
     return () => unsubscribe();
   }, []);
@@ -47,11 +51,13 @@ const ChatUser = ({route}: any) => {
     const message = newMessages[0];
     await firestore()
       .collection('ChatRooms')
-      .doc('ChatRoom1')
+      .doc(String(item.jobId))
       .collection('messages')
       .add({
         ...message,
         createdAt: new Date().getTime(),
+        jobId: item.jobId,
+        proposalId: item.proposalId,
       })
       .then(() => {
         //console.log('Messeged');
@@ -110,7 +116,7 @@ const ChatUser = ({route}: any) => {
         />
         <View style={{alignItems: 'center'}}>
           <Text style={{textTransform: 'capitalize', fontSize: 16}}>
-            {chatRoomId}
+            {item.jobName}
           </Text>
           <Text style={{fontFamily: fonts.regular, fontSize: 9}}>
             Last seen {moment().format('lll')}
