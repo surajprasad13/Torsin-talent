@@ -21,6 +21,8 @@ import {CustomButton, CustomInput, Title} from '../../components';
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
 
+const projectType = ['', 'Hourly', 'Fixed'];
+
 const ProposalDetail = ({route}: any) => {
   const {item} = route.params;
   const navigation = useNavigation();
@@ -30,7 +32,7 @@ const ProposalDetail = ({route}: any) => {
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-        <Title title="Sent Proposal" />
+        <Title title="Proposal Detail" />
 
         <ScrollView>
           <View style={{marginTop: 0, margin: 15}}>
@@ -53,7 +55,8 @@ const ProposalDetail = ({route}: any) => {
                 backgroundColor: colors.white,
               }}>
               <TextInput
-                placeholder="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+                placeholder="Message"
+                value={item.message}
                 multiline={true}
                 placeholderTextColor="#4F4F4F"
                 editable={false}
@@ -75,8 +78,8 @@ const ProposalDetail = ({route}: any) => {
               width: '100%',
             }}>
             <CustomInput
-              label="Service Charge"
-              placeholder="Hourly"
+              label="Project Type"
+              placeholder={projectType[item.projectType]}
               keyboardType="number-pad"
               editable={false}
               containerStyle={{marginTop: 10, width: '45%'}}
@@ -84,7 +87,7 @@ const ProposalDetail = ({route}: any) => {
 
             <CustomInput
               label="Service Charge"
-              placeholder="500.00$"
+              placeholder={String(item.charges)}
               keyboardType="number-pad"
               editable={false}
               containerStyle={{marginTop: 10, width: '45%'}}
@@ -103,27 +106,15 @@ const ProposalDetail = ({route}: any) => {
           </View>
 
           <View style={styles.photoContainer}>
-            <View style={styles.innerPhotos}>
-              <FastImage
-                source={require('../../assets/images/Container.png')}
-                resizeMode="cover"
-                style={{width: '100%', height: 140, borderRadius: 10}}
-              />
-            </View>
-            <View style={styles.innerPhotos}>
-              <FastImage
-                source={require('../../assets/images/Container.png')}
-                resizeMode="cover"
-                style={{width: '100%', height: 140, borderRadius: 10}}
-              />
-            </View>
-            <View style={styles.innerPhotos}>
-              <FastImage
-                source={require('../../assets/images/Container.png')}
-                resizeMode="cover"
-                style={{width: '100%', height: 140, borderRadius: 10}}
-              />
-            </View>
+            {item.images.map((_item: string, index: number) => (
+              <View key={index.toString()} style={styles.innerPhotos}>
+                <FastImage
+                  source={{uri: _item}}
+                  resizeMode="cover"
+                  style={{width: '100%', height: 140, borderRadius: 10}}
+                />
+              </View>
+            ))}
           </View>
 
           <View style={styles.textContainer}>
@@ -158,7 +149,12 @@ const ProposalDetail = ({route}: any) => {
           {}
           <CustomButton
             title="Chat now"
-            onPress={() => navigation.navigate('PurposalSent')}
+            onPress={() =>
+              navigation.navigate('ChatUser', {
+                item,
+              })
+            }
+            disabled={item.proposalStatus == 2}
             style={{marginTop: 20}}
           />
           <View style={{marginTop: 50}} />
@@ -199,7 +195,7 @@ const styles = StyleSheet.create({
   dropdwon: {},
   photoContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexWrap: 'wrap',
     ...appstyle.shadow,
     borderRadius: 10,
     margin: 10,

@@ -3,8 +3,6 @@ import {} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 
-//icons
-
 /**
  * Screens
  */
@@ -43,8 +41,7 @@ import ReportProblem from '../screens/jobs/services/ReportProblem';
 import DetailPastJob from '../screens/jobs/DetailPastJob';
 import DetailNewJob from '../screens/jobs/DetailNewJob';
 import AddJobDetails from '../screens/proposals/AddJobDetails';
-import ProposalDetail from '../screens/proposals/ProposalSentDetail';
-import ProposalAcceptDetail from '../screens/proposals/ProposalAcceptDetail';
+import ProposalDetail from '../screens/proposals/ProposalDetail';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -270,14 +267,7 @@ export default function AppNavigator() {
             }}
             initialParams={{item: {}}}
           />
-          <Stack.Screen
-            name="ProposalAcceptDetail"
-            component={ProposalAcceptDetail}
-            options={{
-              ...TransitionPresets.SlideFromRightIOS,
-              headerShown: false,
-            }}
-          />
+
           <Stack.Screen
             name="WebScreen"
             component={WebScreen}
