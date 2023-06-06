@@ -20,4 +20,14 @@ export interface JobDetail {
   createdAt: Date;
 }
 
+export interface ProposalDetail {
+  job: number;
+  message: string;
+  video: string;
+  portfolio: string;
+  projectType: number;
+  charge: number;
+  images: Array<string>;
+}
+
 export interface Skill {}

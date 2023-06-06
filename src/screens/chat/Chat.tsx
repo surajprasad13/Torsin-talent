@@ -7,7 +7,6 @@ import {
   TextInput,
   SafeAreaView,
   ScrollView,
-  Animated,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -23,44 +22,9 @@ import moment from 'moment';
 
 const list = [
   {
-    name: 'Vaibhav',
-    email: 'vaibhav@gmail.com',
-    id: 'vaibhav',
-  },
-  {
-    name: 'Shreyash',
-    email: 'shreyash@gmail.com',
-    id: 'shreyash',
-  },
-  {
-    name: 'Tarzan',
-    email: 'tarzan@gmail.com',
-    id: 'tarzan',
-  },
-  {
-    name: 'Apponward',
-    email: 'apponward@gmail.com',
-    id: 'apponward',
-  },
-  {
-    name: 'Amisha',
-    email: 'amisha@gmail.com',
-    id: 'vaibhav',
-  },
-  {
-    name: 'Mayank',
-    email: 'shreyash@gmail.com',
-    id: 'shreyash',
-  },
-  {
-    name: 'Tarzan',
-    email: 'tarzan@gmail.com',
-    id: 'tarzan',
-  },
-  {
-    name: 'Apponward',
-    email: 'apponward@gmail.com',
-    id: 'apponward',
+    name: 'ChatRoom1',
+    email: 'Chat',
+    id: 'ChatRoom1',
   },
 ];
 
@@ -101,42 +65,22 @@ const Chat = ({}) => {
             alignItems: 'center',
           }}>
           <Feather
-            onPress={handleSearchIconPress}
             name="search"
-            size={15}
-            style={{position: 'absolute', left: 20, top: 20}}
+            size={18}
+            color={colors.black}
+            style={{marginLeft: 10}}
           />
-          <View
+
+          <TextInput
+            placeholder="Search"
+            disableFullscreenUI
+            placeholderTextColor="#D3D3D3"
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              backgroundColor: colors.white,
-              borderWidth: 1,
-              borderRadius: 30,
-              borderColor: '#BDBDBD',
-              flex: 0.9,
-            }}>
-            <Feather
-              name="search"
-              size={18}
-              color={colors.primary}
-              style={{marginLeft: 10}}
-            />
-            <TextInput
-              placeholder="Search"
-              placeholderTextColor="#BDBDBD"
-              style={{
-                padding: 10,
-                flex: 1,
-              }}
-            />
-          </View>
-          <Text onPress={cancelSearchIconPress} style={{color: colors.red}}>
-            Cancel
-          </Text>
-        </Animated.View>
-      )}
-      <ScrollView>
+              padding: 10,
+              flex: 0.95,
+            }}
+          />
+        </TouchableOpacity>
         <View
           style={{
             ...appstyle.shadow,

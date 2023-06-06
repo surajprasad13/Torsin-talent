@@ -158,7 +158,24 @@ const getAccepted = createAsyncThunk(
       });
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getProposalStatus = createAsyncThunk(
+  'user/proposal/status',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`talent/proposal/status`, {
+        headers: {Authorization: `Bearer ${value.userToken}`},
+      });
+      return data;
+    } catch (error: any) {
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -178,6 +195,7 @@ export {
   searchJob,
   addProposal,
   getAccepted,
+  getProposalStatus,
 };
 
 export default {};

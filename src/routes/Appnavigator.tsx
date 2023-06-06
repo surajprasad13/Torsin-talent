@@ -268,6 +268,7 @@ export default function AppNavigator() {
               ...TransitionPresets.SlideFromRightIOS,
               headerShown: false,
             }}
+            initialParams={{item: {}}}
           />
           <Stack.Screen
             name="ProposalAcceptDetail"

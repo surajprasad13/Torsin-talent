@@ -1,32 +1,28 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
   StyleSheet,
   SafeAreaView,
-  TouchableOpacity,
   ScrollView,
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  Keyboard,
   Pressable,
-  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 // icons
-import Feather from 'react-native-vector-icons/Feather';
 
 // components
-import {CustomButton, CustomInput} from '../../components';
+import {CustomButton, CustomInput, Title} from '../../components';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
 
-import FastImage from 'react-native-fast-image';
-
-const ProposalDetail = ({}) => {
+const ProposalDetail = ({route}: any) => {
+  const {item} = route.params;
   const navigation = useNavigation();
 
   return (
@@ -34,32 +30,7 @@ const ProposalDetail = ({}) => {
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: colors.white,
-            padding: 20,
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              if (navigation.canGoBack()) {
-                navigation.goBack();
-              }
-            }}
-            style={{}}>
-            <Feather name="arrow-left" size={20} />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              color: '#000C14',
-            }}>
-            Sent Proposal
-          </Text>
-          <View />
-        </View>
+        <Title title="Sent Proposal" />
 
         <ScrollView>
           <View style={{marginTop: 0, margin: 15}}>
@@ -184,6 +155,7 @@ const ProposalDetail = ({}) => {
             containerStyle={{marginTop: 10, margin: 15}}
             editable={false}
           />
+          {}
           <CustomButton
             title="Chat now"
             onPress={() => navigation.navigate('PurposalSent')}
