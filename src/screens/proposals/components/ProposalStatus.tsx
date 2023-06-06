@@ -74,7 +74,7 @@ const ProposalStatus = ({item}: any) => {
             <Text style={styles.text}>{item.message}</Text>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.text}>${item.charges}</Text>
+              <Text style={styles.text}>Charges: ${item.charges}</Text>
             </View>
           </View>
           {renderStatus(item.proposalStatus)}
@@ -111,7 +111,9 @@ const ProposalStatus = ({item}: any) => {
           <Text
             style={{fontFamily: fonts.regular, fontSize: 12}}
             numberOfLines={1}>
-            {item.location}
+            {item.location.length > 20
+              ? item.location.substring(0, 20).concat('...')
+              : item.location}
           </Text>
         </View>
       </View>

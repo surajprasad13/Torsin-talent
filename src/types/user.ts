@@ -18,6 +18,7 @@ export interface JobDetail {
   projectType: number;
   priceRate: number;
   createdAt: Date;
+  proposalStatus?: number;
 }
 
 export interface ProposalDetail {

@@ -4,18 +4,14 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-//icons
-import Feather from 'react-native-vector-icons/Feather';
-
 // helpers
-import {appstyle, colors, fonts} from '../../theme';
+import {appstyle, fonts} from '../../theme';
 import FastImage from 'react-native-fast-image';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAccepted} from '../../redux/actions/userAction';
@@ -34,37 +30,7 @@ const Chat = ({}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <ScrollView>
-        <TouchableOpacity
-          style={{
-            padding: 5,
-            margin: 10,
-            backgroundColor: colors.white,
-            borderRadius: 30,
-            flexDirection: 'row',
-            alignItems: 'center',
-            borderWidth: 0.5,
-            borderColor: '#D3D3D3',
-          }}>
-          <Feather
-            name="search"
-            size={18}
-            color={colors.black}
-            style={{marginLeft: 10}}
-          />
-
-          <TextInput
-            placeholder="Search"
-            disableFullscreenUI
-            placeholderTextColor="#D3D3D3"
-            style={{
-              padding: 10,
-              flex: 0.95,
-            }}
-          />
-        </TouchableOpacity>
-
         {loading && <ActivityIndicator />}
-
         <View
           style={{
             ...appstyle.shadow,
@@ -122,19 +88,6 @@ const Chat = ({}) => {
                       }}>
                       {moment(item.createdAt).fromNow()}
                     </Text>
-                    <View
-                      style={{
-                        backgroundColor: colors.primary,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 10,
-                        width: 20,
-                        height: 20,
-                        marginTop: 10,
-                        left: 60,
-                      }}>
-                      <Text style={{color: '#ffffff'}}>2</Text>
-                    </View>
                   </View>
                 </View>
               </TouchableOpacity>

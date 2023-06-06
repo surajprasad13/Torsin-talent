@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
-import {GiftedChat, Bubble} from 'react-native-gifted-chat';
+import {GiftedChat, Bubble, InputToolbar} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
@@ -98,8 +98,23 @@ const ChatUser = ({route}: any) => {
     );
   };
 
+  const customtInputToolbar = (props: any) => {
+    return (
+      <InputToolbar
+        {...props}
+        containerStyle={{
+          backgroundColor: '#F7F7FC',
+          borderTopWidth: 1,
+          borderRadius: 10,
+          borderTopColor: 'transparent',
+          color: '#333333',
+        }}
+      />
+    );
+  };
+
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <View
         style={{
           justifyContent: 'space-between',
@@ -132,7 +147,9 @@ const ChatUser = ({route}: any) => {
           name: userInfo?.fullName,
           avatar: userInfo?.profileImage,
         }}
-        renderBubble={renderBubble}
+        //renderBubble={renderBubble}
+        scrollToBottom
+        renderInputToolbar={props => customtInputToolbar(props)}
       />
     </SafeAreaView>
   );

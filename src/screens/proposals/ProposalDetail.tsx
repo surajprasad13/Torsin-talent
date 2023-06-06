@@ -27,6 +27,8 @@ const ProposalDetail = ({route}: any) => {
   const {item} = route.params;
   const navigation = useNavigation();
 
+  console.log(item);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
       <KeyboardAvoidingView
@@ -64,9 +66,9 @@ const ProposalDetail = ({route}: any) => {
                   padding: 15,
                   top: 10,
                   fontSize: 14,
-                  opacity: 0.5,
                   width: '100%',
                   lineHeight: 20,
+                  fontFamily: fonts.regular,
                 }}
               />
             </View>
@@ -79,15 +81,17 @@ const ProposalDetail = ({route}: any) => {
             }}>
             <CustomInput
               label="Project Type"
-              placeholder={projectType[item.projectType]}
               keyboardType="number-pad"
               editable={false}
+              value={
+                item.projectType !== null ? projectType[item.projectType] : 'NA'
+              }
               containerStyle={{marginTop: 10, width: '45%'}}
             />
 
             <CustomInput
               label="Service Charge"
-              placeholder={String(item.charges)}
+              value={item.charges !== null ? String(item.charges) : 'NA'}
               keyboardType="number-pad"
               editable={false}
               containerStyle={{marginTop: 10, width: '45%'}}
@@ -105,17 +109,31 @@ const ProposalDetail = ({route}: any) => {
             </Text>
           </View>
 
-          <View style={styles.photoContainer}>
-            {item.images.map((_item: string, index: number) => (
-              <View key={index.toString()} style={styles.innerPhotos}>
-                <FastImage
-                  source={{uri: _item}}
-                  resizeMode="cover"
-                  style={{width: '100%', height: 140, borderRadius: 10}}
-                />
-              </View>
-            ))}
-          </View>
+          {item.images.length > 0 ? (
+            <View style={styles.photoContainer}>
+              {item.images.map((_item: string, index: number) => (
+                <View key={index.toString()} style={styles.innerPhotos}>
+                  <FastImage
+                    source={{uri: _item}}
+                    resizeMode="cover"
+                    style={{width: '100%', height: 140, borderRadius: 10}}
+                  />
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View style={styles.photoContainer}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  padding: 10,
+                  fontFamily: fonts.regular,
+                  color: colors.grey,
+                }}>
+                No Photos
+              </Text>
+            </View>
+          )}
 
           <View style={styles.textContainer}>
             <Text
@@ -128,21 +146,36 @@ const ProposalDetail = ({route}: any) => {
             </Text>
           </View>
 
-          <Pressable style={styles.videoInput}>
-            <FastImage
-              source={require('../../assets/images/video1.png')}
-              resizeMode="cover"
-              style={{
-                height: 200,
-                justifyContent: 'center',
-                borderRadius: 10,
-              }}
-            />
-          </Pressable>
+          {item.videos !== null ? (
+            <View style={styles.videoInput}>
+              <FastImage
+                source={require('../../assets/images/video1.png')}
+                resizeMode="cover"
+                style={{
+                  height: 200,
+                  justifyContent: 'center',
+                  borderRadius: 10,
+                }}
+              />
+            </View>
+          ) : (
+            <View style={styles.videoInput}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  padding: 10,
+                  fontFamily: fonts.regular,
+                  color: colors.grey,
+                }}>
+                No Video
+              </Text>
+            </View>
+          )}
 
           <CustomInput
-            label="Add Portfolio link"
+            label="Portfolio link"
             placeholder="https://portfolio.link.com"
+            value={item.portfolio !== null ? item.portfolio : 'NA'}
             containerStyle={{marginTop: 10, margin: 15}}
             editable={false}
           />
