@@ -4,17 +4,13 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   SafeAreaView,
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-//icons
-import Feather from 'react-native-vector-icons/Feather';
-
 // helpers
-import {appstyle, colors, fonts} from '../../theme';
+import {appstyle, fonts} from '../../theme';
 import FastImage from 'react-native-fast-image';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAccepted} from '../../redux/actions/userAction';
@@ -33,54 +29,8 @@ const Chat = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
-      {!isTextInputVisible ? (
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 20,
-            backgroundColor: colors.white,
-          }}>
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              color: colors.black,
-              fontSize: 16,
-            }}>
-            Chats
-          </Text>
-          <Feather
-            onPress={handleSearchIconPress}
-            name="search"
-            size={15}
-            style={{position: 'absolute', right: 10, top: 15}}
-          />
-        </View>
-      ) : (
-        <Animated.View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: 10,
-            alignItems: 'center',
-          }}>
-          <Feather
-            name="search"
-            size={18}
-            color={colors.black}
-            style={{marginLeft: 10}}
-          />
-
-          <TextInput
-            placeholder="Search"
-            disableFullscreenUI
-            placeholderTextColor="#D3D3D3"
-            style={{
-              padding: 10,
-              flex: 0.95,
-            }}
-          />
-        </TouchableOpacity>
+      <ScrollView>
+        {loading && <ActivityIndicator />}
         <View
           style={{
             ...appstyle.shadow,
@@ -138,19 +88,6 @@ const Chat = ({}) => {
                       }}>
                       {moment(item.createdAt).fromNow()}
                     </Text>
-                    <View
-                      style={{
-                        backgroundColor: colors.primary,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 10,
-                        width: 20,
-                        height: 20,
-                        marginTop: 10,
-                        left: 60,
-                      }}>
-                      <Text style={{color: '#ffffff'}}>2</Text>
-                    </View>
                   </View>
                 </View>
               </TouchableOpacity>

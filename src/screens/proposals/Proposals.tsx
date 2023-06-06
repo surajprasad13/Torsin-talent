@@ -8,7 +8,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import {} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 //helpers
 import {colors, fonts} from '../../theme';
@@ -34,6 +34,7 @@ const jobs = [
 ];
 
 const Proposals = ({route}: any) => {
+  const navigation = useNavigation();
   const {sectionId} = route.params;
 
   const dispatch = useAppDispatch();
@@ -49,6 +50,13 @@ const Proposals = ({route}: any) => {
 
   useEffect(() => {
     dispatch(getProposalStatus({userToken}));
+  }, []);
+
+  useEffect(() => {
+    const listener = navigation.addListener('focus', () => {
+      dispatch(getProposalStatus({userToken}));
+    });
+    return () => listener;
   }, []);
 
   useEffect(() => {

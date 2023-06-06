@@ -91,7 +91,16 @@ const AddService = ({route}: any) => {
       handleError('Please add message', 'message');
       isValid = false;
     }
-
+    if (inputs.message.length < 50) {
+      handleError('Please add at least 50 character', 'message');
+      isValid = false;
+    }
+    if (inputs.charge.length > 0) {
+      if (Number(inputs.charge) == 0) {
+        handleError('Please add valid amount', 'serviceCharge');
+        isValid = false;
+      }
+    }
     if (isValid) {
       postService();
     }
@@ -204,6 +213,7 @@ const AddService = ({route}: any) => {
               multiline={true}
               placeholderTextColor="#4F4F4F"
               value={inputs.message}
+              maxLength={500}
               onChangeText={text => {
                 handleOnchange(text, 'message');
               }}
@@ -295,12 +305,22 @@ const AddService = ({route}: any) => {
             <CustomInput
               label="Service Charge"
               placeholder="eg. $500"
+              maxLength={5}
               keyboardType="number-pad"
               value={String(inputs.charge)}
               onChangeText={text => {
-                handleOnchange(text, 'charge');
+                handleError('', 'serviceCharge');
+                const pattern = /^[0-9]*$/;
+                const pass = pattern.test(text);
+                if (pass) {
+                  handleOnchange(text, 'charge');
+                }
+              }}
+              onFocus={() => {
+                handleError('', 'serviceCharge');
               }}
               containerStyle={{marginTop: 10, width: '45%'}}
+              error={errors.serviceCharge}
             />
           </View>
 

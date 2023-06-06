@@ -149,9 +149,11 @@ const HomeScreen = ({}) => {
           </Text>
         </View>
         <View style={{marginTop: 20}}>
-          {correspond.map((item, index) => (
-            <ExpertiseCard item={item} key={index.toString()} />
-          ))}
+          {correspond
+            .filter(_item => _item.proposalStatus == 0)
+            .map((item, index) => (
+              <ExpertiseCard item={item} key={index.toString()} />
+            ))}
         </View>
       </ScrollView>
     </SafeAreaView>
