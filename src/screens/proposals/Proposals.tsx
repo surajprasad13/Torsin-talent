@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -56,7 +57,7 @@ const Proposals = ({route}: any) => {
     const listener = navigation.addListener('focus', () => {
       dispatch(getProposalStatus({userToken}));
     });
-    return () => listener;
+    return listener;
   }, []);
 
   useEffect(() => {

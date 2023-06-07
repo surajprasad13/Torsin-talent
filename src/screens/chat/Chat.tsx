@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -57,29 +58,16 @@ const Chat = ({}) => {
                     borderWidth: 0.5,
                   }}
                 />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    width: '80%',
-                    left: 10,
-                  }}>
-                  <View style={{}}>
+                <View style={{width: '80%'}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
                     <Text
                       style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
                       {item.jobName}
                     </Text>
-                    <Text
-                      style={{
-                        fontFamily: fonts.regular,
-                        color: '#1E202B',
-                        top: 10,
-                        opacity: 0.6,
-                      }}>
-                      {item.jobDescription}
-                    </Text>
-                  </View>
-                  <View>
                     <Text
                       style={{
                         fontFamily: fonts.regular,
@@ -89,6 +77,15 @@ const Chat = ({}) => {
                       {moment(item.createdAt).fromNow()}
                     </Text>
                   </View>
+                  <Text
+                    style={{
+                      fontFamily: fonts.regular,
+                      color: '#1E202B',
+                      opacity: 0.6,
+                      marginTop: 10,
+                    }}>
+                    {item.jobDescription}
+                  </Text>
                 </View>
               </TouchableOpacity>
             );
@@ -101,7 +98,7 @@ const Chat = ({}) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 15,
     borderRadius: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
