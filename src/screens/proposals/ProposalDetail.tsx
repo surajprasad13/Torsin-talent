@@ -8,7 +8,6 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
@@ -26,8 +25,6 @@ const projectType = ['', 'Hourly', 'Fixed'];
 const ProposalDetail = ({route}: any) => {
   const {item} = route.params;
   const navigation = useNavigation();
-
-  console.log(item);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
@@ -109,9 +106,9 @@ const ProposalDetail = ({route}: any) => {
             </Text>
           </View>
 
-          {item.images.length > 0 ? (
+          {item.photos.length > 0 ? (
             <View style={styles.photoContainer}>
-              {item.images.map((_item: string, index: number) => (
+              {item.photos.map((_item: string, index: number) => (
                 <View key={index.toString()} style={styles.innerPhotos}>
                   <FastImage
                     source={{uri: _item}}
@@ -122,7 +119,7 @@ const ProposalDetail = ({route}: any) => {
               ))}
             </View>
           ) : (
-            <View style={styles.photoContainer}>
+            <View style={styles.videoInput}>
               <Text
                 style={{
                   textAlign: 'center',

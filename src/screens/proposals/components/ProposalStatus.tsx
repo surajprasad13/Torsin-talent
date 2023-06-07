@@ -71,11 +71,6 @@ const ProposalStatus = ({item}: any) => {
             <Text style={[styles.headertext, {marginTop: 10}]}>
               {item.jobDescription}
             </Text>
-            <Text style={styles.text}>{item.message}</Text>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.text}>Charges: ${item.charges}</Text>
-            </View>
           </View>
           {renderStatus(item.proposalStatus)}
         </View>

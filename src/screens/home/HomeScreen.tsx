@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
 import {
   View,
@@ -7,6 +8,7 @@ import {
   Dimensions,
   SafeAreaView,
   TextInput,
+  RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {} from 'react-native-paper';
@@ -29,7 +31,7 @@ const {} = Dimensions.get('window');
 const HomeScreen = ({}) => {
   const dispatch = useAppDispatch();
   const {userInfo, userToken} = useAppSelector(state => state.auth);
-  const {correspond} = useAppSelector(state => state.user);
+  const {correspond, loading} = useAppSelector(state => state.user);
 
   const navigation = useNavigation();
 
@@ -38,15 +40,27 @@ const HomeScreen = ({}) => {
   }, []);
 
   useEffect(() => {
+    dispatch(jobCorrespondSkill(userToken));
+  }, []);
+
+  useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(jobCorrespondSkill(userToken));
     });
-    return () => listener;
+    return listener;
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
+    dispatch(jobCorrespondSkill(userToken));
   }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <ScrollView style={{padding: 10}}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
+        style={{padding: 10}}>
         <View
           style={{
             flexDirection: 'row',
