@@ -1,5 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import {
+  FlatList,
+  KeyboardAvoidingView,
+  Modal,
+  Pressable,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {GiftedChat, Bubble, InputToolbar} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
@@ -11,15 +21,19 @@ import {useAppSelector} from '../../hooks';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
+import {Divider} from 'react-native-paper';
 
 // helpers
 
 const ChatUser = ({route}: any) => {
   const {} = useAppSelector(state => state.user);
   const [messages, setMessages] = useState<any>([]);
+  const [inputText, setInputText] = useState<string>('');
+
   const {userInfo} = useAppSelector(state => state.auth);
   const {item} = route.params;
   const navigation = useNavigation();
+  const [isPopupVisible, setPopupVisible] = useState(false);
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -47,17 +61,25 @@ const ChatUser = ({route}: any) => {
     return () => unsubscribe();
   }, []);
 
-  const onSend = async (newMessages: any) => {
-    const message = newMessages[0];
+  const handleSendMessage = async () => {
+    if (inputText.trim() === '') {
+      return;
+    }
     await firestore()
       .collection('ChatRooms')
       .doc(String(item.jobId))
       .collection('messages')
       .add({
-        ...message,
+        id: new Date().getTime(),
         createdAt: new Date().getTime(),
         jobId: item.jobId,
         proposalId: item.proposalId,
+        text: inputText,
+        user: {
+          _id: userInfo?.id,
+          avatar: userInfo?.profileImage,
+          name: userInfo?.fullName,
+        },
       })
       .then(() => {
         //console.log('Messeged');
@@ -65,51 +87,73 @@ const ChatUser = ({route}: any) => {
       .catch(() => {
         //console.log(error);
       });
+
+    setInputText('');
   };
 
-  const renderBubble = (props: any) => {
+  const renderItem = ({item, index}: any) => {
     return (
-      <Bubble
-        {...props}
-        wrapperStyle={{
-          right: {
-            margin: 5,
-            ...appstyle.shadow,
-          },
-          left: {
-            backgroundColor: colors.primary,
-            margin: 5,
-          },
-        }}
-        textStyle={{
-          right: {
-            color: 'black',
-            fontSize: 12,
-            fontFamily: fonts.regular,
-            textAlign: 'center',
-          },
-          left: {
-            color: 'white',
-            fontSize: 12,
-            fontFamily: fonts.regular,
-          },
-        }}
-      />
-    );
-  };
-
-  const customtInputToolbar = (props: any) => {
-    return (
-      <InputToolbar
-        {...props}
-        containerStyle={{
-          backgroundColor: '#F7F7FC',
-          borderTopWidth: 1,
-          borderRadius: 10,
-          borderTopColor: 'transparent',
-          color: '#333333',
-        }}
-      />
+      <View style={{padding: 15}}>
+        {item.user._id === userInfo?.id ? (
+          <View style={{width: '70%', alignSelf: 'flex-end', flex: 1}}>
+            <View
+              style={{
+                backgroundColor: '#E8E9EB',
+                padding: 15,
+                borderRadius: 10,
+                borderBottomRightRadius: 0,
+                borderColor: '#8A9099',
+                borderWidth: 0.2,
+              }}>
+              <Text
+                style={{
+                  color: '#595F69',
+                  fontFamily: fonts.medium,
+                  fontSize: 12,
+                }}>
+                {item.text}
+              </Text>
+            </View>
+            <Text
+              style={{
+                textAlign: 'left',
+                fontFamily: fonts.medium,
+                color: '#8A9099',
+                fontSize: 10,
+              }}>
+              {moment(item.createdAt).fromNow()}
+            </Text>
+          </View>
+        ) : (
+          <View style={{width: '70%'}}>
+            <View
+              style={{
+                backgroundColor: colors.primary,
+                borderRadius: 10,
+                borderBottomLeftRadius: 0,
+                padding: 15,
+              }}>
+              <Text
+                style={{
+                  color: colors.white,
+                  fontFamily: fonts.medium,
+                  fontSize: 12,
+                }}>
+                {item.text}
+              </Text>
+            </View>
+            <Text
+              style={{
+                textAlign: 'right',
+                fontFamily: fonts.medium,
+                color: '#8A9099',
+                fontSize: 10,
+              }}>
+              {moment(item.createdAt).fromNow()}
+            </Text>
+          </View>
+        )}
+      </View>
     );
   };
 
@@ -139,7 +183,7 @@ const ChatUser = ({route}: any) => {
         </View>
         <Feather name="more-vertical" size={20} />
       </View>
-      <GiftedChat
+      {/* <GiftedChat
         messages={messages}
         onSend={newMessages => onSend(newMessages)}
         user={{
@@ -150,7 +194,110 @@ const ChatUser = ({route}: any) => {
         //renderBubble={renderBubble}
         scrollToBottom
         renderInputToolbar={props => customtInputToolbar(props)}
+      /> */}
+      <Modal
+        visible={isPopupVisible}
+        animationType="slide"
+        style={{}}
+        transparent>
+        <View style={{backgroundColor: 'rgba(0,0,0,0.5)', flex: 1}}>
+          <View
+            style={{
+              position: 'absolute',
+              bottom: '15%',
+              width: '100%',
+            }}>
+            <View
+              style={{
+                margin: 20,
+                backgroundColor: 'white',
+                padding: 10,
+                borderRadius: 10,
+              }}>
+              <Pressable style={{padding: 5, margin: 5}}>
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    fontSize: 16,
+                    color: '#4F4F4F',
+                  }}>
+                  Photo & Video Liberary
+                </Text>
+              </Pressable>
+              <Divider />
+              <Pressable style={{padding: 5, margin: 5}}>
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    fontSize: 16,
+                    color: '#4F4F4F',
+                  }}>
+                  Documents
+                </Text>
+              </Pressable>
+            </View>
+            <View style={{margin: 20, marginTop: -10}}>
+              <TouchableOpacity
+                onPress={() => {
+                  setPopupVisible(false);
+                }}
+                style={{
+                  backgroundColor: 'white',
+                  padding: 15,
+                  borderRadius: 10,
+                }}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontFamily: fonts.regular,
+                    color: colors.primary,
+                    fontSize: 16,
+                  }}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <FlatList
+        data={messages}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{flexGrow: 1}}
+        inverted
       />
+      <KeyboardAvoidingView behavior="padding">
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 8,
+            ...appstyle.shadow,
+            justifyContent: 'space-between',
+          }}>
+          <TouchableOpacity onPress={() => setPopupVisible(true)} style={{}}>
+            <Feather name="plus" color={colors.primary} size={20} />
+          </TouchableOpacity>
+
+          <TextInput
+            style={{
+              borderRadius: 8,
+              padding: 15,
+              width: '80%',
+              backgroundColor: '#F7F7FC',
+              color: '#333333',
+            }}
+            placeholder="Type a message..."
+            value={inputText}
+            onChangeText={setInputText}
+          />
+          <TouchableOpacity onPress={handleSendMessage} style={{}}>
+            <Feather name="send" size={20} color={colors.primary} />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

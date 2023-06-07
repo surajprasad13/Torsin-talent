@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
 import {
   View,
@@ -7,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -17,16 +17,15 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAccepted} from '../../redux/actions/userAction';
 import moment from 'moment';
 
-const list = [
-  {
-    name: 'ChatRoom1',
-    email: 'Chat',
-    id: 'ChatRoom1',
-  },
-];
-
 const Chat = ({}) => {
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+  const {userToken} = useAppSelector(state => state.auth);
+  const {acceptList, loading} = useAppSelector(state => state.user);
+
+  useEffect(() => {
+    dispatch(getAccepted({userToken}));
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
@@ -40,7 +39,7 @@ const Chat = ({}) => {
             backgroundColor: 'white',
             margin: 10,
           }}>
-          {list.map((item, index) => {
+          {acceptList.map((item, index) => {
             return (
               <TouchableOpacity
                 key={index.toString()}
@@ -49,7 +48,7 @@ const Chat = ({}) => {
                 }}
                 style={styles.container}>
                 <FastImage
-                  source={{uri: item.image[0]}}
+                  source={{uri: item.profileImage}}
                   resizeMode="cover"
                   style={{
                     width: 50,
@@ -66,7 +65,7 @@ const Chat = ({}) => {
                     }}>
                     <Text
                       style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
-                      {item.jobName}
+                      {item.fullname}
                     </Text>
                     <Text
                       style={{
@@ -79,10 +78,19 @@ const Chat = ({}) => {
                   </View>
                   <Text
                     style={{
+                      fontFamily: fonts.semibold,
+                      color: '#1E202B',
+                      marginTop: 5,
+                      opacity: 0.8,
+                    }}>
+                    {item.jobName}
+                  </Text>
+                  <Text
+                    style={{
                       fontFamily: fonts.regular,
                       color: '#1E202B',
                       opacity: 0.6,
-                      marginTop: 10,
+                      marginTop: 5,
                     }}>
                     {item.jobDescription}
                   </Text>
@@ -109,3 +117,36 @@ const styles = StyleSheet.create({
 });
 
 export default Chat;
+
+const json = [
+  {
+    createdAt: '2023-06-07T05:12:11.460644Z',
+    fullname: 'Mayank Tyagi',
+    image: [
+      'https://torsin-bucket.s3.ap-south-1.amazonaws.com/DE5AA26F-2C02-4F96-B387-BAB425245B94.png',
+      'https://torsin-bucket.s3.ap-south-1.amazonaws.com/5521B2E2-B5EF-49BD-BCF1-096808C14B31.jpg',
+    ],
+    jobDescription:
+      'I am looking for the iOS developer for mobile application ',
+    jobId: 157,
+    jobName: 'IOS developer ',
+    profileImage:
+      'https://torsin-bucket.s3.ap-south-1.amazonaws.com/IMG_0003.JPG',
+    proposalId: 71,
+    proposalStatus: 2,
+  },
+  {
+    createdAt: '2023-06-06T20:00:23.000508Z',
+    fullname: 'Mayank Tyagi',
+    image: [
+      'https://torsin-bucket.s3.ap-south-1.amazonaws.com/D16F5CEB-FF02-4B72-8A01-104B1758791E.png',
+    ],
+    jobDescription: 'DuckDuckGo',
+    jobId: 158,
+    jobName: 'Android ',
+    profileImage:
+      'https://torsin-bucket.s3.ap-south-1.amazonaws.com/IMG_0003.JPG',
+    proposalId: 70,
+    proposalStatus: 2,
+  },
+];
