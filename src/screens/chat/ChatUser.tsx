@@ -158,7 +158,7 @@ const ChatUser = ({route}: any) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <View
         style={{
           justifyContent: 'space-between',
@@ -273,9 +273,10 @@ const ChatUser = ({route}: any) => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            padding: 8,
-            ...appstyle.shadow,
+            padding: 10,
             justifyContent: 'space-between',
+            height: 90,
+            ...appstyle.shadow,
           }}>
           <TouchableOpacity onPress={() => setPopupVisible(true)} style={{}}>
             <Feather name="plus" color={colors.primary} size={20} />
@@ -298,7 +299,7 @@ const ChatUser = ({route}: any) => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 
