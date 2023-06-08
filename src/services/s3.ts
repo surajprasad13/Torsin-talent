@@ -33,6 +33,29 @@ export const uploadFileToS3 = async (
   }
 };
 
+export const uploadPdfFileToS3 = async (
+  file: any,
+  fileName: string,
+  ContentType: string,
+) => {
+  let contentDeposition = 'inline;filename="' + fileName + '"';
+  const params = {
+    Bucket: 'torsin-bucket',
+    Key: fileName,
+    Body: file,
+    ContentDisposition: contentDeposition,
+    ContentType: ContentType,
+    ContentEncoding: 'base64',
+  };
+
+  try {
+    const data = await s3.upload(params).promise();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const uploadVideoToS3 = (uri: string, fileName: string) => {
   const file = {
     uri: uri,

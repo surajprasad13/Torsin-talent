@@ -1,34 +1,42 @@
 import React, {useEffect, useState} from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
   Modal,
+  Platform,
   Pressable,
-  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {GiftedChat, Bubble, InputToolbar} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
+import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 
-// Helpers
-import {appstyle, colors, fonts} from '../../theme';
-import {useAppSelector} from '../../hooks';
-
 //icons
 import Feather from 'react-native-vector-icons/Feather';
-import {Divider} from 'react-native-paper';
 
 // helpers
+import {appstyle, colors, fonts} from '../../theme';
+import {useAppSelector} from '../../hooks';
+import Message from './components/Message';
+import {uploadDocument, uploadMedia} from '../../helpers';
+import {
+  handleSendImageMessage,
+  handleSendVideoMessage,
+} from '../../helpers/chat';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const ChatUser = ({route}: any) => {
+  const insets = useSafeAreaInsets();
+
   const {} = useAppSelector(state => state.user);
   const [messages, setMessages] = useState<any>([]);
-  const [inputText, setInputText] = useState<string>('');
+  const [value, setValue] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
   const {userInfo} = useAppSelector(state => state.auth);
   const {item} = route.params;
@@ -36,6 +44,7 @@ const ChatUser = ({route}: any) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const unsubscribe = firestore()
       .collection('ChatRooms')
       .doc(String(item.jobId))
@@ -56,15 +65,17 @@ const ChatUser = ({route}: any) => {
           _item =>
             _item.jobId == item.jobId && _item.proposalId == item.proposalId,
         );
+        setLoading(false);
         setMessages(newMessage);
       });
     return () => unsubscribe();
   }, []);
 
   const handleSendMessage = async () => {
-    if (inputText.trim() === '') {
+    if (value.length == 0) {
       return;
     }
+    setLoading(true);
     await firestore()
       .collection('ChatRooms')
       .doc(String(item.jobId))
@@ -74,7 +85,7 @@ const ChatUser = ({route}: any) => {
         createdAt: new Date().getTime(),
         jobId: item.jobId,
         proposalId: item.proposalId,
-        text: inputText,
+        text: value,
         user: {
           _id: userInfo?.id,
           avatar: userInfo?.profileImage,
@@ -82,83 +93,27 @@ const ChatUser = ({route}: any) => {
         },
       })
       .then(() => {
+        setLoading(false);
+        setValue('');
         //console.log('Messeged');
       })
       .catch(() => {
+        setLoading(false);
         //console.log(error);
       });
-
-    setInputText('');
   };
 
   const renderItem = ({item, index}: any) => {
-    return (
-      <View style={{padding: 15}}>
-        {item.user._id === userInfo?.id ? (
-          <View style={{width: '70%', alignSelf: 'flex-end', flex: 1}}>
-            <View
-              style={{
-                backgroundColor: '#E8E9EB',
-                padding: 15,
-                borderRadius: 10,
-                borderBottomRightRadius: 0,
-                borderColor: '#8A9099',
-                borderWidth: 0.2,
-              }}>
-              <Text
-                style={{
-                  color: '#595F69',
-                  fontFamily: fonts.medium,
-                  fontSize: 12,
-                }}>
-                {item.text}
-              </Text>
-            </View>
-            <Text
-              style={{
-                textAlign: 'left',
-                fontFamily: fonts.medium,
-                color: '#8A9099',
-                fontSize: 10,
-              }}>
-              {moment(item.createdAt).fromNow()}
-            </Text>
-          </View>
-        ) : (
-          <View style={{width: '70%'}}>
-            <View
-              style={{
-                backgroundColor: colors.primary,
-                borderRadius: 10,
-                borderBottomLeftRadius: 0,
-                padding: 15,
-              }}>
-              <Text
-                style={{
-                  color: colors.white,
-                  fontFamily: fonts.medium,
-                  fontSize: 12,
-                }}>
-                {item.text}
-              </Text>
-            </View>
-            <Text
-              style={{
-                textAlign: 'right',
-                fontFamily: fonts.medium,
-                color: '#8A9099',
-                fontSize: 10,
-              }}>
-              {moment(item.createdAt).fromNow()}
-            </Text>
-          </View>
-        )}
-      </View>
-    );
+    return <Message item={item} userInfo={userInfo} key={index.toString()} />;
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: 'white',
+        paddingBottom: insets.bottom - 50,
+      }}>
       <View
         style={{
           justifyContent: 'space-between',
@@ -175,7 +130,7 @@ const ChatUser = ({route}: any) => {
         />
         <View style={{alignItems: 'center'}}>
           <Text style={{textTransform: 'capitalize', fontSize: 16}}>
-            {item.jobName}
+            {userInfo?.fullName}
           </Text>
           <Text style={{fontFamily: fonts.regular, fontSize: 9}}>
             Last seen {moment().format('lll')}
@@ -183,28 +138,12 @@ const ChatUser = ({route}: any) => {
         </View>
         <Feather name="more-vertical" size={20} />
       </View>
-      {/* <GiftedChat
-        messages={messages}
-        onSend={newMessages => onSend(newMessages)}
-        user={{
-          _id: String(userInfo?.id),
-          name: userInfo?.fullName,
-          avatar: userInfo?.profileImage,
-        }}
-        //renderBubble={renderBubble}
-        scrollToBottom
-        renderInputToolbar={props => customtInputToolbar(props)}
-      /> */}
-      <Modal
-        visible={isPopupVisible}
-        animationType="slide"
-        style={{}}
-        transparent>
+      <Modal visible={isPopupVisible} animationType="slide" transparent>
         <View style={{backgroundColor: 'rgba(0,0,0,0.5)', flex: 1}}>
           <View
             style={{
               position: 'absolute',
-              bottom: '15%',
+              bottom: '10%',
               width: '100%',
             }}>
             <View
@@ -214,18 +153,72 @@ const ChatUser = ({route}: any) => {
                 padding: 10,
                 borderRadius: 10,
               }}>
-              <Pressable style={{padding: 5, margin: 5}}>
+              <Pressable
+                style={{padding: 5, margin: 5}}
+                onPress={async () => {
+                  const data = await uploadMedia({type: 'image'});
+                  setLoading(true);
+                  setPopupVisible(false);
+                  if (data) {
+                    await handleSendImageMessage({
+                      item,
+                      value: data as string,
+                      userInfo,
+                    });
+                    setLoading(false);
+                  } else {
+                    setPopupVisible(false);
+                    setLoading(false);
+                  }
+                }}>
                 <Text
                   style={{
                     fontFamily: fonts.regular,
                     fontSize: 16,
                     color: '#4F4F4F',
                   }}>
-                  Photo & Video Liberary
+                  Photo Library
                 </Text>
               </Pressable>
+
               <Divider />
-              <Pressable style={{padding: 5, margin: 5}}>
+
+              <Pressable
+                style={{padding: 5, margin: 5}}
+                onPress={async () => {
+                  const data = await uploadMedia({type: 'video'});
+                  setLoading(true);
+                  setPopupVisible(false);
+                  if (data) {
+                    await handleSendVideoMessage({
+                      item,
+                      value: data as string,
+                      userInfo,
+                    });
+                    setLoading(false);
+                  } else {
+                    setPopupVisible(false);
+                    setLoading(false);
+                  }
+                }}>
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    fontSize: 16,
+                    color: '#4F4F4F',
+                  }}>
+                  Video Library
+                </Text>
+              </Pressable>
+
+              <Divider />
+
+              <Pressable
+                style={{padding: 5, margin: 5}}
+                onPress={() => {
+                  const data = uploadDocument();
+                  console.log(data);
+                }}>
                 <Text
                   style={{
                     fontFamily: fonts.regular,
@@ -264,19 +257,19 @@ const ChatUser = ({route}: any) => {
       <FlatList
         data={messages}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={{flexGrow: 1}}
         inverted
       />
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            padding: 10,
-            justifyContent: 'space-between',
-            height: 90,
+            padding: 8,
             ...appstyle.shadow,
+            justifyContent: 'space-between',
           }}>
           <TouchableOpacity onPress={() => setPopupVisible(true)} style={{}}>
             <Feather name="plus" color={colors.primary} size={20} />
@@ -291,15 +284,19 @@ const ChatUser = ({route}: any) => {
               color: '#333333',
             }}
             placeholder="Type a message..."
-            value={inputText}
-            onChangeText={setInputText}
+            value={value}
+            onChangeText={text => setValue(text)}
           />
-          <TouchableOpacity onPress={handleSendMessage} style={{}}>
-            <Feather name="send" size={20} color={colors.primary} />
-          </TouchableOpacity>
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            <TouchableOpacity onPress={handleSendMessage} style={{}}>
+              <Feather name="send" size={20} color={colors.primary} />
+            </TouchableOpacity>
+          )}
         </View>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
 };
 
