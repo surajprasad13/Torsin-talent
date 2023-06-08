@@ -24,7 +24,7 @@ import ProFile from '../../components/Profile';
 // helpers
 import {colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {CustomButton, CustomInput} from '../../components';
+import {CustomButton, CustomInput, Title} from '../../components';
 import {userUpdate} from '../../redux/actions/authAction';
 import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
 import {alphabets, email, number} from '../../utils/regex';
@@ -152,26 +152,8 @@ const EditUserProfile = ({}) => {
         </Dialog>
       </Portal>
 
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-            }
-          }}
-          style={{padding: 10}}>
-          <Feather name="arrow-left" size={20} />
-        </TouchableOpacity>
+      <Title title={userInfo?.fullName} />
 
-        <Text
-          style={{
-            fontFamily: fonts.medium,
-            color: '#000C14',
-          }}>
-          {userInfo?.fullName}
-        </Text>
-        <View style={{}} />
-      </View>
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>

@@ -316,9 +316,6 @@ const AddService = ({route}: any) => {
                   handleOnchange(text, 'charge');
                 }
               }}
-              onFocus={() => {
-                handleError('', 'serviceCharge');
-              }}
               containerStyle={{marginTop: 10, width: '45%'}}
               error={errors.serviceCharge}
             />

@@ -21,7 +21,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // components
-import {CustomButton, CustomInput} from '../../components';
+import {CustomButton, CustomInput, Title} from '../../components';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
@@ -82,6 +82,23 @@ const AddService = ({}) => {
     Keyboard.dismiss();
 
     let isValid = true;
+
+    if (inputs.serviceName.length < 3) {
+      handleError('Please add at least 3 character', 'serviceName');
+      isValid = false;
+    }
+
+    if (inputs.serviceCharge.length > 0) {
+      if (Number(inputs.serviceCharge) == 0) {
+        handleError('Please add valid amount', 'serviceCharge');
+        isValid = false;
+      }
+    }
+
+    if (inputs.serviceDescription.length < 50) {
+      handleError('Please add at least 50 character', 'serviceDescription');
+      isValid = false;
+    }
 
     if (inputs.serviceImage.length == 0) {
       handleError('Please add atleast one image', 'image');
@@ -202,32 +219,7 @@ const AddService = ({}) => {
           </Dialog>
         </Portal>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: colors.white,
-            padding: 10,
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              if (navigation.canGoBack()) {
-                navigation.goBack();
-              }
-            }}
-            style={{padding: 10}}>
-            <Feather name="arrow-left" size={20} />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              color: '#000C14',
-            }}>
-            Add Service
-          </Text>
-          <View />
-        </View>
+        <Title title="Add Service" />
 
         <ScrollView>
           <View style={styles.textContainer}>
@@ -255,9 +247,24 @@ const AddService = ({}) => {
               label="Service Name"
               placeholder="eg. Song Production"
               value={inputs.serviceName}
-              onChangeText={text => handleOnchange(text, 'serviceName')}
+              onChangeText={(text: any) => {
+                const name = text.replace(/[^a-zA-Z ]/g, '');
+                handleOnchange(name, 'serviceName');
+                handleError('', 'serviceName');
+              }}
+              onFocus={() => handleError(null, 'serviceName')}
               containerStyle={{}}
+              maxLength={50}
             />
+            {errors && (
+              <Text
+                style={{
+                  marginTop: 5,
+                  color: 'red',
+                }}>
+                {errors.serviceName}
+              </Text>
+            )}
             <View style={{marginTop: 10}}>
               <Text
                 style={{
@@ -311,10 +318,31 @@ const AddService = ({}) => {
               label="Service Charge"
               placeholder="eg. $500"
               keyboardType="number-pad"
+              maxLength={5}
               value={String(inputs.serviceCharge)}
-              onChangeText={text => handleOnchange(text, 'serviceCharge')}
+              onChangeText={text => {
+                handleError('', 'serviceCharge');
+                const pattern = /^[0-9]*$/;
+                const pass = pattern.test(text);
+                if (pass) {
+                  handleOnchange(text, 'serviceCharge');
+                }
+              }}
+              onFocus={() => {
+                handleError('', 'serviceCharge');
+              }}
               containerStyle={{marginTop: 10}}
             />
+
+            {errors && (
+              <Text
+                style={{
+                  marginTop: 5,
+                  color: 'red',
+                }}>
+                {errors.serviceCharge}
+              </Text>
+            )}
 
             <View style={{marginTop: 10}}>
               <Text
@@ -340,9 +368,11 @@ const AddService = ({}) => {
                   multiline={true}
                   placeholderTextColor="#333333"
                   value={inputs.serviceDescription}
-                  onChangeText={text =>
-                    handleOnchange(text, 'serviceDescription')
-                  }
+                  maxLength={500}
+                  onChangeText={text => {
+                    handleError('', 'serviceDescription');
+                    handleOnchange(text, 'serviceDescription');
+                  }}
                   blurOnSubmit={true}
                   onSubmitEditing={() => {
                     Keyboard.dismiss();
@@ -350,6 +380,15 @@ const AddService = ({}) => {
                   style={{padding: 15}}
                 />
               </View>
+              {errors && (
+                <Text
+                  style={{
+                    marginTop: 5,
+                    color: 'red',
+                  }}>
+                  {errors.serviceDescription}
+                </Text>
+              )}
             </View>
           </View>
           <View style={styles.textContainer}>
