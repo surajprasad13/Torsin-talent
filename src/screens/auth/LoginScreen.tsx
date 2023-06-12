@@ -35,8 +35,8 @@ const LoginScreen = ({}) => {
   const dispatch = useAppDispatch();
 
   const [inputs, setInputs] = useState({
-    email: '',
-    password: '',
+    email: 'testing11@yopmail.com',
+    password: 'Mayank@123',
   });
 
   const [errors, setErrors] = useState<any>({});

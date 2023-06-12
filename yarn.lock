@@ -1715,6 +1715,11 @@
   dependencies:
     plist "^3.0.5"
 
+"@react-native-firebase/database@^18.0.0":
+  version "18.0.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/database/-/database-18.0.0.tgz#215e48890e74fb233d49b681b6748662827ea13d"
+  integrity sha512-6FguiE6rs/28qhFkUdZU/yLYqJAt9wSLGT+9RQ8cCGPVj9rfjGI5FLh9rGUOOVWmsSWbBL3WsThmMQzk6Y946A==
+
 "@react-native-firebase/firestore@^17.5.0":
   version "17.5.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-17.5.0.tgz#f0b1edd66b3678743f18ba9240d335d53141cc91"

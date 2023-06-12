@@ -2,6 +2,9 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import api from '../../api';
 
+import messaging from '@react-native-firebase/messaging';
+import database from '@react-native-firebase/database';
+
 const registerIndivisual = createAsyncThunk(
   'auth/register/indivisual',
   async (data: any, {rejectWithValue}) => {
@@ -41,7 +44,13 @@ const userLogin = createAsyncThunk(
   'auth/login',
   async (value: any, {rejectWithValue}) => {
     try {
+      const token = await messaging().getToken();
+      console.log(token)
       const {data} = await api.post(`talent/user/login`, value);
+
+      const ref = database().ref(`/Tokens/u2id${data.response.data.id}`);
+      const _data = await ref.update({device_token: token});
+      console.log(_data);
       return data;
     } catch (error: any) {
       console.log(error.response.data);
