@@ -10,6 +10,7 @@ import messaging from '@react-native-firebase/messaging';
 import AppNavigator from './routes/AppNavigator';
 
 import store, {persistor} from './redux';
+import {injectStore} from './api';
 
 async function onAppBootstrap() {
   // Register the device with FCM
@@ -25,6 +26,7 @@ const App = () => {
   // useEffect(() => {
   //   onAppBootstrap();
   // }, []);
+  injectStore(store);
 
   return (
     <SafeAreaProvider>

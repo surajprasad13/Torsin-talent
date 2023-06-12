@@ -12,40 +12,19 @@ export type RootStackParamList = {
   Successfull: undefined;
   VerifyOtpRegister: undefined;
   WalkthroughScreen: undefined;
-  ThroughRegister: undefined;
   IndivisualRegister: undefined;
   BusinessRegister: undefined;
   BusinessPassword: undefined;
-  BusinessStart: undefined;
   DrawerNavigation: DrawerScreenParamaList;
-  EditProfile: undefined;
-  EditUserProfile: undefined;
-  WithoutSignupHome: undefined;
-  Home: HomeTabParamList;
   PostDetails: {id: string};
   NotFound: undefined;
   BottomScreens: undefined;
-  SearchJob: undefined;
-  MusicJob: undefined;
-  OpenModal: undefined;
   CreatePassword: {item: string} | undefined;
-  Allexpertise: undefined;
   MusicComposer: undefined;
-  ProposalSentSuccess: undefined;
   ChatUser: {
     item: undefined | {};
   };
-  Myjob: undefined;
-  DetailActiveJob: undefined;
   RatingReview: undefined;
-  ReportProblem: undefined;
-  DetailPastJob: undefined;
-  DetailNewJob: undefined;
-  AddJobDetails: {id: number};
-  ProposalDetail: {
-    item: undefined | {};
-  };
-  ProposalAcceptDetail: undefined;
   WebScreen: {
     item: string;
   };
@@ -64,9 +43,7 @@ export type AuthScreenParamList = {
   ThroughRegister: undefined;
   IndivisualRegister: undefined;
   BusinessRegister: undefined;
-  FirstStepBusinessRegister: undefined;
   BusinessPassword: undefined;
-  BusinessStart: undefined;
   IndivisualCreatePassword: undefined;
 };
 
@@ -86,10 +63,10 @@ export type DrawerScreenParamaList = {
 };
 
 export type BottomScreenParamList = {
-  Home: undefined;
-  Jobs: undefined;
+  HomeNavigator: undefined;
+  JobNavigator: undefined;
   Chat: undefined;
-  SettingStack: SettingScreenParamList;
+  SettingNavigator: SettingScreenParamList;
 };
 
 export type SettingScreenParamList = {
@@ -102,8 +79,21 @@ export type SettingScreenParamList = {
   ServiceDetail: undefined;
 };
 
-export type HomeTabParamList = {
+export type HomeScreenParamList = {
   HomeScreen: undefined;
+  AllExpertise: undefined;
+};
+
+export type JobScreenParamList = {
+  ActiveJob: undefined;
+  ActiveJobDetail: undefined;
+  NewJobDetail: undefined;
+  PastJobDetail: undefined;
+  JobDetail: undefined;
+  Jobs: undefined;
+  MyAllJobs: undefined;
+  NewJob: undefined;
+  PastJob: undefined;
 };
 
 export type RootScreenProps = StackScreenProps<RootStackParamList>;
@@ -111,9 +101,9 @@ export type RootScreenProps = StackScreenProps<RootStackParamList>;
 export type AuthStackScreenProps<T extends keyof AuthScreenParamList> =
   StackScreenProps<AuthScreenParamList, T>;
 
-export type HomeTabScreenProps<T extends keyof HomeTabParamList> =
+export type HomeTabScreenProps<T extends keyof HomeScreenParamList> =
   CompositeScreenProps<
-    BottomTabScreenProps<HomeTabParamList, T>,
+    BottomTabScreenProps<HomeScreenParamList, T>,
     RootScreenProps
   >;
 

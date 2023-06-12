@@ -152,14 +152,14 @@ const HomeScreen = ({}) => {
             John based on your expertise
           </Text>
           <Text
-            onPress={() => navigation.navigate('Allexpertise')}
+            onPress={() => navigation.navigate('AllExpertise')}
             style={{
               height: 20,
               fontFamily: fonts.semibold,
               fontSize: 16,
               color: colors.primary,
             }}>
-            view all
+            View All
           </Text>
         </View>
         <View style={{marginTop: 20}}>

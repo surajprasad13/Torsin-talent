@@ -1138,6 +1138,8 @@ PODS:
   - React-jsinspector (0.71.7)
   - React-logger (0.71.7):
     - glog
+  - react-native-document-picker (9.0.1):
+    - React-Core
   - react-native-image-picker (5.3.1):
     - React-Core
   - react-native-netinfo (9.3.10):
@@ -1385,6 +1387,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -1508,6 +1511,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-netinfo:
@@ -1640,6 +1645,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: eaa5f71eb8f6861cf0e57f1a0f52aeb020d9e18e
   React-jsinspector: 9885f6f94d231b95a739ef7bb50536fb87ce7539
   React-logger: 3f8ebad1be1bf3299d1ab6d7f971802d7395c7ef
+  react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-image-picker: ec9b713e248760bfa0f879f0715391de4651a7cb
   react-native-netinfo: ccbe1085dffd16592791d550189772e13bf479e2
   react-native-pager-view: 0ccb8bf60e2ebd38b1f3669fa3650ecce81db2df

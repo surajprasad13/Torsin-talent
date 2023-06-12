@@ -5,9 +5,7 @@ const addService = createAsyncThunk(
   'user/addSerice',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.post(`talent/add/service`, value.inputs, {
-        headers: {Authorization: `Bearer ${value.userToken}`},
-      });
+      const {data} = await api.post(`talent/add/service`, value.inputs);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -41,9 +39,7 @@ const fetchSkill = createAsyncThunk(
   'user/fetchSkill',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(`talent/skill/detail`, {
-        headers: {Authorization: `Bearer ${value.userToken}`},
-      });
+      const {data} = await api.get(`talent/skill/detail`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -58,9 +54,7 @@ const fetchService = createAsyncThunk(
   'user/fetchService',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(`talent/service/detail`, {
-        headers: {Authorization: `Bearer ${value.userToken}`},
-      });
+      const {data} = await api.get(`talent/service/detail`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -76,9 +70,7 @@ const jobCorrespondSkill = createAsyncThunk(
   'skill/corresponding/job',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(`skill/corresponding/job`, {
-        headers: {Authorization: `Bearer ${value}`},
-      });
+      const {data} = await api.get(`skill/corresponding/job`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -94,9 +86,7 @@ const notJobCorrespondSkill = createAsyncThunk(
   'skill/exclude/job',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(`skill/exclude/job`, {
-        headers: {Authorization: `Bearer ${value}`},
-      });
+      const {data} = await api.get(`skill/exclude/job`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -116,7 +106,6 @@ const searchJob = createAsyncThunk(
         params: {
           search: value.search,
         },
-        headers: {Authorization: `Bearer ${value.userToken}`},
       });
       return data;
     } catch (error: any) {
@@ -133,9 +122,7 @@ const addProposal = createAsyncThunk(
   'user/addProposal',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.post(`talent/proposal/job`, value.inputs, {
-        headers: {Authorization: `Bearer ${value.userToken}`},
-      });
+      const {data} = await api.post(`talent/proposal/job`, value.inputs);
 
       return data;
     } catch (error: any) {
@@ -153,9 +140,7 @@ const getAccepted = createAsyncThunk(
   'user/proposal/accept',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(`talent/proposal/accept`, {
-        headers: {Authorization: `Bearer ${value.userToken}`},
-      });
+      const {data} = await api.get(`talent/proposal/accept`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -171,9 +156,7 @@ const getProposalStatus = createAsyncThunk(
   'user/proposal/status',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(`talent/proposal/status`, {
-        headers: {Authorization: `Bearer ${value.userToken}`},
-      });
+      const {data} = await api.get(`talent/proposal/status`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
