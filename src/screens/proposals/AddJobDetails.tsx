@@ -211,6 +211,7 @@ const AddService = ({route}: any) => {
             <TextInput
               placeholder="I am writing to submit a proposal on behalf of your requirement for  ..."
               multiline={true}
+              //returnKeyType="none"
               placeholderTextColor="#4F4F4F"
               value={inputs.message}
               maxLength={500}

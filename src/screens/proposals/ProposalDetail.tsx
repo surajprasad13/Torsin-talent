@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -19,12 +19,18 @@ import {CustomButton, CustomInput, Title} from '../../components';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const projectType = ['', 'Hourly', 'Fixed'];
 
 const ProposalDetail = ({route}: any) => {
   const {item} = route.params;
   const navigation = useNavigation();
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleViewMore = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
@@ -34,6 +40,57 @@ const ProposalDetail = ({route}: any) => {
         <Title title="Proposal Detail" />
 
         <ScrollView>
+          <View
+            style={{
+              ...appstyle.shadow,
+              padding: 10,
+              margin: 10,
+              borderRadius: 12,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <FastImage
+                source={{
+                  uri: 'https://source.unsplash.com/400x400?user',
+                }}
+                resizeMode="cover"
+                style={{width: 50, height: 50, borderRadius: 25}}
+              />
+              <View style={{width: '80%', margin: 5}}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: '#1E202B',
+                    fontFamily: fonts.semibold,
+                  }}>
+                  Card Content
+                </Text>
+                <Text
+                  style={{
+                    color: '#1E202B',
+                    fontFamily: fonts.regular,
+                    fontSize: 12,
+                  }}>
+                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                  Nesciunt commodi accusantium exercitationem autem blanditiis
+                  debitis, sequi pariatur voluptatibus facilis voluptatem vitae
+                  quo repellat modi quasi hic? Neque enim animi ipsa.
+                </Text>
+              </View>
+            </View>
+            {isExpanded && <Text>Additional Content</Text>}
+            <TouchableOpacity
+              style={{alignItems: 'flex-end'}}
+              onPress={handleViewMore}>
+              <Text style={{color: colors.primary}}>
+                {isExpanded ? 'View Less' : 'View More'}
+              </Text>
+            </TouchableOpacity>
+          </View>
           <View style={{marginTop: 0, margin: 15}}>
             <Text
               style={{
