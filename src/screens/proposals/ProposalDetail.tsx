@@ -114,15 +114,16 @@ const ProposalDetail = ({route}: any) => {
                       justifyContent: 'space-between',
                       flexWrap: 'wrap',
                     }}>
-                    {item.images.map((_item: string, index: number) => {
-                      return (
-                        <FastImage
-                          key={index.toString()}
-                          source={{uri: _item}}
-                          style={styles.innerImage}
-                        />
-                      );
-                    })}
+                    {item.photos !== null &&
+                      item.images.map((_item: string, index: number) => {
+                        return (
+                          <FastImage
+                            key={index.toString()}
+                            source={{uri: _item}}
+                            style={styles.innerImage}
+                          />
+                        );
+                      })}
                   </View>
                 </View>
                 <View
@@ -131,8 +132,6 @@ const ProposalDetail = ({route}: any) => {
                     padding: 5,
                     flexDirection: 'row',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
-                    height: 50,
                   }}>
                   <Text
                     style={{
@@ -140,13 +139,14 @@ const ProposalDetail = ({route}: any) => {
                       fontSize: 18,
                       color: colors.primary,
                     }}>
-                    Rates
+                    Rates:
                   </Text>
                   <TouchableOpacity>
                     <Text
                       style={{
-                        color: colors.primary,
+                        color: colors.grey2,
                         fontFamily: fonts.semibold,
+                        padding: 5,
                       }}>
                       ${item.jobPriceRate}
                     </Text>
@@ -277,7 +277,7 @@ const ProposalDetail = ({route}: any) => {
             </Text>
           </View>
 
-          {item.photos.length > 0 ? (
+          {item.photos !== null && item.photos.length > 0 ? (
             <View style={styles.photoContainer}>
               {item.photos.map((_item: string, index: number) => (
                 <View key={index.toString()} style={styles.innerPhotos}>
@@ -439,57 +439,3 @@ const styles = StyleSheet.create({
 });
 
 export default ProposalDetail;
-
-// const json = [
-//   charges
-// :
-// null
-// countryName
-// :
-// "India"
-// createdAt
-// :
-// "2023-06-09T12:36:19.950210Z"
-// images
-// :
-// ["https://torsin-bucket.s3.ap-south-1.amazonaws.com/93765229-7038-4BDC-BEB6-24209193BBAF.jpg"]
-// jobDescription
-// :
-// "The purpose of this simple question is to make sure a developer is familiar with test-driven development. A beginner may not have dealt with this file yet. The rakefile is similar to the makefile in Unix, and assists with packaging and testing Rails code. It's used by the rake utility, which ships natively with the Ruby installation."
-// jobId
-// :
-// 176
-// jobName
-// :
-// "Python developer"
-// jobPriceRate
-// :
-// 232323
-// jobProjectType
-// :
-// 1
-// location
-// :
-// "Noida sector 62"
-// message
-// :
-// "Dyd6f7fufufufufififif7f7fififufififif7f7f7f7f7t7f7tuf7fuf7fufufufuf8f8f8fifigigigigit8gigigigififufufufufigogogigigigig9yogo"
-// photos
-// :
-// []
-// portfolio
-// :
-// null
-// projectType
-// :
-// null
-// proposalId
-// :
-// 104
-// proposalStatus
-// :
-// 1
-// videos
-// :
-// null
-// ]

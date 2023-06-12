@@ -27,6 +27,7 @@ import RatingReview from '../screens/jobs/services/RatingReview';
 // helpers
 import {RootStackParamList} from './RouteType';
 import {useAppSelector} from '../hooks';
+import ThroughRegister from '../screens/ThroughRegister';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -130,6 +131,12 @@ export default function AppNavigator() {
             <Stack.Screen
               name="BusinessRegister"
               component={BusinessRegister}
+              options={{headerShown: false}}
+            />
+
+            <Stack.Screen
+              name="ThroughRegister"
+              component={ThroughRegister}
               options={{headerShown: false}}
             />
 

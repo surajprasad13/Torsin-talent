@@ -13,6 +13,7 @@ export type RootStackParamList = {
   VerifyOtpRegister: undefined;
   WalkthroughScreen: undefined;
   IndivisualRegister: undefined;
+  ThroughRegister: undefined;
   BusinessRegister: undefined;
   BusinessPassword: undefined;
   DrawerNavigation: DrawerScreenParamaList;
