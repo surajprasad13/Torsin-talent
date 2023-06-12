@@ -8,7 +8,7 @@ import MyService from '../screens/drawerScreens/MyService';
 import Payment from '../screens/drawerScreens/Payment';
 import Terms from '../screens/drawerScreens/Terms';
 
-import BottomNavigation, {SettingStack} from './BottomNavigator';
+import BottomNavigation from './BottomNavigator';
 
 import {DrawerScreenParamaList} from './RouteType';
 import Notification from '../screens/Notification';
@@ -54,7 +54,6 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="MyServices" component={MyService} options={{}} />
       <Drawer.Screen name="TermsPrivacy" component={Terms} options={{}} />
       <Drawer.Screen name="HelpSupport" component={Terms} options={{}} />
-      <Drawer.Screen name="DrawerSetting" component={SettingStack} />
     </Drawer.Navigator>
   );
 };

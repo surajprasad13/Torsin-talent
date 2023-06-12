@@ -22,7 +22,6 @@ import Feather from 'react-native-vector-icons/Feather';
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
 import {useAppSelector} from '../../hooks';
-import Message from './components/Message';
 import {uploadDocument, uploadMedia} from '../../helpers';
 import {
   handleSendImageMessage,
@@ -104,7 +103,69 @@ const ChatUser = ({route}: any) => {
   };
 
   const renderItem = ({item, index}: any) => {
-    return <Message item={item} userInfo={userInfo} key={index.toString()} />;
+    return (
+      <View style={{padding: 15}}>
+        {item.user._id === userInfo?.id ? (
+          <View style={{width: '70%', alignSelf: 'flex-end', flex: 1}}>
+            <View
+              style={{
+                backgroundColor: '#E8E9EB',
+                padding: 15,
+                borderRadius: 10,
+                borderBottomRightRadius: 0,
+                borderColor: '#8A9099',
+                borderWidth: 0.2,
+              }}>
+              <Text
+                style={{
+                  color: '#595F69',
+                  fontFamily: fonts.medium,
+                  fontSize: 12,
+                }}>
+                {item.text}
+              </Text>
+            </View>
+            <Text
+              style={{
+                textAlign: 'left',
+                fontFamily: fonts.medium,
+                color: '#8A9099',
+                fontSize: 10,
+              }}>
+              {moment(item.createdAt).fromNow()}
+            </Text>
+          </View>
+        ) : (
+          <View style={{width: '70%'}}>
+            <View
+              style={{
+                backgroundColor: colors.primary,
+                borderRadius: 10,
+                borderBottomLeftRadius: 0,
+                padding: 15,
+              }}>
+              <Text
+                style={{
+                  color: colors.white,
+                  fontFamily: fonts.medium,
+                  fontSize: 12,
+                }}>
+                {item.text}
+              </Text>
+            </View>
+            <Text
+              style={{
+                textAlign: 'right',
+                fontFamily: fonts.medium,
+                color: '#8A9099',
+                fontSize: 10,
+              }}>
+              {moment(item.createdAt).fromNow()}
+            </Text>
+          </View>
+        )}
+      </View>
+    );
   };
 
   return (
@@ -138,7 +199,23 @@ const ChatUser = ({route}: any) => {
         </View>
         <Feather name="more-vertical" size={20} />
       </View>
-      <Modal visible={isPopupVisible} animationType="slide" transparent>
+      {/* <GiftedChat
+        messages={messages}
+        onSend={newMessages => onSend(newMessages)}
+        user={{
+          _id: String(userInfo?.id),
+          name: userInfo?.fullName,
+          avatar: userInfo?.profileImage,
+        }}
+        //renderBubble={renderBubble}
+        scrollToBottom
+        renderInputToolbar={props => customtInputToolbar(props)}
+      /> */}
+      <Modal
+        visible={isPopupVisible}
+        animationType="slide"
+        style={{}}
+        transparent>
         <View style={{backgroundColor: 'rgba(0,0,0,0.5)', flex: 1}}>
           <View
             style={{

@@ -28,6 +28,7 @@ interface AuthState {
   emailVerified: boolean;
   mobileVerified: boolean;
   isFirstOpen: boolean;
+  expired: boolean;
 }
 
 const initialState: AuthState = {
@@ -42,12 +43,17 @@ const initialState: AuthState = {
   emailVerified: false,
   mobileVerified: false,
   isFirstOpen: true,
+  expired: false,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    updateExpire: state => {
+      state.expired = true;
+    },
+
     loginValue: state => {
       state.error = '';
     },
@@ -195,6 +201,7 @@ const authSlice = createSlice({
 });
 
 export const {
+  updateExpire,
   loginValue,
   logout,
   resetSuccess,

@@ -14,11 +14,13 @@ import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import {fonts} from '../../theme';
 
-const Allexpertise = () => {
+const AllExpertise = () => {
   const navigation = useNavigation();
   const {correspond} = useAppSelector(state => state.user);
 
-  const renderItem = ({item, index}) => <ExpertiseCard item={item} />;
+  const renderItem = ({item, index}: {item: any; index: number}) => (
+    <ExpertiseCard item={item} />
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Allexpertise;
+export default AllExpertise;
