@@ -45,12 +45,10 @@ const userLogin = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const token = await messaging().getToken();
-      console.log(token)
       const {data} = await api.post(`talent/user/login`, value);
-
       const ref = database().ref(`/Tokens/u2id${data.response.data.id}`);
-      const _data = await ref.update({device_token: token});
-      console.log(_data);
+      await ref.update({device_token: token});
+
       return data;
     } catch (error: any) {
       console.log(error.response.data);

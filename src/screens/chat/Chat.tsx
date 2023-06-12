@@ -16,6 +16,7 @@ import FastImage from 'react-native-fast-image';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAccepted} from '../../redux/actions/userAction';
 import moment from 'moment';
+import {ChatMessageList} from '../../types/ChatMessage';
 
 const Chat = ({}) => {
   const navigation = useNavigation();
@@ -27,7 +28,13 @@ const Chat = ({}) => {
     dispatch(getAccepted({userToken}));
   }, []);
 
-  const renderItem = ({item, index}: {item: any; index: number}) => {
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: ChatMessageList;
+    index: number;
+  }) => {
     return (
       <TouchableOpacity
         key={index.toString()}
@@ -48,7 +55,11 @@ const Chat = ({}) => {
             <Text style={styles.time}>{moment(item.createdAt).fromNow()}</Text>
           </View>
           <Text style={styles.title}>{item.jobName}</Text>
-          <Text style={{}}>{item.jobDescription}</Text>
+          <Text style={{}}>
+            {item.jobDescription.length > 30
+              ? item.jobDescription.substring(0, 30).concat('....')
+              : item.jobDescription}
+          </Text>
         </View>
       </TouchableOpacity>
     );

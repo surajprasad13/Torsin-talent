@@ -16,12 +16,10 @@ import {injectStore} from './api';
 async function checkApplicationPermission() {
   const setting = await notifee.requestPermission();
   if (setting.authorizationStatus) {
-    console.log('Userd adfhadsf akmsfdkjandsfnakjsdfn');
+    //console.log('Userd ');
   } else {
     console.log('User has disabled notification');
   }
-
-  console.log('iOS setting', setting.ios);
 }
 
 async function onAppBootstrap() {
@@ -32,11 +30,13 @@ async function onAppBootstrap() {
   const token = await messaging().getToken();
 
   // Save the token
+  console.log(token);
 }
 
 const App = () => {
   useEffect(() => {
     checkApplicationPermission();
+    onAppBootstrap();
   }, []);
 
   injectStore(store);

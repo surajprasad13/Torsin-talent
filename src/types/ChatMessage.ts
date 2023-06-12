@@ -12,3 +12,16 @@ export interface ChatMessage {
     name: string;
   };
 }
+
+export interface ChatMessageList {
+  createdAt: string;
+  fullname: string;
+  image: string[];
+  jobDescription: string;
+  jobId: number;
+  jobName: string;
+  profileImage: string;
+  proposalId: number;
+  proposalStatus: number;
+  clientId: number;
+}

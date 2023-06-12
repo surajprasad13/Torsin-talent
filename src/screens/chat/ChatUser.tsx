@@ -15,6 +15,7 @@ import firestore from '@react-native-firebase/firestore';
 import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
+import database from '@react-native-firebase/database';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -26,8 +27,15 @@ import {uploadDocument, uploadMedia} from '../../helpers';
 import {
   handleSendImageMessage,
   handleSendVideoMessage,
+  sendFCMMessage,
 } from '../../helpers/chat';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {ChatMessageList} from '../../types/ChatMessage';
+
+enum ChatStatus {
+  active = 'active',
+  inactive = 'inactive',
+}
 
 const ChatUser = ({route}: any) => {
   const insets = useSafeAreaInsets();
@@ -36,11 +44,36 @@ const ChatUser = ({route}: any) => {
   const [messages, setMessages] = useState<any>([]);
   const [value, setValue] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<null | ChatStatus>(ChatStatus.inactive);
 
   const {userInfo} = useAppSelector(state => state.auth);
-  const {item} = route.params;
+  const {item}: {item: ChatMessageList} = route.params;
   const navigation = useNavigation();
   const [isPopupVisible, setPopupVisible] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
+      // The screen is focused
+      // Call any action
+      database().ref(`Users/u2id${userInfo?.id}/status`).set('inactive');
+    });
+    database().ref(`Users/u2id${userInfo?.id}/status`).set('active');
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const onValueChange = database()
+      .ref(`/Users/u1id90`)
+      .on('value', snapshot => {
+        if (snapshot.val()) {
+          const data = snapshot.val();
+          setStatus(data.status);
+        }
+      });
+
+    return () => database().ref(`/Users/u1id90`).off('value', onValueChange);
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -93,7 +126,16 @@ const ChatUser = ({route}: any) => {
       })
       .then(() => {
         setLoading(false);
-        setValue('');
+        if (status == ChatStatus.inactive) {
+          database()
+            .ref(`/Tokens/u1id${item.clientId}`)
+            .once('value')
+            .then(snapshot => {
+              const data = snapshot.val();
+              sendFCMMessage(data.device_token, value);
+            });
+          setValue('');
+        }
         //console.log('Messeged');
       })
       .catch(() => {
@@ -199,18 +241,7 @@ const ChatUser = ({route}: any) => {
         </View>
         <Feather name="more-vertical" size={20} />
       </View>
-      {/* <GiftedChat
-        messages={messages}
-        onSend={newMessages => onSend(newMessages)}
-        user={{
-          _id: String(userInfo?.id),
-          name: userInfo?.fullName,
-          avatar: userInfo?.profileImage,
-        }}
-        //renderBubble={renderBubble}
-        scrollToBottom
-        renderInputToolbar={props => customtInputToolbar(props)}
-      /> */}
+
       <Modal
         visible={isPopupVisible}
         animationType="slide"

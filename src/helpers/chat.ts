@@ -1,4 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
+import messaging from '@react-native-firebase/messaging';
+import axios from 'axios';
 
 const handleSendMessage = async ({item, value, userInfo}: any) => {
   try {
@@ -68,4 +70,32 @@ const handleSendVideoMessage = async ({item, value, userInfo}: any) => {
   } catch (error) {}
 };
 
-export {handleSendMessage, handleSendImageMessage, handleSendVideoMessage};
+const sendFCMMessage = async (deviceId: string, message: string) => {
+  try {
+    let data = JSON.stringify({
+      notification: {
+        body: 'New Message',
+        image: 'https://firebase.google.com/images/social.png',
+        title: message,
+      },
+      to: deviceId,
+    });
+    await axios.post('https://fcm.googleapis.com/fcm/send', data, {
+      headers: {
+        Authorization:
+          'key=AAAAYwYzGDI:APA91bFi_EQKvXG_K5H3fHhtv2mygDZkTXI5uqFiQ-CA2QrMXfPYA0R_3HKV7JuviiIbKsoD1kLEVWCfEbioI3uuLbW0_i9HGuWJkqenk7156pmI8NCWUHLEJzNxWDz-wG0Gx-7rHg9W',
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log('FCM Message sent successfully:');
+  } catch (error) {
+    console.error('Error sending FCM Message:');
+  }
+};
+
+export {
+  handleSendMessage,
+  handleSendImageMessage,
+  handleSendVideoMessage,
+  sendFCMMessage,
+};
