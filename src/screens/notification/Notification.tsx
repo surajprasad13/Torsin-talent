@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
+  Switch,
   SafeAreaView,
   ScrollView,
   Pressable,
@@ -16,9 +16,10 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
-import {appstyle, colors, fonts} from '../theme';
+import {appstyle, colors, fonts} from '../../theme';
 import FastImage from 'react-native-fast-image';
 import {Divider} from 'react-native-paper';
+import {Title} from '../../components';
 
 const list = [
   {
@@ -66,30 +67,36 @@ const list = [
 const Notification = ({}) => {
   const navigation = useNavigation();
 
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  const toggleSwitch = () => {
+    setIsEnabled(previousState => !previousState);
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
+      <Title title="Notification" />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          padding: 10,
+          alignItems: 'center',
+          margin: 5,
+        }}>
+        <Text style={{fontSize: 16, fontFamily: fonts.semibold}}>
+          Permissions
+        </Text>
+        <Switch
+          trackColor={{false: '#767577', true: colors.primary}}
+          thumbColor={isEnabled ? colors.white : '#f4f3f4'}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+          style={{transform: [{scaleX: 0.7}, {scaleY: 0.7}]}}
+        />
+      </View>
       <ScrollView>
-        <View
-          style={{
-            flexDirection: 'row',
-            padding: 20,
-            margin: 10,
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-            backgroundColor: 'white',
-          }}>
-          <Pressable
-            style={{position: 'absolute', left: 10}}
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <Feather name="arrow-left" size={20} />
-          </Pressable>
-          <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-            Notifications
-          </Text>
-        </View>
         <View
           style={{
             ...appstyle.shadow,
