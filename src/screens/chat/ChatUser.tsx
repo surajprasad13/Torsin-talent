@@ -64,15 +64,17 @@ const ChatUser = ({route}: any) => {
 
   useEffect(() => {
     const onValueChange = database()
-      .ref(`/Users/u1id90`)
+      .ref(`/Users/u1id${item.clientId}`)
       .on('value', snapshot => {
         if (snapshot.val()) {
           const data = snapshot.val();
+
           setStatus(data.status);
         }
       });
 
-    return () => database().ref(`/Users/u1id90`).off('value', onValueChange);
+    return () =>
+      database().ref(`/Users/u1id${item.clientId}`).off('value', onValueChange);
   }, []);
 
   useEffect(() => {
@@ -132,10 +134,12 @@ const ChatUser = ({route}: any) => {
             .once('value')
             .then(snapshot => {
               const data = snapshot.val();
-              sendFCMMessage(data.device_token, value);
+              if (data) {
+                sendFCMMessage(data.device_token, value);
+              }
             });
-          setValue('');
         }
+        setValue('');
         //console.log('Messeged');
       })
       .catch(() => {

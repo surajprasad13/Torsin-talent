@@ -36,7 +36,7 @@ async function onAppBootstrap() {
 const App = () => {
   useEffect(() => {
     checkApplicationPermission();
-    onAppBootstrap();
+    //onAppBootstrap();
   }, []);
 
   injectStore(store);

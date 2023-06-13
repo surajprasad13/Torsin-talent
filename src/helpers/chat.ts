@@ -80,14 +80,18 @@ const sendFCMMessage = async (deviceId: string, message: string) => {
       },
       to: deviceId,
     });
-    await axios.post('https://fcm.googleapis.com/fcm/send', data, {
-      headers: {
-        Authorization:
-          'key=AAAAYwYzGDI:APA91bFi_EQKvXG_K5H3fHhtv2mygDZkTXI5uqFiQ-CA2QrMXfPYA0R_3HKV7JuviiIbKsoD1kLEVWCfEbioI3uuLbW0_i9HGuWJkqenk7156pmI8NCWUHLEJzNxWDz-wG0Gx-7rHg9W',
-        'Content-Type': 'application/json',
+    const response = await axios.post(
+      'https://fcm.googleapis.com/fcm/send',
+      data,
+      {
+        headers: {
+          Authorization:
+            'key=AAAAYwYzGDI:APA91bFi_EQKvXG_K5H3fHhtv2mygDZkTXI5uqFiQ-CA2QrMXfPYA0R_3HKV7JuviiIbKsoD1kLEVWCfEbioI3uuLbW0_i9HGuWJkqenk7156pmI8NCWUHLEJzNxWDz-wG0Gx-7rHg9W',
+          'Content-Type': 'application/json',
+        },
       },
-    });
-    console.log('FCM Message sent successfully:');
+    );
+    console.log('FCM Message sent successfully:', response);
   } catch (error) {
     console.error('Error sending FCM Message:');
   }
