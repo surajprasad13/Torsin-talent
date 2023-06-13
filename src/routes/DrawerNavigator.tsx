@@ -11,7 +11,7 @@ import Terms from '../screens/drawerScreens/Terms';
 import BottomNavigation from './BottomNavigator';
 
 import {DrawerScreenParamaList} from './RouteType';
-import Notification from '../screens/Notification';
+import Notification from '../screens/notification/Notification';
 import {fonts} from '../theme';
 import MyAlljob from '../screens/jobs/MyAllJob';
 import Proposals from '../screens/proposals/Proposals';
