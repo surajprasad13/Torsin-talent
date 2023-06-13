@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {} from 'react-native-paper';
+import messaging from '@react-native-firebase/messaging';
+import database from '@react-native-firebase/database';
 
 //icons
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -34,6 +36,19 @@ const HomeScreen = ({}) => {
   const {correspond, loading} = useAppSelector(state => state.user);
 
   const navigation = useNavigation();
+
+  const setToken = async () => {
+    const token = await messaging().getToken();
+
+    if (token) {
+      const ref = database().ref(`/Tokens/u2id${userInfo?.id}`);
+      await ref.update({device_token: token});
+    }
+  };
+
+  useEffect(() => {
+    setToken();
+  }, []);
 
   useEffect(() => {
     dispatch(profileDetail(userToken));

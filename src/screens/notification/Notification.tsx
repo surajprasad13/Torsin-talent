@@ -7,70 +7,37 @@ import {
   Switch,
   SafeAreaView,
   ScrollView,
-  Pressable,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {} from '@react-navigation/native';
+import notifee from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+import database from '@react-native-firebase/database';
 
 //icons
-import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
-import FastImage from 'react-native-fast-image';
 import {Divider} from 'react-native-paper';
 import {Title} from '../../components';
-
-const list = [
-  {
-    name: 'Vaibhav',
-    email: 'vaibhav@gmail.com',
-    id: 'vaibhav',
-  },
-  {
-    name: 'Shreyash',
-    email: 'shreyash@gmail.com',
-    id: 'shreyash',
-  },
-  {
-    name: 'Tarzan',
-    email: 'tarzan@gmail.com',
-    id: 'tarzan',
-  },
-  {
-    name: 'Apponward',
-    email: 'apponward@gmail.com',
-    id: 'apponward',
-  },
-  {
-    name: 'Amisha',
-    email: 'amisha@gmail.com',
-    id: 'vaibhav',
-  },
-  {
-    name: 'Mayank',
-    email: 'shreyash@gmail.com',
-    id: 'shreyash',
-  },
-  {
-    name: 'Tarzan',
-    email: 'tarzan@gmail.com',
-    id: 'tarzan',
-  },
-  {
-    name: 'Apponward',
-    email: 'apponward@gmail.com',
-    id: 'apponward',
-  },
-];
+import {useAppSelector} from '../../hooks';
 
 const Notification = ({}) => {
-  const navigation = useNavigation();
-
   const [isEnabled, setIsEnabled] = useState(false);
+  const {userInfo} = useAppSelector(state => state.auth);
 
-  const toggleSwitch = () => {
+  const toggleSwitch = async () => {
     setIsEnabled(previousState => !previousState);
+    if (isEnabled) {
+      const setting = await notifee.requestPermission();
+      if (setting.authorizationStatus) {
+        const token = await messaging().getToken();
+        const ref = database().ref(`/Tokens/u2id${userInfo?.id}`);
+        await ref.update({device_token: token});
+      } else {
+        console.log('User has disabled notification');
+      }
+    }
   };
 
   return (
@@ -105,7 +72,7 @@ const Notification = ({}) => {
             backgroundColor: 'white',
             margin: 10,
           }}>
-          {list.map((item, index, item1) => {
+          {[0, 1, 2, 3].map((item, index, item1) => {
             return (
               <View key={index.toString()} style={{}}>
                 <TouchableOpacity
