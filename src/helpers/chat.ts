@@ -1,6 +1,11 @@
 import firestore from '@react-native-firebase/firestore';
-import messaging from '@react-native-firebase/messaging';
 import axios from 'axios';
+import database from '@react-native-firebase/database';
+
+enum ChatStatus {
+  active = 'active',
+  inactive = 'inactive',
+}
 
 const handleSendMessage = async ({item, value, userInfo}: any) => {
   try {
@@ -25,13 +30,11 @@ const handleSendMessage = async ({item, value, userInfo}: any) => {
   } catch (error) {}
 };
 
-const handleSendImageMessage = async ({item, value, userInfo}: any) => {
+const handleSendImageMessage = async ({item, value, userInfo, status}: any) => {
   try {
-    await firestore()
-      .collection('ChatRooms')
-      .doc(String(item.jobId))
-      .collection('messages')
-      .add({
+    database()
+      .ref(`Chat/jobid${item.jobId}-proposalid${item.talentId}`)
+      .push({
         id: new Date().getTime(),
         createdAt: new Date().getTime(),
         jobId: item.jobId,
@@ -44,16 +47,25 @@ const handleSendImageMessage = async ({item, value, userInfo}: any) => {
           name: userInfo?.fullName,
         },
       });
+    if (status == ChatStatus.inactive) {
+      database()
+        .ref(`/Tokens/u1id${item.clientId}`)
+        .once('value')
+        .then(snapshot => {
+          const data = snapshot.val();
+          if (data) {
+            sendFCMMessage(data.device_token, value);
+          }
+        });
+    }
   } catch (error) {}
 };
 
-const handleSendVideoMessage = async ({item, value, userInfo}: any) => {
+const handleSendVideoMessage = async ({item, value, userInfo, status}: any) => {
   try {
-    await firestore()
-      .collection('ChatRooms')
-      .doc(String(item.jobId))
-      .collection('messages')
-      .add({
+    database()
+      .ref(`Chat/jobid${item.jobId}-proposalid${item.talentId}`)
+      .push({
         id: new Date().getTime(),
         createdAt: new Date().getTime(),
         jobId: item.jobId,
@@ -67,6 +79,17 @@ const handleSendVideoMessage = async ({item, value, userInfo}: any) => {
           name: userInfo?.fullName,
         },
       });
+    if (status == ChatStatus.inactive) {
+      database()
+        .ref(`/Tokens/u1id${item.clientId}`)
+        .once('value')
+        .then(snapshot => {
+          const data = snapshot.val();
+          if (data) {
+            sendFCMMessage(data.device_token, value);
+          }
+        });
+    }
   } catch (error) {}
 };
 

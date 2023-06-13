@@ -31,6 +31,7 @@ const BottomNavigator = () => {
         component={HomeNavigator}
         options={{
           headerShown: false,
+          tabBarLabel: 'Home',
           tabBarIcon: ({size, color}) => (
             <AntDesign name="home" size={size} color={color} />
           ),

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
+import notifee from '@notifee/react-native';
 
 /**
  * Screens
@@ -24,6 +25,8 @@ import ChatUser from '../screens/chat/ChatUser';
 import WebScreen from '../screens/WebScreen';
 import RatingReview from '../screens/jobs/services/RatingReview';
 
+import {navigationRef} from './RootNavigation';
+
 // helpers
 import {RootStackParamList} from './RouteType';
 import {useAppSelector} from '../hooks';
@@ -37,7 +40,7 @@ export default function AppNavigator() {
   const config = {
     screens: {
       LoginScreen: 'login',
-      ChatUser: 'chat',
+      ChatUser: 'chatuser',
     },
   };
 
@@ -45,6 +48,22 @@ export default function AppNavigator() {
     prefixes: ['talent://'],
     config,
   };
+
+  const openAppBootStrap = async () => {
+    const initialNotification = await notifee.getInitialNotification();
+    if (initialNotification) {
+      console.log('Initial Notification');
+      // this.handleNotificationOpen(initialNotification.notification);
+      navigationRef?.navigate('ChatUser', {item: {}});
+      await notifee.cancelNotification(
+        initialNotification.notification.id ?? '',
+      );
+    }
+  };
+
+  useEffect(() => {
+    openAppBootStrap();
+  }, []);
 
   return (
     <NavigationContainer linking={linking}>

@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
 import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
@@ -31,6 +30,7 @@ import {
 } from '../../helpers/chat';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ChatMessageList} from '../../types/ChatMessage';
+import Message from './components/Message';
 
 enum ChatStatus {
   active = 'active',
@@ -53,12 +53,10 @@ const ChatUser = ({route}: any) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', () => {
-      // The screen is focused
-      // Call any action
       database().ref(`Users/u2id${userInfo?.id}/status`).set('inactive');
     });
     database().ref(`Users/u2id${userInfo?.id}/status`).set('active');
-    // Return the function to unsubscribe from the event so it gets removed on unmount
+
     return unsubscribe;
   }, [navigation]);
 
@@ -78,31 +76,27 @@ const ChatUser = ({route}: any) => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
-    const unsubscribe = firestore()
-      .collection('ChatRooms')
-      .doc(String(item.jobId))
-      .collection('messages')
-      .orderBy('createdAt', 'desc')
-      .onSnapshot(querySnapshot => {
-        const _messages = querySnapshot.docs.map(doc => {
-          const firebaseData = doc.data();
-          const data: any = {
-            _id: doc.id,
-            text: '',
-            createdAt: new Date().getTime(),
-            ...firebaseData,
-          };
-          return data;
-        });
-        const newMessage = _messages.filter(
-          _item =>
-            _item.jobId == item.jobId && _item.proposalId == item.proposalId,
-        );
-        setLoading(false);
-        setMessages(newMessage);
-      });
-    return () => unsubscribe();
+    const chatRef = database().ref(
+      `Chat/jobid${item.jobId}-proposalid${item.proposalId}`,
+    );
+    chatRef.orderByKey().on('value', snapshot => {
+      const _messages = snapshot.val();
+
+      if (_messages) {
+        const messageList = Object.keys(_messages)
+          .map(key => ({
+            ..._messages[key],
+          }))
+          .sort((a, b) => b.id - a.id);
+
+        setMessages(messageList);
+      } else {
+        setMessages([]);
+      }
+    });
+    return () => {
+      chatRef.off('value');
+    };
   }, []);
 
   const handleSendMessage = async () => {
@@ -110,11 +104,9 @@ const ChatUser = ({route}: any) => {
       return;
     }
     setLoading(true);
-    await firestore()
-      .collection('ChatRooms')
-      .doc(String(item.jobId))
-      .collection('messages')
-      .add({
+    database()
+      .ref(`Chat/jobid${item.jobId}-proposalid${item.proposalId}`)
+      .push({
         id: new Date().getTime(),
         createdAt: new Date().getTime(),
         jobId: item.jobId,
@@ -125,93 +117,24 @@ const ChatUser = ({route}: any) => {
           avatar: userInfo?.profileImage,
           name: userInfo?.fullName,
         },
-      })
-      .then(() => {
-        setLoading(false);
-        if (status == ChatStatus.inactive) {
-          database()
-            .ref(`/Tokens/u1id${item.clientId}`)
-            .once('value')
-            .then(snapshot => {
-              const data = snapshot.val();
-              if (data) {
-                sendFCMMessage(data.device_token, value);
-              }
-            });
-        }
-        setValue('');
-        //console.log('Messeged');
-      })
-      .catch(() => {
-        setLoading(false);
-        //console.log(error);
       });
+    if (status == ChatStatus.inactive) {
+      database()
+        .ref(`/Tokens/u1id${item.clientId}`)
+        .once('value')
+        .then(snapshot => {
+          const data = snapshot.val();
+          if (data) {
+            sendFCMMessage(data.device_token, value);
+          }
+        });
+    }
+    setLoading(false);
+    setValue('');
   };
 
   const renderItem = ({item, index}: any) => {
-    return (
-      <View style={{padding: 15}}>
-        {item.user._id === userInfo?.id ? (
-          <View style={{width: '70%', alignSelf: 'flex-end', flex: 1}}>
-            <View
-              style={{
-                backgroundColor: '#E8E9EB',
-                padding: 15,
-                borderRadius: 10,
-                borderBottomRightRadius: 0,
-                borderColor: '#8A9099',
-                borderWidth: 0.2,
-              }}>
-              <Text
-                style={{
-                  color: '#595F69',
-                  fontFamily: fonts.medium,
-                  fontSize: 12,
-                }}>
-                {item.text}
-              </Text>
-            </View>
-            <Text
-              style={{
-                textAlign: 'left',
-                fontFamily: fonts.medium,
-                color: '#8A9099',
-                fontSize: 10,
-              }}>
-              {moment(item.createdAt).fromNow()}
-            </Text>
-          </View>
-        ) : (
-          <View style={{width: '70%'}}>
-            <View
-              style={{
-                backgroundColor: colors.primary,
-                borderRadius: 10,
-                borderBottomLeftRadius: 0,
-                padding: 15,
-              }}>
-              <Text
-                style={{
-                  color: colors.white,
-                  fontFamily: fonts.medium,
-                  fontSize: 12,
-                }}>
-                {item.text}
-              </Text>
-            </View>
-            <Text
-              style={{
-                textAlign: 'right',
-                fontFamily: fonts.medium,
-                color: '#8A9099',
-                fontSize: 10,
-              }}>
-              {moment(item.createdAt).fromNow()}
-            </Text>
-          </View>
-        )}
-      </View>
-    );
+    return <Message userInfo={userInfo} item={item} key={index.toString()} />;
   };
 
   return (
