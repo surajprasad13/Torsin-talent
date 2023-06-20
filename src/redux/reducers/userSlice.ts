@@ -10,6 +10,7 @@ import {
   getProposalStatus,
   jobCorrespondSkill,
   notJobCorrespondSkill,
+  updateContract,
 } from '../actions/userAction';
 import {JobDetail, Service} from '../../types/user';
 import {searchJob} from '../actions/userAction';
@@ -226,9 +227,23 @@ const userSlice = createSlice({
       .addCase(getContract.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.contracts = action.payload.response;
+        state.contracts = action.payload.response.data;
       })
       .addCase(getContract.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // update contract status
+      .addCase(updateContract.pending, (state, action) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(updateContract.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(updateContract.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

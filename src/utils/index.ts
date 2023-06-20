@@ -1,3 +1,7 @@
 import regex from './regex';
 
-export {regex};
+function calculatePrice(percent: number, amount: number) {
+  return Math.fround(amount * (percent / 100));
+}
+
+export {regex, calculatePrice};

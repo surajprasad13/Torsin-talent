@@ -52,6 +52,7 @@ export type DrawerScreenParamaList = {
   Notifications: undefined;
   Proposals: undefined;
   MyRatings: undefined;
+  ContractNavigator: undefined;
   MyServices: undefined;
   MyJobs: undefined;
   Payments: undefined;
@@ -95,6 +96,19 @@ export type JobScreenParamList = {
   MyAllJobs: undefined;
   NewJob: undefined;
   PastJob: undefined;
+};
+
+export type ContractsScreenParamList = {
+  Sent: undefined;
+  Accepted: undefined;
+  Rejected: undefined;
+  Contract: undefined;
+  EditContract: undefined;
+  ArchiveContract: undefined;
+  CreateContract: undefined;
+  ViewContract: {
+    id: undefined | string;
+  };
 };
 
 export type RootScreenProps = StackScreenProps<RootStackParamList>;

@@ -172,9 +172,48 @@ const getContract = createAsyncThunk(
   'user/contract/list',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(`talent/talent_contract_list`);
+      const {data} = await api.get(
+        `talent/talent_contract_list/?status=${value}`,
+      );
+
       return data;
     } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getContractDetail = createAsyncThunk(
+  'get_contract_details/',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`talent/get_contract_details/${value}/`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const updateContract = createAsyncThunk(
+  'update_contract/',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(
+        `talent/update_contract_status/${value.id}`,
+        value.inputs,
+      );
+      return data;
+    } catch (error: any) {
+      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -196,6 +235,8 @@ export {
   getAccepted,
   getProposalStatus,
   getContract,
+  getContractDetail,
+  updateContract,
 };
 
 export default {};

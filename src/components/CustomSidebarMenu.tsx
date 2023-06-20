@@ -56,6 +56,13 @@ const List = [
     ),
   },
   {
+    title: 'My Contracts',
+    route: 'ContractNavigator',
+    icon: ({color}: {color: string}) => (
+      <Feather name="briefcase" color={color} size={20} />
+    ),
+  },
+  {
     title: 'My Services',
     route: 'MyServices',
     icon: ({color}: {color: string}) => (
