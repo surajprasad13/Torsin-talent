@@ -168,6 +168,22 @@ const getProposalStatus = createAsyncThunk(
   },
 );
 
+const getContract = createAsyncThunk(
+  'user/contract/list',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`talent/talent_contract_list`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -179,6 +195,7 @@ export {
   addProposal,
   getAccepted,
   getProposalStatus,
+  getContract,
 };
 
 export default {};

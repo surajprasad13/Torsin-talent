@@ -72,7 +72,7 @@ const Notification = ({}) => {
             backgroundColor: 'white',
             margin: 10,
           }}>
-          {[0, 1, 2, 3].map((item, index, item1) => {
+          {[0, 1, 2, 3].map((item, index) => {
             return (
               <View key={index.toString()} style={{}}>
                 <TouchableOpacity
