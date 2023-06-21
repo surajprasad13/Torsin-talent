@@ -17,7 +17,7 @@ const ExpertiseCard = ({item}: {item: JobDetail}) => {
   return (
     <Pressable
       style={[styles.cardContainer, {}]}
-      onPress={() => navigation.navigate('MusicComposer', {item})}>
+      onPress={() => navigation.navigate('JobDetail', {item})}>
       <View
         style={{
           flexDirection: 'row',
@@ -36,7 +36,11 @@ const ExpertiseCard = ({item}: {item: JobDetail}) => {
           <Text style={[styles.headertext, {marginTop: 10}]}>
             {item.jobName}
           </Text>
-          <Text style={styles.text}>{item.jobDescription}</Text>
+          <Text style={styles.text}>
+            {item.jobDescription.length > 100
+              ? item.jobDescription.substring(0, 50).concat('...')
+              : item.jobDescription}
+          </Text>
           <Text style={styles.text}>${item.priceRate}</Text>
         </View>
       </View>

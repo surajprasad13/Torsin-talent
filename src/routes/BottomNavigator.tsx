@@ -53,6 +53,7 @@ const BottomNavigator = () => {
         component={Chat}
         options={{
           headerShown: false,
+          tabBarLabel: 'Chats',
           tabBarIcon: ({size, color}) => (
             <IonIcon
               name="chatbubble-ellipses-outline"

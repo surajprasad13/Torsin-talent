@@ -81,7 +81,6 @@ const ChatUser = ({route}: any) => {
     );
     chatRef.orderByKey().on('value', snapshot => {
       const _messages = snapshot.val();
-
       if (_messages) {
         const messageList = Object.keys(_messages)
           .map(key => ({
@@ -117,6 +116,7 @@ const ChatUser = ({route}: any) => {
           avatar: userInfo?.profileImage,
           name: userInfo?.fullName,
         },
+        read: false,
       });
     if (status == ChatStatus.inactive) {
       database()

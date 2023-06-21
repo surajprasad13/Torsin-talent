@@ -46,6 +46,7 @@ const handleSendImageMessage = async ({item, value, userInfo, status}: any) => {
           avatar: userInfo?.profileImage,
           name: userInfo?.fullName,
         },
+        read: false,
       });
     if (status == ChatStatus.inactive) {
       database()
@@ -78,6 +79,7 @@ const handleSendVideoMessage = async ({item, value, userInfo, status}: any) => {
           avatar: userInfo?.profileImage,
           name: userInfo?.fullName,
         },
+        read: false,
       });
     if (status == ChatStatus.inactive) {
       database()

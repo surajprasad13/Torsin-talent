@@ -17,6 +17,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAccepted} from '../../redux/actions/userAction';
 import moment from 'moment';
 import {ChatMessageList} from '../../types/ChatMessage';
+import {Title} from '../../components';
 
 const Chat = ({}) => {
   const navigation = useNavigation();
@@ -67,6 +68,7 @@ const Chat = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
+      <Title title="Chat List" />
       <FlatList
         data={acceptList}
         renderItem={renderItem}

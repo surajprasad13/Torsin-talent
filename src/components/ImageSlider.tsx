@@ -1,162 +1,83 @@
-import React, {useCallback, memo, useRef, useState} from 'react';
-import {
-  FlatList,
-  View,
-  Dimensions,
-  Text,
-  StyleSheet,
-  Image,
-} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, ImageBackground, ScrollView, Button} from 'react-native';
 
-const {width: windowWidth, height: windowHeight} = Dimensions.get('window');
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
-const slideList = Array.from({length: 30}).map((_, i) => {
-  return {
-    id: i,
-    image: `https://picsum.photos/1440/2842?random=${i}`,
-    title: `Blog  ${i + 1}`,
-    subtitle: `Lorem ipsum dolor sit amet consectetur. Purus amet cras posuere integer diam arcu justo laoreet purus. Pellentesque turpis hendrerit dis sit. Sodales congue in ${
-      i + 1
-    }!`,
-  };
-});
+//helpers
+import {colors, fonts} from '../theme';
 
-const Slide = memo(function Slide({data}: any) {
-  return (
-    <View style={styles.slide}>
-      <Image source={{uri: data.image}} style={styles.slideImage}></Image>
-      <Text style={styles.slideTitle}>{data.title}</Text>
-      <Text style={styles.slideSubtitle}>{data.subtitle}</Text>
-    </View>
-  );
-});
-
-function Pagination({index}: any) {
-  return (
-    <View style={styles.pagination} pointerEvents="none">
-      {slideList.map((_, i) => {
-        return (
-          <View
-            key={i}
-            style={[
-              styles.paginationDot,
-              index === i
-                ? styles.paginationDotActive
-                : styles.paginationDotInactive,
-            ]}
-          />
-        );
-      })}
-    </View>
-  );
-}
+const images = [
+  'https://source.unsplash.com/400x400?stone',
+  'https://source.unsplash.com/400x400?water',
+  'https://source.unsplash.com/400x400?mountain',
+  'https://source.unsplash.com/400x400?tree',
+  'https://source.unsplash.com/400x400?clouds',
+  'https://source.unsplash.com/400x400?sky',
+];
 
 const ImageSlider = () => {
-  const [index, setIndex] = useState(0);
-  const indexRef = useRef(index);
-  indexRef.current = index;
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const onScroll = useCallback((event: any) => {
-    const slideSize = event.nativeEvent.layoutMeasurement.width;
-    const index1 = event.nativeEvent.contentOffset.x / slideSize;
-    const roundIndex = Math.round(index);
-
-    const distance = Math.abs(roundIndex - index1);
-
-    const isNoMansLand = 0.4 < distance;
-
-    if (roundIndex !== indexRef.current && !isNoMansLand) {
-      setIndex(roundIndex);
-    }
-  }, []);
-
-  const flatListOptimizationProps = {
-    initialNumToRender: 0,
-    maxToRenderPerBatch: 1,
-    removeClippedSubviews: true,
-    scrollEventThrottle: 16,
-    windowSize: 2,
-    keyExtractor: useCallback((s: any) => String(s.id), []),
-    getItemLayout: useCallback(
-      (_: any) => ({
-        index,
-        length: windowWidth,
-        offset: index * windowWidth,
-      }),
-      [],
-    ),
+  const handleNextImage = () => {
+    setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
   };
 
-  const renderItem = useCallback(function renderItem({item}: any) {
-    return <Slide data={item} />;
-  }, []);
+  const handlePreviousImage = () => {
+    setCurrentIndex(
+      prevIndex => (prevIndex - 1 + images.length) % images.length,
+    );
+  };
 
   return (
-    <>
-      {/* <FlatList
-        data={slideList}
-        style={styles.carousel}
-        renderItem={renderItem}
-        pagingEnabled
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        onScroll={onScroll}
-        {...flatListOptimizationProps}
-      />
-      <Pagination index={index}></Pagination> */}
-    </>
+    <ScrollView horizontal={true}>
+      <ImageBackground
+        key={currentIndex}
+        source={{uri: images[currentIndex]}}
+        resizeMode="cover"
+        style={{width: 365, height: 200, margin: 5}}
+        imageStyle={{borderRadius: 10}}>
+        <Text
+          style={{
+            padding: 10,
+            fontFamily: fonts.medium,
+            color: colors.white,
+          }}>
+          Blog {currentIndex + 1}
+        </Text>
+        <Text
+          style={{
+            padding: 10,
+            fontFamily: fonts.medium,
+            color: colors.white,
+            position: 'absolute',
+            bottom: 10,
+          }}>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum,
+          explicabo? Fuga, reiciendis.
+        </Text>
+      </ImageBackground>
+      <View
+        style={{
+          backgroundColor: colors.white,
+          borderRadius: 15,
+          position: 'absolute',
+          right: 0,
+          marginTop: 100,
+        }}>
+        <AntDesign name="right" size={20} onPress={handleNextImage} />
+      </View>
+      <View
+        style={{
+          backgroundColor: colors.white,
+          borderRadius: 15,
+          position: 'absolute',
+          marginTop: 100,
+        }}>
+        <AntDesign name="left" size={20} onPress={handlePreviousImage} />
+      </View>
+    </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  slide: {
-    height: windowHeight / 3.9,
-    width: windowWidth,
-    borderRadius: 20,
-    top: 9,
-    alignItems: 'center',
-  },
-  slideImage: {
-    width: windowWidth * 0.9,
-    height: windowHeight / 3.9,
-    borderRadius: 18,
-  },
-  slideTitle: {
-    position: 'absolute',
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    fontSize: 12,
-    display: 'flex',
-    alignItems: 'center',
-    color: '#FFFFFF',
-    left: 35,
-    top: 10,
-  },
-  slideSubtitle: {
-    position: 'absolute',
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    fontSize: 10,
-    textAlign: 'center',
-    display: 'flex',
-    alignItems: 'center',
-    color: '#FFFFFF',
-    bottom: 22,
-    width: 303,
-  },
-
-  pagination: {
-    position: 'absolute',
-    bottom: 8,
-    width: '100%',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-
-  carousel: {flex: 1},
-});
 
 export default ImageSlider;

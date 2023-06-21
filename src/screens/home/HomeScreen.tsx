@@ -161,17 +161,15 @@ const HomeScreen = ({}) => {
           <Text
             style={{
               fontFamily: fonts.regular,
-              fontSize: 16,
               color: '#1E202B',
             }}>
-            John based on your expertise
+            Hey, {userInfo?.fullName} job based on your expertise
           </Text>
           <Text
             onPress={() => navigation.navigate('AllExpertise')}
             style={{
               height: 20,
               fontFamily: fonts.semibold,
-              fontSize: 16,
               color: colors.primary,
             }}>
             View All
