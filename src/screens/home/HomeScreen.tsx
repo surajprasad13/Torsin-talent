@@ -25,7 +25,7 @@ import CircleProgress from '../../components/CircleProgress';
 import {colors, fonts} from '../../theme';
 import ExpertiseCard from './components/ExpertiseCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {profileDetail} from '../../redux/actions/authAction';
+import {profileDetail, userUpdate} from '../../redux/actions/authAction';
 import {jobCorrespondSkill} from '../../redux/actions/userAction';
 
 const {} = Dimensions.get('window');
@@ -42,6 +42,13 @@ const HomeScreen = ({}) => {
 
     if (token) {
       const ref = database().ref(`/Tokens/u2id${userInfo?.id}`);
+      dispatch(
+        userUpdate({
+          inputs: {
+            deviceToken: token,
+          },
+        }),
+      );
       await ref.update({device_token: token});
     }
   };
