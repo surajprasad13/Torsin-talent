@@ -3,6 +3,7 @@ import {
   addProposal,
   addService,
   addSkill,
+  fetchNotification,
   fetchService,
   fetchSkill,
   getAccepted,
@@ -36,6 +37,7 @@ interface UserInterface {
   acceptList: Array<any>;
   proposalStatus: Array<any>;
   contracts: Array<any>;
+  notification: Array<any>;
 }
 
 const initialState: UserInterface = {
@@ -53,6 +55,7 @@ const initialState: UserInterface = {
   acceptList: [],
   proposalStatus: [],
   contracts: [],
+  notification: [],
 };
 
 const userSlice = createSlice({
@@ -244,6 +247,21 @@ const userSlice = createSlice({
         state.success = true;
       })
       .addCase(updateContract.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Notification
+      .addCase(fetchNotification.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(fetchNotification.fulfilled, (state, action) => {
+        state.loading = false;
+        state.notification = action.payload.response;
+      })
+      .addCase(fetchNotification.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Switch,
   SafeAreaView,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import {} from '@react-navigation/native';
 import notifee from '@notifee/react-native';
@@ -20,11 +21,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {appstyle, colors, fonts} from '../../theme';
 import {Divider} from 'react-native-paper';
 import {Title} from '../../components';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {fetchNotification} from '../../redux/actions/userAction';
 
 const Notification = ({}) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const {userInfo} = useAppSelector(state => state.auth);
+
+  const dispatch = useAppDispatch();
+  const {notification} = useAppSelector(state => state.user);
 
   const toggleSwitch = async () => {
     setIsEnabled(previousState => !previousState);
@@ -39,6 +44,10 @@ const Notification = ({}) => {
       }
     }
   };
+
+  useEffect(() => {
+    dispatch(fetchNotification(''));
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
@@ -63,78 +72,64 @@ const Notification = ({}) => {
           style={{transform: [{scaleX: 0.7}, {scaleY: 0.7}]}}
         />
       </View>
-      <ScrollView>
-        <View
-          style={{
-            ...appstyle.shadow,
-            padding: 10,
-            borderRadius: 15,
-            backgroundColor: 'white',
-            margin: 10,
-          }}>
-          {[0, 1, 2, 3].map((item, index) => {
-            return (
-              <View key={index.toString()} style={{}}>
-                <TouchableOpacity
-                  // onPress={() => {
-                  //   //@ts-expect-error
-                  //   navigation.navigate('ChatUser', {chatRoomId: item.id});
-                  // }}
-                  style={styles.container}>
+      <FlatList
+        data={notification}
+        renderItem={({item, index}) => {
+          return (
+            <View key={index.toString()} style={{}}>
+              <TouchableOpacity style={styles.container}>
+                <View
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 12,
+                    backgroundColor: '#d4d9f7',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Ionicons
+                    name="notifications-circle"
+                    size={30}
+                    color={colors.primary}
+                  />
+                </View>
+                <View style={{width: '80%'}}>
+                  <Text
+                    style={{
+                      fontFamily: fonts.semibold,
+                      color: '#333333',
+                      fontSize: 14,
+                    }}>
+                    Proposal Accepted
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: fonts.regular,
+                      color: '#4F4F4F',
+                    }}>
+                    Your Request has been accepted by
+                  </Text>
                   <View
                     style={{
-                      width: 50,
-                      height: 50,
-                      borderRadius: 12,
-                      backgroundColor: '#d4d9f7',
-                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
                       alignItems: 'center',
                     }}>
-                    <Ionicons
-                      name="notifications-circle"
-                      size={30}
-                      color={colors.primary}
-                    />
-                  </View>
-                  <View style={{width: '80%'}}>
-                    <Text
-                      style={{
-                        fontFamily: fonts.semibold,
-                        color: '#333333',
-                        fontSize: 14,
-                      }}>
-                      Proposal Accepted
+                    <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+                      Gregory smith.
                     </Text>
-                    <Text
-                      style={{
-                        fontFamily: fonts.regular,
-                        color: '#4F4F4F',
-                      }}>
-                      Your Request has been accepted by
+                    <Text style={{fontFamily: fonts.regular, color: '#BDBDBD'}}>
+                      4 hours ago
                     </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}>
-                      <Text
-                        style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
-                        Gregory smith.
-                      </Text>
-                      <Text
-                        style={{fontFamily: fonts.regular, color: '#BDBDBD'}}>
-                        4 hours ago
-                      </Text>
-                    </View>
                   </View>
-                </TouchableOpacity>
-                <Divider />
-              </View>
-            );
-          })}
-        </View>
-      </ScrollView>
+                </View>
+              </TouchableOpacity>
+              <Divider />
+            </View>
+          );
+        }}
+        keyExtractor={(_, index) => index.toString()}
+      />
     </SafeAreaView>
   );
 };

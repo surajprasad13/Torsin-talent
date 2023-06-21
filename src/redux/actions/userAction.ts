@@ -223,6 +223,22 @@ const updateContract = createAsyncThunk(
   },
 );
 
+const fetchNotification = createAsyncThunk(
+  'fetch_notification/',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`client/get_notification_list/`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -237,6 +253,7 @@ export {
   getContract,
   getContractDetail,
   updateContract,
+  fetchNotification
 };
 
 export default {};
