@@ -29,6 +29,8 @@ const Chat = ({}) => {
     dispatch(getAccepted({userToken}));
   }, []);
 
+  console.log(acceptList);
+
   const renderItem = ({
     item,
     index,
@@ -68,7 +70,7 @@ const Chat = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
-      <Title title="Chat List" />
+      <Title title="Chat" />
       <FlatList
         data={acceptList}
         renderItem={renderItem}
