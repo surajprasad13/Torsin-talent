@@ -55,7 +55,7 @@ export type DrawerScreenParamaList = {
   ContractNavigator: undefined;
   MyServices: undefined;
   MyJobs: undefined;
-  Payments: undefined;
+  PaymentNavigator: undefined;
   SwitchAccount: undefined;
   AboutUs: undefined;
   TermsPrivacy: undefined;
@@ -84,6 +84,10 @@ export type SettingScreenParamList = {
 export type HomeScreenParamList = {
   HomeScreen: undefined;
   AllExpertise: undefined;
+};
+
+export type PaymentScreenParamList = {
+  Payment: undefined;
 };
 
 export type JobScreenParamList = {

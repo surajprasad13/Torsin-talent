@@ -71,7 +71,7 @@ const List = [
   },
   {
     title: 'Payment',
-    route: 'Payments',
+    route: 'PaymentNavigator',
     icon: ({color}: {color: string}) => (
       <MaterialIcon name="payments" color={color} size={20} />
     ),

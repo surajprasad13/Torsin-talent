@@ -5,7 +5,7 @@ import AboutUs from '../screens/drawerScreens/AboutUs';
 import CustomSidebarMenu from '../components/CustomSidebarMenu';
 import MyRating from '../screens/drawerScreens/MyRating';
 import MyService from '../screens/drawerScreens/MyService';
-import Payment from '../screens/drawerScreens/Payment';
+import Payment from '../screens/payment/Payment';
 import Terms from '../screens/drawerScreens/Terms';
 
 import BottomNavigation from './BottomNavigator';
@@ -52,7 +52,7 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="MyJobs" component={MyAlljob} options={{}} />
       <Drawer.Screen name="MyRatings" component={MyRating} options={{}} />
       <Drawer.Screen name="ContractNavigator" component={ContractNavigator} />
-      <Drawer.Screen name="Payments" component={Payment} options={{}} />
+      <Drawer.Screen name="PaymentNavigator" component={Payment} options={{}} />
       <Drawer.Screen name="AboutUs" component={AboutUs} options={{}} />
       <Drawer.Screen name="MyServices" component={MyService} options={{}} />
       <Drawer.Screen name="TermsPrivacy" component={Terms} options={{}} />
