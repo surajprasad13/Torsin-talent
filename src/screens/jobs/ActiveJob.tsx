@@ -1,8 +1,9 @@
-import {View, Text, StyleSheet, Pressable, ScrollView} from 'react-native';
 import React from 'react';
-import {appstyle, colors, fonts} from '../../theme';
+import {View, Text, StyleSheet, Pressable, ScrollView} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import moment from 'moment';
+
+// helpers
+import {appstyle, colors, fonts} from '../../theme';
 
 //icons
 import Entypo from 'react-native-vector-icons/Entypo';

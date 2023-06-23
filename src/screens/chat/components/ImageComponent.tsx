@@ -1,9 +1,11 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Dimensions} from 'react-native';
 import {ChatMessage} from '../../../types/ChatMessage';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import {colors, fonts} from '../../../theme';
+
+const {width} = Dimensions.get('window');
 
 enum TextPosition {
   left = 'left',
@@ -35,7 +37,7 @@ const ImageComponent = ({
           source={{uri: item.image}}
           resizeMode="cover"
           style={{
-            width: '95%',
+            width: width * 0.5,
             height: 220,
             borderRadius: 10,
             borderBottomLeftRadius: TextPosition.left ? 15 : 0,

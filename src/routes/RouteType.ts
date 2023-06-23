@@ -96,6 +96,9 @@ export type JobScreenParamList = {
   MyAllJobs: undefined;
   NewJob: undefined;
   PastJob: undefined;
+  AddJobDetails: {
+    id: undefined;
+  };
 };
 
 export type ContractsScreenParamList = {

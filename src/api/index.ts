@@ -22,7 +22,22 @@ const onRequest = (
 ): InternalAxiosRequestConfig => {
   const {url} = config;
   // console.log(`🚀 [API] ${method?.toUpperCase()} ${url} | Request`);
-  if (url == 'talent/user/login') {
+
+  const notValid = [
+    'talent/user/login',
+    'verify/email',
+    'verify/otp',
+    'talent/individual/registration',
+    'talent/business/registration',
+  ];
+
+  if (
+    url == 'talent/user/login' ||
+    url == 'verify/email' ||
+    url == 'verify/otp' ||
+    url == 'talent/individual/registration' ||
+    url == 'talent/business/registration'
+  ) {
     return config;
   }
   config.headers.authorization = `Bearer ${store.getState().auth.userToken}`;

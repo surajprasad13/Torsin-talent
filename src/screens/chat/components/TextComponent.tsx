@@ -24,7 +24,7 @@ const TextComponent = ({
           padding: 15,
           borderRadius: 10,
           borderBottomRightRadius: TextPosition.left ? 0 : 15,
-          borderBottomLeftRadius: TextPosition.left ? 0 : 15,
+          borderBottomLeftRadius: TextPosition.left ? 15 : 0,
         }}>
         <Text
           style={{

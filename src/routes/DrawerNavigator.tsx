@@ -15,7 +15,6 @@ import Notification from '../screens/notification/Notification';
 import {fonts} from '../theme';
 import MyAlljob from '../screens/jobs/MyAllJob';
 import Proposals from '../screens/proposals/Proposals';
-import Contracts from '../screens/contracts/Contracts';
 import ContractNavigator from './ContractNavigator';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();

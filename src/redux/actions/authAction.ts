@@ -2,9 +2,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import api from '../../api';
 
-import messaging from '@react-native-firebase/messaging';
-import database from '@react-native-firebase/database';
-
 const registerIndivisual = createAsyncThunk(
   'auth/register/indivisual',
   async (data: any, {rejectWithValue}) => {
@@ -83,7 +80,6 @@ const sendOtp = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.post(`verify/email`, value.inputs);
-
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {

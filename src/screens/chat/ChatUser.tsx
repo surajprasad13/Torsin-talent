@@ -24,6 +24,7 @@ import {appstyle, colors, fonts} from '../../theme';
 import {useAppSelector} from '../../hooks';
 import {uploadDocument, uploadMedia} from '../../helpers';
 import {
+  handleSendDocumentMessage,
   handleSendImageMessage,
   handleSendVideoMessage,
   sendFCMMessage,
@@ -133,6 +134,32 @@ const ChatUser = ({route}: any) => {
     setValue('');
   };
 
+  useEffect(() => {
+    updateKeyInDatabase();
+  }, []);
+
+  const updateKeyInDatabase = () => {
+    // Get a reference to the Firebase database
+    // Access the specific data path you want to update
+    const dataRef = database().ref(
+      `Chat/jobid${item.jobId}-proposalid${item.proposalId}`,
+    );
+
+    // Update the value of the specific key in the entire database
+    dataRef.once('value', snapshot => {
+      snapshot.forEach(childSnapshot => {
+        const childKey = childSnapshot.key;
+        const childData = childSnapshot.val();
+        if (childData.user._id !== userInfo?.id) {
+          // Modify the value of the specific key
+          childData.read = true;
+          // Update the modified data back to the database
+          dataRef.child(childKey).set(childData);
+        }
+      });
+    });
+  };
+
   const renderItem = ({item, index}: any) => {
     return <Message userInfo={userInfo} item={item} key={index.toString()} />;
   };
@@ -199,6 +226,7 @@ const ChatUser = ({route}: any) => {
                       item,
                       value: data as string,
                       userInfo,
+                      status,
                     });
                     setLoading(false);
                   } else {
@@ -229,6 +257,7 @@ const ChatUser = ({route}: any) => {
                       item,
                       value: data as string,
                       userInfo,
+                      status,
                     });
                     setLoading(false);
                   } else {
@@ -250,8 +279,22 @@ const ChatUser = ({route}: any) => {
 
               <Pressable
                 style={{padding: 5, margin: 5}}
-                onPress={() => {
-                  const data = uploadDocument();
+                onPress={async () => {
+                  const data = await uploadDocument();
+                  setLoading(true);
+                  setPopupVisible(false);
+                  if (data) {
+                    await handleSendDocumentMessage({
+                      item,
+                      value: data as string,
+                      userInfo,
+                      status,
+                    });
+                    setLoading(false);
+                  } else {
+                    setPopupVisible(false);
+                    setLoading(false);
+                  }
                 }}>
                 <Text
                   style={{
