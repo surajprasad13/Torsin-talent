@@ -10,19 +10,18 @@ import {
 } from 'react-native';
 import {} from '@react-navigation/native';
 import notifee from '@notifee/react-native';
+import {Divider} from 'react-native-paper';
 import messaging from '@react-native-firebase/messaging';
 import database from '@react-native-firebase/database';
+import moment from 'moment';
 
 //icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import {colors, fonts} from '../../theme';
-import {Divider} from 'react-native-paper';
-import {Title} from '../../components';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchNotification} from '../../redux/actions/userAction';
-import moment from 'moment';
 
 const Notification = ({}) => {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -51,7 +50,6 @@ const Notification = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
-      <Title title="Notification" />
       <View
         style={{
           flexDirection: 'row',

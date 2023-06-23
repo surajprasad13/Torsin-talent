@@ -29,8 +29,6 @@ const Chat = ({}) => {
     dispatch(getAccepted({userToken}));
   }, []);
 
-  console.log(acceptList);
-
   const renderItem = ({
     item,
     index,
