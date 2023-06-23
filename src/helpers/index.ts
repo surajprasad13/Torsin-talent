@@ -76,7 +76,6 @@ const uploadDocument = async () => {
     );
     return url.Location;
   } catch (error) {
-    console.log(error, 'Error');
     return '';
   }
 };

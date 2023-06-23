@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import {Platform} from 'react-native';
 import {RNS3} from 'react-native-aws3';
 
 // Configure AWS SDK with your credentials and region
@@ -45,8 +46,11 @@ export const uploadPdfFileToS3 = async (
     Body: file,
     ContentDisposition: contentDeposition,
     ContentType: ContentType,
-    ContentEncoding: 'base64',
   };
+
+  if (Platform.OS == 'ios') {
+    params.ContentEncoding = 'base64';
+  }
 
   try {
     const data = await s3.upload(params).promise();

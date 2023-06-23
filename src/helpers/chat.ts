@@ -33,7 +33,7 @@ const handleSendMessage = async ({item, value, userInfo}: any) => {
 const handleSendImageMessage = async ({item, value, userInfo, status}: any) => {
   try {
     database()
-      .ref(`Chat/jobid${item.jobId}-proposalid${item.talentId}`)
+      .ref(`Chat/jobid${item.jobId}-proposalid${item.proposalId}`)
       .push({
         id: new Date().getTime(),
         createdAt: new Date().getTime(),
@@ -65,7 +65,7 @@ const handleSendImageMessage = async ({item, value, userInfo, status}: any) => {
 const handleSendVideoMessage = async ({item, value, userInfo, status}: any) => {
   try {
     database()
-      .ref(`Chat/jobid${item.jobId}-proposalid${item.talentId}`)
+      .ref(`Chat/jobid${item.jobId}-proposalid${item.proposalId}`)
       .push({
         id: new Date().getTime(),
         createdAt: new Date().getTime(),
@@ -74,6 +74,45 @@ const handleSendVideoMessage = async ({item, value, userInfo, status}: any) => {
         text: '',
         image: '',
         video: value,
+        user: {
+          _id: userInfo?.id,
+          avatar: userInfo?.profileImage,
+          name: userInfo?.fullName,
+        },
+        read: false,
+      });
+    if (status == ChatStatus.inactive) {
+      database()
+        .ref(`/Tokens/u1id${item.clientId}`)
+        .once('value')
+        .then(snapshot => {
+          const data = snapshot.val();
+          if (data) {
+            sendFCMMessage(data.device_token, value);
+          }
+        });
+    }
+  } catch (error) {}
+};
+
+const handleSendDocumentMessage = async ({
+  item,
+  value,
+  userInfo,
+  status,
+}: any) => {
+  try {
+    database()
+      .ref(`Chat/jobid${item.jobId}-proposalid${item.proposalId}`)
+      .push({
+        id: new Date().getTime(),
+        createdAt: new Date().getTime(),
+        jobId: item.jobId,
+        proposalId: item.proposalId,
+        text: '',
+        image: '',
+        video: '',
+        document: value,
         user: {
           _id: userInfo?.id,
           avatar: userInfo?.profileImage,
@@ -127,4 +166,5 @@ export {
   handleSendImageMessage,
   handleSendVideoMessage,
   sendFCMMessage,
+  handleSendDocumentMessage,
 };

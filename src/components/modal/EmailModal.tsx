@@ -96,7 +96,6 @@ const EmailModal = ({active, email}: any) => {
         inputs: {
           email,
         },
-        userToken,
       };
       dispatch(sendOtp(field));
     }

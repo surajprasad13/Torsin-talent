@@ -6,6 +6,7 @@ export interface ChatMessage {
   text: string;
   image?: string;
   video?: string;
+  document: string;
   user: {
     _id: number;
     avatar: string;

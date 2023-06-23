@@ -122,8 +122,11 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('DrawerSetting', {
-                    screen: 'EditProfile',
+                  navigation.navigate('BottomNavigation', {
+                    screen: 'SettingNavigator',
+                    params: {
+                      screen: 'EditProfile',
+                    },
                   });
                 }}>
                 <Text
@@ -137,8 +140,11 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('DrawerSetting', {
-                  screen: 'EditProfile',
+                navigation.navigate('BottomNavigation', {
+                  screen: 'SettingNavigator',
+                  params: {
+                    screen: 'EditProfile',
+                  },
                 });
               }}>
               <Feather name="chevron-right" size={20} />

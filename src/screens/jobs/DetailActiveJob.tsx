@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   View,
   Text,
@@ -6,8 +7,11 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
+import {Divider} from 'react-native-paper';
+
+// helpers
 import {appstyle, colors, fonts} from '../../theme';
 
 //icons
@@ -15,9 +19,6 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import FastImage from 'react-native-fast-image';
-import {Divider} from 'react-native-paper';
 
 const DetailActiveJob = ({route}) => {
   const navigation = useNavigation();

@@ -52,7 +52,6 @@ const ViewContract = ({route}: any) => {
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(getContractDetail(id));
-      console.log(contractDetail);
     });
     return listener;
   }, []);

@@ -44,7 +44,7 @@ type InputProps = {
   images: Array<string>;
 };
 
-const AddService = ({route}: any) => {
+const AddJobDetails = ({route}: any) => {
   const {id} = route.params;
 
   const navigation = useNavigation();
@@ -491,4 +491,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddService;
+export default AddJobDetails;
