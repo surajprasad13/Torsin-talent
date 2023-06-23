@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   FlatList,
 } from 'react-native';
-import {} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import notifee from '@notifee/react-native';
 import {Divider} from 'react-native-paper';
 import messaging from '@react-native-firebase/messaging';
@@ -24,6 +24,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchNotification} from '../../redux/actions/userAction';
 
 const Notification = ({}) => {
+  const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(false);
   const {userInfo} = useAppSelector(state => state.auth);
 
@@ -47,6 +48,8 @@ const Notification = ({}) => {
   useEffect(() => {
     dispatch(fetchNotification(''));
   }, []);
+
+  console.log(notification);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
@@ -75,7 +78,16 @@ const Notification = ({}) => {
         renderItem={({item, index}) => {
           return (
             <View key={index.toString()} style={{}}>
-              <TouchableOpacity style={styles.container}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('DrawerNavigation', {
+                    screen: 'ContractNavigator',
+                    params: {
+                      screen: 'ViewContract',
+                    },
+                  })
+                }
+                style={styles.container}>
                 <View
                   style={{
                     width: 50,

@@ -1,4 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
+import database from '@react-native-firebase/database';
 import api from '../../api';
 
 const addService = createAsyncThunk(
@@ -141,6 +142,15 @@ const getAccepted = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/proposal/accept`);
+      let _data: any = [];
+      for (let index = 0; index < data.response.length; index++) {
+        const element = data.response[index];
+        const length = await fetchDataFromDatabase(element, value.id);
+        _data.push({
+          ...element,
+          read: length,
+        });
+      }
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -227,8 +237,10 @@ const fetchNotification = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/get_notification_list/`);
+      console.log(data);
       return data;
     } catch (error: any) {
+      console.log(error.response);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -237,6 +249,31 @@ const fetchNotification = createAsyncThunk(
     }
   },
 );
+
+async function fetchDataFromDatabase(item: any, userId: number) {
+  try {
+    const snapshot = await database()
+      .ref(`Chat/jobid${item.jobId}-proposalid${item.proposalId}`)
+      .once('value');
+    const _messages = snapshot.val();
+
+    if (_messages) {
+      const messageList = Object.keys(_messages)
+        .map(key => ({
+          ..._messages[key],
+        }))
+        .sort((a, b) => b.id - a.id)
+        .filter(_item => _item.user._id !== userId)
+        .filter(a => a.read === false);
+      return messageList.length;
+    }
+
+    return 0; // Return 0 if no messages found
+  } catch (error) {
+    console.error('Error fetching data from database:', error);
+    throw error;
+  }
+}
 
 export {
   addService,

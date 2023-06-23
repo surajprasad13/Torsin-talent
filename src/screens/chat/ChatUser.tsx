@@ -133,6 +133,7 @@ const ChatUser = ({route}: any) => {
     setValue('');
   };
 
+
   const renderItem = ({item, index}: any) => {
     return <Message userInfo={userInfo} item={item} key={index.toString()} />;
   };
