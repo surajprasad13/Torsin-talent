@@ -15,14 +15,18 @@ import {useNavigation} from '@react-navigation/native';
 
 //components
 import {CustomInput, Title} from '../../components';
-import {colors, fonts} from '../../theme';
+import {appstyle, colors, fonts} from '../../theme';
 
 //icons
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
 
 // helpers
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {getContractDetail} from '../../redux/actions/userAction';
+import {
+  getContractDetail,
+  updateContract,
+} from '../../redux/actions/userAction';
 
 const contractType = ['', 'Hourly', 'Fixed'];
 
@@ -56,6 +60,28 @@ const ViewContract = ({route}: any) => {
   useEffect(() => {
     dispatch(getContractDetail(id));
   }, []);
+
+  const onPressAccept = () => {
+    dispatch(
+      updateContract({
+        id: contractDetail.contract_details[0].contract_id,
+        inputs: {
+          status: 1,
+        },
+      }),
+    );
+  };
+
+  const onPressReject = () => {
+    dispatch(
+      updateContract({
+        id: contractDetail.contract_details[0].contract_id,
+        inputs: {
+          status: 2,
+        },
+      }),
+    );
+  };
 
   if (loading || contractDetail == null) {
     return (
@@ -324,6 +350,59 @@ const ViewContract = ({route}: any) => {
                 />
               </View>
             </View>
+          </View>
+        )}
+        {contractDetail.contract_details[0].status == 0 && (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              marginTop: 20,
+              bottom: 10,
+            }}>
+            <Pressable
+              onPress={onPressReject}
+              style={{
+                ...appstyle.shadow,
+                padding: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '40%',
+                borderRadius: 15,
+                flexDirection: 'row',
+              }}>
+              <View
+                style={{
+                  backgroundColor: colors.red,
+                  borderRadius: 100,
+                  right: 10,
+                }}>
+                <Feather name="x" size={20} color={colors.white} />
+              </View>
+              <Text style={{color: colors.red}}>Reject</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={onPressAccept}
+              style={{
+                ...appstyle.shadow,
+                padding: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '40%',
+                borderRadius: 15,
+                flexDirection: 'row',
+              }}>
+              <View
+                style={{
+                  backgroundColor: 'green',
+                  borderRadius: 100,
+                  right: 10,
+                }}>
+                <Feather name="check" size={20} color={colors.white} />
+              </View>
+              <Text style={{color: colors.blue}}>Accept</Text>
+            </Pressable>
           </View>
         )}
       </ScrollView>

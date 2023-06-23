@@ -4,13 +4,11 @@ import {
   Text,
   ImageBackground,
   ScrollView,
-  Button,
   Animated,
   Dimensions,
 } from 'react-native';
 
 // icons
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // helpers
 import {colors, fonts} from '../theme';
@@ -64,7 +62,7 @@ const ImageSlider = () => {
       })}
       scrollEventThrottle={16}>
       {images.map((image, index) => (
-        <View style={{width: width - 5, margin: 5}}>
+        <View key={index.toString()} style={{width: width - 5, margin: 5}}>
           <ImageBackground
             key={index}
             source={{uri: image}}

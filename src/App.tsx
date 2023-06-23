@@ -16,7 +16,6 @@ import {injectStore} from './api';
 async function checkApplicationPermission() {
   const setting = await notifee.requestPermission();
   if (setting.authorizationStatus) {
-    console.log('Userd ');
   } else {
     console.log('User has disabled notification');
   }

@@ -133,7 +133,6 @@ const ChatUser = ({route}: any) => {
     setValue('');
   };
 
-
   const renderItem = ({item, index}: any) => {
     return <Message userInfo={userInfo} item={item} key={index.toString()} />;
   };
@@ -253,7 +252,6 @@ const ChatUser = ({route}: any) => {
                 style={{padding: 5, margin: 5}}
                 onPress={() => {
                   const data = uploadDocument();
-                  console.log(data);
                 }}>
                 <Text
                   style={{

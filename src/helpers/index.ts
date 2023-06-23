@@ -57,7 +57,6 @@ const uploadMedia = async ({type}: {type: string}) => {
       return url.body.postResponse.location;
     }
   } catch (error) {
-    console.log(error);
     return '';
   }
 };

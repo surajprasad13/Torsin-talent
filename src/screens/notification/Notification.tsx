@@ -49,8 +49,6 @@ const Notification = ({}) => {
     dispatch(fetchNotification(''));
   }, []);
 
-  console.log(notification);
-
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <View
@@ -84,6 +82,9 @@ const Notification = ({}) => {
                     screen: 'ContractNavigator',
                     params: {
                       screen: 'ViewContract',
+                      params: {
+                        id: item.render_id,
+                      },
                     },
                   })
                 }

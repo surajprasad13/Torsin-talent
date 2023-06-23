@@ -1,20 +1,15 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
-import {Divider, Menu} from 'react-native-paper';
+import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
 //icons
-import Entypo from 'react-native-vector-icons/Entypo';
 
 // helpers
 import {appstyle, colors, fonts} from '../../../theme';
 
-const ContractStatus = ({item}) => {
+const ContractStatus = ({item}: any) => {
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
-  const openMenu = () => setVisible(true);
-
-  const closeMenu = () => setVisible(false);
 
   const renderStatus = (id: number) => {
     switch (id) {
@@ -59,57 +54,6 @@ const ContractStatus = ({item}) => {
           padding: 5,
         }}>
         <Text style={{fontFamily: fonts.semibold}}>{item.project_name}</Text>
-        <Menu
-          visible={visible}
-          onDismiss={closeMenu}
-          contentStyle={{
-            backgroundColor: 'white',
-          }}
-          anchor={
-            <Pressable onPress={openMenu}>
-              <Entypo name="dots-three-vertical" size={20} style={{}} />
-            </Pressable>
-          }>
-          <Pressable>
-            <Menu.Item
-              onPress={() => {
-                setVisible(false);
-                navigation.navigate('EditContracts');
-              }}
-              title="Edit"
-              style={{
-                backgroundColor: 'white',
-                height: 30,
-              }}
-              titleStyle={{
-                color: colors.primary,
-                fontFamily: fonts.regular,
-                fontSize: 12,
-              }}
-              contentStyle={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            />
-          </Pressable>
-          <Divider />
-          <Menu.Item
-            title="Withdraw"
-            style={{
-              backgroundColor: 'white',
-              height: 30,
-            }}
-            titleStyle={{
-              fontFamily: fonts.regular,
-              color: colors.primary,
-              fontSize: 12,
-            }}
-            contentStyle={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          />
-        </Menu>
       </View>
       <Divider style={{margin: 5}} />
 
@@ -126,7 +70,7 @@ const ContractStatus = ({item}) => {
         </Text>
       </View>
       <Divider style={{margin: 5}} />
-      {renderStatus(item.status)}
+      {renderStatus(item.Status)}
     </Pressable>
   );
 };

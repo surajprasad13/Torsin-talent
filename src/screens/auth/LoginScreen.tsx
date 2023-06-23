@@ -18,11 +18,11 @@ import {metrics, colors, fonts} from '../../theme';
 
 // components
 import Input from '../../components/Input';
+import {CustomButton} from '../../components';
 
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {userLogin} from '../../redux/actions/authAction';
 import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
-import {CustomButton} from '../../components';
 import {email, password} from '../../utils/regex';
 
 const {moderateScale, verticalScale} = metrics;
@@ -35,8 +35,8 @@ const LoginScreen = ({}) => {
   const dispatch = useAppDispatch();
 
   const [inputs, setInputs] = useState({
-    email: 'testing11@yopmail.com',
-    password: 'Mayank@123',
+    email: '',
+    password: '',
   });
 
   const [errors, setErrors] = useState<any>({});

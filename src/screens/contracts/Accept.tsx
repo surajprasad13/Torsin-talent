@@ -16,11 +16,9 @@ const Accept = () => {
     dispatch(getContract(1));
   }, []);
 
-  console.log(contracts);
-
   return (
     <FlatList
-      data={contracts.filter(item => item.status == 1)}
+      data={contracts.filter(item => item.Status == 1)}
       ListEmptyComponent={<View>{loading && <ActivityIndicator />}</View>}
       renderItem={({item, index}) => {
         return <ContractStatus item={item} key={index} />;

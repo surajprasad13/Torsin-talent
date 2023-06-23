@@ -201,9 +201,12 @@ const getContractDetail = createAsyncThunk(
   'get_contract_details/',
   async (value: any, {rejectWithValue}) => {
     try {
+      console.log(value, 'Value');
       const {data} = await api.get(`talent/get_contract_details/${value}/`);
+
       return data;
     } catch (error: any) {
+      //console.log(error.response);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -217,8 +220,8 @@ const updateContract = createAsyncThunk(
   'update_contract/',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(
-        `talent/update_contract_status/${value.id}`,
+      const {data} = await api.patch(
+        `talent/update_contract_status/${value.id}/`,
         value.inputs,
       );
       return data;
@@ -237,10 +240,8 @@ const fetchNotification = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/get_notification_list/`);
-      console.log(data);
       return data;
     } catch (error: any) {
-      console.log(error.response);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
