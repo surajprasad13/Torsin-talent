@@ -226,7 +226,7 @@ const fetchNotification = createAsyncThunk(
   'fetch_notification/',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(`client/get_notification_list/`);
+      const {data} = await api.get(`talent/get_notification_list/`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -252,7 +252,7 @@ export {
   getContract,
   getContractDetail,
   updateContract,
-  fetchNotification
+  fetchNotification,
 };
 
 export default {};

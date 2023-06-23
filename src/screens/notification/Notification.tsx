@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Switch,
   SafeAreaView,
-  ScrollView,
   FlatList,
 } from 'react-native';
 import {} from '@react-navigation/native';
@@ -18,11 +17,12 @@ import database from '@react-native-firebase/database';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
-import {appstyle, colors, fonts} from '../../theme';
+import {colors, fonts} from '../../theme';
 import {Divider} from 'react-native-paper';
 import {Title} from '../../components';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchNotification} from '../../redux/actions/userAction';
+import moment from 'moment';
 
 const Notification = ({}) => {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -100,14 +100,14 @@ const Notification = ({}) => {
                       color: '#333333',
                       fontSize: 14,
                     }}>
-                    Proposal Accepted
+                    {item.title}
                   </Text>
                   <Text
                     style={{
                       fontFamily: fonts.regular,
                       color: '#4F4F4F',
                     }}>
-                    Your Request has been accepted by
+                    {item.desc}
                   </Text>
                   <View
                     style={{
@@ -116,10 +116,10 @@ const Notification = ({}) => {
                       alignItems: 'center',
                     }}>
                     <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
-                      Gregory smith.
+                      {item.sender_name}
                     </Text>
                     <Text style={{fontFamily: fonts.regular, color: '#BDBDBD'}}>
-                      4 hours ago
+                      {moment(item.createdAt).format('lll')}
                     </Text>
                   </View>
                 </View>
