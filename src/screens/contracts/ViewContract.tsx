@@ -69,6 +69,7 @@ const ViewContract = ({route}: any) => {
         },
       }),
     );
+    dispatch(getContractDetail(id));
   };
 
   const onPressReject = () => {
@@ -80,6 +81,7 @@ const ViewContract = ({route}: any) => {
         },
       }),
     );
+    dispatch(getContractDetail(id));
   };
 
   if (loading || contractDetail == null) {
@@ -165,153 +167,157 @@ const ViewContract = ({route}: any) => {
             <Divider style={{marginTop: 10}} />
           </View>
 
-          <View>
-            <View style={{marginTop: 15}}>
-              <Text
-                style={{
-                  fontFamily: fonts.regular,
-                  color: '#4F4F4F',
-                  fontSize: 16,
-                }}>
-                Hourly Rate
-              </Text>
-              <View
-                style={{
-                  padding: 15,
-                  marginTop: 10,
-                  borderRadius: 12,
-                  backgroundColor: 'white',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  borderWidth: 0.5,
-                  borderColor: '#4f4f4f',
-                }}>
-                <TextInput
-                  placeholder="$100"
-                  placeholderTextColor="#333333"
-                  style={{}}
-                  editable={false}
-                  value={rate}
-                  onChangeText={text => {
-                    setRate(text);
-                  }}
-                />
+          {contractDetail.contract_details[0].contract_type == 2 && (
+            <View style={{}}>
+              <View style={{marginTop: 15}}>
                 <Text
                   style={{
-                    color: '#333333',
-                    padding: 10,
                     fontFamily: fonts.regular,
-                    position: 'absolute',
-                    right: 10,
+                    color: '#4F4F4F',
+                    fontSize: 16,
                   }}>
-                  /hr
+                  Hourly Rate
                 </Text>
+                <View
+                  style={{
+                    padding: 15,
+                    marginTop: 10,
+                    borderRadius: 12,
+                    backgroundColor: 'white',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    borderWidth: 0.5,
+                    borderColor: '#4f4f4f',
+                  }}>
+                  <TextInput
+                    placeholder="$100"
+                    placeholderTextColor="#333333"
+                    style={{}}
+                    editable={false}
+                    value={contractDetail.contract_details[0].amount}
+                    onChangeText={text => {
+                      setRate(text);
+                    }}
+                  />
+                  <Text
+                    style={{
+                      color: '#333333',
+                      padding: 10,
+                      fontFamily: fonts.regular,
+                      position: 'absolute',
+                      right: 10,
+                    }}>
+                    /hr
+                  </Text>
+                </View>
               </View>
-            </View>
-            <CustomInput
-              label="5% Torsin Fee"
-              value="15"
-              containerStyle={{marginTop: 15}}
-            />
-            <CustomInput
-              label="Grand Total"
-              value="100"
-              containerStyle={{marginTop: 15}}
-            />
-            <Divider style={{marginTop: 15}} />
-            <View style={{marginTop: 15}}>
-              <Text
-                style={{
-                  fontFamily: fonts.regular,
-                  color: '#4F4F4F',
-                  fontSize: 16,
-                }}>
-                End Date
-              </Text>
-              <Pressable
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}>
-                <FontAwesome
-                  name={
-                    contractDetail.contract_details[0].end_date == 1
-                      ? 'dot-circle-o'
-                      : 'circle-o'
-                  }
-                  color={
-                    contractDetail.contract_details[0].end_date == 1
-                      ? colors.primary
-                      : '#E0E0E0'
-                  }
-                  size={24}
-                />
+              <CustomInput
+                label="5% Torsin Fee"
+                value={contractDetail.contract_details[0].torsin_rate}
+                editable={false}
+                containerStyle={{marginTop: 15}}
+              />
+              <CustomInput
+                label="Grand Total"
+                editable={false}
+                value={contractDetail.contract_details[0].recived_amount}
+                containerStyle={{marginTop: 15}}
+              />
+              <Divider style={{marginTop: 15}} />
+              <View style={{marginTop: 15}}>
                 <Text
                   style={{
                     fontFamily: fonts.regular,
                     color: '#4F4F4F',
-                    marginLeft: 10,
                     fontSize: 16,
                   }}>
-                  Undefined
+                  End Date
                 </Text>
-              </Pressable>
-
-              <Pressable
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}>
-                <FontAwesome
-                  name={
-                    contractDetail.contract_details[0].end_date == 2
-                      ? 'dot-circle-o'
-                      : 'circle-o'
-                  }
-                  color={
-                    contractDetail.contract_details[0].end_date == 2
-                      ? colors.primary
-                      : '#E0E0E0'
-                  }
-                  size={24}
-                />
-
-                <Text
+                <Pressable
                   style={{
-                    fontFamily: fonts.regular,
-                    color: '#4F4F4F',
-                    marginLeft: 10,
-                    fontSize: 16,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 10,
                   }}>
-                  Specific Date
-                </Text>
-              </Pressable>
-            </View>
+                  <FontAwesome
+                    name={
+                      contractDetail.contract_details[0].end_date == 1
+                        ? 'dot-circle-o'
+                        : 'circle-o'
+                    }
+                    color={
+                      contractDetail.contract_details[0].end_date == 1
+                        ? colors.primary
+                        : '#E0E0E0'
+                    }
+                    size={24}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: fonts.regular,
+                      color: '#4F4F4F',
+                      marginLeft: 10,
+                      fontSize: 16,
+                    }}>
+                    Undefined
+                  </Text>
+                </Pressable>
 
-            {contractDetail.contract_details[0].end_date == 2 && (
-              <>
-                <CustomInput
-                  label="Specified Date"
-                  value=""
-                  containerStyle={{marginTop: 10}}
-                />
-                <Divider style={{marginTop: 10}} />
-              </>
-            )}
-          </View>
+                <Pressable
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 10,
+                  }}>
+                  <FontAwesome
+                    name={
+                      contractDetail.contract_details[0].end_date == 2
+                        ? 'dot-circle-o'
+                        : 'circle-o'
+                    }
+                    color={
+                      contractDetail.contract_details[0].end_date == 2
+                        ? colors.primary
+                        : '#E0E0E0'
+                    }
+                    size={24}
+                  />
+
+                  <Text
+                    style={{
+                      fontFamily: fonts.regular,
+                      color: '#4F4F4F',
+                      marginLeft: 10,
+                      fontSize: 16,
+                    }}>
+                    Specific Date
+                  </Text>
+                </Pressable>
+              </View>
+
+              {contractDetail.contract_details[0].end_date == 2 && (
+                <>
+                  <CustomInput
+                    label="Specified Date"
+                    value={contractDetail.contract_details[0].specific_date}
+                    containerStyle={{marginTop: 10}}
+                  />
+                  <Divider style={{marginTop: 10}} />
+                </>
+              )}
+            </View>
+          )}
         </View>
 
-        {contractDetail.contract_details[0].contract_type == 2 && (
+        {contractDetail.contract_details[0].contract_type == 1 && (
           <View style={{margin: 10, padding: 5, backgroundColor: 'white'}}>
-            <CustomInput placeholder="$" label="Amount" value="" />
+            <CustomInput
+              placeholder="$"
+              label="Amount"
+              value={contractDetail.contract_details[0].amount}
+            />
 
-            <View style={{marginTop: 10}}>
-              <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-                Milestones
-              </Text>
-
+            {contractDetail.contract_details[0].is_milestone == 1 && (
               <View
                 style={{
                   borderWidth: 0.5,
@@ -319,38 +325,173 @@ const ViewContract = ({route}: any) => {
                   padding: 10,
                   borderRadius: 12,
                   marginTop: 20,
+                  backgroundColor: colors.white,
                 }}>
-                <CustomInput
-                  placeholder="Enter name"
-                  label="Milestone name"
-                  editable={false}
-                  containerStyle={{marginTop: 10}}
-                />
+                <View style={styles.innerFix}>
+                  <Text
+                    style={{
+                      color: '#4F4F4F',
+                      fontSize: 16,
+                      fontFamily: fonts.regular,
+                    }}>
+                    Milestone Price
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#828282',
+                      fontFamily: fonts.regular,
+                    }}>
+                    $ {contractDetail.contract_details[0].amount}
+                  </Text>
+                </View>
+                <View style={styles.innerFix}>
+                  <Text
+                    style={{
+                      color: '#4F4F4F',
+                      fontSize: 16,
+                      fontFamily: fonts.regular,
+                    }}>
+                    5% Torsin fee
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#828282',
+                      fontFamily: fonts.regular,
+                    }}>
+                    $ {contractDetail.contract_details[0].torsin_rate}
+                  </Text>
+                </View>
+                <View style={styles.innerFix}>
+                  <Text style={{fontSize: 16, fontFamily: fonts.semibold}}>
+                    Grand Total
+                  </Text>
+                  <Text
+                    style={{
+                      color: colors.primary,
+                      fontSize: 16,
+                      fontFamily: fonts.semibold,
+                    }}>
+                    $ {contractDetail.contract_details[0].recived_amount}
+                  </Text>
+                </View>
+              </View>
+            )}
 
-                <CustomInput
-                  label="Start Date"
-                  placeholder=""
-                  editable={false}
-                  containerStyle={{marginTop: 10}}
-                />
+            {contractDetail.contract_details[0].is_milestone == 2 &&
+              contractDetail.milestone.length > 0 &&
+              contractDetail.milestone.map((a, b) => (
+                <View key={b.toString()} style={{marginTop: 10}}>
+                  <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
+                    Milestones
+                  </Text>
 
-                <CustomInput
-                  label="End Date"
-                  placeholder=""
-                  editable={false}
-                  containerStyle={{marginTop: 10}}
-                />
+                  <View
+                    style={{
+                      borderWidth: 0.5,
+                      borderColor: '#BDBDBD',
+                      padding: 10,
+                      borderRadius: 12,
+                      marginTop: 20,
+                    }}>
+                    <CustomInput
+                      placeholder="Enter name"
+                      label="Milestone name"
+                      value={a.name}
+                      editable={false}
+                      containerStyle={{marginTop: 10}}
+                    />
 
-                <CustomInput
-                  placeholder="$ Enter amount"
-                  label="Milestone Price"
-                  editable={false}
-                  containerStyle={{marginTop: 10}}
-                />
+                    <CustomInput
+                      label="Start Date"
+                      placeholder=""
+                      editable={false}
+                      value={a.start_date}
+                      containerStyle={{marginTop: 10}}
+                    />
+
+                    <CustomInput
+                      label="End Date"
+                      value={a.end_date}
+                      placeholder=""
+                      editable={false}
+                      containerStyle={{marginTop: 10}}
+                    />
+
+                    <CustomInput
+                      placeholder="$ Enter amount"
+                      label="Milestone Price"
+                      value={`${a.price}`}
+                      editable={false}
+                      containerStyle={{marginTop: 10}}
+                    />
+                  </View>
+                </View>
+              ))}
+          </View>
+        )}
+
+        {contractDetail.contract_details[0].is_milestone == 2 && (
+          <View style={{margin: 10, padding: 5, backgroundColor: 'white'}}>
+            <View
+              style={{
+                borderWidth: 0.5,
+                borderColor: '#BDBDBD',
+                padding: 10,
+                borderRadius: 12,
+                marginTop: 20,
+                backgroundColor: colors.white,
+              }}>
+              <View style={styles.innerFix}>
+                <Text
+                  style={{
+                    color: '#4F4F4F',
+                    fontSize: 16,
+                    fontFamily: fonts.regular,
+                  }}>
+                  Milestone Price
+                </Text>
+                <Text
+                  style={{
+                    color: '#828282',
+                    fontFamily: fonts.regular,
+                  }}>
+                  $ {contractDetail.contract_details[0].amount}
+                </Text>
+              </View>
+              <View style={styles.innerFix}>
+                <Text
+                  style={{
+                    color: '#4F4F4F',
+                    fontSize: 16,
+                    fontFamily: fonts.regular,
+                  }}>
+                  5% Torsin fee
+                </Text>
+                <Text
+                  style={{
+                    color: '#828282',
+                    fontFamily: fonts.regular,
+                  }}>
+                  $ {contractDetail.contract_details[0].torsin_rate}
+                </Text>
+              </View>
+              <View style={styles.innerFix}>
+                <Text style={{fontSize: 16, fontFamily: fonts.semibold}}>
+                  Grand Total
+                </Text>
+                <Text
+                  style={{
+                    color: colors.primary,
+                    fontSize: 16,
+                    fontFamily: fonts.semibold,
+                  }}>
+                  $ {contractDetail.contract_details[0].recived_amount}
+                </Text>
               </View>
             </View>
           </View>
         )}
+
         {contractDetail.contract_details[0].status == 0 && (
           <View
             style={{

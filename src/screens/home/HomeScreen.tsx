@@ -54,7 +54,7 @@ const HomeScreen = ({}) => {
   };
 
   useEffect(() => {
-    dispatch(profileDetail(userToken));
+    dispatch(profileDetail(''));
   }, []);
 
   useEffect(() => {

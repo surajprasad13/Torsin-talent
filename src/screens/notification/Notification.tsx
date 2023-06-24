@@ -22,6 +22,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchNotification} from '../../redux/actions/userAction';
+import {Title} from '../../components';
 
 const Notification = ({}) => {
   const navigation = useNavigation();
@@ -51,6 +52,8 @@ const Notification = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
+      <Title title="Notification" />
+
       <View
         style={{
           flexDirection: 'row',

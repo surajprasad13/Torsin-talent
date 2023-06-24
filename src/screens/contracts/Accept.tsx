@@ -18,7 +18,7 @@ const Accept = () => {
 
   return (
     <FlatList
-      data={contracts.filter(item => item.Status == 1)}
+      data={contracts}
       ListEmptyComponent={<View>{loading && <ActivityIndicator />}</View>}
       renderItem={({item, index}) => {
         return <ContractStatus item={item} key={index} />;

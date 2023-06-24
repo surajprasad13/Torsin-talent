@@ -14,6 +14,7 @@ import {
 import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -28,7 +29,6 @@ import {
   handleSendVideoMessage,
   sendFCMMessage,
 } from '../../helpers/chat';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ChatMessageList} from '../../types/ChatMessage';
 import Message from './components/Message';
 
@@ -47,6 +47,7 @@ const ChatUser = ({route}: any) => {
   const [status, setStatus] = useState<null | ChatStatus>(ChatStatus.inactive);
 
   const {userInfo} = useAppSelector(state => state.auth);
+
   const {item}: {item: ChatMessageList} = route.params;
   const navigation = useNavigation();
   const [isPopupVisible, setPopupVisible] = useState(false);
@@ -162,8 +163,6 @@ const ChatUser = ({route}: any) => {
   const renderItem = ({item, index}: any) => {
     return <Message userInfo={userInfo} item={item} key={index.toString()} />;
   };
-
-  console.log(item);
 
   return (
     <SafeAreaView
