@@ -44,7 +44,7 @@ const Chat = ({}) => {
         }}
         style={styles.container}>
         <FastImage
-          source={{uri: item.profileImage}}
+          source={{uri: item.image[0]}}
           resizeMode="cover"
           style={styles.image}
         />
@@ -55,12 +55,22 @@ const Chat = ({}) => {
             </Text>
             <Text style={styles.time}>{moment(item.createdAt).fromNow()}</Text>
           </View>
-          <Text style={styles.title}>{item.jobName}</Text>
-          <Text style={{}}>
-            {item.jobDescription.length > 30
-              ? item.jobDescription.substring(0, 30).concat('....')
-              : item.jobDescription}
-          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View>
+              <Text style={styles.title}>{item.jobName}</Text>
+              <Text style={{}}>
+                {item.jobDescription.length > 30
+                  ? item.jobDescription.substring(0, 30).concat('....')
+                  : item.jobDescription}
+              </Text>
+            </View>
+            <Text style={{}}>{item.read > 0 ? item.read : null}</Text>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -98,7 +108,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.semibold,
     color: '#1E202B',
-    marginTop: 5,
     opacity: 0.8,
   },
   description: {

@@ -203,7 +203,7 @@ const userSlice = createSlice({
       .addCase(getAccepted.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.acceptList = action.payload.response;
+        state.acceptList = action.payload;
       })
       .addCase(getAccepted.rejected, (state, action) => {
         state.loading = false;

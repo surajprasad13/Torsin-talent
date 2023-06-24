@@ -36,7 +36,7 @@ const List = [
 
   {
     title: 'Proposals',
-    route: 'Proposals',
+    route: 'ProposalNavigator',
     icon: ({color}: {color: string}) => (
       <IonIcon name="newspaper-outline" color={color} size={20} />
     ),

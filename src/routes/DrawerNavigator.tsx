@@ -14,8 +14,8 @@ import {DrawerScreenParamaList} from './RouteType';
 import Notification from '../screens/notification/Notification';
 import {fonts} from '../theme';
 import MyAlljob from '../screens/jobs/MyAllJob';
-import Proposals from '../screens/proposals/Proposals';
 import ContractNavigator from './ContractNavigator';
+import ProposalNavigator from './ProposalNavigator';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
@@ -47,7 +47,11 @@ const DrawerNavigation = () => {
         component={Notification}
         options={{}}
       />
-      <Drawer.Screen name="Proposals" component={Proposals} options={{}} />
+      <Drawer.Screen
+        name="ProposalNavigator"
+        component={ProposalNavigator}
+        options={{}}
+      />
       <Drawer.Screen name="MyJobs" component={MyAlljob} options={{}} />
       <Drawer.Screen name="MyRatings" component={MyRating} options={{}} />
       <Drawer.Screen name="ContractNavigator" component={ContractNavigator} />

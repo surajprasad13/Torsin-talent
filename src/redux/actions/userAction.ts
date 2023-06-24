@@ -127,6 +127,7 @@ const addProposal = createAsyncThunk(
 
       return data;
     } catch (error: any) {
+      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -150,7 +151,7 @@ const getAccepted = createAsyncThunk(
           read: length,
         });
       }
-      return data;
+      return _data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);

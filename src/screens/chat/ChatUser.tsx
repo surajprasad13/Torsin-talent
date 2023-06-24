@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
-import moment from 'moment';
 import database from '@react-native-firebase/database';
 
 //icons
@@ -164,6 +163,8 @@ const ChatUser = ({route}: any) => {
     return <Message userInfo={userInfo} item={item} key={index.toString()} />;
   };
 
+  console.log(item);
+
   return (
     <SafeAreaView
       style={{
@@ -187,10 +188,7 @@ const ChatUser = ({route}: any) => {
         />
         <View style={{alignItems: 'center'}}>
           <Text style={{textTransform: 'capitalize', fontSize: 16}}>
-            {userInfo?.fullName}
-          </Text>
-          <Text style={{fontFamily: fonts.regular, fontSize: 9}}>
-            Last seen {moment().format('lll')}
+            {item.fullname}
           </Text>
         </View>
         <Feather name="more-vertical" size={20} />

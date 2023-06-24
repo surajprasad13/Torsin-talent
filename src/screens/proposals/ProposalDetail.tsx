@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -15,8 +15,6 @@ import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
-
-// icons
 
 // components
 import {CustomButton, CustomInput, Title} from '../../components';
