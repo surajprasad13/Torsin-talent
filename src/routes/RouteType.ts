@@ -65,6 +65,7 @@ export type DrawerScreenParamaList = {
   HelpSupport: undefined;
   BottomNavigation: BottomScreenParamList;
   DrawerSetting: undefined;
+  PaymentMethod: undefined;
 };
 
 export type BottomScreenParamList = {
@@ -98,6 +99,8 @@ export type HomeScreenParamList = {
 
 export type PaymentScreenParamList = {
   Payment: undefined;
+  Pending: undefined;
+  Received: undefined;
 };
 
 export type JobScreenParamList = {

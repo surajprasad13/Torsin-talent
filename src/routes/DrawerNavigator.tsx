@@ -16,6 +16,7 @@ import {fonts} from '../theme';
 import MyAlljob from '../screens/jobs/MyAllJob';
 import ContractNavigator from './ContractNavigator';
 import ProposalNavigator from './ProposalNavigator';
+import PaymentMethod from '../screens/drawerScreens/PaymentMethod';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
@@ -60,6 +61,7 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="MyServices" component={MyService} options={{}} />
       <Drawer.Screen name="TermsPrivacy" component={Terms} options={{}} />
       <Drawer.Screen name="HelpSupport" component={Terms} options={{}} />
+      <Drawer.Screen name='PaymentMethod' component = {PaymentMethod}/>
     </Drawer.Navigator>
   );
 };

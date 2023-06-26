@@ -1,38 +1,28 @@
 import React from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import {SafeAreaView} from 'react-native';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-//helpers
+//components
 import {Title} from '../../components';
-import {appstyle, colors, fonts} from '../../theme';
+import MyTabBar from '../../components/MyTabBar';
 
-const Payment = () => {
+// helpers
+import {PaymentScreenParamList} from '../../routes/RouteType';
+import Pending from './Pending';
+import Received from './Received';
+
+const Tab = createMaterialTopTabNavigator<PaymentScreenParamList>();
+
+const Payment = ({}) => {
   return (
-    <SafeAreaView style={styles.container}>
-      <Title title="Payments" />
-      <View style={{padding: 10}}>
-        <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-          Pending/Ongoing
-        </Text>
-        <View style={styles.cardView}>
-          <Text style={{textAlign: 'right', padding: 10, color: 'blue'}}>
-            View Job
-          </Text>
-        </View>
-      </View>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
+      <Title title="Payment" />
+      <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
+        <Tab.Screen name="Pending" component={Pending} />
+        <Tab.Screen name="Received" component={Received} />
+      </Tab.Navigator>
     </SafeAreaView>
   );
 };
 
 export default Payment;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fbff',
-  },
-  cardView: {
-    ...appstyle.shadow,
-    marginTop: 10,
-    borderRadius: 12,
-  },
-});
