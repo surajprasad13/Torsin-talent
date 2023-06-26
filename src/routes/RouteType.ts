@@ -29,6 +29,9 @@ export type RootStackParamList = {
   WebScreen: {
     item: string;
   };
+  PdfScreen: {
+    item: undefined | object;
+  };
 };
 
 export type AuthScreenParamList = {
@@ -50,7 +53,7 @@ export type AuthScreenParamList = {
 
 export type DrawerScreenParamaList = {
   Notifications: undefined;
-  Proposals: undefined;
+  ProposalNavigator: undefined;
   MyRatings: undefined;
   ContractNavigator: undefined;
   MyServices: undefined;
@@ -84,6 +87,13 @@ export type SettingScreenParamList = {
 export type HomeScreenParamList = {
   HomeScreen: undefined;
   AllExpertise: undefined;
+  JobDetail: {
+    item: undefined;
+  };
+  AddJobDetails: {
+    item: undefined;
+  };
+  ProposalSentSuccess: undefined;
 };
 
 export type PaymentScreenParamList = {

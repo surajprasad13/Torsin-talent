@@ -25,4 +25,5 @@ export interface ChatMessageList {
   proposalId: number;
   proposalStatus: number;
   clientId: number;
+  read?: number;
 }

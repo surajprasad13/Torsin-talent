@@ -11,7 +11,6 @@ import messaging from '@react-native-firebase/messaging';
 
 import {navigationRef} from './src/routes/RootNavigation';
 
-// Note that an async function or a function that returns a Promise
 // is required for both subscribers.
 async function onMessageReceived(message) {
   // Do something

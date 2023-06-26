@@ -111,6 +111,9 @@ const AddJobDetails = ({route}: any) => {
   };
 
   const postService = () => {
+    if (data.charge == '') {
+      delete data.charge;
+    }
     let value = {
       inputs: data,
       userToken,
@@ -211,7 +214,6 @@ const AddJobDetails = ({route}: any) => {
             <TextInput
               placeholder="I am writing to submit a proposal on behalf of your requirement for  ..."
               multiline={true}
-              //returnKeyType="none"
               placeholderTextColor="#4F4F4F"
               value={inputs.message}
               maxLength={500}
@@ -221,7 +223,6 @@ const AddJobDetails = ({route}: any) => {
               onFocus={() => {
                 handleError('', 'message');
               }}
-              blurOnSubmit={true}
               onSubmitEditing={() => {
                 Keyboard.dismiss();
               }}

@@ -63,7 +63,9 @@ const ContractStatus = ({item}: any) => {
           justifyContent: 'space-between',
           padding: 5,
         }}>
-        <Text style={{fontFamily: fonts.regular}}>Email - {item.email_id}</Text>
+        <Text style={{fontFamily: fonts.regular, width: '70%'}}>
+          Email - {item.email_id}
+        </Text>
         <Text style={{textAlign: 'center', color: '#E0E2E3'}}>|</Text>
         <Text style={{fontFamily: fonts.regular, color: '#4B4D56'}}>
           Amount - <Text style={{color: colors.black}}>{item.amount}</Text>

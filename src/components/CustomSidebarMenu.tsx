@@ -36,7 +36,7 @@ const List = [
 
   {
     title: 'Proposals',
-    route: 'Proposals',
+    route: 'ProposalNavigator',
     icon: ({color}: {color: string}) => (
       <IonIcon name="newspaper-outline" color={color} size={20} />
     ),
@@ -57,7 +57,7 @@ const List = [
   },
   {
     title: 'My Contracts',
-    route: 'ContractNavigator',
+    route: 'Contract',
     icon: ({color}: {color: string}) => (
       <Feather name="briefcase" color={color} size={20} />
     ),

@@ -20,11 +20,12 @@ const projectType = ['', 'Fixed', 'Hourly'];
 
 const JobDetails = ({route}: any) => {
   const {item} = route.params as {item: JobDetail};
-
   const navigation = useNavigation();
+
   return (
     <SafeAreaView style={styles.container}>
       <Title title="Job Details" />
+
       <ScrollView>
         <View style={styles.cardContainer}>
           <Text style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>

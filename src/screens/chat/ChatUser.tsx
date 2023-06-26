@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
-import moment from 'moment';
 import database from '@react-native-firebase/database';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -29,7 +29,6 @@ import {
   handleSendVideoMessage,
   sendFCMMessage,
 } from '../../helpers/chat';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ChatMessageList} from '../../types/ChatMessage';
 import Message from './components/Message';
 
@@ -48,6 +47,7 @@ const ChatUser = ({route}: any) => {
   const [status, setStatus] = useState<null | ChatStatus>(ChatStatus.inactive);
 
   const {userInfo} = useAppSelector(state => state.auth);
+
   const {item}: {item: ChatMessageList} = route.params;
   const navigation = useNavigation();
   const [isPopupVisible, setPopupVisible] = useState(false);
@@ -187,10 +187,7 @@ const ChatUser = ({route}: any) => {
         />
         <View style={{alignItems: 'center'}}>
           <Text style={{textTransform: 'capitalize', fontSize: 16}}>
-            {userInfo?.fullName}
-          </Text>
-          <Text style={{fontFamily: fonts.regular, fontSize: 9}}>
-            Last seen {moment().format('lll')}
+            {item.fullname}
           </Text>
         </View>
         <Feather name="more-vertical" size={20} />

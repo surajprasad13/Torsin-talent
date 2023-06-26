@@ -31,6 +31,7 @@ import {navigationRef} from './RootNavigation';
 import {RootStackParamList} from './RouteType';
 import {useAppSelector} from '../hooks';
 import ThroughRegister from '../screens/ThroughRegister';
+import PdfScreen from '../screens/chat/PdfScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -86,6 +87,14 @@ export default function AppNavigator() {
               }}
               initialParams={{
                 item: {},
+              }}
+            />
+            <Stack.Screen
+              name="PdfScreen"
+              component={PdfScreen}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
               }}
             />
           </Stack.Group>

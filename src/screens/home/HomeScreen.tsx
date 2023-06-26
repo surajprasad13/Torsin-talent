@@ -40,7 +40,7 @@ const HomeScreen = ({}) => {
   const setToken = async () => {
     const token = await messaging().getToken();
 
-    if (token) {
+    if (token && userInfo?.id) {
       const ref = database().ref(`/Tokens/u2id${userInfo?.id}`);
       dispatch(
         userUpdate({
@@ -54,11 +54,11 @@ const HomeScreen = ({}) => {
   };
 
   useEffect(() => {
-    setToken();
+    dispatch(profileDetail(''));
   }, []);
 
   useEffect(() => {
-    dispatch(profileDetail(userToken));
+    setToken();
   }, []);
 
   useEffect(() => {
