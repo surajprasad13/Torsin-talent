@@ -9,13 +9,18 @@ import {
 import React from 'react';
 import FastImage from 'react-native-fast-image';
 import {appstyle, fonts} from '../../theme';
+import {useNavigation} from '@react-navigation/native';
 
 const Pending = () => {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>
         {[0, 1, 2, 3, 4, 5, 6].map(item => (
-          <TouchableOpacity style={styles.container}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PaymentDetail')}
+            style={styles.container}>
             <FastImage
               source={{uri: 'https://source.unsplash.com/400x400?stone'}}
               resizeMode="cover"
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    borderRadius: 25
+    borderRadius: 25,
   },
   title: {
     fontFamily: fonts.regular,

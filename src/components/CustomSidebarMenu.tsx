@@ -70,19 +70,20 @@ const List = [
     ),
   },
   {
-    title: 'Payment',
-    route: 'PaymentNavigator',
-    icon: ({color}: {color: string}) => (
-      <MaterialIcon name="payments" color={color} size={20} />
-    ),
-  },
-  {
     title: 'Payment Method',
     route: 'PaymentMethod',
     icon: ({color}: {color: string}) => (
       <MaterialIcon name="payments" color={color} size={20} />
     ),
   },
+  {
+    title: 'Payment',
+    route: 'PaymentNavigator',
+    icon: ({color}: {color: string}) => (
+      <MaterialIcon name="payments" color={color} size={20} />
+    ),
+  },
+
   {
     title: 'About us',
     route: 'AboutUs',

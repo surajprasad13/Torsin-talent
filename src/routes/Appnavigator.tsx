@@ -23,7 +23,7 @@ import DrawerNavigation from './DrawerNavigator';
 import CreatePassword from '../screens/auth/CreatePassword';
 import ChatUser from '../screens/chat/ChatUser';
 import WebScreen from '../screens/WebScreen';
-import RatingReview from '../screens/jobs/services/RatingReview';
+import RatingReview from '../screens/payment/services/RatingReview';
 
 import {navigationRef} from './RootNavigation';
 
@@ -32,6 +32,9 @@ import {RootStackParamList} from './RouteType';
 import {useAppSelector} from '../hooks';
 import ThroughRegister from '../screens/ThroughRegister';
 import PdfScreen from '../screens/chat/PdfScreen';
+import PaymentDetail from '../screens/payment/PendingPaymentDetail';
+import ReportProblem from '../screens/payment/services/ReportProblem';
+import ReceivedPayment from '../screens/payment/ReceivedPaymentDetail';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -92,6 +95,38 @@ export default function AppNavigator() {
             <Stack.Screen
               name="PdfScreen"
               component={PdfScreen}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="PaymentDetail"
+              component={PaymentDetail}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+             <Stack.Screen
+              name="ReceivePayment"
+              component={ReceivedPayment}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="Rating"
+              component={RatingReview}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="Report"
+              component={ReportProblem}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,

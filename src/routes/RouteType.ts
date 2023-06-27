@@ -22,6 +22,10 @@ export type RootStackParamList = {
   BottomScreens: undefined;
   CreatePassword: {item: string} | undefined;
   MusicComposer: undefined;
+  PaymentDetail: undefined;
+  ReceivePayment: undefined;
+  Rating: undefined;
+  Report: undefined;
   ChatUser: {
     item: undefined | {};
   };
