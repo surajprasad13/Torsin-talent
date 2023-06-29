@@ -22,7 +22,7 @@ import DrawerNavigation from './DrawerNavigator';
 
 import CreatePassword from '../screens/auth/CreatePassword';
 import ChatUser from '../screens/chat/ChatUser';
-import WebScreen from '../screens/WebScreen';
+import WebScreen from '../screens/common/WebScreen';
 import RatingReview from '../screens/payment/services/RatingReview';
 
 import {navigationRef} from './RootNavigation';
@@ -108,7 +108,7 @@ export default function AppNavigator() {
                 ...TransitionPresets.SlideFromRightIOS,
               }}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="ReceivePayment"
               component={ReceivedPayment}
               options={{
@@ -131,6 +131,15 @@ export default function AppNavigator() {
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,
               }}
+            />
+            <Stack.Screen
+              name="WebScreen"
+              component={WebScreen}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+              initialParams={{item: ''}}
             />
           </Stack.Group>
         ) : (

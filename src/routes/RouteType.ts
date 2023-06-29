@@ -31,7 +31,7 @@ export type RootStackParamList = {
   };
   RatingReview: undefined;
   WebScreen: {
-    item: string;
+    item: string | undefined;
   };
   PdfScreen: {
     item: undefined | object;

@@ -13,11 +13,13 @@ import {
 
 import authReducer from './reducers/authSlice';
 import userReducer from './reducers/userSlice';
+import paymentReducer from './reducers/paymentReducer';
 
 const rootReducer = combineReducers({
   // Add your reducers here
   auth: authReducer,
   user: userReducer,
+  payment: paymentReducer,
 });
 
 const persistConfig = {

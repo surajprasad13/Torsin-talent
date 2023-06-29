@@ -1,61 +1,150 @@
-import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
-import React from 'react';
-import {Title} from '../../components';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect} from 'react';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  ActivityIndicator,
+  ScrollView,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {CustomButton, CustomInput, Title} from '../../components';
 import {appstyle, colors, fonts} from '../../theme';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {
+  generateLink,
+  getBankAccountDeail,
+  getStripeAccountInfo,
+} from '../../redux/actions/paymentAction';
 
 const PaymentMethod = () => {
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
+
+  const {accountDetail, loading, accountOnboarding, bankAccountDetail} =
+    useAppSelector(state => state.payment);
+
+  useEffect(() => {
+    const listener = navigation.addListener('focus', () => {
+      if (accountDetail) {
+        dispatch(generateLink(accountDetail.instanceId));
+      }
+    });
+    return () => listener;
+  }, []);
+
+  useEffect(() => {
+    dispatch(getStripeAccountInfo(''));
+  }, []);
+
+  useEffect(() => {
+    if (accountDetail) {
+      dispatch(generateLink(accountDetail.instanceId));
+    }
+  }, [accountDetail]);
+
+  useEffect(() => {
+    dispatch(getBankAccountDeail(''));
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <Title title="Payment Method" />
-      <View style={{padding: 10}}>
-        <Text style={{fontFamily: fonts.regular, fontSize: 16}}>
-          Payment Link
-        </Text>
-        <View
-          style={{
-            ...appstyle.shadow,
-            padding: 10,
-            borderRadius: 12,
-            marginTop: 10,
-          }}>
-          <Text style={{color: '#6180F4', padding: 10, fontSize: 16}}>
-            http://www.example.com/apparel.html?beginner=brotherwww.example.com/apparel.html
-            beginner=brotherwww.example.com/apparel.html?beginner=brother
-          </Text>
-        </View>
-        <View
-          style={{
-            ...appstyle.shadow,
-            padding: 10,
-            borderRadius: 12,
-            marginTop: 40,
-            borderWidth: 0.2,
-            borderColor: colors.grey,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <AntDesign
-            name="exclamationcircleo"
-            size={50}
-            color="#6180F4"
-            style={{padding: 10}}
-          />
+      <ScrollView>
+        <Title title="Payment Method" />
 
-          <Text
-            style={{
-              color: '#000000',
-              padding: 10,
-              fontSize: 16,
-              width: '85%',
-              fontFamily: fonts.regular,
-            }}>
-            Click on the above link to proceed to Stripe payment source
-          </Text>
-        </View>
-      </View>
+        {bankAccountDetail?.Details?.external_accounts?.data ? (
+          <View style={{margin: 10}}>
+            {bankAccountDetail?.Details?.external_accounts?.data.map(
+              (item: any, index: number) => {
+                return (
+                  <View key={index.toString()} style={{}}>
+                    <CustomInput
+                      editable={false}
+                      label="Bank Name"
+                      value={item.bank_name}
+                    />
+                    <CustomInput
+                      editable={false}
+                      label="Account Holder Name"
+                      value={item.account_holder_name ?? ''}
+                      containerStyle={{marginTop: 10}}
+                    />
+                    <CustomInput
+                      editable={false}
+                      label="Account Number"
+                      value={`**** **** **** ` + item.last4 ?? ''}
+                      containerStyle={{marginTop: 10}}
+                    />
+                    <CustomInput
+                      editable={false}
+                      label="Account Type"
+                      value={item.account_type ?? ''}
+                      containerStyle={{marginTop: 10}}
+                    />
+                  </View>
+                );
+              },
+            )}
+          </View>
+        ) : (
+          <View style={{padding: 10}}>
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <CustomButton
+                disabled
+                title="Add Bank"
+                onPress={() => {
+                  navigation.navigate('WebScreen', {
+                    item: accountOnboarding?.url,
+                  });
+                }}
+              />
+            )}
+            <View
+              style={{
+                ...appstyle.shadow,
+                padding: 10,
+                borderRadius: 12,
+                marginTop: 40,
+                borderWidth: 0.2,
+                borderColor: colors.grey,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <AntDesign
+                name="exclamationcircleo"
+                size={50}
+                color="#6180F4"
+                style={{padding: 10}}
+              />
+
+              <Text
+                style={{
+                  color: colors.black,
+                  padding: 10,
+                  width: '85%',
+                  fontFamily: fonts.regular,
+                  textAlign: 'center',
+                }}>
+                Click on the button to proceed to Stripe payment source
+              </Text>
+            </View>
+          </View>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 };
