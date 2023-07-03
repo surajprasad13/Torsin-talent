@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
 import {
   View,
@@ -7,9 +8,12 @@ import {
   Dimensions,
   SafeAreaView,
   TextInput,
+  RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {} from 'react-native-paper';
+import messaging from '@react-native-firebase/messaging';
+import database from '@react-native-firebase/database';
 
 //icons
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -21,7 +25,7 @@ import CircleProgress from '../../components/CircleProgress';
 import {colors, fonts} from '../../theme';
 import ExpertiseCard from './components/ExpertiseCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {profileDetail} from '../../redux/actions/authAction';
+import {profileDetail, userUpdate} from '../../redux/actions/authAction';
 import {jobCorrespondSkill} from '../../redux/actions/userAction';
 
 const {} = Dimensions.get('window');
@@ -29,24 +33,56 @@ const {} = Dimensions.get('window');
 const HomeScreen = ({}) => {
   const dispatch = useAppDispatch();
   const {userInfo, userToken} = useAppSelector(state => state.auth);
-  const {correspond} = useAppSelector(state => state.user);
+  const {correspond, loading} = useAppSelector(state => state.user);
 
   const navigation = useNavigation();
 
+  const setToken = async () => {
+    const token = await messaging().getToken();
+
+    if (token && userInfo?.id) {
+      const ref = database().ref(`/Tokens/u2id${userInfo?.id}`);
+      dispatch(
+        userUpdate({
+          inputs: {
+            deviceToken: token,
+          },
+        }),
+      );
+      await ref.update({device_token: token});
+    }
+  };
+
   useEffect(() => {
-    dispatch(profileDetail(userToken));
+    dispatch(profileDetail(''));
+  }, []);
+
+  useEffect(() => {
+    setToken();
+  }, []);
+
+  useEffect(() => {
+    dispatch(jobCorrespondSkill(userToken));
   }, []);
 
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(jobCorrespondSkill(userToken));
     });
-    return () => listener;
+    return listener;
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
+    dispatch(jobCorrespondSkill(userToken));
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <ScrollView style={{padding: 10}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
+        style={{padding: 10}}>
         <View
           style={{
             flexDirection: 'row',
@@ -65,9 +101,10 @@ const HomeScreen = ({}) => {
             style={{
               flex: 0.9,
               backgroundColor: colors.white,
-              borderRadius: 15,
+              borderRadius: 100,
               flexDirection: 'row',
               alignItems: 'center',
+              borderWidth: 0.2,
             }}>
             <Feather
               name="search"
@@ -132,20 +169,18 @@ const HomeScreen = ({}) => {
           <Text
             style={{
               fontFamily: fonts.regular,
-              fontSize: 16,
               color: '#1E202B',
             }}>
-            John based on your expertise
+            Hey, {userInfo?.fullName} job based on your expertise
           </Text>
           <Text
-            onPress={() => navigation.navigate('Allexpertise')}
+            onPress={() => navigation.navigate('AllExpertise')}
             style={{
               height: 20,
               fontFamily: fonts.semibold,
-              fontSize: 16,
               color: colors.primary,
             }}>
-            view all
+            View All
           </Text>
         </View>
         <View style={{marginTop: 20}}>

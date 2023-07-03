@@ -44,7 +44,7 @@ type InputProps = {
   images: Array<string>;
 };
 
-const AddService = ({route}: any) => {
+const AddJobDetails = ({route}: any) => {
   const {id} = route.params;
 
   const navigation = useNavigation();
@@ -111,6 +111,9 @@ const AddService = ({route}: any) => {
   };
 
   const postService = () => {
+    if (data.charge == '') {
+      delete data.charge;
+    }
     let value = {
       inputs: data,
       userToken,
@@ -220,7 +223,6 @@ const AddService = ({route}: any) => {
               onFocus={() => {
                 handleError('', 'message');
               }}
-              blurOnSubmit={true}
               onSubmitEditing={() => {
                 Keyboard.dismiss();
               }}
@@ -315,9 +317,6 @@ const AddService = ({route}: any) => {
                 if (pass) {
                   handleOnchange(text, 'charge');
                 }
-              }}
-              onFocus={() => {
-                handleError('', 'serviceCharge');
               }}
               containerStyle={{marginTop: 10, width: '45%'}}
               error={errors.serviceCharge}
@@ -493,4 +492,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddService;
+export default AddJobDetails;

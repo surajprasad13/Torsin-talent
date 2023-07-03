@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,13 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
+  LayoutAnimation,
+  TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
-
-// icons
+import moment from 'moment';
+import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
 
 // components
 import {CustomButton, CustomInput, Title} from '../../components';
@@ -24,10 +25,26 @@ import {appstyle, colors, fonts} from '../../theme';
 const projectType = ['', 'Hourly', 'Fixed'];
 
 const ProposalDetail = ({route}: any) => {
+  const ref = useRef(null);
+
   const {item} = route.params;
   const navigation = useNavigation();
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  console.log(item);
+  const handleViewMore = () => {
+    if (ref.current) {
+      //@ts-ignore
+      ref.current.scrollTo({y: 0, animated: true});
+    }
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setIsExpanded(!isExpanded);
+  };
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(isExpanded ? 0 : 1),
+    };
+  });
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
@@ -36,7 +53,156 @@ const ProposalDetail = ({route}: any) => {
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
         <Title title="Proposal Detail" />
 
-        <ScrollView>
+        <ScrollView ref={ref}>
+          <View style={styles.container}>
+            {isExpanded ? (
+              <Animated.View>
+                <FastImage
+                  source={{
+                    uri: item.images[0],
+                  }}
+                  style={styles.image}
+                  resizeMode="cover"
+                />
+                <View style={{padding: 10}}>
+                  <Text style={styles.title}>{item.jobName}</Text>
+                  <View style={{marginTop: 10}}>
+                    <Text style={styles.titleName}>
+                      Published date:{' '}
+                      <Text style={styles.description}>
+                        {moment(item.createdAt).format('lll')}
+                      </Text>
+                    </Text>
+                    <Text style={styles.titleName}>
+                      Service:
+                      <Text style={styles.description}>
+                        {' '}
+                        {item.adminService}
+                      </Text>
+                    </Text>
+                    <Text style={styles.titleName}>
+                      Payment type:
+                      <Text style={styles.description}>
+                        {' '}
+                        {projectType[item.jobProjectType]}
+                      </Text>
+                    </Text>
+                    <Text style={styles.titleName}>
+                      Location:
+                      <Text style={styles.description}> {item.location}</Text>
+                    </Text>
+                    <Text style={styles.titleName}>
+                      Country:
+                      <Text style={styles.description}>
+                        {' '}
+                        {item.countryName}
+                      </Text>
+                    </Text>
+                  </View>
+                </View>
+                <View style={{margin: 5, padding: 5}}>
+                  <Text style={styles.title}>Description</Text>
+                  <Text style={styles.description}>{item.jobDescription}</Text>
+                </View>
+                <View style={{margin: 5, padding: 5}}>
+                  <Text style={styles.title}>Photos</Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                    }}>
+                    {item.photos !== null &&
+                      item.images.map((_item: string, index: number) => {
+                        return (
+                          <FastImage
+                            key={index.toString()}
+                            source={{uri: _item}}
+                            style={styles.innerImage}
+                          />
+                        );
+                      })}
+                  </View>
+                </View>
+                <View
+                  style={{
+                    margin: 5,
+                    padding: 5,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      fontFamily: fonts.semibold,
+                      fontSize: 18,
+                      color: colors.primary,
+                    }}>
+                    Rates:
+                  </Text>
+                  <TouchableOpacity>
+                    <Text
+                      style={{
+                        color: colors.grey2,
+                        fontFamily: fonts.semibold,
+                        padding: 5,
+                      }}>
+                      ${item.jobPriceRate}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </Animated.View>
+            ) : (
+              <Animated.View
+                style={[
+                  {
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  },
+                  animatedStyle,
+                ]}>
+                <FastImage
+                  source={{
+                    uri: item.images[0],
+                  }}
+                  resizeMode="cover"
+                  style={{width: 50, height: 50, borderRadius: 25}}
+                />
+                <View style={{width: '80%', margin: 5}}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: '#1E202B',
+                      fontFamily: fonts.semibold,
+                    }}>
+                    {item.jobName}
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#1E202B',
+                      fontFamily: fonts.regular,
+                      fontSize: 12,
+                      marginTop: 5,
+                    }}>
+                    {item.jobDescription}
+                  </Text>
+                </View>
+              </Animated.View>
+            )}
+
+            <TouchableOpacity
+              style={{alignItems: 'flex-end', padding: 5}}
+              onPress={handleViewMore}>
+              <Text
+                style={{
+                  color: colors.primary,
+                  fontFamily: fonts.regular,
+                  fontSize: 12,
+                }}>
+                {isExpanded ? 'View Less' : 'View More'}
+              </Text>
+            </TouchableOpacity>
+          </View>
           <View style={{marginTop: 0, margin: 15}}>
             <Text
               style={{
@@ -109,9 +275,9 @@ const ProposalDetail = ({route}: any) => {
             </Text>
           </View>
 
-          {item.images.length > 0 ? (
+          {item.photos !== null && item.photos.length > 0 ? (
             <View style={styles.photoContainer}>
-              {item.images.map((_item: string, index: number) => (
+              {item.photos.map((_item: string, index: number) => (
                 <View key={index.toString()} style={styles.innerPhotos}>
                   <FastImage
                     source={{uri: _item}}
@@ -122,7 +288,7 @@ const ProposalDetail = ({route}: any) => {
               ))}
             </View>
           ) : (
-            <View style={styles.photoContainer}>
+            <View style={styles.videoInput}>
               <Text
                 style={{
                   textAlign: 'center',
@@ -203,6 +369,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  container: {
+    ...appstyle.shadow,
+    maxWidth: '100%',
+    margin: 10,
+    borderRadius: 15,
+    padding: 0,
+  },
   textContainer: {
     marginLeft: 10,
     padding: 10,
@@ -233,6 +406,33 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 10,
     padding: 5,
+  },
+  image: {
+    width: '100%',
+    height: 250,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  title: {
+    fontFamily: fonts.semibold,
+    color: colors.primary,
+    fontSize: 18,
+    marginTop: 10,
+  },
+  description: {
+    fontFamily: fonts.regular,
+    color: colors.grey2,
+    marginTop: 10,
+  },
+  titleName: {
+    color: colors.primary,
+    marginTop: 5,
+  },
+  innerImage: {
+    width: 86,
+    height: 100,
+    borderRadius: 5,
+    margin: 5,
   },
 });
 

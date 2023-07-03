@@ -36,14 +36,14 @@ const List = [
 
   {
     title: 'Proposals',
-    route: 'Proposals',
+    route: 'ProposalNavigator',
     icon: ({color}: {color: string}) => (
       <IonIcon name="newspaper-outline" color={color} size={20} />
     ),
   },
   {
     title: 'My Jobs',
-    route: 'MyJobs',
+    route: 'JobNavigator',
     icon: ({color}: {color: string}) => (
       <FontAwesome name="calendar-check-o" color={color} size={20} />
     ),
@@ -56,6 +56,13 @@ const List = [
     ),
   },
   {
+    title: 'My Contracts',
+    route: 'ContractNavigator',
+    icon: ({color}: {color: string}) => (
+      <Feather name="briefcase" color={color} size={20} />
+    ),
+  },
+  {
     title: 'My Services',
     route: 'MyServices',
     icon: ({color}: {color: string}) => (
@@ -63,12 +70,20 @@ const List = [
     ),
   },
   {
-    title: 'Payment',
-    route: 'Payments',
+    title: 'Payment Method',
+    route: 'PaymentMethod',
     icon: ({color}: {color: string}) => (
       <MaterialIcon name="payments" color={color} size={20} />
     ),
   },
+  {
+    title: 'Payment',
+    route: 'PaymentNavigator',
+    icon: ({color}: {color: string}) => (
+      <MaterialIcon name="payments" color={color} size={20} />
+    ),
+  },
+
   {
     title: 'About us',
     route: 'AboutUs',
@@ -115,8 +130,11 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('DrawerSetting', {
-                    screen: 'EditProfile',
+                  navigation.navigate('BottomNavigation', {
+                    screen: 'SettingNavigator',
+                    params: {
+                      screen: 'EditProfile',
+                    },
                   });
                 }}>
                 <Text
@@ -130,8 +148,11 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('DrawerSetting', {
-                  screen: 'EditProfile',
+                navigation.navigate('BottomNavigation', {
+                  screen: 'SettingNavigator',
+                  params: {
+                    screen: 'EditProfile',
+                  },
                 });
               }}>
               <Feather name="chevron-right" size={20} />
@@ -159,9 +180,9 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                         sectionId: 'sent',
                       });
                       break;
-                    case 'MyJobs':
-                      navigation.navigate('MyJobs', {
-                        sectionId: 'active',
+                    case 'JobNavigator':
+                      navigation.navigate('JobNavigator', {
+                        screen: 'MyAllJobs',
                       });
                       break;
                     case 'AboutUs':

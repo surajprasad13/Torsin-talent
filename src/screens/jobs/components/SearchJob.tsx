@@ -1,14 +1,5 @@
 import React, {useState, useEffect} from 'react';
-
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  View,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {SafeAreaView, Text, StyleSheet, View, FlatList} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 
 //icons

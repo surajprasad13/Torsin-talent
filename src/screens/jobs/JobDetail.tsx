@@ -1,26 +1,31 @@
 import {View, Text, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
+import {Divider} from 'react-native-paper';
+import moment from 'moment';
+
+// components
+import {CustomButton, Title} from '../../components';
+
+// helpers
 import {appstyle, colors, fonts} from '../../theme';
+import {JobDetail} from '../../types/user';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
-import FastImage from 'react-native-fast-image';
-import {Divider} from 'react-native-paper';
-import {CustomButton, Title} from '../../components';
-import {JobDetail} from '../../types/user';
-import moment from 'moment';
 
 const projectType = ['', 'Fixed', 'Hourly'];
 
 const JobDetails = ({route}: any) => {
   const {item} = route.params as {item: JobDetail};
-
   const navigation = useNavigation();
+
   return (
     <SafeAreaView style={styles.container}>
       <Title title="Job Details" />
+
       <ScrollView>
         <View style={styles.cardContainer}>
           <Text style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>

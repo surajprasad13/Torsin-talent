@@ -126,7 +126,6 @@ const PhoneModal = ({active, phone}) => {
       dispatch(resetSuccess());
       setVisible(false);
     } catch (_error: any) {
-      console.log(_error);
       setLoading(false);
       setMessage('');
       setError('Invalid Code');

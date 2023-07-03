@@ -9,10 +9,8 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {colors, fonts} from '../theme';
 import {useAppDispatch} from '../hooks';
 import {logout} from '../redux/reducers/authSlice';
-import {StackActions, useNavigation} from '@react-navigation/native';
 
 const Logout = () => {
-  const navigation = useNavigation();
   const dispatch = useAppDispatch();
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -33,7 +31,10 @@ const Logout = () => {
       </TouchableOpacity>
 
       <Portal>
-        <Dialog visible={visible} onDismiss={toggleModal}>
+        <Dialog
+          visible={visible}
+          onDismiss={toggleModal}
+          style={{backgroundColor: colors.white}}>
           <Dialog.Content
             style={{justifyContent: 'center', alignItems: 'center'}}>
             <SimpleLineIcons name="logout" size={35} />
@@ -65,10 +66,6 @@ const Logout = () => {
               onPress={() => {
                 dispatch(logout());
                 toggleModal();
-                navigation.reset({
-                  index: 0,
-                  routes: [{name: 'OnboardingScreen'}],
-                });
               }}>
               Logout
             </Button>

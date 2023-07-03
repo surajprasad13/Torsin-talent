@@ -1,7 +1,9 @@
-import {Text, Image, SafeAreaView, StyleSheet} from 'react-native';
 import React, {useEffect} from 'react';
-import {colors, fonts} from '../../theme';
+import {Text, Image, SafeAreaView, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+
+// helpers
+import {colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {resetSuccess} from '../../redux/reducers/authSlice';
 
@@ -13,9 +15,12 @@ const ProposalSentSuccess = () => {
   useEffect(() => {
     dispatch(resetSuccess());
     const timeout = setTimeout(() => {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'DrawerNavigation'}],
+      // navigation.reset({
+      //   index: 0,
+      //   routes: [{name: 'DrawerNavigation'}],
+      // });
+      navigation.replace('DrawerNavigation', {
+        screen: 'ProposalNavigator',
       });
     }, 1000);
     return () => clearTimeout(timeout);

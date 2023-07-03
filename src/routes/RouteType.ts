@@ -12,42 +12,29 @@ export type RootStackParamList = {
   Successfull: undefined;
   VerifyOtpRegister: undefined;
   WalkthroughScreen: undefined;
-  ThroughRegister: undefined;
   IndivisualRegister: undefined;
+  ThroughRegister: undefined;
   BusinessRegister: undefined;
   BusinessPassword: undefined;
-  BusinessStart: undefined;
   DrawerNavigation: DrawerScreenParamaList;
-  EditProfile: undefined;
-  EditUserProfile: undefined;
-  WithoutSignupHome: undefined;
-  Home: HomeTabParamList;
   PostDetails: {id: string};
   NotFound: undefined;
   BottomScreens: undefined;
-  SearchJob: undefined;
-  MusicJob: undefined;
-  OpenModal: undefined;
   CreatePassword: {item: string} | undefined;
-  Allexpertise: undefined;
   MusicComposer: undefined;
-  ProposalSentSuccess: undefined;
+  PaymentDetail: undefined;
+  ReceivePayment: undefined;
+  Rating: undefined;
+  Report: undefined;
   ChatUser: {
     item: undefined | {};
   };
-  Myjob: undefined;
-  DetailActiveJob: undefined;
   RatingReview: undefined;
-  ReportProblem: undefined;
-  DetailPastJob: undefined;
-  DetailNewJob: undefined;
-  AddJobDetails: {id: number};
-  ProposalDetail: {
-    item: undefined | {};
-  };
-  ProposalAcceptDetail: undefined;
   WebScreen: {
-    item: string;
+    item: string | undefined;
+  };
+  PdfScreen: {
+    item: undefined | object;
   };
 };
 
@@ -64,32 +51,32 @@ export type AuthScreenParamList = {
   ThroughRegister: undefined;
   IndivisualRegister: undefined;
   BusinessRegister: undefined;
-  FirstStepBusinessRegister: undefined;
   BusinessPassword: undefined;
-  BusinessStart: undefined;
   IndivisualCreatePassword: undefined;
 };
 
 export type DrawerScreenParamaList = {
   Notifications: undefined;
-  Proposals: undefined;
+  ProposalNavigator: undefined;
   MyRatings: undefined;
+  ContractNavigator: undefined;
   MyServices: undefined;
-  MyJobs: undefined;
-  Payments: undefined;
+  JobNavigator: undefined;
+  PaymentNavigator: undefined;
   SwitchAccount: undefined;
   AboutUs: undefined;
   TermsPrivacy: undefined;
   HelpSupport: undefined;
   BottomNavigation: BottomScreenParamList;
   DrawerSetting: undefined;
+  PaymentMethod: undefined;
 };
 
 export type BottomScreenParamList = {
-  Home: undefined;
-  Jobs: undefined;
+  HomeNavigator: undefined;
+  JobNavigator: undefined;
   Chat: undefined;
-  SettingStack: SettingScreenParamList;
+  SettingNavigator: SettingScreenParamList;
 };
 
 export type SettingScreenParamList = {
@@ -102,8 +89,52 @@ export type SettingScreenParamList = {
   ServiceDetail: undefined;
 };
 
-export type HomeTabParamList = {
+export type HomeScreenParamList = {
   HomeScreen: undefined;
+  AllExpertise: undefined;
+  JobDetail: {
+    item: undefined;
+  };
+  AddJobDetails: {
+    item: undefined;
+  };
+  ProposalSentSuccess: undefined;
+};
+
+export type PaymentScreenParamList = {
+  Payment: undefined;
+  Pending: undefined;
+  Received: undefined;
+};
+
+export type JobScreenParamList = {
+  ActiveJob: undefined;
+  ActiveJobDetail: {
+    item: undefined | any;
+  };
+  NewJobDetail: undefined;
+  PastJobDetail: undefined;
+  JobDetail: undefined;
+  Jobs: undefined;
+  MyAllJobs: undefined;
+  NewJob: undefined;
+  PastJob: undefined;
+  AddJobDetails: {
+    id: undefined;
+  };
+};
+
+export type ContractsScreenParamList = {
+  Sent: undefined;
+  Accepted: undefined;
+  Rejected: undefined;
+  Contract: undefined;
+  EditContract: undefined;
+  ArchiveContract: undefined;
+  CreateContract: undefined;
+  ViewContract: {
+    id: undefined | string;
+  };
 };
 
 export type RootScreenProps = StackScreenProps<RootStackParamList>;
@@ -111,9 +142,9 @@ export type RootScreenProps = StackScreenProps<RootStackParamList>;
 export type AuthStackScreenProps<T extends keyof AuthScreenParamList> =
   StackScreenProps<AuthScreenParamList, T>;
 
-export type HomeTabScreenProps<T extends keyof HomeTabParamList> =
+export type HomeTabScreenProps<T extends keyof HomeScreenParamList> =
   CompositeScreenProps<
-    BottomTabScreenProps<HomeTabParamList, T>,
+    BottomTabScreenProps<HomeScreenParamList, T>,
     RootScreenProps
   >;
 

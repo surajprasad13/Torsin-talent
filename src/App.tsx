@@ -6,10 +6,20 @@ import {Provider} from 'react-redux';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {PersistGate} from 'redux-persist/integration/react';
 import messaging from '@react-native-firebase/messaging';
+import notifee from '@notifee/react-native';
 
 import AppNavigator from './routes/AppNavigator';
 
 import store, {persistor} from './redux';
+import {injectStore} from './api';
+
+async function checkApplicationPermission() {
+  const setting = await notifee.requestPermission();
+  if (setting.authorizationStatus) {
+  } else {
+    console.log('User has disabled notification');
+  }
+}
 
 async function onAppBootstrap() {
   // Register the device with FCM
@@ -19,12 +29,16 @@ async function onAppBootstrap() {
   const token = await messaging().getToken();
 
   // Save the token
+  console.log(token);
 }
 
 const App = () => {
-  // useEffect(() => {
-  //   onAppBootstrap();
-  // }, []);
+  useEffect(() => {
+    checkApplicationPermission();
+    //onAppBootstrap();
+  }, []);
+
+  injectStore(store);
 
   return (
     <SafeAreaProvider>

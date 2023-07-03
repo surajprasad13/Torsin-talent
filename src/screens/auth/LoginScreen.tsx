@@ -8,8 +8,8 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import {StackActions, useNavigation} from '@react-navigation/native';
-import {Dialog, Portal} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import {} from 'react-native-paper';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -18,12 +18,11 @@ import {metrics, colors, fonts} from '../../theme';
 
 // components
 import Input from '../../components/Input';
-import Loader from '../../components/Loader';
+import {CustomButton} from '../../components';
 
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {userLogin} from '../../redux/actions/authAction';
 import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
-import {CustomButton} from '../../components';
 import {email, password} from '../../utils/regex';
 
 const {moderateScale, verticalScale} = metrics;
@@ -81,12 +80,8 @@ const LoginScreen = ({}) => {
   useEffect(() => {
     if (userToken) {
       dispatch(resetSuccess());
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'DrawerNavigation'}],
-      });
     }
-  }, [userToken, navigation]);
+  }, [userToken]);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>

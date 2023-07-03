@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import {Platform} from 'react-native';
 import {RNS3} from 'react-native-aws3';
 
 // Configure AWS SDK with your credentials and region
@@ -24,6 +25,32 @@ export const uploadFileToS3 = async (
     Body: file,
     ContentType: ContentType,
   };
+
+  try {
+    const data = await s3.upload(params).promise();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const uploadPdfFileToS3 = async (
+  file: any,
+  fileName: string,
+  ContentType: string,
+) => {
+  let contentDeposition = 'inline;filename="' + fileName + '"';
+  const params = {
+    Bucket: 'torsin-bucket',
+    Key: fileName,
+    Body: file,
+    ContentDisposition: contentDeposition,
+    ContentType: ContentType,
+  };
+
+  if (Platform.OS == 'ios') {
+    params.ContentEncoding = 'base64';
+  }
 
   try {
     const data = await s3.upload(params).promise();

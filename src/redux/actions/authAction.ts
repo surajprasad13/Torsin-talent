@@ -41,9 +41,15 @@ const userLogin = createAsyncThunk(
   'auth/login',
   async (value: any, {rejectWithValue}) => {
     try {
+      // const token = await messaging().getToken();
+      // console.log(token);
       const {data} = await api.post(`talent/user/login`, value);
+      // const ref = database().ref(`/Tokens/u2id${data.response.data.id}`);
+      // await ref.update({device_token: token});
+
       return data;
     } catch (error: any) {
+      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -57,9 +63,7 @@ const userUpdate = createAsyncThunk(
   'auth/update',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.put(`talent/user/update`, value.inputs, {
-        headers: {Authorization: `Bearer ${value.userToken}`},
-      });
+      const {data} = await api.put(`talent/user/update`, value.inputs);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -76,7 +80,6 @@ const sendOtp = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.post(`verify/email`, value.inputs);
-
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -108,9 +111,7 @@ const profileDetail = createAsyncThunk(
   'user/profileDetail',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(`user/details`, {
-        headers: {Authorization: `Bearer ${value}`},
-      });
+      const {data} = await api.get(`user/details`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {

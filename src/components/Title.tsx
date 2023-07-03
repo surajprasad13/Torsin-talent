@@ -19,7 +19,6 @@ const Title = ({title}: {title: string}) => {
         color={colors.almostBlack}
         style={{
           left: 10,
-          top: 5,
           position: 'absolute',
         }}
         onPress={() => {

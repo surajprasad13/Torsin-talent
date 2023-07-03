@@ -3,12 +3,16 @@ import {
   addProposal,
   addService,
   addSkill,
+  fetchNotification,
   fetchService,
   fetchSkill,
   getAccepted,
+  getContract,
+  getContractDetail,
   getProposalStatus,
   jobCorrespondSkill,
   notJobCorrespondSkill,
+  updateContract,
 } from '../actions/userAction';
 import {JobDetail, Service} from '../../types/user';
 import {searchJob} from '../actions/userAction';
@@ -33,6 +37,9 @@ interface UserInterface {
   addSuccess: string;
   acceptList: Array<any>;
   proposalStatus: Array<any>;
+  contracts: Array<any>;
+  notification: Array<any>;
+  contractDetail: null | any;
 }
 
 const initialState: UserInterface = {
@@ -49,6 +56,9 @@ const initialState: UserInterface = {
   addSuccess: '',
   acceptList: [],
   proposalStatus: [],
+  contracts: [],
+  notification: [],
+  contractDetail: null,
 };
 
 const userSlice = createSlice({
@@ -193,7 +203,7 @@ const userSlice = createSlice({
       .addCase(getAccepted.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.acceptList = action.payload.response;
+        state.acceptList = action.payload;
       })
       .addCase(getAccepted.rejected, (state, action) => {
         state.loading = false;
@@ -211,6 +221,65 @@ const userSlice = createSlice({
         state.proposalStatus = action.payload.response;
       })
       .addCase(getProposalStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // contracts list
+      .addCase(getContract.pending, (state, action) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getContract.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.contracts = action.payload.response.data;
+      })
+      .addCase(getContract.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // update contract status
+      .addCase(updateContract.pending, (state, action) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(updateContract.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(updateContract.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Notification
+      .addCase(fetchNotification.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(fetchNotification.fulfilled, (state, action) => {
+        state.loading = false;
+        state.notification = action.payload.response;
+      })
+      .addCase(fetchNotification.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //get contract deatils
+      .addCase(getContractDetail.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getContractDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.contractDetail = action.payload.response.data;
+      })
+      .addCase(getContractDetail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

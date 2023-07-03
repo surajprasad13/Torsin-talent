@@ -9,7 +9,6 @@ import {
 import React from 'react';
 import {appstyle, colors, fonts} from '../../theme';
 import FastImage from 'react-native-fast-image';
-import moment from 'moment';
 
 //icons
 import Entypo from 'react-native-vector-icons/Entypo';
