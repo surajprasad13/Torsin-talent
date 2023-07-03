@@ -43,7 +43,7 @@ const List = [
   },
   {
     title: 'My Jobs',
-    route: 'MyJobs',
+    route: 'JobNavigator',
     icon: ({color}: {color: string}) => (
       <FontAwesome name="calendar-check-o" color={color} size={20} />
     ),
@@ -57,7 +57,7 @@ const List = [
   },
   {
     title: 'My Contracts',
-    route: 'Contract',
+    route: 'ContractNavigator',
     icon: ({color}: {color: string}) => (
       <Feather name="briefcase" color={color} size={20} />
     ),
@@ -180,9 +180,9 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                         sectionId: 'sent',
                       });
                       break;
-                    case 'MyJobs':
-                      navigation.navigate('MyJobs', {
-                        sectionId: 'active',
+                    case 'JobNavigator':
+                      navigation.navigate('JobNavigator', {
+                        screen: 'MyAllJobs',
                       });
                       break;
                     case 'AboutUs':

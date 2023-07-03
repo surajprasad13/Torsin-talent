@@ -1,14 +1,17 @@
-import React from "react"
-import {View, Text, StyleSheet} from "react-native"
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const MyService = () => {
   return (
-    <View>
-     <Text>Hello</Text>
-    </View>
-  )
+    <SafeAreaView>
+      <View>
+        <Text>My Services</Text>
+      </View>
+    </SafeAreaView>
+  );
 };
 
-export default MyService;
+const styles = StyleSheet.create({});
 
-const styles = StyleSheet.create({})
+export default MyService;

@@ -12,12 +12,11 @@ import {
   Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {RadioButton, Searchbar} from 'react-native-paper';
+import {Searchbar} from 'react-native-paper';
 import BottomSheet from '@gorhom/bottom-sheet';
 
 //icons
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Octicons from 'react-native-vector-icons/Octicons';
 
@@ -32,7 +31,7 @@ import {searchJob} from '../../redux/actions/userAction';
 const {} = Dimensions.get('window');
 
 const Jobs = ({}) => {
-  const {userInfo, userToken} = useAppSelector(state => state.auth);
+  const {userToken} = useAppSelector(state => state.auth);
   const {notCorrespond, search, loading} = useAppSelector(state => state.user);
 
   const dispatch = useAppDispatch();
@@ -88,7 +87,7 @@ const Jobs = ({}) => {
   // callbacks
   const handleSheetChanges = useCallback((index: number) => {
     if (index == 0) {
-      bottomSheetRef.current.close();
+      bottomSheetRef?.current?.close();
     }
   }, []);
 
@@ -237,8 +236,6 @@ const Jobs = ({}) => {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  // borderWidth: 1,
-                  // borderColor: checked ? colors.primary : 'white',
                 }}
                 key={index.toString()}>
                 <Text

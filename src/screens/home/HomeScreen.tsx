@@ -77,7 +77,7 @@ const HomeScreen = ({}) => {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={onRefresh} />
@@ -101,9 +101,10 @@ const HomeScreen = ({}) => {
             style={{
               flex: 0.9,
               backgroundColor: colors.white,
-              borderRadius: 15,
+              borderRadius: 100,
               flexDirection: 'row',
               alignItems: 'center',
+              borderWidth: 0.2,
             }}>
             <Feather
               name="search"

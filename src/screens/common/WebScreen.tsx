@@ -21,7 +21,8 @@ const WebScreen = ({route}: any) => {
         onNavigationStateChange={(navState: any) => {
           if (
             navState.url ==
-            'https://talent-torsin.apponward.com/payment/success?link=talent://payment/success'
+              'https://talent-torsin.apponward.com/payment/success?link=talent://payment/success' ||
+            'https://talent-torsin.apponward.com/payment'
           ) {
             navigation.goBack();
           }

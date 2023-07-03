@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -30,11 +31,6 @@ import {
 
 const contractType = ['', 'Hourly', 'Fixed'];
 
-enum EndDate {
-  undefined = 'undefined',
-  specified = 'specified',
-}
-
 const ViewContract = ({route}: any) => {
   const {id} = route.params;
 
@@ -43,17 +39,11 @@ const ViewContract = ({route}: any) => {
   const {} = useAppSelector(state => state.auth);
   const {contractDetail, loading} = useAppSelector(state => state.user);
 
-  const [endDate, setEndDate] = useState<EndDate>(EndDate.undefined);
-
-  const [rate, setRate] = useState('');
-
-  const [description, setDescription] = useState<string>('');
-
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(getContractDetail(id));
     });
-    return listener;
+    return () => listener;
   }, []);
 
   useEffect(() => {
@@ -151,7 +141,6 @@ const ViewContract = ({route}: any) => {
                 style={{padding: 15}}
                 value={contractDetail.contract_details[0].desc}
                 editable={false}
-                onChangeText={(text: string) => setDescription(text)}
               />
             </View>
 
@@ -195,9 +184,6 @@ const ViewContract = ({route}: any) => {
                     style={{}}
                     editable={false}
                     value={contractDetail.contract_details[0].amount}
-                    onChangeText={text => {
-                      setRate(text);
-                    }}
                   />
                   <Text
                     style={{

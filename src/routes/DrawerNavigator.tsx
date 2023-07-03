@@ -13,10 +13,10 @@ import BottomNavigation from './BottomNavigator';
 import {DrawerScreenParamaList} from './RouteType';
 import Notification from '../screens/notification/Notification';
 import {fonts} from '../theme';
-import MyAlljob from '../screens/jobs/MyAllJob';
 import ContractNavigator from './ContractNavigator';
 import ProposalNavigator from './ProposalNavigator';
 import PaymentMethod from '../screens/drawerScreens/PaymentMethod';
+import JobNavigator from './JobNavigator';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
@@ -53,7 +53,11 @@ const DrawerNavigation = () => {
         component={ProposalNavigator}
         options={{}}
       />
-      <Drawer.Screen name="MyJobs" component={MyAlljob} options={{}} />
+      <Drawer.Screen
+        name="JobNavigator"
+        component={JobNavigator}
+        options={{}}
+      />
       <Drawer.Screen name="MyRatings" component={MyRating} options={{}} />
       <Drawer.Screen name="ContractNavigator" component={ContractNavigator} />
       <Drawer.Screen name="PaymentNavigator" component={Payment} options={{}} />
@@ -61,7 +65,7 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="MyServices" component={MyService} options={{}} />
       <Drawer.Screen name="TermsPrivacy" component={Terms} options={{}} />
       <Drawer.Screen name="HelpSupport" component={Terms} options={{}} />
-      <Drawer.Screen name='PaymentMethod' component = {PaymentMethod}/>
+      <Drawer.Screen name="PaymentMethod" component={PaymentMethod} />
     </Drawer.Navigator>
   );
 };

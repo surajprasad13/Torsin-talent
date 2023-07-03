@@ -61,7 +61,7 @@ export type DrawerScreenParamaList = {
   MyRatings: undefined;
   ContractNavigator: undefined;
   MyServices: undefined;
-  MyJobs: undefined;
+  JobNavigator: undefined;
   PaymentNavigator: undefined;
   SwitchAccount: undefined;
   AboutUs: undefined;
@@ -109,7 +109,9 @@ export type PaymentScreenParamList = {
 
 export type JobScreenParamList = {
   ActiveJob: undefined;
-  ActiveJobDetail: undefined;
+  ActiveJobDetail: {
+    item: undefined | any;
+  };
   NewJobDetail: undefined;
   PastJobDetail: undefined;
   JobDetail: undefined;

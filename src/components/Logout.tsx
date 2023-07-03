@@ -31,7 +31,10 @@ const Logout = () => {
       </TouchableOpacity>
 
       <Portal>
-        <Dialog visible={visible} onDismiss={toggleModal}>
+        <Dialog
+          visible={visible}
+          onDismiss={toggleModal}
+          style={{backgroundColor: colors.white}}>
           <Dialog.Content
             style={{justifyContent: 'center', alignItems: 'center'}}>
             <SimpleLineIcons name="logout" size={35} />

@@ -1,3 +1,4 @@
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,19 +8,16 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
-import React, {useState} from 'react';
+import {} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
-import FastImage from 'react-native-fast-image';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 // helpers
 import {appstyle, colors, fonts} from '../../../theme';
 import {CustomButton} from '../../../components';
-import {Divider} from 'react-native-paper';
 
 const ReportProblem = () => {
   const navigation = useNavigation();
