@@ -1,3 +1,4 @@
+import {Platform} from 'react-native';
 import {decode} from 'base64-arraybuffer';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {
@@ -41,6 +42,18 @@ const uploadMedia = async ({type}: {type: string}) => {
       includeBase64: true,
       cropping: type == 'image',
     });
+
+    if (Platform.OS == 'android' && type == 'video') {
+      const base64 = await fs.readFile(response.path, 'base64');
+      var base64data = decode(base64);
+      const url = await uploadFileToS3(
+        base64data,
+        `${new Date().getTime()}`,
+        'video/mp4',
+      );
+      return url.Location;
+    }
+
     if (response.data) {
       var base64data = decode(response.data);
       const url = await uploadFileToS3(
@@ -57,6 +70,7 @@ const uploadMedia = async ({type}: {type: string}) => {
       return url.body.postResponse.location;
     }
   } catch (error) {
+    console.log('Error in video upload, ', error);
     return '';
   }
 };
