@@ -3,6 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ActivityIndicator, SafeAreaView, StyleSheet} from 'react-native';
 import WebView from 'react-native-webview';
 
+//components
 import {Title} from '../../components';
 
 const WebScreen = ({route}: any) => {

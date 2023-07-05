@@ -2,13 +2,13 @@ import React from 'react';
 import {View, Image, Text} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
-const CircleProgress = ({image}: any) => {
+const CircleProgress = ({image, progress}) => {
   return (
     <View style={{top: 10}}>
       <AnimatedCircularProgress
         size={60}
         width={4}
-        fill={80}
+        fill={progress}
         tintColor="#14226D"
         rotation={180}
         onAnimationComplete={() => {}}
@@ -17,9 +17,9 @@ const CircleProgress = ({image}: any) => {
       <Image
         source={image ? {uri: image} : require('../assets/images/profile.png')}
         style={{
-          width: 40,
-          height: 40,
-          borderRadius: 35,
+          width: 50,
+          height: 50,
+          borderRadius: 25,
           left: 10,
           top: 10,
           position: 'absolute',
@@ -32,8 +32,8 @@ const CircleProgress = ({image}: any) => {
           height: 18,
           backgroundColor: '#14226D',
           borderRadius: 20,
-          left: 30,
-          bottom: 10,
+          left: 35,
+          bottom: 15,
         }}>
         <Text
           style={{
@@ -44,7 +44,7 @@ const CircleProgress = ({image}: any) => {
             fontSize: 10,
             color: '#ffffff',
           }}>
-          80%
+          {progress}%
         </Text>
       </View>
     </View>

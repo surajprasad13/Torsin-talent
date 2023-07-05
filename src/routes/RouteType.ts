@@ -122,6 +122,8 @@ export type JobScreenParamList = {
   AddJobDetails: {
     id: undefined;
   };
+  Rating: undefined;
+  Report: undefined;
 };
 
 export type ContractsScreenParamList = {

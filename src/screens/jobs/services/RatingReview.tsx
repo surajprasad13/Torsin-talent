@@ -6,14 +6,15 @@ import {
   Pressable,
   ScrollView,
   TextInput,
+  TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 
 //icons
 import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import {appstyle, colors, fonts} from '../../../theme';
@@ -21,6 +22,33 @@ import {CustomButton} from '../../../components';
 
 const RatingReview = () => {
   const navigation = useNavigation();
+  const [rating, setRating] = useState(0);
+
+  const renderRatingStars = () => {
+    const stars = [];
+
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <TouchableOpacity
+          key={i}
+          onPress={() => handleStarPress(i)}
+          activeOpacity={0.7}
+          style={{padding: 5}}>
+          <Ionicons
+            name={rating >= i + 1 ? 'star' : 'star-outline'}
+            size={30}
+            color={rating >= i + 1 ? '#FFD700' : '#4F4F4F'} // Customize the star color as needed
+          />
+        </TouchableOpacity>,
+      );
+    }
+
+    return stars;
+  };
+
+  const handleStarPress = (starIndex: number) => {
+    setRating(starIndex + 1);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -74,7 +102,7 @@ const RatingReview = () => {
               Feedback matters!! Add to favourites.
             </Text>
             <FastImage
-              source={require('../../../assets/images/Frame.png')}
+              source={require('../../../assets/images/Container.png')}
               resizeMode="cover"
               style={{width: 80, height: 80, borderRadius: 40, marginTop: 10}}
             />
@@ -84,34 +112,35 @@ const RatingReview = () => {
                 flexDirection: 'row',
                 marginTop: 10,
               }}>
-              {[0, 1, 2, 3, 4].map(item => (
-                <AntDesign
-                  key={item.toString()}
-                  name="star"
-                  color="#4F4F4F"
-                  size={20}
-                  style={{margin: 5}}
-                />
-              ))}
+              {renderRatingStars()}
             </View>
           </View>
-          <View style={{margin: 10}}>
-            <Text style={{fontFamily: fonts.medium, fontSize: 18}}>
+
+          <View style={{marginTop: 20}}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: fonts.semibold,
+                color: '#333333',
+              }}>
               Add Review
             </Text>
+
             <View
               style={{
-                minHeight: 170,
-                borderWidth: 0.2,
+                width: '100%',
+                height: 150,
+                borderWidth: 1,
                 borderRadius: 8,
-                borderColor: colors.light,
                 backgroundColor: colors.white,
+                borderColor: '#BDBDBD',
                 marginTop: 10,
               }}>
               <TextInput
-                placeholder="Type description here..."
+                placeholder="Lorem ipsum dolor sit amet consectetur. Elementum vitae consequat erat tellus eleifend leo tempor lectus. Massa ac ullamcorper aliquet faucibus vestibulum. Aenean suspendisse semper."
                 multiline={true}
-                placeholderTextColor="#333333"
+                placeholderTextColor="#bdbdbd"
+                maxLength={500}
                 style={{padding: 15}}
               />
             </View>

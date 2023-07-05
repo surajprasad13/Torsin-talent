@@ -626,7 +626,7 @@ const ActiveJobDetail = ({route}: any) => {
           </View>
         )}
 
-        <Pressable
+        {/* <Pressable
           style={{
             padding: 15,
             backgroundColor: colors.primary,
@@ -642,7 +642,8 @@ const ActiveJobDetail = ({route}: any) => {
             }}>
             Request Payment
           </Text>
-        </Pressable>
+        </Pressable> */}
+
         <View style={{marginTop: 50}} />
       </ScrollView>
     </SafeAreaView>
