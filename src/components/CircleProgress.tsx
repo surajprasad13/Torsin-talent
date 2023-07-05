@@ -8,7 +8,7 @@ const CircleProgress = ({image, progress}) => {
       <AnimatedCircularProgress
         size={60}
         width={4}
-        fill={progress}
+        fill={progress ?? 0}
         tintColor="#14226D"
         rotation={180}
         onAnimationComplete={() => {}}

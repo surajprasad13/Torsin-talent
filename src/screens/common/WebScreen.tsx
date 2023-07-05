@@ -20,11 +20,11 @@ const WebScreen = ({route}: any) => {
         startInLoadingState={true}
         renderLoading={() => <ActivityIndicator />}
         onNavigationStateChange={(navState: any) => {
-          if (
-            navState.url ==
-              'https://talent-torsin.apponward.com/payment/success?link=talent://payment/success' ||
-            'https://talent-torsin.apponward.com/payment'
-          ) {
+          const urls = [
+            'https://talent-torsin.apponward.com/payment/success?link=talent://payment/success',
+            'https://talent-torsin.apponward.com/payment',
+          ];
+          if (urls.includes(navState.url)) {
             navigation.goBack();
           }
         }}
