@@ -123,6 +123,43 @@ const profileDetail = createAsyncThunk(
   },
 );
 
+const resetOtpSent = createAsyncThunk(
+  'auth/lostPassword',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`talent/lostPassword/otpsent`, value);
+      console.log(data);
+      return data;
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const otpverify = createAsyncThunk(
+  'auth/lostPassword/otpverify',
+  async (value: any, {rejectWithValue}) => {
+    console.log(value);
+    try {
+      const {data} = await api.post(`talent/lostPassword/otpverify`, value);
+      console.log(data, 'data');
+      return data;
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   userLogin,
   registerIndivisual,
@@ -131,6 +168,8 @@ export {
   sendOtp,
   verifyOtp,
   profileDetail,
+  resetOtpSent,
+  otpverify,
 };
 
 export default {};

@@ -7,6 +7,8 @@ import {
   sendOtp,
   verifyOtp,
   profileDetail,
+  resetOtpSent,
+  otpverify,
 } from '../actions/authAction';
 import {LoginResponseData} from '../../types/auth';
 
@@ -193,6 +195,43 @@ const authSlice = createSlice({
         state.userInfo = action.payload.response.data;
       })
       .addCase(profileDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.message = '';
+      });
+
+    //reset otp sent
+    builder
+      .addCase(resetOtpSent.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(resetOtpSent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true; // registration successful
+        state.userToken = action.payload.response.data.token.access;
+        state.userInfo = action.payload.response.data;
+      })
+      .addCase(resetOtpSent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // verify otp
+      .addCase(otpverify.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+        state.success = false;
+      })
+      .addCase(otpverify.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true; // registration successful
+        state.message = action.payload.response.message.successMessage;
+        state.emailVerified = true;
+      })
+      .addCase(otpverify.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.message = '';

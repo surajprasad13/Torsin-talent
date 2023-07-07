@@ -9,99 +9,130 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 
-// icons
-import Feather from 'react-native-vector-icons/Feather';
+//icons
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
-import {metrics, colors, fonts} from '../../../theme';
+import {colors, fonts, metrics} from '../../../theme';
 
 // components
 import Input from '../../../components/Input';
 import Loader from '../../../components/Loader';
-import {useAppSelector} from '../../../hooks';
-import {CustomInput} from '../../../components';
+import {useNavigation} from '@react-navigation/native';
+import {CustomButton, CustomInput, Title} from '../../../components';
 
 const {moderateScale, verticalScale} = metrics;
 
 const ResetPassword = ({}) => {
   const navigation = useNavigation();
-  const {loading} = useAppSelector(state => state.auth);
 
-  const [inputs, setInputs] = useState({
+  const [input, setInput] = useState({
     password: '',
-    confirm_password: '',
+    confirmPassword: '',
   });
+
+  const [isValid, setIsValid] = useState<Array<boolean>>([]);
+
+  const passwordStrength = [
+    'Atleast one upper character.',
+    'Atleast one numeric digit.',
+    'Atleast one speical character (E.g @%$)',
+    'Atleast 8 character',
+  ];
+
+  function handleValidation(value: string) {
+    const pattern = [
+      '(?=.*[A-Z])', // uppercase letter
+      '(?=.*\\d)', // number required
+      '[^a-zA-Z0-9]',
+      '^.{8,}$', // min 8 chars
+    ];
+    if (!pattern) return true;
+
+    // string pattern, one validation rule
+    if (typeof pattern === 'string') {
+      const condition = new RegExp(pattern, 'g');
+      return condition.test(value);
+    }
+
+    // array patterns, multiple validation rules
+    if (typeof pattern === 'object') {
+      const conditions = pattern.map(rule => new RegExp(rule, 'g'));
+      return conditions.map(condition => condition.test(value));
+    }
+  }
+
+  function checkStatus(index: number) {
+    switch (index) {
+      case 0:
+        return isValid[index];
+      case 1:
+        return isValid[index];
+      case 2:
+        return isValid[index];
+      case 3:
+        return isValid[index];
+      default:
+        return false;
+    }
+  }
 
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const validate = () => {
     Keyboard.dismiss();
-    let isValid = true;
+    let _isValid = true;
 
-    if (!inputs.password) {
-      handleError('Please enter password', 'password');
-      isValid = false;
-    } else if (inputs.password.length < 5) {
-      handleError('Min password length of 5', 'password');
-      isValid = false;
+    if (!input.password) {
+      handleError('Please enter valid password', 'password');
+      _isValid = false;
     }
-
-    if (!inputs.confirm_password) {
-      handleError('Please enter password', 'confirm_password');
-      isValid = false;
-    } else if (inputs.confirm_password.length < 5) {
-      handleError('Min password length of 5', 'confirm_password');
-      isValid = false;
+    if (input.password.length < 8) {
+      handleError('Min password length of 8', 'password');
+      _isValid = false;
     }
-
-    if (isValid) {
+    if (!input.confirmPassword) {
+      handleError('Please enter Confirm password', 'confirmPassword');
+      _isValid = false;
+    } else if (input.confirmPassword.length < 8) {
+      handleError('Min password length of 8', 'confirmPassword');
+      _isValid = false;
+    }
+    if (_isValid) {
       register();
     }
   };
 
   const register = async () => {
-    const article = {
-      mobileNo: inputs.password,
-      password: inputs.password,
+    const headers = {
+      Accept: 'application/json',
     };
   };
 
-  const handleOnchange = (text: any, input: any) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
+  const handleOnchange = (text, input) => {
+    setInput(prevState => ({...prevState, [input]: text}));
   };
-  const handleError = (error: any, input: any) => {
+  const handleError = (error, input) => {
     setErrors(prevState => ({...prevState, [input]: error}));
   };
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('LostPassword')}
-        style={{
-          position: 'relative',
-          left: 15,
-          paddingVertical: 10,
-          marginTop: moderateScale(40),
-        }}>
-        <Feather name="arrow-left" />
-      </TouchableOpacity>
+      <Title />
       <ScrollView
         contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
         <View style={{flex: 0.8}}>
-          <View
-            style={{
-              marginTop: verticalScale(50),
-            }}>
+          <View>
             <Text
               style={{
-                fontFamily: fonts.bold,
-                fontSize: moderateScale(32),
-                color: colors.primary,
+                fontFamily: fonts.semibold,
+                fontSize: 22,
+                color: '#0E184D',
               }}>
               Reset Password
             </Text>
@@ -109,106 +140,84 @@ const ResetPassword = ({}) => {
             <Text
               style={{
                 fontFamily: fonts.regular,
-                fontSize: moderateScale(14),
+                alignItems: 'center',
                 color: '#000F1A',
-                top: 20,
+                top: 10,
               }}>
               It's important to choose a strong and unique password for your
               account to keep it secure
             </Text>
           </View>
 
-          <View style={{marginVertical: 10, marginTop: 50}}>
+          <View style={{top: 16}}>
             <CustomInput
-              onChangeText={text => handleOnchange(text, 'password')}
+              onChangeText={(text: string) => {
+                setIsValid(handleValidation(text));
+                handleError(null, 'password');
+                handleOnchange(text, 'password');
+              }}
               onFocus={() => handleError(null, 'password')}
-              // iconName="lock-outline"
               label="Password"
-              placeholder="********"
-              error={errors.password}
-              password
-            />
-
-            <Input
-              onChangeText={(text: any) => handleOnchange(text, 'phone')}
-              onFocus={() => handleError(null, 'phone')}
-              // iconName="phone-outline"
-              label="Confirm Password"
-              placeholder="********"
-              error={errors.phone}
+              maxLength={16}
+              placeholder="Enter password"
+              autoCapitalize="none"
               password
             />
           </View>
 
-          <View style={{marginTop: moderateScale(10)}}>
-            <View style={styles.section}>
-              <CheckBox
-                style={styles.checkbox}
-                disabled={false}
-                value={toggleCheckBox}
-                onValueChange={newValue => setToggleCheckBox(newValue)}
-              />
-              <Text style={styles.paragraph}>At least one upper case</Text>
-            </View>
+          <View style={{top: 32}}>
+            <CustomInput
+              onChangeText={(text: string) => {
+                handleError(null, 'confirmPassword');
+                handleOnchange(text, 'confirmPassword');
+              }}
+              onFocus={() => {
+                handleError(null, 'confirmPassword');
+              }}
+              maxLength={16}
+              label="Re-enter password"
+              placeholder="Re-enter password"
+              autoCapitalize="none"
+              password
+            />
+          </View>
 
-            <View style={styles.section}>
-              <CheckBox
-                style={styles.checkbox}
-                disabled={false}
-                value={toggleCheckBox}
-                onValueChange={newValue => setToggleCheckBox(newValue)}
-              />
-              <Text style={styles.paragraph}>At least one number</Text>
-            </View>
-
-            <View style={styles.section}>
-              <CheckBox
-                style={styles.checkbox}
-                disabled={false}
-                value={toggleCheckBox}
-                onValueChange={newValue => setToggleCheckBox(newValue)}
-              />
-              <Text style={styles.paragraph}>At least 8 character</Text>
-            </View>
-
-            <View style={styles.section}>
-              <CheckBox
-                style={styles.checkbox}
-                disabled={false}
-                value={toggleCheckBox}
-                onValueChange={newValue => setToggleCheckBox(newValue)}
-              />
-              <Text style={styles.paragraph}>
-                At least one special character (E.g @%$
-              </Text>
-            </View>
+          <View style={{marginTop: 50}}>
+            {passwordStrength.map((_item: string, index: number) => {
+              const _active = checkStatus(index);
+              return (
+                <View
+                  key={_item}
+                  style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Ionicons
+                    name={_active ? 'checkbox' : 'square-outline'}
+                    size={25}
+                    color={_active ? colors.primary : '#BDBDBD'}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: fonts.regular,
+                      color: _active ? colors.primary : '#BDBDBD',
+                      paddingLeft: 10,
+                    }}>
+                    {_item}
+                  </Text>
+                </View>
+              );
+            })}
           </View>
         </View>
-
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Successfull');
-          }}
-          style={{
-            width: '85%',
-            height: 50,
-            marginTop: verticalScale(100),
-            marginLeft: '7.5%',
-            justifyContent: 'center',
-            backgroundColor: '#0E184D',
-            borderRadius: 8,
-          }}>
-          <Text
-            style={{
-              textAlign: 'center',
-              color: '#FFFFFF',
-              fontFamily: 'Inter',
-              fontSize: moderateScale(16),
-              lineHeight: 22,
-            }}>
-            Reset Password
-          </Text>
-        </TouchableOpacity>
+        <CustomButton
+          title="Submit"
+          onPress={validate}
+          disabled={
+            input.password.length >= 8 &&
+            input.confirmPassword.length >= 8 &&
+            isValid.every(_item => _item == true)
+          }
+          style={{marginTop: 200}}
+          loading={loading}
+        />
       </ScrollView>
     </SafeAreaView>
   );
