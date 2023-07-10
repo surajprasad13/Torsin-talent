@@ -10,7 +10,9 @@ export type RootStackParamList = {
   VerifyOtp: {
     email: undefined | string;
   };
-  ResetPassword: undefined;
+  ResetPassword: {
+    email: undefined | string;
+  };
   Successfull: undefined;
   VerifyOtpRegister: undefined;
   WalkthroughScreen: undefined;
@@ -48,7 +50,9 @@ export type AuthScreenParamList = {
   VerifyOtp: {
     email: undefined | string;
   };
-  ResetPassword: undefined;
+  ResetPassword: {
+    email: undefined | string;
+  };
   Successfull: undefined;
   VerifyOtpRegister: undefined;
   WalkthroughScreen: undefined;

@@ -31,6 +31,7 @@ const onRequest = (
     'talent/business/registration',
     'talent/lostPassword/otpsent',
     'talent/lostPassword/otpverify',
+    'talent/resetPassword',
   ];
 
   if (notValid.includes(url as string)) {

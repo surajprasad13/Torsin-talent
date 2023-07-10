@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {metrics} from '../../../theme';
+import {fonts, metrics} from '../../../theme';
 const {moderateScale} = metrics;
 
 export const CELL_SIZE = 49;
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     borderRadius: CELL_BORDER_RADIUS,
     color: '#0C0900',
     backgroundColor: '#fff',
-
     // IOS
     shadowColor: '#000',
     shadowOffset: {
@@ -91,9 +90,7 @@ const styles = StyleSheet.create({
   input: {
     color: '#000000',
     fontSize: moderateScale(14),
-    fontWeight: '400',
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
+    fontFamily: fonts.regular,
   },
   tinyLogo: {
     width: 30,

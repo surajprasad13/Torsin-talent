@@ -21,14 +21,18 @@ import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {otpverify, resetOtpSent} from '../../../redux/actions/authAction';
 import {resetSuccess} from '../../../redux/reducers/authSlice';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {AuthScreenParamList} from '../../../routes/RouteType';
 
 const {width} = Dimensions.get('window');
 
 const CELL_COUNT = 6;
 
+type NavigationProp = StackNavigationProp<AuthScreenParamList>;
+
 const VerifyOtp = ({route}: any) => {
   const {email} = route.params;
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
   const {loading, success, emailVerified} = useAppSelector(state => state.auth);
 
@@ -40,7 +44,7 @@ const VerifyOtp = ({route}: any) => {
         },
       };
       dispatch(otpverify(field));
-      navigation.navigate('ResetPassword');
+      navigation.navigate('ResetPassword', {email});
     }
   };
 
@@ -70,7 +74,7 @@ const VerifyOtp = ({route}: any) => {
   useEffect(() => {
     if (success) {
       dispatch(resetSuccess());
-      navigation.navigate('ResetPassword');
+      navigation.navigate('ResetPassword', {email});
     }
   }, [success]);
 
@@ -116,11 +120,7 @@ const VerifyOtp = ({route}: any) => {
             </View>
           )}
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Text
             style={{
               fontFamily: fonts.regular,

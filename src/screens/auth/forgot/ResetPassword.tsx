@@ -1,24 +1,33 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Keyboard, ScrollView, SafeAreaView} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 //icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import {colors, fonts} from '../../../theme';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
 
 // components
-import {} from '@react-navigation/native';
 import {CustomButton, CustomInput, Title} from '../../../components';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {AuthScreenParamList} from '../../../routes/RouteType';
+import {resetPassword} from '../../../redux/actions/authAction';
+import {resetSuccess} from '../../../redux/reducers/authSlice';
 
-const ResetPassword = ({}) => {
+type NavigationProp = StackNavigationProp<AuthScreenParamList>;
+
+const ResetPassword = ({route}: any) => {
+  const {email} = route.params;
+
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<NavigationProp>();
+
   const [input, setInput] = useState({
     password: '',
     confirmPassword: '',
   });
-
-  const dispatch = useAppDispatch();
   const {loading, success} = useAppSelector(state => state.auth);
 
   const [isValid, setIsValid] = useState<Array<boolean>>([]);
@@ -89,11 +98,26 @@ const ResetPassword = ({}) => {
       _isValid = false;
     }
     if (_isValid) {
-      register();
+      resetPass();
     }
   };
 
-  const register = async () => {};
+  const resetPass = () => {
+    dispatch(
+      resetPassword({
+        email,
+        newPassword: input.password,
+        confirmPassword: input.confirmPassword,
+      }),
+    );
+  };
+
+  useEffect(() => {
+    if (success) {
+      dispatch(resetSuccess());
+      navigation.navigate('Successfull');
+    }
+  }, [success]);
 
   const handleOnchange = (text, input) => {
     setInput(prevState => ({...prevState, [input]: text}));
@@ -188,8 +212,10 @@ const ResetPassword = ({}) => {
             })}
           </View>
         </View>
+
         <CustomButton
           title="Submit"
+          loading={loading}
           onPress={validate}
           disabled={
             input.password.length >= 8 &&
@@ -197,7 +223,6 @@ const ResetPassword = ({}) => {
             isValid.every(_item => _item == true)
           }
           style={{marginTop: 200}}
-          loading={loading}
         />
       </ScrollView>
     </SafeAreaView>

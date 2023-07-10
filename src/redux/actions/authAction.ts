@@ -155,8 +155,10 @@ const resetPassword = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.post(`talent/resetPassword`, value);
+      console.log(data);
       return data;
     } catch (error: any) {
+      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
