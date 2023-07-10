@@ -18,7 +18,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 // helpers
 import {appstyle, colors, fonts} from '../../../theme';
-import {CustomButton} from '../../../components';
+import {CustomButton, Title} from '../../../components';
 import {Divider} from 'react-native-paper';
 
 const ReportProblem = () => {
@@ -43,29 +43,27 @@ const ReportProblem = () => {
     },
   ]);
 
+  const handleReasonSelection = selectedIndex => {
+    const updatedReasons = reason.map((item, index) => {
+      if (index === selectedIndex) {
+        return {
+          ...item,
+          checked: true,
+        };
+      }
+      return {
+        ...item,
+        checked: false,
+      };
+    });
+
+    setReasons(updatedReasons);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+      <Title title="Report a problem" />
       <ScrollView>
-        <View
-          style={{
-            flexDirection: 'row',
-            padding: 10,
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-          }}>
-          <Pressable
-            style={{position: 'absolute', left: 10}}
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <Feather name="arrow-left" size={20} />
-          </Pressable>
-          <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-            Report a problem
-          </Text>
-        </View>
-
         <View
           style={{
             margin: 15,
@@ -75,7 +73,7 @@ const ReportProblem = () => {
             justifyContent: 'center',
           }}>
           <Text style={{fontFamily: fonts.medium, fontSize: 18}}>
-            What brings you to here?
+            What brings you here?
           </Text>
           <Text
             style={{
@@ -89,41 +87,36 @@ const ReportProblem = () => {
         </View>
 
         <View style={{margin: 10}}>
-          {reason.map(({title, checked}, index) => {
-            return (
-              <Pressable
-                onPress={() => {
-                  reason[index].checked = !reason[index].checked;
-                  setReasons([...reason]);
-                }}
+          {reason.map(({title, checked}, index) => (
+            <Pressable
+              onPress={() => handleReasonSelection(index)}
+              style={{
+                ...appstyle.shadow,
+                margin: 5,
+                padding: 10,
+                borderRadius: 10,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                borderWidth: 1,
+                borderColor: checked ? colors.primary : 'white',
+              }}
+              key={index.toString()}>
+              <Text
                 style={{
-                  ...appstyle.shadow,
-                  margin: 5,
-                  padding: 10,
-                  borderRadius: 10,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  borderWidth: 1,
-                  borderColor: checked ? colors.primary : 'white',
-                }}
-                key={index.toString()}>
-                <Text
-                  style={{
-                    fontFamily: fonts.regular,
-                    textTransform: 'capitalize',
-                  }}>
-                  {title}
-                </Text>
+                  fontFamily: fonts.regular,
+                  textTransform: 'capitalize',
+                }}>
+                {title}
+              </Text>
 
-                <MaterialIcons
-                  name={checked ? 'check-circle' : 'radio-button-unchecked'}
-                  color={checked ? colors.primary : '#D9D9D9'}
-                  size={25}
-                />
-              </Pressable>
-            );
-          })}
+              <MaterialIcons
+                name={checked ? 'check-circle' : 'radio-button-unchecked'}
+                color={checked ? colors.primary : '#D9D9D9'}
+                size={25}
+              />
+            </Pressable>
+          ))}
         </View>
 
         <View style={{alignItems: 'center', margin: 10}}>
@@ -176,6 +169,7 @@ const ReportProblem = () => {
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
