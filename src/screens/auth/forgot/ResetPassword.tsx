@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import {colors, fonts} from '../../../theme';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 
 // components
 import {} from '@react-navigation/native';
@@ -16,6 +17,9 @@ const ResetPassword = ({}) => {
     password: '',
     confirmPassword: '',
   });
+
+  const dispatch = useAppDispatch();
+  const {loading, success} = useAppSelector(state => state.auth);
 
   const [isValid, setIsValid] = useState<Array<boolean>>([]);
 
@@ -64,7 +68,6 @@ const ResetPassword = ({}) => {
   }
 
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const validate = () => {
     Keyboard.dismiss();

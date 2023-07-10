@@ -9,6 +9,7 @@ import {
   profileDetail,
   resetOtpSent,
   otpverify,
+  resetPassword,
 } from '../actions/authAction';
 import {LoginResponseData} from '../../types/auth';
 
@@ -215,6 +216,24 @@ const authSlice = createSlice({
         state.emailVerified = true;
       })
       .addCase(otpverify.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.message = '';
+      })
+
+      //resetPassword
+      .addCase(resetPassword.pending, state => {
+        state.error = null;
+        state.loading = true;
+        state.success = false;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true; // registration successful
+        state.message = action.payload.response.message.successMessage;
+        state.emailVerified = true;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.message = '';

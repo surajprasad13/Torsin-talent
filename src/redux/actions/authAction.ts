@@ -150,6 +150,22 @@ const otpverify = createAsyncThunk(
   },
 );
 
+const resetPassword = createAsyncThunk(
+  'auth/resetPassword',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`talent/resetPassword`, value);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   userLogin,
   registerIndivisual,
@@ -160,6 +176,7 @@ export {
   profileDetail,
   resetOtpSent,
   otpverify,
+  resetPassword,
 };
 
 export default {};
