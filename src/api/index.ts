@@ -35,9 +35,10 @@ const onRequest = (
 
   if (notValid.includes(url as string)) {
     return config;
+  } else {
+    config.headers.authorization = `Bearer ${store.getState().auth.userToken}`;
+    return config;
   }
-  config.headers.authorization = `Bearer ${store.getState().auth.userToken}`;
-  return config;
 };
 
 const onErrorResponse = async (

@@ -163,6 +163,9 @@ export default function AppNavigator() {
               name="VerifyOtp"
               component={VerifyOtp}
               options={{headerShown: false}}
+              initialParams={{
+                email: '',
+              }}
             />
             <Stack.Screen
               name="ResetPassword"

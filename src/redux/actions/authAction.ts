@@ -41,12 +41,7 @@ const userLogin = createAsyncThunk(
   'auth/login',
   async (value: any, {rejectWithValue}) => {
     try {
-      // const token = await messaging().getToken();
-      // console.log(token);
       const {data} = await api.post(`talent/user/login`, value);
-      // const ref = database().ref(`/Tokens/u2id${data.response.data.id}`);
-      // await ref.update({device_token: token});
-
       return data;
     } catch (error: any) {
       console.log(error.response.data);
@@ -128,10 +123,8 @@ const resetOtpSent = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.post(`talent/lostPassword/otpsent`, value);
-      console.log(data);
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -144,13 +137,10 @@ const resetOtpSent = createAsyncThunk(
 const otpverify = createAsyncThunk(
   'auth/lostPassword/otpverify',
   async (value: any, {rejectWithValue}) => {
-    console.log(value);
     try {
       const {data} = await api.post(`talent/lostPassword/otpverify`, value);
-      console.log(data, 'data');
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {

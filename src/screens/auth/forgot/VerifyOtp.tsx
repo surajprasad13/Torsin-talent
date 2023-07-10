@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Dimensions,
-  Keyboard,
+  TouchableOpacity,
 } from 'react-native';
 import {
   CodeField,
@@ -17,26 +17,23 @@ import {
 //helpers
 import {CustomButton, Title} from '../../../components';
 import {colors, fonts} from '../../../theme';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {otpverify, resetOtpSent} from '../../../redux/actions/authAction';
-import {resetSuccess, loginValue} from '../../../redux/reducers/authSlice';
+import {resetSuccess} from '../../../redux/reducers/authSlice';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const CELL_COUNT = 6;
 
-const VerifyOtp = ({active, email}: any) => {
+const VerifyOtp = ({route}: any) => {
+  const {email} = route.params;
   const navigation = useNavigation();
-
   const dispatch = useAppDispatch();
-
-  const {loading, error, userToken, message, emailVerified} = useAppSelector(
-    state => state.auth,
-  );
+  const {loading, success, emailVerified} = useAppSelector(state => state.auth);
 
   const onPressResend = () => {
-    if (active && email) {
+    if (email) {
       let field = {
         inputs: {
           email,
@@ -63,23 +60,19 @@ const VerifyOtp = ({active, email}: any) => {
   }, [emailVerified]);
 
   const [value, setValue] = useState('');
+
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
 
-  const [errors, setErrors] = useState<any>({});
-
-  const handleError = (_error: any, input: any) => {
-    setErrors((prevState: any) => ({...prevState, [input]: _error}));
-  };
-
   useEffect(() => {
-    if (userToken) {
+    if (success) {
       dispatch(resetSuccess());
+      navigation.navigate('ResetPassword');
     }
-  }, [userToken]);
+  }, [success]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -116,7 +109,7 @@ const VerifyOtp = ({active, email}: any) => {
             <View
               onLayout={getCellOnLayoutHandler(index)}
               key={index}
-              style={[isFocused && styles.focusCell]}>
+              style={[]}>
               <Text style={styles.cell}>
                 {symbol || (isFocused ? <Cursor /> : null)}
               </Text>
@@ -135,18 +128,24 @@ const VerifyOtp = ({active, email}: any) => {
             }}>
             I didn't receive code?
           </Text>
-          <Text
-            style={{
-              color: '#27AE60',
-              fontFamily: fonts.regular,
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(resetOtpSent({email}));
             }}>
-            {''} Resend Code
-          </Text>
+            <Text
+              style={{
+                color: '#27AE60',
+                fontFamily: fonts.regular,
+              }}>
+              {''} Resend Code
+            </Text>
+          </TouchableOpacity>
         </View>
         <CustomButton
           onPress={onPressResend}
           title="Submit & Verify"
           disabled
+          loading={loading}
           style={{marginTop: 300}}
         />
       </View>

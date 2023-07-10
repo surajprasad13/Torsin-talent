@@ -1,33 +1,17 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Keyboard,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import {View, Text, Keyboard, ScrollView, SafeAreaView} from 'react-native';
 
 //icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
-import {colors, fonts, metrics} from '../../../theme';
+import {colors, fonts} from '../../../theme';
 
 // components
-import Input from '../../../components/Input';
-import Loader from '../../../components/Loader';
-import {useNavigation} from '@react-navigation/native';
+import {} from '@react-navigation/native';
 import {CustomButton, CustomInput, Title} from '../../../components';
 
-const {moderateScale, verticalScale} = metrics;
-
 const ResetPassword = ({}) => {
-  const navigation = useNavigation();
-
   const [input, setInput] = useState({
     password: '',
     confirmPassword: '',
@@ -79,8 +63,6 @@ const ResetPassword = ({}) => {
     }
   }
 
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
-
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -108,11 +90,7 @@ const ResetPassword = ({}) => {
     }
   };
 
-  const register = async () => {
-    const headers = {
-      Accept: 'application/json',
-    };
-  };
+  const register = async () => {};
 
   const handleOnchange = (text, input) => {
     setInput(prevState => ({...prevState, [input]: text}));
@@ -123,7 +101,7 @@ const ResetPassword = ({}) => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <Title />
+      <Title title="" />
       <ScrollView
         contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
         <View style={{flex: 0.8}}>
@@ -222,41 +200,5 @@ const ResetPassword = ({}) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  inputText: {
-    width: '92%',
-    marginLeft: '4%',
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#BDBDBD',
-    marginTop: 10,
-    borderRadius: 12,
-  },
-
-  input: {
-    color: '#000000',
-    fontSize: moderateScale(14),
-    fontWeight: '400',
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-  },
-
-  tinyLogo: {
-    width: 16,
-    height: 14,
-  },
-
-  errorTextStyle: {
-    color: 'red',
-    textAlign: 'center',
-    fontSize: 14,
-  },
-  section: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    bottom: 20,
-  },
-});
 
 export default ResetPassword;

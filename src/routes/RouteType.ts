@@ -7,7 +7,9 @@ export type RootStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   LostPassword: undefined;
-  VerifyOtp: undefined;
+  VerifyOtp: {
+    email: undefined | string;
+  };
   ResetPassword: undefined;
   Successfull: undefined;
   VerifyOtpRegister: undefined;
@@ -43,7 +45,9 @@ export type AuthScreenParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   LostPassword: undefined;
-  VerifyOtp: undefined;
+  VerifyOtp: {
+    email: undefined | string;
+  };
   ResetPassword: undefined;
   Successfull: undefined;
   VerifyOtpRegister: undefined;
