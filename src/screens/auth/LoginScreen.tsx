@@ -152,7 +152,7 @@ const LoginScreen = ({}) => {
         )}
 
         <TouchableOpacity
-          style={{alignSelf: 'center'}}
+          style={{alignSelf: 'flex-end'}}
           onPress={() => {
             navigation.navigate('LostPassword');
           }}>

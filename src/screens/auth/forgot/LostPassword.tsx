@@ -4,12 +4,13 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Keyboard,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {} from 'react-native-paper';
+import {Formik} from 'formik';
+import * as yup from 'yup';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -17,62 +18,39 @@ import Feather from 'react-native-vector-icons/Feather';
 //helpers
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {resetOtpSent} from '../../../redux/actions/authAction';
-import {loginValue, resetSuccess} from '../../../redux/reducers/authSlice';
+import {resetSuccess} from '../../../redux/reducers/authSlice';
 
 // components
 import {metrics, colors, fonts} from '../../../theme';
 import {CustomButton, CustomInput} from '../../../components';
-
-import {email} from '../../../utils/regex';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {AuthScreenParamList} from '../../../routes/RouteType';
 
 const {moderateScale, verticalScale} = metrics;
 
-const LoginScreen = ({}) => {
-  const navigation = useNavigation();
+const validationSchema = yup.object().shape({
+  email: yup.string().email('Invalid email').required('Email is required *'),
+});
 
-  const {loading, error, userToken} = useAppSelector(state => state.auth);
+type NavigationProp = StackNavigationProp<AuthScreenParamList>;
 
+const LostPasswordScreen = ({}) => {
+  const [value, setValue] = useState('');
+
+  const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
+  const {loading, success} = useAppSelector(state => state.auth);
 
-  const [errors, setErrors] = useState<any>({});
-
-  const [inputs, setInputs] = useState({
-    email: '',
-  });
-
-  const validate = () => {
-    Keyboard.dismiss();
-    let isValid = true;
-
-    const validEmail = email(inputs.email);
-
-    if (!validEmail) {
-      handleError('Please enter valid email Id', 'email');
-      isValid = false;
-    }
-    if (isValid) {
-      register();
-    }
-  };
-
-  const register = () => {
-    dispatch(resetOtpSent(inputs));
-    navigation.navigate('VerifyOtp');
-  };
-
-  const handleOnchange = (text: any, input: any) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
-  };
-
-  const handleError = (_error: any, input: any) => {
-    setErrors((prevState: any) => ({...prevState, [input]: _error}));
+  const handleOnSubmit = (values: any) => {
+    dispatch(resetOtpSent({email: values.email}));
   };
 
   useEffect(() => {
-    if (userToken) {
+    if (success) {
       dispatch(resetSuccess());
+      navigation.navigate('VerifyOtp', {email: value});
     }
-  }, [userToken]);
+  }, [success]);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
@@ -81,48 +59,58 @@ const LoginScreen = ({}) => {
         style={{padding: 10}}>
         <Feather name="arrow-left" size={20} />
       </TouchableOpacity>
-      <ScrollView contentContainerStyle={{padding: 10}}>
-        <View style={{flex: 0.8}}>
-          <View style={{}}>
-            <Text style={styles.title}>Lost Password</Text>
-          </View>
+      <Formik
+        validateOnChange={false}
+        initialValues={{
+          email: '',
+        }}
+        validationSchema={validationSchema}
+        onSubmit={handleOnSubmit}>
+        {({handleSubmit, handleChange, values, errors, setErrors}) => (
+          <ScrollView contentContainerStyle={{padding: 10}}>
+            <View style={{flex: 0.8}}>
+              <Text style={styles.title}>Lost Password</Text>
 
-          <Text
-            style={{
-              fontFamily: fonts.regular,
-              fontSize: moderateScale(14),
-              color: '#000F1A',
-              top: 18,
-            }}>
-            Please enter your email address, we will send the OTP to reset your
-            password
-          </Text>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  fontSize: moderateScale(14),
+                  color: '#000F1A',
+                  top: 18,
+                }}>
+                Please enter your email address, we will send the OTP to reset
+                your password
+              </Text>
 
-          <View style={{marginVertical: 10, marginTop: 55}}>
-            <CustomInput
-              value={inputs.email}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              onChangeText={(text: string) => {
-                handleOnchange(text, 'email');
-                dispatch(loginValue());
-              }}
-              onFocus={() => handleError(null, 'email')}
-              label="Email"
-              placeholder="Email"
-              error={errors.email}
+              <View style={{marginVertical: 10, marginTop: 55}}>
+                <CustomInput
+                  value={values.email}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoComplete="email"
+                  onChangeText={(text: string) => {
+                    setErrors({email: ''});
+                    handleChange('email')(text);
+                    setValue(text);
+                  }}
+                  onFocus={() => {}}
+                  label="Email"
+                  placeholder="Email"
+                  error={errors.email}
+                />
+              </View>
+            </View>
+
+            <CustomButton
+              title="Send Otp"
+              disabled
+              loading={loading}
+              onPress={handleSubmit}
+              style={{marginTop: verticalScale(200)}}
             />
-          </View>
-        </View>
-
-        <CustomButton
-          title="Send Otp"
-          disabled
-          onPress={validate}
-          style={{marginTop: verticalScale(200)}}
-        />
-      </ScrollView>
+          </ScrollView>
+        )}
+      </Formik>
     </SafeAreaView>
   );
 };
@@ -141,4 +129,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default LostPasswordScreen;
