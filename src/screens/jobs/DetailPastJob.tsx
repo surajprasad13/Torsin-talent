@@ -559,7 +559,7 @@ const OldJobDetail = ({route}: any) => {
 
         <View>
           <Pressable
-            onPress={() => navigation.navigate('Rating')}
+            onPress={() => navigation.navigate('RatingReview', {item})}
             style={{
               ...appstyle.shadow,
               marginTop: 20,
@@ -655,6 +655,9 @@ const OldJobDetail = ({route}: any) => {
           </Pressable>
 
           <Pressable
+            onPress={() => {
+              navigation.navigate('ChatUser', {item});
+            }}
             style={{
               ...appstyle.shadow,
               marginTop: 10,

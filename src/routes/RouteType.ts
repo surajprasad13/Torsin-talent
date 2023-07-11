@@ -40,6 +40,7 @@ export type RootStackParamList = {
   PdfScreen: {
     item: undefined | object;
   };
+  RatingDetail: undefined;
 };
 
 export type AuthScreenParamList = {
@@ -130,8 +131,8 @@ export type JobScreenParamList = {
   AddJobDetails: {
     id: undefined;
   };
-  Rating: undefined;
-  Report: undefined;
+  RatingReview: undefined;
+  ReportProblem: undefined;
 };
 
 export type ContractsScreenParamList = {

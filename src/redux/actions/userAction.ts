@@ -274,6 +274,43 @@ async function fetchDataFromDatabase(item: any, userId: number) {
   }
 }
 
+const getRating = createAsyncThunk(
+  'https://torsin-admin.apponward.com/v1/api/common/rating/get',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(
+        `https://torsin-admin.apponward.com/v1/api/common/rating/get`,
+      );
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+)
+
+const createRating = createAsyncThunk(
+  'https://torsin-admin.apponward.com/v1/api/common/rating/create',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(
+        `https://torsin-admin.apponward.com/v1/api/common/rating/create`,
+        value,
+      );
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -289,6 +326,8 @@ export {
   getContractDetail,
   updateContract,
   fetchNotification,
+  getRating,
+  createRating
 };
 
 export default {};

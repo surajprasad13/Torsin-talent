@@ -3,26 +3,34 @@ import {
   Text,
   SafeAreaView,
   StyleSheet,
-  Pressable,
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 
 //icons
-import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import {appstyle, colors, fonts} from '../../../theme';
-import {CustomButton} from '../../../components';
+import {CustomButton, Title} from '../../../components';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {createRating} from '../../../redux/actions/userAction';
+import {updateSuccess} from '../../../redux/reducers/userSlice';
 
-const RatingReview = () => {
+const RatingReview = ({route}: any) => {
+  const {item} = route.params;
+
   const navigation = useNavigation();
-  const [rating, setRating] = useState(0);
+  const dispatch = useAppDispatch();
+  const {loading, error, message} = useAppSelector(state => state.user);
+
+  const [rating, setRating] = useState<number>(0);
+  const [review, setReview] = useState<string>('');
 
   const renderRatingStars = () => {
     const stars = [];
@@ -31,7 +39,9 @@ const RatingReview = () => {
       stars.push(
         <TouchableOpacity
           key={i}
-          onPress={() => handleStarPress(i)}
+          onPress={() => {
+            handleStarPress(i);
+          }}
           activeOpacity={0.7}
           style={{padding: 5}}>
           <Ionicons
@@ -50,28 +60,37 @@ const RatingReview = () => {
     setRating(starIndex + 1);
   };
 
+  const handleonPress = () => {
+    dispatch(
+      createRating({
+        rating,
+        review,
+        job_id: item.jobId,
+        reciver_id: item.clientId,
+      }),
+    );
+    Alert.alert(
+      'Submited',
+      'Your rating has been submitted',
+      [
+        {
+          text: 'Ok',
+          style: 'default',
+          onPress: () => navigation.navigate('HomeScreen'),
+        },
+        {
+          text: 'Cancel',
+          style: 'destructive',
+        },
+      ],
+      {userInterfaceStyle: 'dark'},
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+      <Title title="Rating & Review" />
       <ScrollView>
-        <View
-          style={{
-            flexDirection: 'row',
-            padding: 10,
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-          }}>
-          <Pressable
-            style={{position: 'absolute', left: 10}}
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <Feather name="arrow-left" size={20} />
-          </Pressable>
-          <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-            Rating & Review
-          </Text>
-        </View>
         <View
           style={{
             ...appstyle.shadow,
@@ -142,6 +161,10 @@ const RatingReview = () => {
                 placeholderTextColor="#bdbdbd"
                 maxLength={500}
                 style={{padding: 15}}
+                value={review}
+                onChangeText={(text: string) => {
+                  setReview(text);
+                }}
               />
             </View>
           </View>
@@ -149,6 +172,8 @@ const RatingReview = () => {
             style={{marginTop: 10}}
             title="Submit feedback"
             disabled
+            loading={loading}
+            onPress={handleonPress}
           />
         </View>
       </ScrollView>

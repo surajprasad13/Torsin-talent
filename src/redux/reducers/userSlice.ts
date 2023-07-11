@@ -3,6 +3,7 @@ import {
   addProposal,
   addService,
   addSkill,
+  createRating,
   fetchNotification,
   fetchService,
   fetchSkill,
@@ -10,11 +11,12 @@ import {
   getContract,
   getContractDetail,
   getProposalStatus,
+  getRating,
   jobCorrespondSkill,
   notJobCorrespondSkill,
   updateContract,
 } from '../actions/userAction';
-import {JobDetail, Service} from '../../types/user';
+import {JobDetail, Rating, Service} from '../../types/user';
 import {searchJob} from '../actions/userAction';
 
 enum Status {
@@ -40,10 +42,13 @@ interface UserInterface {
   contracts: Array<any>;
   notification: Array<any>;
   contractDetail: null | any;
+  rating: Array<Rating>;
+  created: boolean;
 }
 
 const initialState: UserInterface = {
   loading: false,
+  created: false,
   error: null,
   success: false,
   status: null,
@@ -59,6 +64,7 @@ const initialState: UserInterface = {
   contracts: [],
   notification: [],
   contractDetail: null,
+  rating: [],
 };
 
 const userSlice = createSlice({
@@ -280,6 +286,36 @@ const userSlice = createSlice({
         state.contractDetail = action.payload.response.data;
       })
       .addCase(getContractDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //rating
+      .addCase(getRating.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getRating.fulfilled, (state, action) => {
+        state.loading = false;
+        state.rating = action.payload.response;
+      })
+      .addCase(getRating.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //createRating
+      .addCase(createRating.pending, (state, action) => {
+        state.status = Status.pending;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(createRating.fulfilled, (state, action) => {
+        state.loading = false;
+        state.created = true;
+      })
+      .addCase(createRating.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -6,104 +6,102 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {Divider} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //helpers
 import {appstyle, fonts} from '../../../theme';
+import {Rating} from '../../../types/user';
 
-const RatingCard = () => {
-  const [rating, setRating] = useState(0);
+const RatingCard = ({item}: {item: Rating}) => {
+  const navigation = useNavigation();
 
-  const renderRatingStars = () => {
-    const stars = [];
-
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <View key={i} style={{padding: 5}}>
-          <AntDesign
-            name={'star'}
-            size={20}
-            color={'#FFC005'} // Customize the star color as needed
-          />
-        </View>,
-      );
-    }
-
-    return stars;
-  };
-
-  const handleStarPress = (starIndex: number) => {
-    setRating(starIndex + 1);
+  const renderRatingStars = (number: number) => {
+    return (
+      <>
+        {Array(number)
+          .fill('')
+          .map((_, index) => (
+            <View key={index.toString()} style={{padding: 5}}>
+              <AntDesign
+                name={'star'}
+                size={20}
+                color={'#FFC005'} // Customize the star color as needed
+              />
+            </View>
+          ))}
+      </>
+    );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.cardContainer}>
-        <View style={{flexDirection: 'row'}}>
-          <FastImage
-            source={{
-              uri: 'https://source.unsplash.com/400x400?avengers',
-            }}
-            resizeMode="cover"
+      <TouchableOpacity
+        onPress={() => navigation.navigate('RatingDetail', {item})}>
+        <View style={styles.cardContainer}>
+          <View style={{flexDirection: 'row'}}>
+            <FastImage
+              source={{uri: item.profileImage}}
+              resizeMode="cover"
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                borderWidth: 0.5,
+              }}
+            />
+            <View style={{padding: 5}}>
+              <Text
+                style={{
+                  fontFamily: fonts.semibold,
+                  fontSize: 16,
+                  color: '#333333',
+                }}>
+                {item.fullname}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  color: '#333333',
+                }}>
+                {item.email}
+              </Text>
+            </View>
+          </View>
+          <View
             style={{
-              width: 50,
-              height: 50,
-              borderRadius: 25,
-            }}
-          />
-          <View style={{padding: 5}}>
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            {renderRatingStars(item.rating)}
             <Text
               style={{
+                padding: 7,
+                color: '#1E202B',
                 fontFamily: fonts.semibold,
-                fontSize: 16,
-                color: '#333333',
+                fontSize: 14,
+                flex: 0.9,
               }}>
-              Client Name
+              {item.rating}
             </Text>
             <Text
               style={{
+                padding: 10,
+                color: '#1E202B',
                 fontFamily: fonts.regular,
-                color: '#333333',
+                fontSize: 14,
               }}>
-              Java
+              {moment(item.ratingCreatedAt).format('lll')}
             </Text>
           </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          {renderRatingStars()}
-          <Text
-            style={{
-              padding: 7,
-              color: '#1E202B',
-              fontFamily: fonts.semibold,
-              fontSize: 14,
-              flex: 0.9,
-            }}>
-            5.0
-          </Text>
-          <Text
-            style={{
-              padding: 10,
-              color: '#1E202B',
-              fontFamily: fonts.regular,
-              fontSize: 14,
-            }}>
-            3 days ago
+          <Text style={{padding: 10, color: '#1E202B', fontSize: 12}}>
+            {item.jobDescription}
           </Text>
         </View>
-        <Divider />
-        <Text style={{padding: 10, color: '#1E202B', fontSize: 12}}>
-          As a musician l loved the job, the place. Everything was so cool!
-          Minim mollit non deseruntAmet minim mollit non deserunt .
-        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

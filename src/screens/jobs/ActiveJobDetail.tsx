@@ -527,7 +527,9 @@ const ActiveJobDetail = ({route}: any) => {
         {item.status == 4 && (
           <View>
             <Pressable
-              onPress={() => navigation.navigate('RatingReview')}
+              onPress={() => {
+                navigation.navigate('ChatUser', {item});
+              }}
               style={{
                 ...appstyle.shadow,
                 marginTop: 10,
@@ -555,7 +557,7 @@ const ActiveJobDetail = ({route}: any) => {
                   width: '80%',
                 }}>
                 <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-                  Add Rating & Review
+                  Chats
                 </Text>
                 <Text
                   style={{
