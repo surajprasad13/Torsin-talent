@@ -23,7 +23,7 @@ import DrawerNavigation from './DrawerNavigator';
 import CreatePassword from '../screens/auth/CreatePassword';
 import ChatUser from '../screens/chat/ChatUser';
 import WebScreen from '../screens/common/WebScreen';
-import RatingReview from '../screens/payment/services/RatingReview';
+import RatingReview from '../screens/jobs/services/RatingReview';
 
 import {navigationRef} from './RootNavigation';
 
@@ -33,8 +33,9 @@ import {useAppSelector} from '../hooks';
 import ThroughRegister from '../screens/ThroughRegister';
 import PdfScreen from '../screens/chat/PdfScreen';
 import PaymentDetail from '../screens/payment/PendingPaymentDetail';
-import ReportProblem from '../screens/payment/services/ReportProblem';
+import ReportProblem from '../screens/jobs/services/ReportProblem';
 import ReceivedPayment from '../screens/payment/ReceivedPaymentDetail';
+import RatingDetail from '../screens/rating/RatingDetail';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -125,6 +126,14 @@ export default function AppNavigator() {
               }}
             />
             <Stack.Screen
+              name="RatingDetail"
+              component={RatingDetail}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
               name="Report"
               component={ReportProblem}
               options={{
@@ -163,6 +172,9 @@ export default function AppNavigator() {
               name="VerifyOtp"
               component={VerifyOtp}
               options={{headerShown: false}}
+              initialParams={{
+                email: '',
+              }}
             />
             <Stack.Screen
               name="ResetPassword"

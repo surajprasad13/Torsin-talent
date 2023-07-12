@@ -31,4 +31,21 @@ export interface ProposalDetail {
   images: Array<string>;
 }
 
+export interface Rating {
+  jobId: number;
+  jobName: string;
+  image: string[];
+  jobDescription: string;
+  location: string;
+  countryName: string;
+  createdAt: string;
+  Id: number;
+  fullname: string;
+  email: string;
+  profileImage: string;
+  rating: number;
+  review: string;
+  ratingCreatedAt: string;
+}
+
 export interface Skill {}

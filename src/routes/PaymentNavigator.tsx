@@ -6,7 +6,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {PaymentScreenParamList} from './RouteType';
 import Payment from '../screens/payment/Payment';
 import PaymentDetail from '../screens/payment/PendingPaymentDetail';
-import RatingReview from '../screens/payment/services/RatingReview';
 
 const Stack = createStackNavigator<PaymentScreenParamList>();
 

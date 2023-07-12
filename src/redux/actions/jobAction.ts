@@ -18,4 +18,21 @@ const fetchActiveJobAndContract = createAsyncThunk(
   },
 );
 
-export {fetchActiveJobAndContract};
+const fetchPastJobAndContract = createAsyncThunk(
+  'job/pastJobandContract',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`talent/pastJobandContract`);
+      console.log(data);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+export {fetchActiveJobAndContract, fetchPastJobAndContract};

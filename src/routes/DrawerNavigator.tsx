@@ -3,7 +3,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import AboutUs from '../screens/drawerScreens/AboutUs';
 import CustomSidebarMenu from '../components/CustomSidebarMenu';
-import MyRating from '../screens/drawerScreens/MyRating';
+import MyRating from '../screens/rating/MyRating';
 import MyService from '../screens/drawerScreens/MyService';
 import Payment from '../screens/payment/Payment';
 import Terms from '../screens/drawerScreens/Terms';

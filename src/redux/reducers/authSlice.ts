@@ -7,14 +7,11 @@ import {
   sendOtp,
   verifyOtp,
   profileDetail,
+  resetOtpSent,
+  otpverify,
+  resetPassword,
 } from '../actions/authAction';
 import {LoginResponseData} from '../../types/auth';
-
-enum Status {
-  pending = 'pending',
-  succeeded = 'succeeded',
-  failed = 'failed',
-}
 
 interface AuthState {
   loading: boolean;
@@ -80,8 +77,7 @@ const authSlice = createSlice({
   extraReducers: builder => {
     //login
     builder
-      .addCase(userLogin.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(userLogin.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -96,8 +92,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       //  indivisual registration
-      .addCase(registerIndivisual.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(registerIndivisual.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -113,8 +108,7 @@ const authSlice = createSlice({
       })
 
       // bussiness registration
-      .addCase(registerBusiness.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(registerBusiness.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -130,8 +124,7 @@ const authSlice = createSlice({
       })
 
       // update user
-      .addCase(userUpdate.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(userUpdate.pending, state => {
         state.error = null;
         state.loading = true;
         state.success = false;
@@ -146,8 +139,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       // verify email
-      .addCase(sendOtp.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(sendOtp.pending, state => {
         state.error = null;
         state.loading = true;
         state.success = false;
@@ -164,8 +156,7 @@ const authSlice = createSlice({
         state.message = '';
       })
       // verify otp
-      .addCase(verifyOtp.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(verifyOtp.pending, state => {
         state.error = null;
         state.loading = true;
         state.success = false;
@@ -183,8 +174,7 @@ const authSlice = createSlice({
       })
 
       // user profile detail
-      .addCase(profileDetail.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(profileDetail.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -193,6 +183,57 @@ const authSlice = createSlice({
         state.userInfo = action.payload.response.data;
       })
       .addCase(profileDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.message = '';
+      });
+
+    //reset otp sent
+    builder
+      .addCase(resetOtpSent.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(resetOtpSent.fulfilled, state => {
+        state.loading = false;
+        state.success = true; // registration successful
+      })
+      .addCase(resetOtpSent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // verify otp
+      .addCase(otpverify.pending, state => {
+        state.error = null;
+        state.loading = true;
+        state.success = false;
+      })
+      .addCase(otpverify.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true; // registration successful
+        state.message = action.payload.response.message.successMessage;
+        state.emailVerified = true;
+      })
+      .addCase(otpverify.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.message = '';
+      })
+
+      //resetPassword
+      .addCase(resetPassword.pending, state => {
+        state.error = null;
+        state.loading = true;
+        state.success = false;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true; // registration successful
+        state.message = action.payload.response.message.successMessage;
+        state.emailVerified = true;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.message = '';

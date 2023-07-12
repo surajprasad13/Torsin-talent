@@ -1,81 +1,132 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
+  ScrollView,
   SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {} from 'react-native-paper';
+import {Formik} from 'formik';
+import * as yup from 'yup';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
 
-// helpers
-import {colors, fonts} from '../../../theme';
+//helpers
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {resetOtpSent} from '../../../redux/actions/authAction';
+import {resetSuccess} from '../../../redux/reducers/authSlice';
+
+// components
+import {metrics, colors, fonts} from '../../../theme';
 import {CustomButton, CustomInput} from '../../../components';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {AuthScreenParamList} from '../../../routes/RouteType';
 
-const LostPassword = ({}) => {
-  const navigation = useNavigation();
+const {moderateScale, verticalScale} = metrics;
 
-  const [email, setEmail] = useState<string>('');
+const validationSchema = yup.object().shape({
+  email: yup.string().email('Invalid email').required('Email is required *'),
+});
+
+type NavigationProp = StackNavigationProp<AuthScreenParamList>;
+
+const LostPasswordScreen = ({}) => {
+  const [value, setValue] = useState('');
+
+  const navigation = useNavigation<NavigationProp>();
+  const dispatch = useAppDispatch();
+  const {loading, success} = useAppSelector(state => state.auth);
+
+  const handleOnSubmit = (values: any) => {
+    dispatch(resetOtpSent({email: values.email}));
+  };
+
+  useEffect(() => {
+    if (success) {
+      dispatch(resetSuccess());
+      navigation.navigate('VerifyOtp', {email: value});
+    }
+  }, [success]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1, padding: 10}}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('LoginScreen');
-          }}
-          style={{}}>
-          <Feather name="arrow-left" size={20} />
-        </TouchableOpacity>
+    <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('LoginScreen')}
+        style={{padding: 10}}>
+        <Feather name="arrow-left" size={20} />
+      </TouchableOpacity>
+      <Formik
+        validateOnChange={false}
+        initialValues={{
+          email: '',
+        }}
+        validationSchema={validationSchema}
+        onSubmit={handleOnSubmit}>
+        {({handleSubmit, handleChange, values, errors, setErrors}) => (
+          <ScrollView contentContainerStyle={{padding: 10}}>
+            <View style={{flex: 0.8}}>
+              <Text style={styles.title}>Lost Password</Text>
 
-        <View style={{flex: 1}}>
-          <Text
-            style={{
-              fontFamily: fonts.bold,
-              fontSize: 32,
-              color: colors.primary,
-            }}>
-            Lost Password
-          </Text>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  fontSize: moderateScale(14),
+                  color: '#000F1A',
+                  top: 18,
+                }}>
+                Please enter your email address, we will send the OTP to reset
+                your password
+              </Text>
 
-          <Text
-            style={{
-              fontFamily: fonts.regular,
-              color: '#000F1A',
-            }}>
-            Please enter your email address, we will send the OTP to reset your
-            password
-          </Text>
+              <View style={{marginVertical: 10, marginTop: 55}}>
+                <CustomInput
+                  value={values.email}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoComplete="email"
+                  onChangeText={(text: string) => {
+                    setErrors({email: ''});
+                    handleChange('email')(text);
+                    setValue(text);
+                  }}
+                  onFocus={() => {}}
+                  label="Email"
+                  placeholder="Email"
+                  error={errors.email}
+                />
+              </View>
+            </View>
 
-          <CustomInput
-            label="Email"
-            placeholder="eg.john@gmail.com"
-            placeholderTextColor="#828282"
-            value={email}
-            onChangeText={(text: string) => setEmail(text)}
-            containerStyle={{marginTop: 50}}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-        </View>
-
-        <CustomButton
-          onPress={() => {
-            navigation.navigate('VerifyOtp');
-          }}
-          disabled
-          title="Send Otp"
-          style={{marginBottom: 50}}
-        />
-      </View>
+            <CustomButton
+              title="Send Otp"
+              disabled
+              loading={loading}
+              onPress={handleSubmit}
+              style={{marginTop: verticalScale(200)}}
+            />
+          </ScrollView>
+        )}
+      </Formik>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  title: {
+    fontFamily: fonts.bold,
+    fontSize: moderateScale(32),
+    color: colors.blue,
+  },
+  subtitle: {
+    fontFamily: fonts.regular,
+    fontSize: moderateScale(14),
+    color: '#000F1A',
+    top: 18,
+  },
+});
 
-export default LostPassword;
+export default LostPasswordScreen;

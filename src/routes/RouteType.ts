@@ -7,8 +7,12 @@ export type RootStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   LostPassword: undefined;
-  VerifyOtp: undefined;
-  ResetPassword: undefined;
+  VerifyOtp: {
+    email: undefined | string;
+  };
+  ResetPassword: {
+    email: undefined | string;
+  };
   Successfull: undefined;
   VerifyOtpRegister: undefined;
   WalkthroughScreen: undefined;
@@ -36,6 +40,7 @@ export type RootStackParamList = {
   PdfScreen: {
     item: undefined | object;
   };
+  RatingDetail: undefined;
 };
 
 export type AuthScreenParamList = {
@@ -43,8 +48,12 @@ export type AuthScreenParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   LostPassword: undefined;
-  VerifyOtp: undefined;
-  ResetPassword: undefined;
+  VerifyOtp: {
+    email: undefined | string;
+  };
+  ResetPassword: {
+    email: undefined | string;
+  };
   Successfull: undefined;
   VerifyOtpRegister: undefined;
   WalkthroughScreen: undefined;
@@ -122,6 +131,8 @@ export type JobScreenParamList = {
   AddJobDetails: {
     id: undefined;
   };
+  RatingReview: undefined;
+  ReportProblem: undefined;
 };
 
 export type ContractsScreenParamList = {

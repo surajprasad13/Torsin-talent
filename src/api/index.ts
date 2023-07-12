@@ -29,19 +29,17 @@ const onRequest = (
     'verify/otp',
     'talent/individual/registration',
     'talent/business/registration',
+    'talent/lostPassword/otpsent',
+    'talent/lostPassword/otpverify',
+    'talent/resetPassword',
   ];
 
-  if (
-    url == 'talent/user/login' ||
-    url == 'verify/email' ||
-    url == 'verify/otp' ||
-    url == 'talent/individual/registration' ||
-    url == 'talent/business/registration'
-  ) {
+  if (notValid.includes(url as string)) {
+    return config;
+  } else {
+    config.headers.authorization = `Bearer ${store.getState().auth.userToken}`;
     return config;
   }
-  config.headers.authorization = `Bearer ${store.getState().auth.userToken}`;
-  return config;
 };
 
 const onErrorResponse = async (

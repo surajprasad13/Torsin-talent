@@ -1,155 +1,193 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import {
   CodeField,
   Cursor,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+
+//helpers
+import {CustomButton, Title} from '../../../components';
+import {colors, fonts} from '../../../theme';
 import {useNavigation} from '@react-navigation/native';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {otpverify, resetOtpSent} from '../../../redux/actions/authAction';
+import {resetSuccess} from '../../../redux/reducers/authSlice';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {AuthScreenParamList} from '../../../routes/RouteType';
 
-// icons
-import Feather from 'react-native-vector-icons/Feather';
+const {width} = Dimensions.get('window');
 
-// helpers
-import {fonts, metrics} from '../../../theme';
-
-const {horizontalScale, moderateScale, verticalScale} = metrics;
 const CELL_COUNT = 6;
 
-const VerifyOtp = ({}) => {
-  const navigation = useNavigation();
+type NavigationProp = StackNavigationProp<AuthScreenParamList>;
+
+const VerifyOtp = ({route}: any) => {
+  const {email} = route.params;
+  const navigation = useNavigation<NavigationProp>();
+  const dispatch = useAppDispatch();
+  const {loading, success, emailVerified} = useAppSelector(state => state.auth);
+
+  const onPressResend = () => {
+    if (email) {
+      let field = {
+        inputs: {
+          email,
+        },
+      };
+      dispatch(otpverify(field));
+      navigation.navigate('ResetPassword', {email});
+    }
+  };
+
+  useEffect(() => {
+    if (value.length >= 6) {
+      const field = {
+        email,
+        otp: Number(value),
+      };
+      dispatch(otpverify(field));
+    }
+  }, [value]);
+
+  useEffect(() => {
+    if (emailVerified) {
+    }
+  }, [emailVerified]);
 
   const [value, setValue] = useState('');
+
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
 
+  useEffect(() => {
+    if (success) {
+      dispatch(resetSuccess());
+      navigation.navigate('ResetPassword', {email});
+    }
+  }, [success]);
+
   return (
-    <View style={{flex: 1, backgroundColor: '#ffffff'}}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('LostPassword');
-        }}
-        style={{
-          position: 'relative',
-          left: 15,
-          marginTop: moderateScale(40),
-        }}>
-        <Feather name="arrow-left" size={20} />
-      </TouchableOpacity>
-
-      <View style={{flex: 0.8}}>
-        <View
+    <SafeAreaView style={styles.container}>
+      <Title title="" />
+      <View style={{flex: 0.8, padding: 10, marginTop: 20}}>
+        <Text
           style={{
-            marginTop: verticalScale(100),
-            marginLeft: horizontalScale(15),
+            fontFamily: fonts.semibold,
+            fontSize: 22,
+            color: '#0E184D',
           }}>
-          <Text
-            style={{
-              fontFamily: fonts.bold,
-              fontSize: moderateScale(32),
-              left: 10,
-              color: '#0E184D',
-            }}>
-            Verify OTP
-          </Text>
+          Verify Otp
+        </Text>
 
+        <Text
+          style={{
+            fontFamily: fonts.regular,
+            alignItems: 'center',
+            color: '#000F1A',
+            top: 10,
+          }}>
+          Please wait till we verify your Email address
+        </Text>
+        <CodeField
+          ref={ref}
+          {...props}
+          value={value}
+          onChangeText={setValue}
+          cellCount={CELL_COUNT}
+          rootStyle={styles.codeFiledRoot}
+          keyboardType="number-pad"
+          textContentType="oneTimeCode"
+          renderCell={({index, symbol, isFocused}) => (
+            <View
+              onLayout={getCellOnLayoutHandler(index)}
+              key={index}
+              style={[]}>
+              <Text style={styles.cell}>
+                {symbol || (isFocused ? <Cursor /> : null)}
+              </Text>
+            </View>
+          )}
+        />
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Text
             style={{
               fontFamily: fonts.regular,
-              marginTop: 10,
-              width: horizontalScale(300),
-              fontSize: moderateScale(14),
-              lineHeight: moderateScale(17),
-              alignItems: 'center',
-              left: 10,
-              color: '#000F1A',
-            }}>
-            Please wait till we verify your Email jo**@*****.com
-          </Text>
-        </View>
-
-        <View style={{marginTop: verticalScale(20)}}>
-          <CodeField
-            ref={ref}
-            {...props}
-            value={value}
-            onChangeText={setValue}
-            cellCount={CELL_COUNT}
-            keyboardType="number-pad"
-            textContentType="oneTimeCode"
-            renderCell={({index, symbol, isFocused}) => (
-              <View
-                onLayout={getCellOnLayoutHandler(index)}
-                key={index}
-                style={[]}>
-                <Text>{symbol || (isFocused ? <Cursor /> : null)}</Text>
-              </View>
-            )}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: moderateScale(10),
-            justifyContent: 'center',
-          }}>
-          <Text
-            style={{
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              fontSize: moderateScale(14),
-
               color: '#000000',
             }}>
             I didn't receive code?
           </Text>
-          <Text
+          <TouchableOpacity
             onPress={() => {
-              navigation.navigate('RegisterScreen');
-            }}
-            style={{
-              color: '#27AE60',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              fontSize: moderateScale(14),
-
-              left: 2,
+              dispatch(resetOtpSent({email}));
             }}>
-            Resend Code
-          </Text>
+            <Text
+              style={{
+                color: '#27AE60',
+                fontFamily: fonts.regular,
+              }}>
+              {''} Resend Code
+            </Text>
+          </TouchableOpacity>
         </View>
+        <CustomButton
+          onPress={onPressResend}
+          title="Submit & Verify"
+          disabled
+          loading={loading}
+          style={{marginTop: 300}}
+        />
       </View>
-
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('ResetPassword');
-        }}
-        style={{
-          width: '85%',
-          height: 50,
-          marginLeft: '7.5%',
-          backgroundColor: '#14226D',
-          justifyContent: 'center',
-          borderRadius: 8,
-        }}>
-        <Text
-          style={{
-            textAlign: 'center',
-            color: '#FFFFFF',
-            fontFamily: fonts.regular,
-            fontSize: moderateScale(16),
-          }}>
-          Submit & Verify
-        </Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f9fbff',
+  },
+  codeFiledRoot: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  cell: {
+    marginHorizontal: 9,
+    width: width * 0.2,
+    height: width * 0.2,
+    maxWidth: 45,
+    maxHeight: 45,
+    fontSize: 20,
+    borderWidth: 0.3,
+    borderRadius: 2,
+    color: '#0C0900',
+    backgroundColor: colors.white,
+    textAlign: 'center',
+    padding: 10,
+
+    // IOS
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    // Android
+    elevation: 1,
+  },
+});
 
 export default VerifyOtp;

@@ -1,5 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchActiveJobAndContract} from '../actions/jobAction';
+import {
+  fetchActiveJobAndContract,
+  fetchPastJobAndContract,
+} from '../actions/jobAction';
 
 type JobType = {
   error: string;
@@ -7,6 +10,7 @@ type JobType = {
   loading: boolean;
   success: boolean;
   jobs: any[];
+  pastjob: any[];
 };
 
 const initialState: JobType = {
@@ -15,6 +19,7 @@ const initialState: JobType = {
   loading: false,
   success: false,
   jobs: [],
+  pastjob: [],
 };
 
 const jobSlice = createSlice({
@@ -33,6 +38,20 @@ const jobSlice = createSlice({
         state.jobs = action.payload.response;
       })
       .addCase(fetchActiveJobAndContract.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(fetchPastJobAndContract.pending, state => {
+        state.error = '';
+        state.loading = true;
+      })
+      .addCase(fetchPastJobAndContract.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.pastjob = action.payload.response;
+      })
+      .addCase(fetchPastJobAndContract.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
