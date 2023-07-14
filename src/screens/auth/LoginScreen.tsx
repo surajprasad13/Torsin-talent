@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Keyboard,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
@@ -25,7 +24,6 @@ import {CustomButton, CustomInput} from '../../components';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {userLogin} from '../../redux/actions/authAction';
 import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
-import {email, password} from '../../utils/regex';
 
 interface Values {
   email?: string;
@@ -50,7 +48,7 @@ const LoginValidationSchema = Yup.object().shape({
     .required('Min 8 characters are required'),
 });
 
-const {moderateScale, verticalScale} = metrics;
+const {moderateScale} = metrics;
 
 const LoginScreen = ({}) => {
   const navigation = useNavigation();
@@ -59,23 +57,8 @@ const LoginScreen = ({}) => {
 
   const dispatch = useAppDispatch();
 
-  const [inputs, setInputs] = useState({
-    email: '',
-    password: '',
-  });
-
   const onSubmit = (values: any) => {
     dispatch(userLogin(values));
-  };
-
-  const [errors, setErrors] = useState<any>({});
-
-  const handleOnchange = (text: any, input: any) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
-  };
-
-  const handleError = (_error: any, input: any) => {
-    setErrors((prevState: any) => ({...prevState, [input]: _error}));
   };
 
   useEffect(() => {
@@ -104,7 +87,6 @@ const LoginScreen = ({}) => {
             <View style={{flex: 0.8}}>
               <View style={{}}>
                 <Text style={styles.title}>Login</Text>
-
                 <Text style={styles.subtitle}>Welcome back!</Text>
               </View>
 
@@ -137,12 +119,12 @@ const LoginScreen = ({}) => {
                 />
 
                 <Input
-                  value={inputs.password}
+                  value={values.password}
                   onChangeText={(text: string) => {
-                    handleOnchange(text, 'password');
+                    handleChange('password')(text);
                     dispatch(loginValue());
                   }}
-                  onFocus={() => handleError(null, 'password')}
+                  onFocus={() => setErrors({password: ''})}
                   label="Password"
                   placeholder="********"
                   error={errors.password}

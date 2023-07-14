@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {RadioButton} from 'react-native-paper';
+import {} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import PhoneInput from 'react-native-phone-number-input';
@@ -40,7 +40,6 @@ import {RootState} from '../../redux';
 import {registerIndivisual} from '../../redux/actions/authAction';
 import {CustomButton} from '../../components';
 
-import {email, alphabets, number} from '../../utils/regex';
 import {uploadFileToS3} from '../../services/s3';
 import {useAppDispatch} from '../../hooks';
 import {
@@ -48,40 +47,12 @@ import {
   resetMobileVerified,
 } from '../../redux/reducers/authSlice';
 
-const {horizontalScale, moderateScale, verticalScale} = metrics;
-
-type InputProp = {
-  fullName: string;
-  email: string;
-  mobileNo: string;
-  location: string;
-  countryName: string;
-  gender: number;
-  password: string;
-  confirmPassword: string;
-  profileImage: string;
-};
+const {moderateScale} = metrics;
 
 const IndivisualRegister = ({}) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const {loading, emailVerified, mobileVerified} = useSelector(
-    (state: RootState) => state.auth,
-  );
-
-  const [inputs, setInputs] = useState<InputProp>({
-    fullName: '',
-    email: '',
-    mobileNo: '',
-    location: '',
-    countryName: '',
-    gender: 1,
-    password: '',
-    confirmPassword: '',
-    profileImage: '',
-  });
-
-  const [errors, setErrors] = useState<any>({});
+  const {loading} = useSelector((state: RootState) => state.auth);
 
   const [checked, setChecked] = useState('first');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
@@ -131,7 +102,7 @@ const IndivisualRegister = ({}) => {
         `${response.filename}`,
         'image/jpeg',
       );
-      setInputs(prevState => ({...prevState, profileImage: url.Location}));
+      setProfileImage(url.Location);
       setImageLoading(false);
     } else {
       setImageLoading(false);
@@ -154,13 +125,6 @@ const IndivisualRegister = ({}) => {
     return () => listener;
   }, []);
 
-  const handleOnchange = (text: any, input: any) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
-  };
-  const handleError = (_error: any, input: any) => {
-    setErrors((prevState: any) => ({...prevState, [input]: _error}));
-  };
-
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -178,17 +142,6 @@ const IndivisualRegister = ({}) => {
     };
   }, []);
 
-  const active: boolean =
-    inputs.fullName &&
-    inputs.email &&
-    inputs.mobileNo &&
-    emailVerified &&
-    mobileVerified &&
-    inputs.location &&
-    inputs.countryName
-      ? true
-      : false;
-
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
       <Formik
@@ -197,8 +150,10 @@ const IndivisualRegister = ({}) => {
           email: '',
           mobileNo: '',
           password: '',
+          location: '',
           confirmPassword: '',
           gender: 1,
+          countryName: '',
         }}
         validateOnChange={false}
         validationSchema={validationSchema}
@@ -295,12 +250,12 @@ const IndivisualRegister = ({}) => {
               <View style={{marginVertical: 47, marginTop: 84}}>
                 <Input
                   label="Name"
-                  value={inputs.fullName}
-                  onFocus={() => handleError(null, 'fullName')}
+                  value={values.fullName}
+                  onFocus={() => setErrors({fullName: ''})}
                   placeholder="John smith"
                   onChangeText={(text: any) => {
                     const name = text.replace(/[^a-zA-Z ]/g, '');
-                    handleOnchange(name, 'fullName');
+                    handleChange('fullName')(name);
                   }}
                   error={errors.fullName}
                 />
@@ -308,9 +263,9 @@ const IndivisualRegister = ({}) => {
                 <View>
                   <Input
                     onChangeText={(text: string) => {
-                      handleOnchange(text, 'email');
+                      handleChange('email')(text);
                     }}
-                    onFocus={() => handleError(null, 'email')}
+                    onFocus={() => setErrors({email: ''})}
                     label="Email"
                     keyboardType="email-address"
                     placeholder="john@gmail.com"
@@ -412,7 +367,7 @@ const IndivisualRegister = ({}) => {
                     style={{flexDirection: 'row', alignItems: 'center'}}
                     onPress={() => {
                       setChecked('first');
-                      setInputs(prevState => ({...prevState, gender: 1}));
+                      handleChange('gender')('1');
                     }}>
                     <FontAwesome
                       name={checked === 'first' ? 'dot-circle-o' : 'circle-o'}
@@ -438,7 +393,7 @@ const IndivisualRegister = ({}) => {
                     }}
                     onPress={() => {
                       setChecked('second');
-                      setInputs(prevState => ({...prevState, gender: 2}));
+                      handleChange('gender')('2');
                     }}>
                     <FontAwesome
                       name={checked === 'second' ? 'dot-circle-o' : 'circle-o'}
@@ -459,10 +414,8 @@ const IndivisualRegister = ({}) => {
 
                 <View style={{marginTop: 10}}>
                   <Input
-                    onChangeText={(text: any) =>
-                      handleOnchange(text, 'location')
-                    }
-                    onFocus={() => handleError(null, 'location')}
+                    onChangeText={(text: any) => handleChange('location')(text)}
+                    onFocus={() => setErrors({location: ''})}
                     label="Location"
                     placeholder="Enter Location"
                     error={errors.location}
@@ -471,12 +424,12 @@ const IndivisualRegister = ({}) => {
 
                 <View style={{marginTop: 10}}>
                   <Input
-                    value={inputs.countryName}
+                    value={values.countryName}
                     onChangeText={(text: any) => {
                       const name = text.replace(/[^a-zA-Z ]/g, '');
-                      handleOnchange(name, 'countryName');
+                      handleChange('countryName')(name);
                     }}
-                    onFocus={() => handleError(null, 'countryName')}
+                    onFocus={() => setErrors({countryName: ''})}
                     label="Country"
                     placeholder="Enter your country"
                     error={errors.countryName}
@@ -523,9 +476,8 @@ const IndivisualRegister = ({}) => {
                     values.fullName &&
                     values.email &&
                     values.mobileNo &&
-                    values.password &&
-                    isValid.every(item => item == true) &&
-                    values.confirmPassword
+                    values.location &&
+                    values.countryName
                       ? true
                       : false
                   }

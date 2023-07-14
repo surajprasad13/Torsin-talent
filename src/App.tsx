@@ -8,7 +8,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
 
-import AppNavigator from './routes/AppNavigator';
+import AppNavigator from './routes/Appnavigator';
 
 import store, {persistor} from './redux';
 import {injectStore} from './api';
