@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {} from 'react-native-paper';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -18,12 +20,35 @@ import {metrics, colors, fonts} from '../../theme';
 
 // components
 import Input from '../../components/Input';
-import {CustomButton} from '../../components';
+import {CustomButton, CustomInput} from '../../components';
 
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {userLogin} from '../../redux/actions/authAction';
 import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
 import {email, password} from '../../utils/regex';
+
+interface Values {
+  email?: string;
+  mobileNo?: string;
+  password: string;
+}
+
+const LoginValidationSchema = Yup.object().shape({
+  email: Yup.string()
+    .test('email', 'Invalid email or phone number', (value: any) => {
+      // Regular expression for email validation
+      const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      // Regular expression for phone number validation
+      const phoneRegex = /^\d{10}$/;
+      // Check if the value matches either email or phone number pattern
+      return emailRegex.test(value) || phoneRegex.test(value);
+    })
+    .required('Email/Phone is required'),
+  password: Yup.string()
+    .required('Please enter password')
+    .min(8)
+    .required('Min 8 characters are required'),
+});
 
 const {moderateScale, verticalScale} = metrics;
 
@@ -39,35 +64,11 @@ const LoginScreen = ({}) => {
     password: '',
   });
 
+  const onSubmit = (values: any) => {
+    dispatch(userLogin(values));
+  };
+
   const [errors, setErrors] = useState<any>({});
-
-  const validate = () => {
-    Keyboard.dismiss();
-    let isValid = true;
-
-    const validEmail = email(inputs.email);
-    const validPassword = password(inputs.password);
-
-    if (!validEmail) {
-      handleError('Please enter valid email Id', 'email');
-      isValid = false;
-    }
-    if (inputs.password.length < 8) {
-      handleError('Min password length of 8', 'password');
-      isValid = false;
-    }
-    if (!validPassword && inputs.password.length >= 8) {
-      handleError('Please enter valid password', 'password');
-      isValid = false;
-    }
-    if (isValid) {
-      register();
-    }
-  };
-
-  const register = () => {
-    dispatch(userLogin(inputs));
-  };
 
   const handleOnchange = (text: any, input: any) => {
     setInputs(prevState => ({...prevState, [input]: text}));
@@ -90,113 +91,125 @@ const LoginScreen = ({}) => {
         style={{padding: 10}}>
         <Feather name="arrow-left" size={20} />
       </TouchableOpacity>
-      <ScrollView contentContainerStyle={{padding: 10}}>
-        <View style={{flex: 0.8}}>
-          <View style={{}}>
-            <Text style={styles.title}>Login</Text>
+      <Formik
+        onSubmit={onSubmit}
+        validateOnChange={false}
+        validationSchema={LoginValidationSchema}
+        initialValues={{
+          email: '',
+          password: '',
+        }}>
+        {({values, errors, handleSubmit, handleChange, setErrors}) => (
+          <ScrollView contentContainerStyle={{padding: 10}}>
+            <View style={{flex: 0.8}}>
+              <View style={{}}>
+                <Text style={styles.title}>Login</Text>
 
-            <Text style={styles.subtitle}>Welcome back!</Text>
-          </View>
+                <Text style={styles.subtitle}>Welcome back!</Text>
+              </View>
 
-          <Text
-            style={{
-              fontFamily: fonts.regular,
-              fontSize: moderateScale(14),
-              color: '#000F1A',
-              top: 18,
-            }}>
-            Please fill the below details to Login the app.
-          </Text>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  fontSize: moderateScale(14),
+                  color: '#000F1A',
+                  top: 18,
+                }}>
+                Please fill the below details to Login the app.
+              </Text>
 
-          <View style={{marginVertical: 10, marginTop: 55}}>
-            <Input
-              value={inputs.email}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              onChangeText={(text: string) => {
-                handleOnchange(text, 'email');
-                dispatch(loginValue());
-              }}
-              onFocus={() => handleError(null, 'email')}
-              label="Email"
-              placeholder="Email"
-              error={errors.email}
+              <View style={{marginVertical: 10, marginTop: 55}}>
+                <CustomInput
+                  autoCapitalize="none"
+                  returnKeyType="done"
+                  onChangeText={(text: string) => {
+                    setErrors({email: ''});
+                    handleChange('email')(text);
+                  }}
+                  onFocus={() => setErrors({email: ''})}
+                  label="Mobile / Email"
+                  placeholder="Mobile no / Email"
+                  error={errors.email}
+                  maxLength={/^\d+$/.test(values.email) ? 15 : 50}
+                  containerStyle={{
+                    marginTop: 30,
+                  }}
+                />
+
+                <Input
+                  value={inputs.password}
+                  onChangeText={(text: string) => {
+                    handleOnchange(text, 'password');
+                    dispatch(loginValue());
+                  }}
+                  onFocus={() => handleError(null, 'password')}
+                  label="Password"
+                  placeholder="********"
+                  error={errors.password}
+                  password
+                />
+              </View>
+            </View>
+            {!!error && (
+              <Text
+                style={{
+                  textAlign: 'left',
+                  left: 10,
+                  color: 'red',
+                  bottom: 20,
+                  fontFamily: fonts.medium,
+                }}>
+                {error}
+              </Text>
+            )}
+
+            <TouchableOpacity
+              style={{alignSelf: 'center'}}
+              onPress={() => {
+                navigation.navigate('LostPassword');
+              }}>
+              <Text
+                style={{
+                  fontFamily: fonts.medium,
+                  color: '#27AE60',
+                }}>
+                Lost password ?
+              </Text>
+            </TouchableOpacity>
+
+            <CustomButton
+              title="Login"
+              onPress={handleSubmit}
+              disabled={!!values.email && !!values.password}
+              loading={loading}
             />
 
-            <Input
-              value={inputs.password}
-              onChangeText={(text: string) => {
-                handleOnchange(text, 'password');
-                dispatch(loginValue());
-              }}
-              onFocus={() => handleError(null, 'password')}
-              label="Password"
-              placeholder="********"
-              error={errors.password}
-              password
-            />
-          </View>
-        </View>
-        {!!error && (
-          <Text
-            style={{
-              textAlign: 'left',
-              left: 10,
-              color: 'red',
-              bottom: 20,
-              fontFamily: fonts.medium,
-            }}>
-            {error}
-          </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: 10,
+              }}>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  color: colors.black,
+                }}>
+                Don’t have an account?
+              </Text>
+              <Text
+                onPress={() => navigation.navigate('ThroughRegister')}
+                style={{
+                  color: '#0E184D',
+                  fontFamily: fonts.bold,
+                  left: 2,
+                }}>
+                Create account
+              </Text>
+            </View>
+          </ScrollView>
         )}
-
-        <TouchableOpacity
-          style={{alignSelf: 'center'}}
-          onPress={() => {
-            navigation.navigate('LostPassword');
-          }}>
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              color: '#27AE60',
-            }}>
-            Lost password ?
-          </Text>
-        </TouchableOpacity>
-
-        <CustomButton
-          title="Login"
-          onPress={validate}
-          disabled={inputs.email && inputs.password ? true : false}
-          style={{marginTop: verticalScale(200)}}
-          loading={loading}
-        />
-
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginTop: 10,
-          }}>
-          <Text
-            style={{
-              fontFamily: fonts.regular,
-              color: colors.black,
-            }}>
-            Don’t have an account?
-          </Text>
-          <Text
-            onPress={() => navigation.navigate('ThroughRegister')}
-            style={{
-              color: '#0E184D',
-              fontFamily: fonts.bold,
-              left: 2,
-            }}>
-            Create account
-          </Text>
-        </View>
-      </ScrollView>
+      </Formik>
     </SafeAreaView>
   );
 };
