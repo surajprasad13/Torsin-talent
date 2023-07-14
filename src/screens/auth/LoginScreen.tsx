@@ -118,7 +118,7 @@ const LoginScreen = ({}) => {
                   }}
                 />
 
-                <Input
+                <CustomInput
                   value={values.password}
                   onChangeText={(text: string) => {
                     handleChange('password')(text);
@@ -129,6 +129,9 @@ const LoginScreen = ({}) => {
                   placeholder="********"
                   error={errors.password}
                   password
+                  containerStyle={{
+                    marginTop: 20,
+                  }}
                 />
               </View>
             </View>
@@ -138,7 +141,6 @@ const LoginScreen = ({}) => {
                   textAlign: 'left',
                   left: 10,
                   color: 'red',
-                  bottom: 20,
                   fontFamily: fonts.medium,
                 }}>
                 {error}
@@ -164,6 +166,7 @@ const LoginScreen = ({}) => {
               onPress={handleSubmit}
               disabled={!!values.email && !!values.password}
               loading={loading}
+              style={{marginTop: 200}}
             />
 
             <View

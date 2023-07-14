@@ -38,7 +38,7 @@ import ProFile from '../../components/Profile';
 // redux
 import {RootState} from '../../redux';
 import {registerIndivisual} from '../../redux/actions/authAction';
-import {CustomButton} from '../../components';
+import {CustomButton, CustomInput} from '../../components';
 
 import {uploadFileToS3} from '../../services/s3';
 import {useAppDispatch} from '../../hooks';
@@ -78,6 +78,9 @@ const IndivisualRegister = ({}) => {
     };
 
     dispatch(registerIndivisual(data));
+    navigation.navigate('CreatePassword', {
+      item: JSON.stringify(data),
+    });
   };
 
   const [image, setImage] = useState('');
@@ -248,15 +251,16 @@ const IndivisualRegister = ({}) => {
               </View>
 
               <View style={{marginVertical: 47, marginTop: 84}}>
-                <Input
-                  label="Name"
+                <CustomInput
                   value={values.fullName}
-                  onFocus={() => setErrors({fullName: ''})}
-                  placeholder="John smith"
-                  onChangeText={(text: any) => {
+                  onChangeText={(text: string) => {
                     const name = text.replace(/[^a-zA-Z ]/g, '');
                     handleChange('fullName')(name);
                   }}
+                  maxLength={30}
+                  onFocus={() => setErrors({fullName: ''})}
+                  label="Name"
+                  placeholder="eg. John smith"
                   error={errors.fullName}
                 />
 
