@@ -26,7 +26,7 @@ const ActiveJob = ({}) => {
   }, []);
 
   return (
-    <View>
+    <View style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <FlatList
         data={jobs}
         style={{backgroundColor: colors.white}}

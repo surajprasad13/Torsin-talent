@@ -10,6 +10,7 @@ import {
   Platform,
   LayoutAnimation,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
@@ -17,7 +18,12 @@ import moment from 'moment';
 import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
 
 // components
-import {CustomButton, CustomInput, Title} from '../../components';
+import {
+  CustomButton,
+  CustomInput,
+  GridImageView,
+  Title,
+} from '../../components';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
@@ -26,6 +32,7 @@ const projectType = ['', 'Hourly', 'Fixed'];
 
 const ProposalDetail = ({route}: any) => {
   const ref = useRef(null);
+  const [imageVisible, setImageVisible] = useState<boolean>(false);
 
   const {item} = route.params;
   const navigation = useNavigation();
@@ -240,6 +247,7 @@ const ProposalDetail = ({route}: any) => {
               />
             </View>
           </View>
+
           <View
             style={{
               flexDirection: 'row',
@@ -266,31 +274,41 @@ const ProposalDetail = ({route}: any) => {
           </View>
 
           {item.photos !== null && item.photos.length > 0 && (
-            <View style={styles.textContainer}>
+            <View
+              style={{
+                ...appstyle.shadow,
+                borderRadius: 10,
+                margin: 15,
+                padding: 10,
+              }}>
               <Text
                 style={{
-                  fontFamily: fonts.regular,
-                  color: '#4F4F4F',
+                  fontFamily: fonts.semibold,
+                  color: colors.black,
                   fontSize: 16,
+                  padding: 5,
                 }}>
                 Photos
               </Text>
+
+              <View style={styles.photoContainer}>
+                {item.photos?.map((a, b) => (
+                  <Pressable
+                    onPress={() => {
+                      setImageVisible(true);
+                    }}
+                    key={b.toString()}
+                    style={styles.innerPhotos}>
+                    <FastImage
+                      source={{uri: a}}
+                      resizeMode="cover"
+                      style={{width: '100%', height: 140, borderRadius: 10}}
+                    />
+                  </Pressable>
+                ))}
+              </View>
             </View>
           )}
-
-          {item.photos !== null && item.photos.length > 0 ? (
-            <View style={styles.photoContainer}>
-              {item.photos.map((_item: string, index: number) => (
-                <View key={index.toString()} style={styles.innerPhotos}>
-                  <FastImage
-                    source={{uri: _item}}
-                    resizeMode="cover"
-                    style={{width: '100%', height: 140, borderRadius: 10}}
-                  />
-                </View>
-              ))}
-            </View>
-          ) : null}
 
           {item.videos !== null && (
             <View style={styles.textContainer}>
@@ -341,6 +359,15 @@ const ProposalDetail = ({route}: any) => {
           />
           <View style={{marginTop: 50}} />
         </ScrollView>
+        {item.photos !== null && item.photos.length > 0 && (
+          <GridImageView
+            data={item.photos}
+            visible={imageVisible}
+            onRequestClose={() => {
+              setImageVisible(false);
+            }}
+          />
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
