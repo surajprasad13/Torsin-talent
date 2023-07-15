@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Keyboard,
   SafeAreaView,
   Pressable,
   KeyboardAvoidingView,
@@ -24,7 +23,6 @@ import * as Yup from 'yup';
 // icons
 import Feather from 'react-native-vector-icons/Feather';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // helpers
 import {metrics, colors, fonts} from '../../theme';
@@ -54,7 +52,6 @@ const BusinessRegister = ({}) => {
   const dispatch = useAppDispatch();
   const {loading} = useSelector((state: RootState) => state.auth);
 
-  const [checked, setChecked] = useState('first');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
   const validationSchema = Yup.object().shape({
@@ -71,15 +68,17 @@ const BusinessRegister = ({}) => {
   const locales = getLocales();
 
   const onSubmit = (event: any) => {
-    const data = {
-      ...event,
-      profileImage,
-      countryId: phoneInput?.current?.getCallingCode(),
+    const field = {
+      screen: 'business',
+      data: {
+        ...event,
+        profileImage,
+        countryId: phoneInput?.current?.getCallingCode(),
+      },
     };
 
-    dispatch(registerIndivisual(data));
     navigation.navigate('CreatePassword', {
-      item: JSON.stringify(data),
+      item: JSON.stringify(field),
     });
   };
 
@@ -126,23 +125,6 @@ const BusinessRegister = ({}) => {
       dispatch(resetMobileVerified());
     });
     return () => listener;
-  }, []);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {},
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {},
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
   }, []);
 
   return (

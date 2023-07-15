@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Keyboard,
   SafeAreaView,
   Pressable,
   KeyboardAvoidingView,
@@ -37,7 +36,6 @@ import ProFile from '../../components/Profile';
 
 // redux
 import {RootState} from '../../redux';
-import {registerIndivisual} from '../../redux/actions/authAction';
 import {CustomButton, CustomInput} from '../../components';
 
 import {uploadFileToS3} from '../../services/s3';
@@ -71,15 +69,17 @@ const IndivisualRegister = ({}) => {
   const locales = getLocales();
 
   const onSubmit = (event: any) => {
-    const data = {
-      ...event,
-      profileImage,
-      countryId: phoneInput?.current?.getCallingCode(),
+    const field = {
+      screen: 'indivisual',
+      data: {
+        ...event,
+        profileImage,
+        countryId: phoneInput?.current?.getCallingCode(),
+      },
     };
 
-    dispatch(registerIndivisual(data));
     navigation.navigate('CreatePassword', {
-      item: JSON.stringify(data),
+      item: JSON.stringify(field),
     });
   };
 
@@ -128,23 +128,6 @@ const IndivisualRegister = ({}) => {
     return () => listener;
   }, []);
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {},
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {},
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
       <Formik
@@ -152,7 +135,6 @@ const IndivisualRegister = ({}) => {
           fullName: '',
           email: '',
           mobileNo: '',
-          password: '',
           location: '',
           confirmPassword: '',
           gender: 1,
