@@ -6,11 +6,14 @@ import {
   ActivityIndicator,
   StyleSheet,
   Image,
+  Dimensions,
 } from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getProposalStatus} from '../../redux/actions/userAction';
 import ProposalStatus from './components/ProposalStatus';
 import {fonts} from '../../theme';
+
+const {height} = Dimensions.get('window');
 
 const Accepted = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +28,12 @@ const Accepted = () => {
     <View>
       <FlatList
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
+          <View
+            style={{
+              flex: 1,
+              minHeight: height * 0.7,
+              justifyContent: 'center',
+            }}>
             {loading ? (
               <ActivityIndicator />
             ) : (
@@ -37,8 +45,10 @@ const Accepted = () => {
                 <Text
                   style={{
                     fontFamily: fonts.semibold,
-                    fontSize: 24,
+                    fontSize: 20,
                     color: '#000F1A',
+                    textAlign: 'center',
+                    marginTop: 10,
                   }}>
                   No Proposals Accept
                 </Text>
@@ -57,16 +67,10 @@ const Accepted = () => {
 };
 
 const styles = StyleSheet.create({
-  emptyContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   emptyImage: {
-    width: '90%',
-    height: 300,
+    width: '100%',
+    height: 250,
     resizeMode: 'contain',
-    flex: 1,
   },
 });
 

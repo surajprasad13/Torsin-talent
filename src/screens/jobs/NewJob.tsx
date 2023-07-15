@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Image,
   Text,
+  Dimensions,
 } from 'react-native';
 
 //icons
@@ -14,6 +15,8 @@ import JobCard from './components/JobCard';
 import {fetchNewJobAndContract} from '../../redux/actions/jobAction';
 import {colors, fonts} from '../../theme';
 import PastJobCard from './components/PastJobCard';
+
+const {height} = Dimensions.get('window');
 
 const NewJob = ({}) => {
   const {newjob, loading} = useAppSelector(state => state.job);
@@ -39,14 +42,7 @@ const NewJob = ({}) => {
                   source={require('../../assets/images/noModule/job.png')}
                   style={styles.emptyImage}
                 />
-                <Text
-                  style={{
-                    fontFamily: fonts.semibold,
-                    fontSize: 24,
-                    color: '#000F1A',
-                  }}>
-                  No New Job
-                </Text>
+                <Text style={styles.text}>No New Job</Text>
               </>
             )}
           </View>
@@ -63,14 +59,20 @@ const NewJob = ({}) => {
 const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
-    alignItems: 'center',
+    minHeight: height * 0.7,
     justifyContent: 'center',
   },
   emptyImage: {
     width: '100%',
-    height: 300,
+    height: 250,
     resizeMode: 'contain',
-    flex: 1,
+  },
+  text: {
+    fontFamily: fonts.semibold,
+    fontSize: 20,
+    color: '#000F1A',
+    textAlign: 'center',
+    marginTop: 10,
   },
 });
 

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 
 //icons
 
@@ -11,6 +11,8 @@ import {FlatList} from 'react-native';
 import {ActivityIndicator} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getContract} from '../../redux/actions/userAction';
+
+const {height} = Dimensions.get('window');
 
 const ArchiveContract = () => {
   const {loading, contracts} = useAppSelector(state => state.user);
@@ -33,14 +35,7 @@ const ArchiveContract = () => {
                 source={require('../../assets/images/noModule/contract.png')}
                 style={styles.emptyImage}
               />
-              <Text
-                style={{
-                  fontFamily: fonts.semibold,
-                  fontSize: 24,
-                  color: '#000F1A',
-                }}>
-                No Contracts Archived
-              </Text>
+              <Text style={styles.text}>No Contracts Archived</Text>
             </>
           )}
         </View>
@@ -56,14 +51,20 @@ const ArchiveContract = () => {
 const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
-    alignItems: 'center',
+    minHeight: height * 0.7,
     justifyContent: 'center',
   },
   emptyImage: {
     width: '100%',
-    height: 300,
+    height: 250,
     resizeMode: 'contain',
-    flex: 1,
+  },
+  text: {
+    fontFamily: fonts.semibold,
+    fontSize: 20,
+    color: '#000F1A',
+    textAlign: 'center',
+    marginTop: 10,
   },
 });
 

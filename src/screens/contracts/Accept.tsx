@@ -6,6 +6,7 @@ import {
   Image,
   Text,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 
 // components
@@ -15,6 +16,8 @@ import ContractStatus from './components/ContractStatus';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getContract} from '../../redux/actions/userAction';
 import {fonts} from '../../theme';
+
+const {height} = Dimensions.get('window');
 
 const Accept = () => {
   const dispatch = useAppDispatch();
@@ -38,11 +41,7 @@ const Accept = () => {
                 style={styles.emptyImage}
               />
               <Text
-                style={{
-                  fontFamily: fonts.semibold,
-                  fontSize: 24,
-                  color: '#000F1A',
-                }}>
+                style={styles.text}>
                 No Contracts Accepted
               </Text>
             </>
@@ -60,14 +59,20 @@ const Accept = () => {
 const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
-    alignItems: 'center',
+    minHeight: height * 0.7,
     justifyContent: 'center',
   },
   emptyImage: {
     width: '100%',
-    height: 300,
+    height: 250,
     resizeMode: 'contain',
-    flex: 1,
+  },
+  text: {
+    fontFamily: fonts.semibold,
+    fontSize: 20,
+    color: '#000F1A',
+    textAlign: 'center',
+    marginTop: 10,
   },
 });
 

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   Text,
+  Dimensions,
 } from 'react-native';
 
 // helpers
@@ -16,6 +17,8 @@ import {colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchActiveJobAndContract} from '../../redux/actions/jobAction';
 import JobCard from './components/JobCard';
+
+const {height} = Dimensions.get('window');
 
 const ActiveJob = ({}) => {
   const dispatch = useAppDispatch();
@@ -31,7 +34,12 @@ const ActiveJob = ({}) => {
         data={jobs}
         style={{backgroundColor: colors.white}}
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
+          <View
+            style={{
+              flex: 1,
+              minHeight: height * 0.7,
+              justifyContent: 'center',
+            }}>
             {loading ? (
               <ActivityIndicator />
             ) : (
@@ -43,8 +51,10 @@ const ActiveJob = ({}) => {
                 <Text
                   style={{
                     fontFamily: fonts.semibold,
-                    fontSize: 24,
+                    fontSize: 20,
                     color: '#000F1A',
+                    textAlign: 'center',
+                    marginTop: 10,
                   }}>
                   No Active Job Yet
                 </Text>
@@ -62,16 +72,10 @@ const ActiveJob = ({}) => {
 };
 
 const styles = StyleSheet.create({
-  emptyContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   emptyImage: {
     width: '100%',
-    height: 300,
+    height: 250,
     resizeMode: 'contain',
-    flex: 1,
   },
 });
 
