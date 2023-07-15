@@ -104,16 +104,16 @@ const ProposalDetail = ({route}: any) => {
                   <Text style={styles.title}>Description</Text>
                   <Text style={styles.description}>{item.jobDescription}</Text>
                 </View>
-                <View style={{margin: 5, padding: 5}}>
-                  <Text style={styles.title}>Photos</Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      flexWrap: 'wrap',
-                    }}>
-                    {item.photos !== null &&
-                      item.images.map((_item: string, index: number) => {
+                {item.photos && item.photos.length > 0 && (
+                  <View style={{margin: 5, padding: 5}}>
+                    <Text style={styles.title}>Photos</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                      }}>
+                      {item.photos.map((_item: string, index: number) => {
                         return (
                           <FastImage
                             key={index.toString()}
@@ -122,8 +122,9 @@ const ProposalDetail = ({route}: any) => {
                           />
                         );
                       })}
+                    </View>
                   </View>
-                </View>
+                )}
                 <View
                   style={{
                     margin: 5,
@@ -264,16 +265,18 @@ const ProposalDetail = ({route}: any) => {
             />
           </View>
 
-          <View style={styles.textContainer}>
-            <Text
-              style={{
-                fontFamily: fonts.regular,
-                color: '#4F4F4F',
-                fontSize: 16,
-              }}>
-              Photos
-            </Text>
-          </View>
+          {item.photos !== null && item.photos.length > 0 && (
+            <View style={styles.textContainer}>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  color: '#4F4F4F',
+                  fontSize: 16,
+                }}>
+                Photos
+              </Text>
+            </View>
+          )}
 
           {item.photos !== null && item.photos.length > 0 ? (
             <View style={styles.photoContainer}>
@@ -287,30 +290,20 @@ const ProposalDetail = ({route}: any) => {
                 </View>
               ))}
             </View>
-          ) : (
-            <View style={styles.videoInput}>
+          ) : null}
+
+          {item.videos !== null && (
+            <View style={styles.textContainer}>
               <Text
                 style={{
-                  textAlign: 'center',
-                  padding: 10,
                   fontFamily: fonts.regular,
-                  color: colors.grey,
+                  color: '#4F4F4F',
+                  fontSize: 16,
                 }}>
-                No Photos
+                Video
               </Text>
             </View>
           )}
-
-          <View style={styles.textContainer}>
-            <Text
-              style={{
-                fontFamily: fonts.regular,
-                color: '#4F4F4F',
-                fontSize: 16,
-              }}>
-              Video
-            </Text>
-          </View>
 
           {item.videos !== null ? (
             <View style={styles.videoInput}>
@@ -324,28 +317,18 @@ const ProposalDetail = ({route}: any) => {
                 }}
               />
             </View>
-          ) : (
-            <View style={styles.videoInput}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  padding: 10,
-                  fontFamily: fonts.regular,
-                  color: colors.grey,
-                }}>
-                No Video
-              </Text>
-            </View>
+          ) : null}
+
+          {item.portfolio !== null && (
+            <CustomInput
+              label="Portfolio link"
+              placeholder="https://portfolio.link.com"
+              value={item.portfolio}
+              containerStyle={{marginTop: 10, margin: 15}}
+              editable={false}
+            />
           )}
 
-          <CustomInput
-            label="Portfolio link"
-            placeholder="https://portfolio.link.com"
-            value={item.portfolio !== null ? item.portfolio : 'NA'}
-            containerStyle={{marginTop: 10, margin: 15}}
-            editable={false}
-          />
-          {}
           <CustomButton
             title="Chat now"
             onPress={() =>
