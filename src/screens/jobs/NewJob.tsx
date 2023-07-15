@@ -1,143 +1,76 @@
+import React, {useEffect} from 'react';
 import {
   View,
-  Text,
   StyleSheet,
-  Pressable,
-  ScrollView,
-  SafeAreaView,
+  FlatList,
+  ActivityIndicator,
+  Image,
+  Text,
 } from 'react-native';
-import React from 'react';
-import {appstyle, colors, fonts} from '../../theme';
-import FastImage from 'react-native-fast-image';
 
 //icons
-import Entypo from 'react-native-vector-icons/Entypo';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {Divider} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import JobCard from './components/JobCard';
+import {fetchNewJobAndContract} from '../../redux/actions/jobAction';
+import {colors, fonts} from '../../theme';
+import PastJobCard from './components/PastJobCard';
 
 const NewJob = ({}) => {
-  const navigation = useNavigation();
+  const {newjob, loading} = useAppSelector(state => state.job);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchNewJobAndContract(''));
+  }, []);
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        {[0, 1, 2, 3, 4].map(item => (
-          <Pressable
-            onPress={() => navigation.navigate('DetailNewJob')}
-            key={item.toString()}
-            style={[styles.cardContainer, {}]}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <FastImage
-                source={require('../../assets/images/men.png')}
-                resizeMode="cover"
-                style={{width: 50, height: 50, borderRadius: 25}}
-              />
-              <View style={{width: '80%'}}>
-                <Text style={{fontFamily: fonts.semibold, color: colors.black}}>
-                  Java Developer
-                </Text>
-                <Text style={[styles.headertext, {marginTop: 10}]}>
-                  Testing Java
-                </Text>
-                <Text style={styles.text}>Test YourSelf</Text>
-                <Text style={styles.text}>$22222</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}></View>
-              </View>
-            </View>
-
-            <Divider style={{marginTop: 10}} />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                marginTop: 15,
-                margin: 10,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginRight: 20,
-                }}>
-                <AntDesign
-                  name="checkcircle"
-                  size={20}
-                  style={{color: 'green'}}
+    <View style={{flex: 1, backgroundColor: '#f9fbff'}}>
+      <FlatList
+        data={newjob}
+        style={{backgroundColor: colors.white}}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <>
+                <Image
+                  source={require('../../assets/images/noModule/job.png')}
+                  style={styles.emptyImage}
                 />
                 <Text
                   style={{
-                    fontFamily: fonts.medium,
-                    fontSize: 16,
-                    color: 'blue',
-                    marginLeft: 10,
+                    fontFamily: fonts.semibold,
+                    fontSize: 24,
+                    color: '#000F1A',
                   }}>
-                  Accept
+                  No New Job
                 </Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginLeft: 20,
-                }}>
-                <Entypo
-                  name="circle-with-cross"
-                  size={20}
-                  style={{color: 'red'}}
-                />
-                <Text
-                  style={{
-                    fontFamily: fonts.medium,
-                    fontSize: 16,
-                    color: 'red',
-                    marginLeft: 10,
-                  }}
-                  numberOfLines={1}>
-                  Reject
-                </Text>
-              </View>
-            </View>
-          </Pressable>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+              </>
+            )}
+          </View>
+        }
+        renderItem={({item}) => {
+          return <PastJobCard item={item} />;
+        }}
+        keyExtractor={(_, index) => index.toString()}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    ...appstyle.shadow,
-    padding: 20,
-    borderRadius: 15,
-    backgroundColor: 'white',
-    marginTop: 20,
-    margin: 10,
-  },
-  text: {
-    fontFamily: fonts.regular,
-    color: '#1E202B',
-    fontSize: 12,
-    marginTop: 5,
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
   },
-  headertext: {
-    fontFamily: fonts.regular,
-    color: colors.primary,
-    fontSize: 16,
-    justifyContent: 'center',
-  },
-  icon: {
-    right: 2,
+  emptyImage: {
+    width: '100%',
+    height: 300,
+    resizeMode: 'contain',
+    flex: 1,
   },
 });
 

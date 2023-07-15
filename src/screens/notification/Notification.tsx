@@ -7,6 +7,7 @@ import {
   Switch,
   SafeAreaView,
   FlatList,
+  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import notifee from '@notifee/react-native';
@@ -53,97 +54,110 @@ const Notification = ({}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <Title title="Notification" />
-
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          padding: 10,
-          alignItems: 'center',
-          margin: 5,
-        }}>
-        <Text style={{fontSize: 16, fontFamily: fonts.semibold}}>
-          Permissions
-        </Text>
-        <Switch
-          trackColor={{false: '#767577', true: colors.primary}}
-          thumbColor={isEnabled ? colors.white : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={isEnabled}
-          style={{transform: [{scaleX: 0.7}, {scaleY: 0.7}]}}
-        />
-      </View>
-      <FlatList
-        data={notification}
-        renderItem={({item, index}) => {
-          return (
-            <View key={index.toString()} style={{}}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('DrawerNavigation', {
-                    screen: 'ContractNavigator',
-                    params: {
-                      screen: 'ViewContract',
-                      params: {
-                        id: item.render_id,
-                      },
-                    },
-                  })
-                }
-                style={styles.container}>
-                <View
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 12,
-                    backgroundColor: '#d4d9f7',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Ionicons
-                    name="notifications-circle"
-                    size={30}
-                    color={colors.primary}
-                  />
+      {notification && notification.length === 0 ? (
+        <View style={styles.centerContainer}>
+          <Image
+            source={require('../../assets/images/noModule/notification.png')}
+            style={styles.image}
+          />
+          <Text style={styles.noNotificationText}>No Notifications</Text>
+        </View>
+      ) : (
+        <>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              padding: 10,
+              alignItems: 'center',
+              margin: 5,
+            }}>
+            <Text style={{fontSize: 16, fontFamily: fonts.semibold}}>
+              Permissions
+            </Text>
+            <Switch
+              trackColor={{false: '#767577', true: colors.primary}}
+              thumbColor={isEnabled ? colors.white : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={isEnabled}
+              style={{transform: [{scaleX: 0.7}, {scaleY: 0.7}]}}
+            />
+          </View>
+          <FlatList
+            data={notification}
+            renderItem={({item, index}) => {
+              return (
+                <View key={index.toString()} style={{}}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('DrawerNavigation', {
+                        screen: 'ContractNavigator',
+                        params: {
+                          screen: 'ViewContract',
+                          params: {
+                            id: item.render_id,
+                          },
+                        },
+                      })
+                    }
+                    style={styles.container}>
+                    <View
+                      style={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: 12,
+                        backgroundColor: '#d4d9f7',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Ionicons
+                        name="notifications-circle"
+                        size={30}
+                        color={colors.primary}
+                      />
+                    </View>
+                    <View style={{width: '80%'}}>
+                      <Text
+                        style={{
+                          fontFamily: fonts.semibold,
+                          color: '#333333',
+                          fontSize: 14,
+                        }}>
+                        {item.title}
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: fonts.regular,
+                          color: '#4F4F4F',
+                        }}>
+                        {item.desc}
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}>
+                        <Text
+                          style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
+                          {item.sender_name}
+                        </Text>
+                        <Text
+                          style={{fontFamily: fonts.regular, color: '#BDBDBD'}}>
+                          {moment(item.createdAt).format('lll')}
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  <Divider />
                 </View>
-                <View style={{width: '80%'}}>
-                  <Text
-                    style={{
-                      fontFamily: fonts.semibold,
-                      color: '#333333',
-                      fontSize: 14,
-                    }}>
-                    {item.title}
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      color: '#4F4F4F',
-                    }}>
-                    {item.desc}
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{fontFamily: fonts.regular, color: '#4F4F4F'}}>
-                      {item.sender_name}
-                    </Text>
-                    <Text style={{fontFamily: fonts.regular, color: '#BDBDBD'}}>
-                      {moment(item.createdAt).format('lll')}
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <Divider />
-            </View>
-          );
-        }}
-        keyExtractor={(_, index) => index.toString()}
-      />
+              );
+            }}
+            keyExtractor={(_, index) => index.toString()}
+          />
+        </>
+      )}
     </SafeAreaView>
   );
 };
@@ -155,6 +169,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+  },
+  noNotificationText: {
+    marginTop: 20,
+    fontFamily: fonts.semibold,
+    fontSize: 24,
+    color: '#000F1A',
   },
 });
 

@@ -264,8 +264,8 @@ const IndivisualRegister = ({}) => {
                   error={errors.fullName}
                 />
 
-                <View>
-                  <Input
+                <View style={{marginTop: 20}}>
+                  <CustomInput
                     onChangeText={(text: string) => {
                       handleChange('email')(text);
                     }}
@@ -276,6 +276,7 @@ const IndivisualRegister = ({}) => {
                     error={errors.email}
                     autoComplete="email"
                     autoCapitalize="none"
+                    containerStyle={{}}
                   />
                   <Pressable
                     style={{
@@ -287,7 +288,7 @@ const IndivisualRegister = ({}) => {
                   </Pressable>
                 </View>
 
-                <View style={{margin: 2}}>
+                <View style={{margin: 2, marginTop: 20}}>
                   <Text
                     style={{
                       fontFamily: fonts.regular,

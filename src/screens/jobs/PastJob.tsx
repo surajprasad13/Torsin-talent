@@ -1,11 +1,18 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, FlatList, ActivityIndicator} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+  Image,
+  Text,
+} from 'react-native';
 
 //icons
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import JobCard from './components/JobCard';
 import {fetchPastJobAndContract} from '../../redux/actions/jobAction';
-import {colors} from '../../theme';
+import {colors, fonts} from '../../theme';
 import PastJobCard from './components/PastJobCard';
 
 const PastJob = ({}) => {
@@ -23,9 +30,25 @@ const PastJob = ({}) => {
         data={pastjob}
         style={{backgroundColor: colors.white}}
         ListEmptyComponent={
-          <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            {loading && <ActivityIndicator />}
+          <View style={styles.emptyContainer}>
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <>
+                <Image
+                  source={require('../../assets/images/noModule/job.png')}
+                  style={styles.emptyImage}
+                />
+                <Text
+                  style={{
+                    fontFamily: fonts.semibold,
+                    fontSize: 24,
+                    color: '#000F1A',
+                  }}>
+                  No Past Job
+                </Text>
+              </>
+            )}
           </View>
         }
         renderItem={({item}) => {
@@ -37,6 +60,18 @@ const PastJob = ({}) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyImage: {
+    width: '100%',
+    height: 300,
+    resizeMode: 'contain',
+    flex: 1,
+  },
+});
 
 export default PastJob;

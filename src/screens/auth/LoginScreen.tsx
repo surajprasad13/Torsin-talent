@@ -58,7 +58,12 @@ const LoginScreen = ({}) => {
   const dispatch = useAppDispatch();
 
   const onSubmit = (values: any) => {
-    dispatch(userLogin(values));
+    const isNumber = /^\d+$/.test(values.email);
+    if (isNumber) {
+      dispatch(userLogin({mobileNo: values.email, password: values.password}));
+    } else {
+      dispatch(userLogin(values));
+    }
   };
 
   useEffect(() => {

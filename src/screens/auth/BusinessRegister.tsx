@@ -78,6 +78,9 @@ const BusinessRegister = ({}) => {
     };
 
     dispatch(registerIndivisual(data));
+    navigation.navigate('CreatePassword', {
+      item: JSON.stringify(data),
+    });
   };
 
   const [image, setImage] = useState('');
