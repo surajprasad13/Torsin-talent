@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {Divider} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 
 // icons
@@ -9,7 +10,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // helpers
 import {colors, fonts, appstyle} from '../../../theme';
 import {NotificationInterface} from '../../../types/notification';
-import {useNavigation} from '@react-navigation/native';
 import {DrawerScreenParamaList} from '../../../routes/RouteType';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 

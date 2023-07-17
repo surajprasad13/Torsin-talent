@@ -22,7 +22,7 @@ const Rejected = () => {
   const [filtered, setFiltered] = useState(proposalStatus);
 
   useEffect(() => {
-    dispatch(getProposalStatus(''));
+    dispatch(getProposalStatus());
   }, []);
 
   return (
@@ -34,7 +34,7 @@ const Rejected = () => {
               flex: 1,
               minHeight: height * 0.7,
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}>
             {loading ? (
               <ActivityIndicator />

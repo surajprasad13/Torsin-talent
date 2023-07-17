@@ -57,15 +57,10 @@ const ViewContract = ({route}: any) => {
     dispatch(getContractDetail(id));
   }, []);
 
-<<<<<<< Updated upstream
-  console.log(contractDetail, 'success');
-=======
   useEffect(() => {
     dispatch(getAdminPercentage(''));
   }, []);
 
-  console.log(contractDetail);
->>>>>>> Stashed changes
 
   const onPressAccept = () => {
     dispatch(
@@ -113,13 +108,7 @@ const ViewContract = ({route}: any) => {
 
       {loading && <ActivityIndicator />}
 
-<<<<<<< Updated upstream
       <ScrollView style={{}}>
-=======
-      <ScrollView>
-        {/* Section 1 */}
-
->>>>>>> Stashed changes
         <View style={{margin: 10, padding: 5}}>
           <CustomInput
             value={contract?.talentEmail}
@@ -128,11 +117,7 @@ const ViewContract = ({route}: any) => {
           />
 
           <CustomInput
-<<<<<<< Updated upstream
             value={contract?.jobName}
-=======
-            value={contractDetail.job_details[0].jobName}
->>>>>>> Stashed changes
             label="Project Name"
             editable={false}
             containerStyle={{marginTop: 15}}
@@ -180,7 +165,6 @@ const ViewContract = ({route}: any) => {
 
           {contract?.contractType == 2 && (
             <View style={{}}>
-<<<<<<< Updated upstream
               <CustomInput
                 label="Duration"
                 editable={false}
@@ -198,44 +182,13 @@ const ViewContract = ({route}: any) => {
               />
 
               <CustomInput
-=======
-              <View style={{}}>
-                <CustomInput
-                  label="Hourly Rate"
-                  editable={false}
-                  value={'$' + contractDetail.contract_details[0].amount}
-                  containerStyle={{
-                    marginTop: 10,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: '#333333',
-                    padding: 10,
-                    fontFamily: fonts.regular,
-                    position: 'absolute',
-                    right: 10,
-                    top: 45,
-                  }}>
-                  /hr
-                </Text>
-              </View>
-
-              <CustomInput
->>>>>>> Stashed changes
                 label={`${adminPercentage}% Torsin Fee`}
                 value={String(
                   '$' +
                     interestAmount(
-<<<<<<< Updated upstream
                       contract?.amount,
                       contract?.timeDuration,
                       contract?.torsinRate,
-=======
-                      contractDetail?.contract_details[0].amount,
-                      contractDetail?.contract_details[0].time_duration,
-                      contractDetail?.contract_details[0].torsin_rate,
->>>>>>> Stashed changes
                     ),
                 )}
                 editable={false}
@@ -245,11 +198,7 @@ const ViewContract = ({route}: any) => {
               <CustomInput
                 label="Grand Total"
                 editable={false}
-<<<<<<< Updated upstream
                 value={'$' + contract?.receivedAmount}
-=======
-                value={'$' + contractDetail.contract_details[0].recived_amount}
->>>>>>> Stashed changes
                 containerStyle={{marginTop: 15}}
               />
 
@@ -329,11 +278,7 @@ const ViewContract = ({route}: any) => {
             <CustomInput
               placeholder="$"
               label="Amount"
-<<<<<<< Updated upstream
               value={String(contract?.amount)}
-=======
-              value={'$' + contractDetail.contract_details[0].amount}
->>>>>>> Stashed changes
             />
 
             {contract?.ismilestone == 1 && (
@@ -406,7 +351,6 @@ const ViewContract = ({route}: any) => {
                       justifyContent: 'space-between',
                       alignItems: 'center',
                     }}>
-<<<<<<< Updated upstream
                     <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
                       Milestones
                     </Text>
@@ -425,35 +369,6 @@ const ViewContract = ({route}: any) => {
                         size={20}
                       />
                     </Pressable>
-=======
-                    <CustomInput
-                      label="Milestone name"
-                      value={a.name}
-                      editable={false}
-                      containerStyle={{marginTop: 10}}
-                    />
-
-                    <CustomInput
-                      label="Start Date"
-                      editable={false}
-                      value={a.start_date}
-                      containerStyle={{marginTop: 10}}
-                    />
-
-                    <CustomInput
-                      label="End Date"
-                      value={a.end_date}
-                      editable={false}
-                      containerStyle={{marginTop: 10}}
-                    />
-
-                    <CustomInput
-                      label="Milestone Price"
-                      value={`$ ${a.price}`}
-                      editable={false}
-                      containerStyle={{marginTop: 10}}
-                    />
->>>>>>> Stashed changes
                   </View>
 
                   {a.active && (

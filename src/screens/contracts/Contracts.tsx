@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {SafeAreaView, View, Text} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
@@ -24,11 +24,6 @@ const Contracts: FC = ({}) => {
   const {} = useAppSelector(state => state.auth);
 
   const {} = useAppSelector(state => state.user);
-
-  useEffect(() => {
-    const listener = navigation.addListener('focus', () => {});
-    return listener;
-  }, [navigation]);
 
   return (
     <>
