@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
   FlatList,
+  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -18,6 +19,8 @@ import {getAccepted} from '../../redux/actions/userAction';
 import moment from 'moment';
 import {ChatMessageList} from '../../types/ChatMessage';
 import {Title} from '../../components';
+
+const {height} = Dimensions.get('window');
 
 const Chat = ({}) => {
   const navigation = useNavigation();
@@ -82,7 +85,36 @@ const Chat = ({}) => {
       <FlatList
         data={acceptList}
         renderItem={renderItem}
-        ListEmptyComponent={<View>{loading && <ActivityIndicator />}</View>}
+        ListEmptyComponent={
+          <View
+            style={{
+              flex: 1,
+              minHeight: height * 0.7,
+              justifyContent: 'center',
+            }}>
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <>
+                <FastImage
+                  source={require('../../assets/images/noModule/chat.png')}
+                  style={styles.emptyImage}
+                  resizeMode="contain"
+                />
+                <Text
+                  style={{
+                    fontFamily: fonts.semibold,
+                    fontSize: 20,
+                    color: '#000F1A',
+                    textAlign: 'center',
+                    marginTop: 10,
+                  }}>
+                  No chats avilable!
+                </Text>
+              </>
+            )}
+          </View>
+        }
         keyExtractor={(_, index) => index.toString()}
       />
     </SafeAreaView>
@@ -120,6 +152,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     color: '#BDBDBD',
     textAlign: 'right',
+  },
+  emptyImage: {
+    width: 'auto',
+    height: 200,
+    resizeMode: 'contain',
   },
 });
 

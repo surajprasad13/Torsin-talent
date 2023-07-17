@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
+  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {CustomButton, CustomInput, Title} from '../../components';
@@ -103,45 +104,51 @@ const PaymentMethod = () => {
             {loading ? (
               <ActivityIndicator />
             ) : (
-              <CustomButton
-                disabled
-                title="Add Bank"
-                onPress={() => {
-                  navigation.navigate('WebScreen', {
-                    item: accountOnboarding?.url,
-                  });
-                }}
-              />
-            )}
-            <View
-              style={{
-                ...appstyle.shadow,
-                padding: 10,
-                borderRadius: 12,
-                marginTop: 40,
-                borderWidth: 0.2,
-                borderColor: colors.grey,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <AntDesign
-                name="exclamationcircleo"
-                size={50}
-                color="#6180F4"
-                style={{padding: 10}}
-              />
+              <>
+                <CustomButton
+                  disabled
+                  title="Add Bank"
+                  onPress={() => {
+                    navigation.navigate('WebScreen', {
+                      item: accountOnboarding?.url,
+                    });
+                  }}
+                />
+                <View
+                  style={{
+                    ...appstyle.shadow,
+                    padding: 10,
+                    borderRadius: 12,
+                    marginTop: 40,
+                    borderWidth: 0.2,
+                    borderColor: colors.grey,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <AntDesign
+                    name="exclamationcircleo"
+                    size={50}
+                    color="#6180F4"
+                    style={{padding: 10}}
+                  />
 
-              <Text
-                style={{
-                  color: colors.black,
-                  padding: 10,
-                  width: '85%',
-                  fontFamily: fonts.regular,
-                  textAlign: 'center',
-                }}>
-                Click on the button to proceed to Stripe payment source
-              </Text>
-            </View>
+                  <Text
+                    style={{
+                      color: colors.black,
+                      padding: 10,
+                      width: '85%',
+                      fontFamily: fonts.regular,
+                      textAlign: 'center',
+                    }}>
+                    Click on the button to proceed to Stripe payment source
+                  </Text>
+                </View>
+                <Image
+                  source={require('../../assets/images/noModule/paymentmethod.png')}
+                  style={styles.noPaymentImage}
+                />
+              </>
+            )}
           </View>
         )}
       </ScrollView>
@@ -153,6 +160,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9fbff',
+  },
+  noPaymentImage: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginTop: 40,
   },
 });
 

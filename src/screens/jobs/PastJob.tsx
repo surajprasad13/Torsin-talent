@@ -38,6 +38,7 @@ const PastJob = ({}) => {
               flex: 1,
               minHeight: height * 0.7,
               justifyContent: 'center',
+              alignItems: 'center',
             }}>
             {loading ? (
               <ActivityIndicator />
@@ -72,7 +73,7 @@ const PastJob = ({}) => {
 
 const styles = StyleSheet.create({
   emptyImage: {
-    width: '100%',
+    width: '70%',
     height: 250,
     resizeMode: 'contain',
   },
