@@ -40,7 +40,7 @@ const PdfScreen = ({route}: any) => {
       .then(res => {
         if (Platform.OS === 'ios') {
           const filePath = res.path();
-          console.log('Sadfads', filePath);
+
           let options = {
             type: 'application/pdf',
             url: filePath,

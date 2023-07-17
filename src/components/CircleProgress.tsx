@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {View, Image, Text} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import {colors, fonts} from '../theme';
 
-const CircleProgress = ({image, progress}) => {
+interface CircleProgressProp {
+  image: string;
+  progress: number;
+}
+
+const CircleProgress: FC<CircleProgressProp> = ({image, progress}) => {
   return (
     <View style={{top: 10}}>
       <AnimatedCircularProgress
@@ -38,11 +44,9 @@ const CircleProgress = ({image, progress}) => {
         <Text
           style={{
             textAlign: 'center',
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '400',
+            fontFamily: fonts.regular,
             fontSize: 10,
-            color: '#ffffff',
+            color: colors.white,
           }}>
           {progress}%
         </Text>

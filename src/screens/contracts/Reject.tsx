@@ -29,7 +29,7 @@ const Reject = () => {
 
   return (
     <FlatList
-      data={contracts.filter(item => item.status == 2)}
+      data={contracts.rejected}
       ListEmptyComponent={
         <View style={styles.emptyContainer}>
           {loading ? (

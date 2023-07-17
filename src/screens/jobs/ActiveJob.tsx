@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {
   View,
   FlatList,
@@ -20,7 +20,7 @@ import JobCard from './components/JobCard';
 
 const {height} = Dimensions.get('window');
 
-const ActiveJob = ({}) => {
+const ActiveJob: FC = ({}) => {
   const dispatch = useAppDispatch();
   const {jobs, loading} = useAppSelector(state => state.job);
 

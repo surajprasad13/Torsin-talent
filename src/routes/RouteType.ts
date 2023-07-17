@@ -1,5 +1,8 @@
 import type {CompositeScreenProps} from '@react-navigation/native';
-import type {StackScreenProps} from '@react-navigation/stack';
+import type {
+  StackNavigationProp,
+  StackScreenProps,
+} from '@react-navigation/stack';
 import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 
 export type RootStackParamList = {
@@ -68,7 +71,7 @@ export type DrawerScreenParamaList = {
   Notifications: undefined;
   ProposalNavigator: undefined;
   MyRatings: undefined;
-  ContractNavigator: undefined;
+  ContractNavigator: StackNavigationProp<ContractsScreenParamList>;
   MyServices: undefined;
   JobNavigator: undefined;
   PaymentNavigator: undefined;

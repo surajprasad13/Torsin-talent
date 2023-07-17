@@ -70,7 +70,6 @@ const uploadMedia = async ({type}: {type: string}) => {
       return url.body.postResponse.location;
     }
   } catch (error) {
-    console.log('Error in video upload, ', error);
     return '';
   }
 };

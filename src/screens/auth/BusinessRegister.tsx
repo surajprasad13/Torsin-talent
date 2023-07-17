@@ -35,7 +35,6 @@ import ProFile from '../../components/Profile';
 
 // redux
 import {RootState} from '../../redux';
-import {registerIndivisual} from '../../redux/actions/authAction';
 import {CustomButton} from '../../components';
 
 import {uploadFileToS3} from '../../services/s3';
@@ -63,7 +62,7 @@ const BusinessRegister = ({}) => {
 
   const [profileImage, setProfileImage] = useState('');
   const [formattedValue, setFormattedValue] = useState('');
-  const phoneInput = useRef(null);
+  const phoneInput = useRef<any | null>(null);
 
   const locales = getLocales();
 

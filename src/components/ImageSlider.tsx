@@ -8,8 +8,6 @@ import {
   Dimensions,
 } from 'react-native';
 
-// icons
-
 // helpers
 import {colors, fonts} from '../theme';
 
@@ -26,30 +24,18 @@ const {width} = Dimensions.get('window');
 
 const ImageSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<any | null>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const interval = setInterval(() => {
       const newIndex = (currentIndex + 1) % images.length;
       setCurrentIndex(newIndex);
-      scrollRef.current?.scrollTo({x: newIndex * width - 5, animated: true});
+      scrollRef.current?.scrollTo({x: width - newIndex, animated: true});
     }, 5000);
 
     return () => clearInterval(interval);
   }, [currentIndex]);
-
-  const handleNextImage = () => {
-    const newIndex = (currentIndex + 1) % images.length;
-    setCurrentIndex(newIndex);
-    scrollRef.current?.scrollTo({x: newIndex * width - 5, animated: true});
-  };
-
-  const handlePreviousImage = () => {
-    const newIndex = (currentIndex - 1 + images.length) % images.length;
-    setCurrentIndex(newIndex);
-    scrollRef.current?.scrollTo({x: newIndex * width - 5, animated: true});
-  };
 
   return (
     <ScrollView
@@ -62,12 +48,12 @@ const ImageSlider = () => {
       })}
       scrollEventThrottle={16}>
       {images.map((image, index) => (
-        <View key={index.toString()} style={{width: width - 5, margin: 5}}>
+        <View key={index.toString()} style={{width}}>
           <ImageBackground
             key={index}
             source={{uri: image}}
             resizeMode="cover"
-            style={{width: '100%', height: 200}}
+            style={{width: 'auto', height: 200, margin: 5}}
             imageStyle={{borderRadius: 10}}>
             <Text
               style={{

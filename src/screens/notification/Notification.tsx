@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -8,12 +9,9 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import {} from '@react-navigation/native';
 import notifee from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import database from '@react-native-firebase/database';
-
-//icons
 
 // helpers
 import {colors, fonts} from '../../theme';
@@ -43,15 +41,16 @@ const Notification = ({}) => {
   };
 
   useEffect(() => {
-    dispatch(fetchNotification(''));
+    dispatch(fetchNotification());
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
+    <SafeAreaView style={{backgroundColor: '#f9fbff', flex: 1}}>
       <Title title="Notification" />
 
       <FlatList
         data={notification}
+        style={{flex: 1}}
         ListHeaderComponent={
           <View>
             {notification && notification.length > 0 && (
@@ -90,7 +89,6 @@ const Notification = ({}) => {
         renderItem={({item}) => {
           return <NotificationCard item={item} />;
         }}
-        contentContainerStyle={{flex: 1}}
         keyExtractor={(_, index) => index.toString()}
       />
     </SafeAreaView>

@@ -11,7 +11,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {} from 'react-native-paper';
+import {StackNavigationProp} from '@react-navigation/stack';
 import messaging from '@react-native-firebase/messaging';
 import database from '@react-native-firebase/database';
 
@@ -22,20 +22,23 @@ import Feather from 'react-native-vector-icons/Feather';
 // components
 import ImageSlider from '../../components/ImageSlider';
 import CircleProgress from '../../components/CircleProgress';
-import {colors, fonts} from '../../theme';
+import {appstyle, colors, fonts} from '../../theme';
 import ExpertiseCard from './components/ExpertiseCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {profileDetail, userUpdate} from '../../redux/actions/authAction';
 import {jobCorrespondSkill} from '../../redux/actions/userAction';
+import {HomeScreenParamList} from '../../routes/RouteType';
 
 const {} = Dimensions.get('window');
+
+type NavigationProp = StackNavigationProp<HomeScreenParamList>;
 
 const HomeScreen = ({}) => {
   const dispatch = useAppDispatch();
   const {userInfo, userToken} = useAppSelector(state => state.auth);
   const {correspond, loading} = useAppSelector(state => state.user);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
 
   const setToken = async () => {
     const token = await messaging().getToken();
@@ -82,14 +85,8 @@ const HomeScreen = ({}) => {
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={onRefresh} />
         }
-        style={{padding: 10}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: 10,
-            justifyContent: 'space-between',
-          }}>
+        style={{}}>
+        <View style={[appstyle.rowBetween, {padding: 10}]}>
           <TouchableOpacity
             onPress={() => {
               //@ts-ignore
@@ -133,7 +130,8 @@ const HomeScreen = ({}) => {
             padding: 15,
             justifyContent: 'space-between',
           }}>
-          <CircleProgress image={userInfo?.profileImage} />
+          <CircleProgress image={userInfo?.profileImage ?? ''} progress={100} />
+
           <View style={{width: '70%'}}>
             <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
               {userInfo?.fullName} Profile
@@ -156,9 +154,7 @@ const HomeScreen = ({}) => {
           </View>
         </View>
 
-        <View style={{top: 8}}>
-          <ImageSlider />
-        </View>
+        <ImageSlider />
 
         <View
           style={{

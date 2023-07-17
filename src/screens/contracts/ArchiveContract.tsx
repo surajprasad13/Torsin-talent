@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 
 //icons
@@ -14,7 +14,7 @@ import {getContract} from '../../redux/actions/userAction';
 
 const {height} = Dimensions.get('window');
 
-const ArchiveContract = () => {
+const ArchiveContract: FC = () => {
   const {loading, contracts} = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
 
@@ -24,7 +24,7 @@ const ArchiveContract = () => {
 
   return (
     <FlatList
-      data={contracts.filter(item => item.status == 3)}
+      data={contracts.archived}
       ListEmptyComponent={
         <View style={styles.emptyContainer}>
           {loading ? (

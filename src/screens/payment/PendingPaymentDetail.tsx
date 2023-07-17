@@ -41,7 +41,7 @@ const PendingPayment = () => {
             <Feather name="arrow-left" size={20} />
           </Pressable>
           <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-            Active Job details
+            Active Job Details
           </Text>
         </View>
         <View style={styles.cardContainer}>

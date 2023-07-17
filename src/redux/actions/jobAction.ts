@@ -23,7 +23,6 @@ const fetchPastJobAndContract = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/pastJobandContract`);
-      console.log(data);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -40,7 +39,6 @@ const fetchNewJobAndContract = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/newJobandContract`);
-      console.log(data);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {

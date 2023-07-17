@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {FC, useEffect} from 'react';
 import {
   View,
   Text,
@@ -15,13 +16,12 @@ import {fonts} from '../../theme';
 
 const {height} = Dimensions.get('window');
 
-const Accepted = () => {
+const Accepted: FC = () => {
   const dispatch = useAppDispatch();
   const {proposalStatus, loading} = useAppSelector(state => state.user);
-  const [filtered, setFiltered] = useState(proposalStatus);
 
   useEffect(() => {
-    dispatch(getProposalStatus(''));
+    dispatch(getProposalStatus());
   }, []);
 
   return (
@@ -57,7 +57,7 @@ const Accepted = () => {
             )}
           </View>
         }
-        data={filtered.filter(_item => _item.proposalStatus == 2)}
+        data={proposalStatus.filter(_item => _item.proposalStatus == 2)}
         renderItem={({item, index}) => {
           return <ProposalStatus item={item} key={index} />;
         }}
