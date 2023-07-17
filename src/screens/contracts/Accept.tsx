@@ -27,6 +27,8 @@ const Accept = () => {
     dispatch(getContract(1));
   }, []);
 
+  console.log(contracts);
+
   return (
     <FlatList
       data={contracts}

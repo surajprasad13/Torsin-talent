@@ -50,10 +50,12 @@ const ViewContract = ({route}: any) => {
     dispatch(getContractDetail(id));
   }, []);
 
+  console.log(contractDetail, 'success');
+
   const onPressAccept = () => {
     dispatch(
       updateContract({
-        id: contractDetail.contract_details[0].contract_id,
+        id: contractDetail.contractDetails.contractId,
         inputs: {
           status: 1,
         },
@@ -65,7 +67,7 @@ const ViewContract = ({route}: any) => {
   const onPressReject = () => {
     dispatch(
       updateContract({
-        id: contractDetail.contract_details[0].contract_id,
+        id: contractDetail.contractDetails.contractId,
         inputs: {
           status: 2,
         },
@@ -101,14 +103,14 @@ const ViewContract = ({route}: any) => {
 
         <View style={{margin: 10, padding: 5, backgroundColor: 'white'}}>
           <CustomInput
-            value={contractDetail.talent_details[0].email}
+            value={contractDetail.talentDtails.email}
             label="Talent-email-address"
             editable={false}
           />
-          <Text>{contractDetail.talent_details.email}</Text>
+          <Text>{contractDetail.talentDetails.email}</Text>
           <View style={{marginTop: 15}}>
             <CustomInput
-              value={contractDetail.job_details[0].jobName}
+              value={contractDetail.jobDetails.jobName}
               label="Project Name"
               editable={false}
             />
@@ -139,16 +141,14 @@ const ViewContract = ({route}: any) => {
                 placeholderTextColor="#333333"
                 maxLength={500}
                 style={{padding: 15}}
-                value={contractDetail.contract_details[0].desc}
+                value={contractDetail.contractDetails.description}
                 editable={false}
               />
             </View>
 
             <CustomInput
               placeholder=""
-              value={
-                contractType[contractDetail.contract_details[0].contract_type]
-              }
+              value={contractType[contractDetail.contractDetails.contractType]}
               label="Contract Type"
               editable={false}
               containerStyle={{marginTop: 15}}
@@ -156,7 +156,7 @@ const ViewContract = ({route}: any) => {
             <Divider style={{marginTop: 10}} />
           </View>
 
-          {contractDetail.contract_details[0].contract_type == 2 && (
+          {contractDetail.contractDetails.contractType == 2 && (
             <View style={{}}>
               <View style={{marginTop: 15}}>
                 <Text
@@ -183,7 +183,7 @@ const ViewContract = ({route}: any) => {
                     placeholderTextColor="#333333"
                     style={{}}
                     editable={false}
-                    value={contractDetail.contract_details[0].amount}
+                    value={contractDetail.contractDetails.amount}
                   />
                   <Text
                     style={{
@@ -199,14 +199,14 @@ const ViewContract = ({route}: any) => {
               </View>
               <CustomInput
                 label="5% Torsin Fee"
-                value={contractDetail.contract_details[0].torsin_rate}
+                value={contractDetail.contractDetails.torsinRate}
                 editable={false}
                 containerStyle={{marginTop: 15}}
               />
               <CustomInput
                 label="Grand Total"
                 editable={false}
-                value={contractDetail.contract_details[0].recived_amount}
+                value={contractDetail.contractDetails.receivedAmount}
                 containerStyle={{marginTop: 15}}
               />
               <Divider style={{marginTop: 15}} />
@@ -227,12 +227,12 @@ const ViewContract = ({route}: any) => {
                   }}>
                   <FontAwesome
                     name={
-                      contractDetail.contract_details[0].end_date == 1
+                      contractDetail.contractDetails.endDate == 1
                         ? 'dot-circle-o'
                         : 'circle-o'
                     }
                     color={
-                      contractDetail.contract_details[0].end_date == 1
+                      contractDetail.contractDetails.endDate == 1
                         ? colors.primary
                         : '#E0E0E0'
                     }
@@ -257,12 +257,12 @@ const ViewContract = ({route}: any) => {
                   }}>
                   <FontAwesome
                     name={
-                      contractDetail.contract_details[0].end_date == 2
+                      contractDetail.contractDetails.endDate == 2
                         ? 'dot-circle-o'
                         : 'circle-o'
                     }
                     color={
-                      contractDetail.contract_details[0].end_date == 2
+                      contractDetail.contractDetails.endDate == 2
                         ? colors.primary
                         : '#E0E0E0'
                     }
@@ -281,11 +281,11 @@ const ViewContract = ({route}: any) => {
                 </Pressable>
               </View>
 
-              {contractDetail.contract_details[0].end_date == 2 && (
+              {contractDetail.contractDetails.endDate == 2 && (
                 <>
                   <CustomInput
                     label="Specified Date"
-                    value={contractDetail.contract_details[0].specific_date}
+                    value={contractDetail.contractDetails.specificDate}
                     containerStyle={{marginTop: 10}}
                   />
                   <Divider style={{marginTop: 10}} />
@@ -295,15 +295,15 @@ const ViewContract = ({route}: any) => {
           )}
         </View>
 
-        {contractDetail.contract_details[0].contract_type == 1 && (
+        {contractDetail.contractDetails.contractType == 1 && (
           <View style={{margin: 10, padding: 5, backgroundColor: 'white'}}>
             <CustomInput
               placeholder="$"
               label="Amount"
-              value={contractDetail.contract_details[0].amount}
+              value={contractDetail.contractDetails.amount}
             />
 
-            {contractDetail.contract_details[0].is_milestone == 1 && (
+            {contractDetail.contractDetails.ismilestone == 1 && (
               <View
                 style={{
                   borderWidth: 0.5,
@@ -327,7 +327,7 @@ const ViewContract = ({route}: any) => {
                       color: '#828282',
                       fontFamily: fonts.regular,
                     }}>
-                    $ {contractDetail.contract_details[0].amount}
+                    $ {contractDetail.contractDetails.amount}
                   </Text>
                 </View>
                 <View style={styles.innerFix}>
@@ -344,7 +344,7 @@ const ViewContract = ({route}: any) => {
                       color: '#828282',
                       fontFamily: fonts.regular,
                     }}>
-                    $ {contractDetail.contract_details[0].torsin_rate}
+                    $ {contractDetail.contractDetails.torsinRate}
                   </Text>
                 </View>
                 <View style={styles.innerFix}>
@@ -357,15 +357,15 @@ const ViewContract = ({route}: any) => {
                       fontSize: 16,
                       fontFamily: fonts.semibold,
                     }}>
-                    $ {contractDetail.contract_details[0].recived_amount}
+                    $ {contractDetail.contractDetails.receivedAmount}
                   </Text>
                 </View>
               </View>
             )}
 
-            {contractDetail.contract_details[0].is_milestone == 2 &&
-              contractDetail.milestone.length > 0 &&
-              contractDetail.milestone.map((a, b) => (
+            {contractDetail.contractDetails.ismilestone == 2 &&
+              contractDetail.milestoneData.length > 0 &&
+              contractDetail.milestoneData.map((a, b) => (
                 <View key={b.toString()} style={{marginTop: 10}}>
                   <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
                     Milestones
@@ -391,13 +391,13 @@ const ViewContract = ({route}: any) => {
                       label="Start Date"
                       placeholder=""
                       editable={false}
-                      value={a.start_date}
+                      value={a.startDate}
                       containerStyle={{marginTop: 10}}
                     />
 
                     <CustomInput
                       label="End Date"
-                      value={a.end_date}
+                      value={a.endDate}
                       placeholder=""
                       editable={false}
                       containerStyle={{marginTop: 10}}
@@ -416,7 +416,7 @@ const ViewContract = ({route}: any) => {
           </View>
         )}
 
-        {contractDetail.contract_details[0].is_milestone == 2 && (
+        {contractDetail.contractDetails.ismilestone == 2 && (
           <View style={{margin: 10, padding: 5, backgroundColor: 'white'}}>
             <View
               style={{
@@ -441,7 +441,7 @@ const ViewContract = ({route}: any) => {
                     color: '#828282',
                     fontFamily: fonts.regular,
                   }}>
-                  $ {contractDetail.contract_details[0].amount}
+                  $ {contractDetail.contractDetails.amount}
                 </Text>
               </View>
               <View style={styles.innerFix}>
@@ -458,7 +458,7 @@ const ViewContract = ({route}: any) => {
                     color: '#828282',
                     fontFamily: fonts.regular,
                   }}>
-                  $ {contractDetail.contract_details[0].torsin_rate}
+                  $ {contractDetail.contractDetails.torsinRate}
                 </Text>
               </View>
               <View style={styles.innerFix}>
@@ -471,14 +471,14 @@ const ViewContract = ({route}: any) => {
                     fontSize: 16,
                     fontFamily: fonts.semibold,
                   }}>
-                  $ {contractDetail.contract_details[0].recived_amount}
+                  $ {contractDetail.contractDetails.receivedAmount}
                 </Text>
               </View>
             </View>
           </View>
         )}
 
-        {contractDetail.contract_details[0].status == 0 && (
+        {contractDetail.contractDetails.status == 0 && (
           <View
             style={{
               flexDirection: 'row',

@@ -198,7 +198,7 @@ const AddJobDetails = ({route}: any) => {
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-        <Title title="Add Proposal Detail" />
+        <Title title="Add Proposal Details" />
 
         <ScrollView>
           <View style={{marginTop: 0, margin: 15}}>
@@ -208,7 +208,7 @@ const AddJobDetails = ({route}: any) => {
                 color: '#4F4F4F',
                 fontSize: 16,
               }}>
-              Message
+              Proposal
             </Text>
 
             <TextInput

@@ -64,13 +64,6 @@ const ProposalDetail = ({route}: any) => {
           <View style={styles.container}>
             {isExpanded ? (
               <Animated.View>
-                <FastImage
-                  source={{
-                    uri: item.images[0],
-                  }}
-                  style={styles.image}
-                  resizeMode="cover"
-                />
                 <View style={{padding: 10}}>
                   <Text style={styles.title}>{item.jobName}</Text>
                   <View style={{marginTop: 10}}>

@@ -5,8 +5,11 @@ import {Divider} from 'react-native-paper';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {colors, fonts} from '../../../theme';
+import {useNavigation} from '@react-navigation/native';
 
 const NotificationCard = ({item}: any) => {
+  const navigation = useNavigation();
+
   return (
     <View style={{}}>
       <TouchableOpacity style={styles.container}>
