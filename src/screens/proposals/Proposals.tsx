@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -17,22 +17,22 @@ import MyTabBar from '../../components/MyTabBar';
 
 const Tab = createMaterialTopTabNavigator();
 
-const Proposals = ({}) => {
+const Proposals: FC = ({}) => {
   const navigation = useNavigation();
 
   const dispatch = useAppDispatch();
-  const {userToken} = useAppSelector(state => state.auth);
+  const {} = useAppSelector(state => state.auth);
   const {} = useAppSelector(state => state.user);
 
   useEffect(() => {
-    dispatch(getProposalStatus(''));
+    dispatch(getProposalStatus());
   }, []);
 
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
-      dispatch(getProposalStatus({userToken}));
+      dispatch(getProposalStatus());
     });
-    return listener;
+    return () => listener;
   }, []);
 
   return (

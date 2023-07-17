@@ -165,7 +165,7 @@ const getAccepted = createAsyncThunk(
 
 const getProposalStatus = createAsyncThunk(
   'user/proposal/status',
-  async (value: any, {rejectWithValue}) => {
+  async (_, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/proposal/status`);
       return data;
@@ -186,7 +186,6 @@ const getContract = createAsyncThunk(
       const {data} = await api.get(
         `talent/talent_contract_list/?status=${value}`,
       );
-
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -235,7 +234,7 @@ const updateContract = createAsyncThunk(
 
 const fetchNotification = createAsyncThunk(
   'fetch_notification/',
-  async (value: any, {rejectWithValue}) => {
+  async (_, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/get_notification_list/`);
       return data;
@@ -290,7 +289,7 @@ const getRating = createAsyncThunk(
       }
     }
   },
-)
+);
 
 const createRating = createAsyncThunk(
   'https://torsin-admin.apponward.com/v1/api/common/rating/create',
@@ -300,6 +299,22 @@ const createRating = createAsyncThunk(
         `https://torsin-admin.apponward.com/v1/api/common/rating/create`,
         value,
       );
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getAdminPercentage = createAsyncThunk(
+  'admin/percentage',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`admin/percentage`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -327,7 +342,8 @@ export {
   updateContract,
   fetchNotification,
   getRating,
-  createRating
+  createRating,
+  getAdminPercentage,
 };
 
 export default {};

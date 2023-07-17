@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {SafeAreaView, View, Text} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
@@ -7,19 +7,19 @@ import Feather from 'react-native-vector-icons/Feather';
 
 // helpers
 import {useNavigation} from '@react-navigation/native';
-import {useAppDispatch, useAppSelector} from '../../hooks';
+import {useAppSelector} from '../../hooks';
 
 import Accept from './Accept';
 import Reject from './Reject';
 import MyTabBar from '../../components/MyTabBar';
 
 import ArchiveContract from './ArchiveContract';
+import {appstyle} from '../../theme';
 
 const Tab = createMaterialTopTabNavigator();
 
-const Contracts = ({}) => {
+const Contracts: FC = ({}) => {
   const navigation = useNavigation();
-  const dispatch = useAppDispatch();
 
   const {} = useAppSelector(state => state.auth);
 
@@ -34,21 +34,15 @@ const Contracts = ({}) => {
     <>
       <SafeAreaView style={{backgroundColor: '#f9fbff'}}>
         <View
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: 15,
-            borderBottomWidth: 1,
-            borderBottomColor: '#d3d3d3',
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              flex: 0.6,
-              justifyContent: 'space-between',
-            }}>
+          style={[
+            appstyle.rowBetween,
+            {
+              padding: 15,
+              borderBottomWidth: 1,
+              borderBottomColor: '#d3d3d3',
+            },
+          ]}>
+          <View style={[appstyle.rowBetween, {flex: 0.6}]}>
             <Feather
               onPress={() => navigation.goBack()}
               name="arrow-left"

@@ -8,6 +8,7 @@ import {
   fetchService,
   fetchSkill,
   getAccepted,
+  getAdminPercentage,
   getContract,
   getContractDetail,
   getProposalStatus,
@@ -18,6 +19,7 @@ import {
 } from '../actions/userAction';
 import {JobDetail, Rating, Service} from '../../types/user';
 import {searchJob} from '../actions/userAction';
+import {Contract} from '../../types/contract';
 
 enum Status {
   pending = 'pending',
@@ -41,9 +43,10 @@ interface UserInterface {
   proposalStatus: Array<any>;
   contracts: Array<any>;
   notification: Array<any>;
-  contractDetail: null | any;
+  contractDetail: null | Contract;
   rating: Array<Rating>;
   created: boolean;
+  adminPercentage: number;
 }
 
 const initialState: UserInterface = {
@@ -65,6 +68,7 @@ const initialState: UserInterface = {
   notification: [],
   contractDetail: null,
   rating: [],
+  adminPercentage: 0,
 };
 
 const userSlice = createSlice({
@@ -81,12 +85,11 @@ const userSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(addService.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(addService.pending, state => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(addService.fulfilled, (state, action) => {
+      .addCase(addService.fulfilled, state => {
         state.loading = false;
         state.success = true;
       })
@@ -96,12 +99,11 @@ const userSlice = createSlice({
       })
 
       //skill
-      .addCase(addSkill.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(addSkill.pending, state => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(addSkill.fulfilled, (state, action) => {
+      .addCase(addSkill.fulfilled, state => {
         state.loading = false;
         state.success = true;
       })
@@ -111,8 +113,7 @@ const userSlice = createSlice({
       })
 
       // fetch Skills
-      .addCase(fetchSkill.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(fetchSkill.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -126,8 +127,7 @@ const userSlice = createSlice({
       })
 
       // fetch service
-      .addCase(fetchService.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(fetchService.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -141,8 +141,7 @@ const userSlice = createSlice({
       })
 
       // job correspond Skills
-      .addCase(jobCorrespondSkill.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(jobCorrespondSkill.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -156,8 +155,7 @@ const userSlice = createSlice({
       })
 
       // not job correspond Skills
-      .addCase(notJobCorrespondSkill.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(notJobCorrespondSkill.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -171,8 +169,7 @@ const userSlice = createSlice({
       })
 
       // not job correspond Skills
-      .addCase(searchJob.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(searchJob.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -186,8 +183,7 @@ const userSlice = createSlice({
       })
 
       // add propsal
-      .addCase(addProposal.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(addProposal.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -201,8 +197,7 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
       // Get Accepted
-      .addCase(getAccepted.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(getAccepted.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -216,8 +211,7 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
       // Proposal Status
-      .addCase(getProposalStatus.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(getProposalStatus.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -232,7 +226,7 @@ const userSlice = createSlice({
       })
 
       // contracts list
-      .addCase(getContract.pending, (state, action) => {
+      .addCase(getContract.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -247,11 +241,11 @@ const userSlice = createSlice({
       })
 
       // update contract status
-      .addCase(updateContract.pending, (state, action) => {
+      .addCase(updateContract.pending, state => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(updateContract.fulfilled, (state, action) => {
+      .addCase(updateContract.fulfilled, state => {
         state.loading = false;
         state.success = true;
       })
@@ -261,8 +255,7 @@ const userSlice = createSlice({
       })
 
       // Notification
-      .addCase(fetchNotification.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(fetchNotification.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -276,8 +269,7 @@ const userSlice = createSlice({
       })
 
       //get contract deatils
-      .addCase(getContractDetail.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(getContractDetail.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -291,8 +283,7 @@ const userSlice = createSlice({
       })
 
       //rating
-      .addCase(getRating.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(getRating.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -306,16 +297,29 @@ const userSlice = createSlice({
       })
 
       //createRating
-      .addCase(createRating.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(createRating.pending, state => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(createRating.fulfilled, (state, action) => {
+      .addCase(createRating.fulfilled, state => {
         state.loading = false;
         state.created = true;
       })
       .addCase(createRating.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // admin Percentage
+      .addCase(getAdminPercentage.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getAdminPercentage.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminPercentage = action.payload.response[0].adminPercentage;
+      })
+      .addCase(getAdminPercentage.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

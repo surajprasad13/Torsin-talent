@@ -8,14 +8,17 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  LayoutAnimation,
   TouchableOpacity,
   Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment';
-import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 // components
 import {
@@ -37,20 +40,15 @@ const ProposalDetail = ({route}: any) => {
   const {item} = route.params;
   const navigation = useNavigation();
   const [isExpanded, setIsExpanded] = useState(false);
+  const heightProgress = useSharedValue(150);
 
   const handleViewMore = () => {
-    if (ref.current) {
-      //@ts-ignore
-      ref.current.scrollTo({y: 0, animated: true});
-    }
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsExpanded(!isExpanded);
+    heightProgress.value = withTiming(isExpanded ? 150 : 300);
   };
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: withTiming(isExpanded ? 0 : 1),
-    };
+  const rStyle = useAnimatedStyle(() => {
+    return {height: heightProgress.value};
   });
 
   return (
@@ -61,135 +59,92 @@ const ProposalDetail = ({route}: any) => {
         <Title title="Proposal Detail" />
 
         <ScrollView ref={ref}>
-          <View style={styles.container}>
-            {isExpanded ? (
-              <Animated.View>
-                <View style={{padding: 10}}>
-                  <Text style={styles.title}>{item.jobName}</Text>
-                  <View style={{marginTop: 10}}>
-                    <Text style={styles.titleName}>
-                      Published date:{' '}
-                      <Text style={styles.description}>
-                        {moment(item.createdAt).format('lll')}
-                      </Text>
-                    </Text>
-                    <Text style={styles.titleName}>
-                      Service:
-                      <Text style={styles.description}>
-                        {' '}
-                        {item.adminService}
-                      </Text>
-                    </Text>
-                    <Text style={styles.titleName}>
-                      Payment type:
-                      <Text style={styles.description}>
-                        {' '}
-                        {projectType[item.jobProjectType]}
-                      </Text>
-                    </Text>
-                    <Text style={styles.titleName}>
-                      Location:
-                      <Text style={styles.description}> {item.location}</Text>
-                    </Text>
-                    <Text style={styles.titleName}>
-                      Country:
-                      <Text style={styles.description}>
-                        {' '}
-                        {item.countryName}
-                      </Text>
-                    </Text>
-                  </View>
-                </View>
+          <View
+            style={[
+              appstyle.shadow,
+              {margin: 10, padding: 10, borderRadius: 12},
+            ]}>
+            <Animated.View style={[rStyle, {overflow: 'hidden'}]}>
+              <Text style={styles.title}>{item.jobName}</Text>
+              <View style={{marginTop: 10}}>
+                <Text style={styles.titleName}>
+                  Published date:{' '}
+                  <Text style={styles.description}>
+                    {moment(item.createdAt).format('lll')}
+                  </Text>
+                </Text>
+                <Text style={styles.titleName}>
+                  Service:
+                  <Text style={styles.description}> {item.adminService}</Text>
+                </Text>
+                <Text style={styles.titleName}>
+                  Payment type:
+                  <Text style={styles.description}>
+                    {' '}
+                    {projectType[item.jobProjectType]}
+                  </Text>
+                </Text>
+                <Text style={styles.titleName}>
+                  Location:
+                  <Text style={styles.description}> {item.location}</Text>
+                </Text>
+                <Text style={styles.titleName}>
+                  Country:
+                  <Text style={styles.description}> {item.countryName}</Text>
+                </Text>
+              </View>
+
+              <Text style={styles.title}>Description</Text>
+              <Text style={styles.description}>{item.jobDescription}</Text>
+
+              {item.photos && item.photos.length > 0 && (
                 <View style={{margin: 5, padding: 5}}>
-                  <Text style={styles.title}>Description</Text>
-                  <Text style={styles.description}>{item.jobDescription}</Text>
-                </View>
-                {item.photos && item.photos.length > 0 && (
-                  <View style={{margin: 5, padding: 5}}>
-                    <Text style={styles.title}>Photos</Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        flexWrap: 'wrap',
-                      }}>
-                      {item.photos.map((_item: string, index: number) => {
-                        return (
-                          <FastImage
-                            key={index.toString()}
-                            source={{uri: _item}}
-                            style={styles.innerImage}
-                          />
-                        );
-                      })}
-                    </View>
+                  <Text style={styles.title}>Photos</Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                    }}>
+                    {item.photos.map((_item: string, index: number) => {
+                      return (
+                        <FastImage
+                          key={index.toString()}
+                          source={{uri: _item}}
+                          style={styles.innerImage}
+                        />
+                      );
+                    })}
                   </View>
-                )}
-                <View
+                </View>
+              )}
+              <View
+                style={{
+                  margin: 5,
+                  padding: 5,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <Text
                   style={{
-                    margin: 5,
-                    padding: 5,
-                    flexDirection: 'row',
-                    alignItems: 'center',
+                    fontFamily: fonts.semibold,
+                    fontSize: 18,
+                    color: colors.primary,
                   }}>
+                  Rates:
+                </Text>
+                <TouchableOpacity>
                   <Text
                     style={{
+                      color: colors.grey2,
                       fontFamily: fonts.semibold,
-                      fontSize: 18,
-                      color: colors.primary,
+                      padding: 5,
                     }}>
-                    Rates:
+                    ${item.jobPriceRate}
                   </Text>
-                  <TouchableOpacity>
-                    <Text
-                      style={{
-                        color: colors.grey2,
-                        fontFamily: fonts.semibold,
-                        padding: 5,
-                      }}>
-                      ${item.jobPriceRate}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </Animated.View>
-            ) : (
-              <Animated.View
-                style={[
-                  {
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  },
-                  animatedStyle,
-                ]}>
-                <FastImage
-                  source={{
-                    uri: item.images[0],
-                  }}
-                  resizeMode="cover"
-                  style={{width: 50, height: 50, borderRadius: 25}}
-                />
-                <View style={{width: '80%', margin: 5}}>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: '#1E202B',
-                      fontFamily: fonts.semibold,
-                    }}>
-                    {item.jobName}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#1E202B',
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    {item.jobDescription}
-                  </Text>
-                </View>
-              </Animated.View>
-            )}
+                </TouchableOpacity>
+              </View>
+            </Animated.View>
 
             <TouchableOpacity
               style={{alignItems: 'flex-end', padding: 5}}
@@ -204,6 +159,7 @@ const ProposalDetail = ({route}: any) => {
               </Text>
             </TouchableOpacity>
           </View>
+
           <View style={{marginTop: 0, margin: 15}}>
             <Text
               style={{
@@ -245,7 +201,7 @@ const ProposalDetail = ({route}: any) => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-evenly',
-              width: '100%',
+              width: 'auto',
             }}>
             <CustomInput
               label="Project Type"
@@ -262,7 +218,7 @@ const ProposalDetail = ({route}: any) => {
               value={item.charges !== null ? String(item.charges) : 'NA'}
               keyboardType="number-pad"
               editable={false}
-              containerStyle={{marginTop: 10, width: '45%'}}
+              containerStyle={{marginTop: 10, width: 'auto'}}
             />
           </View>
 
@@ -285,7 +241,7 @@ const ProposalDetail = ({route}: any) => {
               </Text>
 
               <View style={styles.photoContainer}>
-                {item.photos?.map((a, b) => (
+                {item.photos?.map((a: any, b: any) => (
                   <Pressable
                     onPress={() => {
                       setImageVisible(true);

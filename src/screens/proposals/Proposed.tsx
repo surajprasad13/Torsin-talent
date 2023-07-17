@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,7 +9,8 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+
+// helpers
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getProposalStatus} from '../../redux/actions/userAction';
 import ProposalStatus from './components/ProposalStatus';
@@ -19,10 +22,8 @@ const Proposed = () => {
   const dispatch = useAppDispatch();
   const {proposalStatus, loading} = useAppSelector(state => state.user);
 
-  const [filtered, setFiltered] = useState(proposalStatus);
-
   useEffect(() => {
-    dispatch(getProposalStatus(''));
+    dispatch(getProposalStatus());
   }, []);
 
   return (
