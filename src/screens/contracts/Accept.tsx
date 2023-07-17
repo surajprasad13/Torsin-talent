@@ -27,11 +27,9 @@ const Accept = () => {
     dispatch(getContract(1));
   }, []);
 
-  console.log(contracts);
-
   return (
     <FlatList
-      data={contracts}
+      data={contracts.accepted}
       ListEmptyComponent={
         <View style={styles.emptyContainer}>
           {loading ? (

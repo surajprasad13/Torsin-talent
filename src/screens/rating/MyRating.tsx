@@ -31,8 +31,6 @@ const MyRating = () => {
     dispatch(getRating(''));
   }, []);
 
-  console.log(rating);
-
   return (
     <SafeAreaView style={styles.container}>
       <Title title="My Rating" />

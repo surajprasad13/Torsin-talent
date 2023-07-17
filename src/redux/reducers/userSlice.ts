@@ -41,7 +41,11 @@ interface UserInterface {
   addSuccess: string;
   acceptList: Array<any>;
   proposalStatus: Array<any>;
-  contracts: Array<any>;
+  contracts: {
+    accepted: Array<any>;
+    rejected: Array<any>;
+    archived: Array<any>;
+  };
   notification: Array<any>;
   contractDetail: null | Contract;
   rating: Array<Rating>;
@@ -64,7 +68,11 @@ const initialState: UserInterface = {
   addSuccess: '',
   acceptList: [],
   proposalStatus: [],
-  contracts: [],
+  contracts: {
+    accepted: [],
+    rejected: [],
+    archived: [],
+  },
   notification: [],
   contractDetail: null,
   rating: [],
@@ -233,7 +241,14 @@ const userSlice = createSlice({
       .addCase(getContract.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.contracts = action.payload.response.data;
+        if (action.payload.status == 1) {
+          state.contracts.accepted = action.payload.response;
+        } else if (action.payload.status == 2) {
+          state.contracts.rejected = action.payload.response;
+        } else if (action.payload.status == 3) {
+          state.contracts.archived = action.payload.response;
+        } else {
+        }
       })
       .addCase(getContract.rejected, (state, action) => {
         state.loading = false;

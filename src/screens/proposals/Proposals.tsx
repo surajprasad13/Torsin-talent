@@ -25,10 +25,6 @@ const Proposals: FC = ({}) => {
   const {} = useAppSelector(state => state.user);
 
   useEffect(() => {
-    dispatch(getProposalStatus());
-  }, []);
-
-  useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(getProposalStatus());
     });

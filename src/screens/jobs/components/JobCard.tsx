@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -16,7 +16,11 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 type NavigationProp = StackNavigationProp<JobScreenParamList>;
 
-const JobCard = ({item}: {item: any}) => {
+interface JobCardProp {
+  item: any;
+}
+
+const JobCard: FC<JobCardProp> = ({item}) => {
   const navigation = useNavigation<NavigationProp>();
 
   return (

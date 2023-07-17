@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -34,7 +34,7 @@ import {interestAmount} from '../../utils';
 
 const contractType = ['', 'Hourly', 'Fixed'];
 
-const ViewContract = ({route}: any) => {
+const ViewContract: FC = ({route}: any) => {
   const {id} = route.params;
 
   const dispatch = useAppDispatch();
@@ -54,13 +54,18 @@ const ViewContract = ({route}: any) => {
   }, []);
 
   useEffect(() => {
+    if (contractDetail) {
+      setContract(contractDetail);
+    }
+  }, [contractDetail]);
+
+  useEffect(() => {
     dispatch(getContractDetail(id));
   }, []);
 
   useEffect(() => {
     dispatch(getAdminPercentage(''));
   }, []);
-
 
   const onPressAccept = () => {
     dispatch(

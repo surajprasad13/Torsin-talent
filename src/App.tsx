@@ -29,7 +29,6 @@ async function onAppBootstrap() {
   const token = await messaging().getToken();
 
   // Save the token
-  console.log(token);
 }
 
 const App = () => {

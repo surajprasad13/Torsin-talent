@@ -124,10 +124,8 @@ const addProposal = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.post(`talent/proposal/job`, value.inputs);
-
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -186,7 +184,7 @@ const getContract = createAsyncThunk(
       const {data} = await api.get(
         `talent/talent_contract_list/?status=${value}`,
       );
-      return data;
+      return {response: data.response.data, status: value};
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);

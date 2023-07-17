@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {
   View,
   Text,
@@ -6,14 +6,17 @@ import {
   Pressable,
   StyleSheet,
   ScrollView,
-  LayoutAnimation,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {Divider} from 'react-native-paper';
-import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import moment from 'moment';
 
 // helpers
@@ -29,26 +32,19 @@ import {CustomInput, Title} from '../../components';
 
 const contractType = ['', 'Hourly', 'Fixed'];
 
-const ActiveJobDetail = ({route}: any) => {
+const ActiveJobDetail: FC = ({route}: any) => {
   const {item} = route.params;
 
-  const ref = useRef(null);
-
   const [isExpanded, setIsExpanded] = useState(false);
+  const heightProgress = useSharedValue(150);
 
   const handleViewMore = () => {
-    if (ref.current) {
-      //@ts-ignore
-      ref.current.scrollTo({y: 0, animated: true});
-    }
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsExpanded(!isExpanded);
+    heightProgress.value = withTiming(isExpanded ? 150 : 300);
   };
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: withTiming(isExpanded ? 0 : 1),
-    };
+  const rStyle = useAnimatedStyle(() => {
+    return {height: heightProgress.value};
   });
 
   const navigation = useNavigation();
@@ -57,143 +53,92 @@ const ActiveJobDetail = ({route}: any) => {
       <Title title="Active Job Details" />
       <ScrollView contentContainerStyle={{margin: 15}}>
         <View style={styles.cardContainer}>
-          {isExpanded ? (
-            <Animated.View style={{}}>
-              <Text
-                style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
-                {item.jobName}
-              </Text>
-              <View
+          <Animated.View style={[rStyle, {overflow: 'hidden'}]}>
+            <Text style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
+              {item.jobName}
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: 20,
+              }}>
+              <FastImage
+                source={{uri: item.image[0]}}
+                resizeMode="cover"
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: 20,
-                }}>
-                <FastImage
-                  source={{uri: item.image[0]}}
-                  resizeMode="cover"
+                  width: 50,
+                  height: 50,
+                  borderRadius: 25,
+                  borderWidth: 0.3,
+                }}
+              />
+              <View style={{width: '80%'}}>
+                <Text style={styles.headertext}>{item.fullname}</Text>
+                <Text
                   style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    borderWidth: 0.3,
-                  }}
-                />
-                <View style={{width: '80%'}}>
-                  <Text style={styles.headertext}>{item.fullname}</Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    email : {item.email}
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    Cost : ${item.amount}
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginTop: 20,
-                  margin: 10,
-                }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <AntDesign
-                    name="clockcircleo"
-                    size={10}
-                    style={styles.icon}
-                  />
-                  <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
-                    {moment(item.createdAt).format('lll')}
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    fontFamily: fonts.regular,
+                    fontSize: 12,
+                    marginTop: 5,
                   }}>
-                  <Entypo name="location-pin" size={10} style={styles.icon} />
-                  <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
-                    {item.location}, {item.countryName}
-                  </Text>
-                </View>
-              </View>
-              <View style={{marginTop: 20}}>
-                <Divider />
-              </View>
-              <View style={{marginTop: 20}}>
-                <Text style={{fontSize: 14, fontFamily: fonts.semibold}}>
-                  Job Description
+                  email : {item.email}
                 </Text>
                 <Text
                   style={{
                     fontFamily: fonts.regular,
-                    lineHeight: 20,
-                    marginTop: 10,
                     fontSize: 12,
-                    color: '#1E202B',
+                    marginTop: 5,
                   }}>
-                  {item.jobDescription}
+                  Cost : ${item.amount}
                 </Text>
               </View>
-            </Animated.View>
-          ) : (
-            <Animated.View style={[{}, animatedStyle]}>
-              <Text
-                style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
-                {item.jobName}
-              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: 20,
+                margin: 10,
+              }}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <AntDesign name="clockcircleo" size={10} style={styles.icon} />
+                <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
+                  {moment(item.createdAt).format('lll')}
+                </Text>
+              </View>
+
               <View
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginTop: 20,
+                  justifyContent: 'center',
                 }}>
-                <FastImage
-                  source={{uri: item.image[0]}}
-                  resizeMode="cover"
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    borderWidth: 0.3,
-                  }}
-                />
-                <View style={{width: '80%'}}>
-                  <Text style={styles.headertext}>{item.fullname}</Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    email : {item.email}
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    Cost : ${item.amount}
-                  </Text>
-                </View>
+                <Entypo name="location-pin" size={10} style={styles.icon} />
+                <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
+                  {item.location}, {item.countryName}
+                </Text>
               </View>
-            </Animated.View>
-          )}
+            </View>
+            <View style={{marginTop: 20}}>
+              <Divider />
+            </View>
+            <View style={{marginTop: 20}}>
+              <Text style={{fontSize: 14, fontFamily: fonts.semibold}}>
+                Job Description
+              </Text>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  lineHeight: 20,
+                  marginTop: 10,
+                  fontSize: 12,
+                  color: '#1E202B',
+                }}>
+                {item.jobDescription}
+              </Text>
+            </View>
+          </Animated.View>
 
           <TouchableOpacity
             style={{alignItems: 'flex-end', padding: 5}}
