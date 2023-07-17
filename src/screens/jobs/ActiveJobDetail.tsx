@@ -70,16 +70,6 @@ const ActiveJobDetail = ({route}: any) => {
                   alignItems: 'center',
                   marginTop: 20,
                 }}>
-                <FastImage
-                  source={{uri: item.image[0]}}
-                  resizeMode="cover"
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    borderWidth: 0.3,
-                  }}
-                />
                 <View style={{width: '80%'}}>
                   <Text style={styles.headertext}>{item.fullname}</Text>
                   <Text
@@ -162,16 +152,6 @@ const ActiveJobDetail = ({route}: any) => {
                   alignItems: 'center',
                   marginTop: 20,
                 }}>
-                <FastImage
-                  source={{uri: item.image[0]}}
-                  resizeMode="cover"
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    borderWidth: 0.3,
-                  }}
-                />
                 <View style={{width: '80%'}}>
                   <Text style={styles.headertext}>{item.fullname}</Text>
                   <Text

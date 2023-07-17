@@ -12,7 +12,19 @@ const NotificationCard = ({item}: any) => {
 
   return (
     <View style={{}}>
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('DrawerNavigation', {
+            screen: 'ContractNavigator',
+            params: {
+              screen: 'ViewContract',
+              params: {
+                id: item.render_id,
+              },
+            },
+          })
+        }
+        style={styles.container}>
         <View
           style={{
             width: 50,

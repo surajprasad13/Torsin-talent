@@ -29,16 +29,6 @@ const JobCard = ({item}: {item: any}) => {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <FastImage
-          source={{uri: item.image[0]}}
-          resizeMode="cover"
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: 25,
-            borderWidth: 0.5,
-          }}
-        />
         <View style={{width: '80%'}}>
           <Text style={[styles.headertext, {marginTop: 10}]}>
             {item.jobName}
@@ -48,9 +38,7 @@ const JobCard = ({item}: {item: any}) => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-            }}>
-            <Text style={styles.text}>$ {item.amount}</Text>
-          </View>
+            }}></View>
         </View>
       </View>
 

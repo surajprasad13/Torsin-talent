@@ -24,8 +24,6 @@ const Accepted = () => {
     dispatch(getProposalStatus(''));
   }, []);
 
-  console.log(proposalStatus);
-
   return (
     <View>
       <FlatList
