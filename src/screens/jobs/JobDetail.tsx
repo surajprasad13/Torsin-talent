@@ -37,34 +37,16 @@ const JobDetails = ({route}: any) => {
 
       <ScrollView>
         <View style={styles.cardContainer}>
-          <Text style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
-            {item.adminService}
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginTop: 20,
-            }}>
-            <FastImage
-              source={{
-                uri: item.photos[0],
-              }}
-              resizeMode="cover"
-              style={{width: 50, height: 50, borderRadius: 25}}
-            />
-            <View style={{width: '80%'}}>
-              <Text style={styles.headertext}>{item.jobName}</Text>
-              <Text
-                style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
-                Project type : {projectType[item.projectType]}
-              </Text>
-              <Text
-                style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
-                Cost : {item.priceRate}
-              </Text>
-            </View>
+          <View style={{width: '80%'}}>
+            <Text style={styles.headertext}>{item.jobName}</Text>
+            <Text
+              style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
+              Project type : {projectType[item.projectType]}
+            </Text>
+            <Text
+              style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
+              Cost : {item.priceRate}
+            </Text>
           </View>
           <View
             style={{
@@ -202,7 +184,6 @@ const styles = StyleSheet.create({
   headertext: {
     fontFamily: fonts.regular,
     color: colors.black,
-    fontSize: 12,
     justifyContent: 'center',
   },
   icon: {

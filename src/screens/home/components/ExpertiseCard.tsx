@@ -24,18 +24,8 @@ const ExpertiseCard = ({item}: {item: JobDetail}) => {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <FastImage
-          source={{uri: item.photos[0]}}
-          resizeMode="cover"
-          style={{width: 50, height: 50, borderRadius: 25}}
-        />
         <View style={{width: '80%'}}>
-          <Text style={{fontFamily: fonts.semibold, color: colors.black}}>
-            {item.adminService}
-          </Text>
-          <Text style={[styles.headertext, {marginTop: 10}]}>
-            {item.jobName}
-          </Text>
+          <Text style={[styles.headertext, {}]}>{item.jobName}</Text>
           <Text style={styles.text}>
             {item.jobDescription.length > 100
               ? item.jobDescription.substring(0, 50).concat('...')

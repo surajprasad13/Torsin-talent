@@ -158,9 +158,7 @@ const HomeScreen = ({}) => {
 
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            marginTop: 30,
+            margin: 10,
           }}>
           <Text
             style={{
@@ -169,17 +167,8 @@ const HomeScreen = ({}) => {
             }}>
             Hey, {userInfo?.fullName} job based on your expertise
           </Text>
-          <Text
-            onPress={() => navigation.navigate('AllExpertise')}
-            style={{
-              height: 20,
-              fontFamily: fonts.semibold,
-              color: colors.primary,
-            }}>
-            View All
-          </Text>
         </View>
-        <View style={{marginTop: 20}}>
+        <View style={{margin: 10}}>
           {correspond
             .filter(_item => _item.proposalStatus == 0)
             .map((item, index) => (

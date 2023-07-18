@@ -51,48 +51,29 @@ const ActiveJobDetail: FC = ({route}: any) => {
   return (
     <SafeAreaView style={styles.container}>
       <Title title="Active Job Details" />
-      <ScrollView contentContainerStyle={{margin: 15}}>
+      <ScrollView contentContainerStyle={{margin: 10}}>
         <View style={styles.cardContainer}>
           <Animated.View style={[rStyle, {overflow: 'hidden'}]}>
-            <Text style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
+            <Text style={{fontSize: 18, fontFamily: fonts.medium}}>
               {item.jobName}
             </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginTop: 20,
-              }}>
-              <FastImage
-                source={{uri: item.image[0]}}
-                resizeMode="cover"
+
+            <View style={{width: '80%'}}>
+              <Text style={styles.headertext}>{item.fullName}</Text>
+              <Text
                 style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 25,
-                  borderWidth: 0.3,
-                }}
-              />
-              <View style={{width: '80%'}}>
-                <Text style={styles.headertext}>{item.fullname}</Text>
-                <Text
-                  style={{
-                    fontFamily: fonts.regular,
-                    fontSize: 12,
-                    marginTop: 5,
-                  }}>
-                  email : {item.email}
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: fonts.regular,
-                    fontSize: 12,
-                    marginTop: 5,
-                  }}>
-                  Cost : ${item.amount}
-                </Text>
-              </View>
+                  fontFamily: fonts.regular,
+                  fontSize: 12,
+                }}>
+                email : {item.email}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  fontSize: 12,
+                }}>
+                Cost : ${item.amount}
+              </Text>
             </View>
             <View
               style={{
@@ -130,7 +111,6 @@ const ActiveJobDetail: FC = ({route}: any) => {
               <Text
                 style={{
                   fontFamily: fonts.regular,
-                  lineHeight: 20,
                   marginTop: 10,
                   fontSize: 12,
                   color: '#1E202B',
@@ -196,7 +176,7 @@ const ActiveJobDetail: FC = ({route}: any) => {
               </View>
             </View>
             <CustomInput
-              label="5% Torsin Fee"
+              label={`${adminPercentage}% Torsin Fee`}
               value={item.torsinRate}
               editable={false}
               containerStyle={{marginTop: 15}}
@@ -204,7 +184,7 @@ const ActiveJobDetail: FC = ({route}: any) => {
             <CustomInput
               label="Grand Total"
               editable={false}
-              value={item.recived_amount}
+              value={item.receivedAmount}
               containerStyle={{marginTop: 15}}
             />
             <Divider style={{marginTop: 15}} />
@@ -267,7 +247,7 @@ const ActiveJobDetail: FC = ({route}: any) => {
               <>
                 <CustomInput
                   label="Specified Date"
-                  value={item.specific_date}
+                  value={item.specificDate}
                   containerStyle={{marginTop: 10}}
                 />
                 <Divider style={{marginTop: 10}} />
@@ -295,7 +275,7 @@ const ActiveJobDetail: FC = ({route}: any) => {
             containerStyle={{marginTop: 15}}
           />
 
-          {item.isMileStone == 2 &&
+          {item.ismilestone == 2 &&
             item.milestoneData.length > 0 &&
             item.milestoneData.map((a: any, b: number) => (
               <View key={b.toString()} style={{marginTop: 10}}>
@@ -323,13 +303,13 @@ const ActiveJobDetail: FC = ({route}: any) => {
                     label="Start Date"
                     placeholder=""
                     editable={false}
-                    value={a.start_date}
+                    value={a.startDate}
                     containerStyle={{marginTop: 10}}
                   />
 
                   <CustomInput
                     label="End Date"
-                    value={a.end_date}
+                    value={a.endDate}
                     placeholder=""
                     editable={false}
                     containerStyle={{marginTop: 10}}
