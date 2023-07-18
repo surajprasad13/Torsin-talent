@@ -116,7 +116,7 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
     <SafeAreaView>
       <View style={styles.sideMenuContainer}>
         <View style={{flexDirection: 'row', alignItems: 'center', padding: 20}}>
-          <CircleProgress image={userInfo?.profileImage} />
+          <CircleProgress image={userInfo?.profileImage ?? ''} progress={100} />
           <View
             style={{
               flexDirection: 'row',
@@ -196,9 +196,7 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                       });
                       break;
                     case 'HelpSupport':
-                      navigation.navigate('WebScreen', {
-                        item: 'https://github.com',
-                      });
+                      navigation.navigate('HelpSupport', {});
                       break;
                     default:
                       navigation.navigate(item.route);

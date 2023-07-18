@@ -23,9 +23,9 @@ const CircleProgress: FC<CircleProgressProp> = ({image, progress}) => {
       <Image
         source={image ? {uri: image} : require('../assets/images/profile.png')}
         style={{
-          width: 50,
-          height: 50,
-          borderRadius: 25,
+          width: 40,
+          height: 40,
+          borderRadius: 20,
           left: 10,
           top: 10,
           position: 'absolute',

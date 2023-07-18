@@ -32,6 +32,7 @@ export type RootStackParamList = {
   PaymentDetail: undefined;
   ReceivePayment: undefined;
   Rating: undefined;
+  RaiseQuery: undefined;
   Report: undefined;
   ChatUser: {
     item: undefined | {};

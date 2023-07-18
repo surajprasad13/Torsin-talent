@@ -250,7 +250,7 @@ const OldJobDetail = ({route}: any) => {
             <CustomInput
               label="Grand Total"
               editable={false}
-              value={item.recived_amount}
+              value={item.receivedAmount}
               containerStyle={{marginTop: 15}}
             />
             <Divider style={{marginTop: 15}} />
@@ -313,7 +313,7 @@ const OldJobDetail = ({route}: any) => {
               <>
                 <CustomInput
                   label="Specified Date"
-                  value={item.specific_date}
+                  value={item.specificDate}
                   containerStyle={{marginTop: 10}}
                 />
                 <Divider style={{marginTop: 10}} />
@@ -341,7 +341,7 @@ const OldJobDetail = ({route}: any) => {
             containerStyle={{marginTop: 15}}
           />
 
-          {item.isMileStone == 2 &&
+          {item.ismilestone == 2 &&
             item.milestoneData.length > 0 &&
             item.milestoneData.map((a: any, b: number) => {
               const settleStatus = item.status == 2;
@@ -374,13 +374,13 @@ const OldJobDetail = ({route}: any) => {
                       label="Start Date"
                       placeholder=""
                       editable={false}
-                      value={a.start_date}
+                      value={a.startDate}
                       containerStyle={{marginTop: 10}}
                     />
 
                     <CustomInput
                       label="End Date"
-                      value={a.end_date}
+                      value={a.endDate}
                       placeholder=""
                       editable={false}
                       containerStyle={{marginTop: 10}}
@@ -452,7 +452,7 @@ const OldJobDetail = ({route}: any) => {
                     fontSize: 16,
                     fontFamily: fonts.semibold,
                   }}>
-                  $ {item.recievedAmount}
+                  $ {item.receivedAmount}
                 </Text>
               </View>
             </View>
@@ -513,7 +513,7 @@ const OldJobDetail = ({route}: any) => {
                       fontSize: 16,
                       fontFamily: fonts.semibold,
                     }}>
-                    $ {item.recievedAmount}
+                    $ {item.receivedAmount}
                   </Text>
                 </View>
               </View>
