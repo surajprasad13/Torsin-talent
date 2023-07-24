@@ -19,11 +19,13 @@ import {getLocales} from 'react-native-localize';
 import {decode} from 'base64-arraybuffer';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import CountryPicker from 'react-native-country-picker-modal';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // helpers
 import {metrics, colors, fonts} from '../../theme';
@@ -54,6 +56,14 @@ const IndivisualRegister = ({}) => {
 
   const [checked, setChecked] = useState('first');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
+  const [selectedCountry, setSelectedCountry] = useState<any | null>(null);
+  const [isCountryPickerOpen, setCountryPickerOpen] = useState(false);
+
+  const handleCountrySelect = (country: any) => {
+    setSelectedCountry(country);
+    setCountryPickerOpen(false); // Close the country dropdown after selection
+  };
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Please enter name'),
@@ -409,19 +419,51 @@ const IndivisualRegister = ({}) => {
                   />
                 </View>
 
-                <View style={{marginTop: 10}}>
+                <View style={{position: 'relative'}}>
                   <Input
-                    value={values.countryName}
-                    onChangeText={(text: any) => {
-                      const name = text.replace(/[^a-zA-Z ]/g, '');
-                      handleChange('countryName')(name);
-                    }}
-                    onFocus={() => setErrors({countryName: ''})}
                     label="Country"
-                    placeholder="Enter your country"
+                    placeholder="eg. India"
+                    value={selectedCountry?.name || values.countryName}
+                    onChangeText={text => {
+                      setCountryPickerOpen(true);
+                      handleChange('countryName')(text); // Add this line to update the 'countryName' value
+                    }}
+                    onBlur={() => {
+                      setCountryPickerOpen(false); // Update the state to close the CountryPicker
+                    }}
+                    onFocus={() => {
+                      setErrors({countryName: ''});
+                      setCountryPickerOpen(true);
+                    }}
                     error={errors.countryName}
+                    maxLength={50}
                   />
+
+                  <Pressable
+                    onPress={() => setCountryPickerOpen(true)}
+                    style={{
+                      alignItems: 'center',
+                      position: 'absolute',
+                      right: 10,
+                      justifyContent: 'center',
+                      marginTop: 50,
+                    }}>
+                    <AntDesign name="down" size={15} />
+                  </Pressable>
                 </View>
+
+                {isCountryPickerOpen && (
+                  <CountryPicker
+                    withFilter
+                    withFlag={false}
+                    onSelect={handleCountrySelect}
+                    countryCode={selectedCountry?.cca2}
+                    visible={isCountryPickerOpen}
+                    containerButtonStyle={{
+                      display: 'none',
+                    }}
+                  />
+                )}
 
                 <View
                   style={{

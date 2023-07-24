@@ -35,6 +35,8 @@ const contractType = ['', 'Hourly', 'Fixed'];
 const ActiveJobDetail: FC = ({route}: any) => {
   const {item} = route.params;
 
+  
+
   const [isExpanded, setIsExpanded] = useState(false);
   const heightProgress = useSharedValue(150);
 

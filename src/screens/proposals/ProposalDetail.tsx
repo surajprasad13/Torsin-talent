@@ -56,7 +56,7 @@ const ProposalDetail = ({route}: any) => {
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-        <Title title="Proposal Detail" />
+        <Title title="Proposal Details" />
 
         <ScrollView ref={ref}>
           <View

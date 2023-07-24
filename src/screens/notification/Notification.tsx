@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -78,10 +77,10 @@ const Notification = ({}) => {
           </View>
         }
         ListEmptyComponent={
-          <View style={styles.centerContainer}>
+          <View style={[styles.centerContainer, {flex: 1}]}>
             <Image
               source={require('../../assets/images/noModule/notification.png')}
-              style={styles.image}
+              style={styles.emptyImage}
             />
             <Text style={styles.noNotificationText}>No Notifications</Text>
           </View>
@@ -108,9 +107,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  image: {
-    width: 200,
+  emptyImage: {
+    width: '70%',
     height: 200,
+    resizeMode: 'contain',
+    marginLeft: '15%',
+    marginTop: '50%',
   },
   noNotificationText: {
     marginTop: 20,
