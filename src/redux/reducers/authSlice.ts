@@ -10,6 +10,7 @@ import {
   resetOtpSent,
   otpverify,
   resetPassword,
+  changePassword,
 } from '../actions/authAction';
 import {LoginResponseData} from '../../types/auth';
 
@@ -234,6 +235,22 @@ const authSlice = createSlice({
         state.emailVerified = true;
       })
       .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.message = '';
+      })
+
+      .addCase(changePassword.pending, state => {
+        state.error = null;
+        state.loading = true;
+        state.success = false;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true; // registration successful
+        state.message = action.payload.response.message.successMessage;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.message = '';

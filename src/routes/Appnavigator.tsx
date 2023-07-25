@@ -37,6 +37,7 @@ import ReportProblem from '../screens/jobs/services/ReportProblem';
 import ReceivedPayment from '../screens/payment/ReceivedPaymentDetail';
 import RatingDetail from '../screens/rating/RatingDetail';
 import RaiseQuery from '../screens/help/RaiseQuery';
+import FeedDetails from '../screens/feeds/FeedDetails';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -121,6 +122,15 @@ export default function AppNavigator() {
             <Stack.Screen
               name="Rating"
               component={RatingReview}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
+            <Stack.Screen
+              name="FeedDetails"
+              component={FeedDetails}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,

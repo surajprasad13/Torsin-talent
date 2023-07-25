@@ -18,6 +18,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // components
 import Logout from './Logout';
@@ -81,6 +82,22 @@ const List = [
     route: 'PaymentNavigator',
     icon: ({color}: {color: string}) => (
       <MaterialIcon name="payments" color={color} size={20} />
+    ),
+  },
+
+  {
+    title: 'Feeds',
+    route: 'Feeds',
+    icon: ({color}: {color: string}) => (
+      <FontAwesome name="feed" color={color} size={20} />
+    ),
+  },
+
+  {
+    title: 'ChangePassword',
+    route: 'ChangePassword',
+    icon: ({color}: {color: string}) => (
+      <MaterialCommunityIcons name="onepassword" color={color} size={20} />
     ),
   },
 
@@ -277,8 +294,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: fonts.medium,
-    fontSize: 16,
-    marginTop: 15,
+    marginTop: 10,
   },
 });
 

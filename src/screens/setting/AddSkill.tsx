@@ -8,10 +8,12 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
+  TextInput,
 } from 'react-native';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {colors, fonts} from '../../theme';
 import {CustomButton, CustomInput} from '../../components';
@@ -38,9 +40,17 @@ const AddSkill = () => {
     setInputValue(text);
   };
 
+  const handleRemoveItem = (item: any) => {
+    const updatedItems = selectedItems.filter(i => i !== item);
+    setSelectedItem(updatedItems);
+  };
+
   useEffect(() => {
     dispatch(fetchSkill());
   }, []);
+
+  const valid =
+    inputValue !== '' && skills.length > 0 && typeof skills !== 'string';
 
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {
@@ -103,49 +113,36 @@ const AddSkill = () => {
           }}>
           Add skills
         </Text>
-        <Text style={{fontFamily: fonts.regular, color: '#1E202B'}}>
-          Job Description Complete your profile. Set your profile completely .
-        </Text>
 
-        <CustomInput
-          label="Skill"
-          placeholder="eg. Song Production"
-          value={inputValue}
-          onChangeText={handleSearch}
-          containerStyle={{marginTop: 20}}
-        />
-
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-          {selectedItems.map((item, index) => {
-            return (
-              <View
+        <View style={styles.inputContainer}>
+          <View style={styles.chipContainer}>
+            {selectedItems.map((item, index) => (
+              <TouchableOpacity
                 key={index.toString()}
-                style={{
-                  padding: 5,
-                  borderWidth: 1,
-                  margin: 5,
-                  borderColor: colors.primary,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  borderRadius: 10,
-                }}>
+                style={styles.chip}
+                onPress={() => handleRemoveItem(item)}>
                 <Text>{item}</Text>
-                <Pressable
-                  onPress={() => {
-                    const filter = selectedItems.filter(
-                      (_, _index) => _index !== index,
-                    );
-                    setSelectedItem(filter);
-                  }}
-                  style={{backgroundColor: colors.primary, padding: 2}}>
-                  <Feather name="x" size={10} color={colors.white} />
-                </Pressable>
-              </View>
-            );
-          })}
+                <View style={styles.cancelContainer}>
+                  <Icon
+                    name="close"
+                    size={10}
+                    style={{}}
+                    color={colors.white}
+                  />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <TextInput
+            placeholder="Search Skill..."
+            value={inputValue}
+            onChangeText={handleSearch}
+            style={{padding: 15}}
+          />
         </View>
 
-        <ScrollView>
+        <ScrollView
+          style={[styles.sectionContainer, {borderWidth: valid ? 1 : 0}]}>
           {inputValue.length > 0 &&
             filteredItems.map((item, index) => (
               <Pressable
@@ -153,12 +150,7 @@ const AddSkill = () => {
                   setSelectedItem([...selectedItems, item]);
                 }}
                 key={index}
-                style={{
-                  margin: 5,
-                  backgroundColor: 'grey',
-                  borderRadius: 10,
-                  padding: 10,
-                }}>
+                style={styles.section}>
                 <Text>{item}</Text>
               </Pressable>
             ))}
@@ -196,6 +188,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  inputContainer: {
+    borderRadius: 10,
+    marginTop: 10,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: colors.grey4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  chipContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 5,
+    borderWidth: 0.5,
+    borderColor: colors.primary,
+    borderRadius: 10,
+    margin: 3,
+  },
+  cancelContainer: {
+    width: 15,
+    height: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: 7.5,
+  },
+  section: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderColor: colors.grey4,
+    borderRadius: 10,
+  },
+  sectionContainer: {
+    backgroundColor: colors.white,
+    borderColor: colors.grey4,
+    borderBottomWidth: 0,
+    borderRadius: 10,
+    margin: 5,
   },
 });
 

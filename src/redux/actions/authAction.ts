@@ -166,6 +166,22 @@ const resetPassword = createAsyncThunk(
   },
 );
 
+const changePassword = createAsyncThunk(
+  'auth/changePassword',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`change/password`, value);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   userLogin,
   registerIndivisual,
@@ -177,6 +193,7 @@ export {
   resetOtpSent,
   otpverify,
   resetPassword,
+  changePassword,
 };
 
 export default {};

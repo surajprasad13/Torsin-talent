@@ -6,7 +6,9 @@ import {
   ScrollView,
   Animated,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 // helpers
 import {colors, fonts} from '../theme';
@@ -23,6 +25,8 @@ const images = [
 const {width} = Dimensions.get('window');
 
 const ImageSlider = () => {
+  const navigation = useNavigation();
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollRef = useRef<any | null>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -48,7 +52,10 @@ const ImageSlider = () => {
       })}
       scrollEventThrottle={16}>
       {images.map((image, index) => (
-        <View key={index.toString()} style={{width}}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('FeedDetails')}
+          key={index.toString()}
+          style={{width}}>
           <ImageBackground
             key={index}
             source={{uri: image}}
@@ -75,7 +82,7 @@ const ImageSlider = () => {
               explicabo? Fuga, reiciendis.
             </Text>
           </ImageBackground>
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );

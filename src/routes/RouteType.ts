@@ -32,6 +32,7 @@ export type RootStackParamList = {
   PaymentDetail: undefined;
   ReceivePayment: undefined;
   Rating: undefined;
+  FeedDetails: undefined;
   RaiseQuery: undefined;
   Report: undefined;
   ChatUser: {
@@ -83,6 +84,8 @@ export type DrawerScreenParamaList = {
   BottomNavigation: BottomScreenParamList;
   DrawerSetting: undefined;
   PaymentMethod: undefined;
+  Feeds: undefined;
+  ChangePassword: undefined;
 };
 
 export type BottomScreenParamList = {

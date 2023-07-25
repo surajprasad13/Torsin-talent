@@ -18,6 +18,7 @@ import ServiceCard from './components/ServiceCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchService, fetchSkill} from '../../redux/actions/userAction';
 import {Service} from '../../types/user';
+import {Title} from '../../components';
 
 const ServiceSkill = ({}) => {
   const navigation = useNavigation();
@@ -36,29 +37,7 @@ const ServiceSkill = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: colors.white,
-          padding: 10,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-            }
-          }}
-          style={{padding: 10}}>
-          <Feather name="arrow-left" size={20} />
-        </TouchableOpacity>
-
-        <Text style={{fontFamily: fonts.medium, color: '#000C14'}}>
-          Skills & Services
-        </Text>
-        <View />
-      </View>
+      <Title title="Skills & Services" />
 
       <ScrollView style={{padding: 10}}>
         {loading && <ActivityIndicator />}
@@ -77,42 +56,43 @@ const ServiceSkill = ({}) => {
             </Text>
           </TouchableOpacity>
         </View>
+        {skills && skills.length > 0 && (
+          <View
+            style={{
+              ...appstyle.shadow,
+              borderRadius: 10,
+              margin: 10,
+              padding: 10,
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              minHeight: skills.length > 0 ? 0 : 100,
+            }}>
+            {/*  */}
 
-        <View
-          style={{
-            ...appstyle.shadow,
-            borderRadius: 10,
-            margin: 10,
-            padding: 10,
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            minHeight: skills.length > 0 ? 0 : 100,
-          }}>
-          {/*  */}
-
-          {skills.map((item, index) => {
-            return (
-              <View
-                key={index.toString()}
-                style={{
-                  borderWidth: 1,
-                  borderColor: '#08161433',
-                  margin: 5,
-                  padding: 10,
-                  borderRadius: 30,
-                }}>
-                <Text
+            {skills.map((item, index) => {
+              return (
+                <View
+                  key={index.toString()}
                   style={{
-                    fontFamily: fonts.regular,
-                    color: colors.black,
-                    opacity: 0.4,
+                    borderWidth: 1,
+                    borderColor: '#08161433',
+                    margin: 5,
+                    padding: 10,
+                    borderRadius: 30,
                   }}>
-                  {item}
-                </Text>
-              </View>
-            );
-          })}
-        </View>
+                  <Text
+                    style={{
+                      fontFamily: fonts.regular,
+                      color: colors.black,
+                      opacity: 0.4,
+                    }}>
+                    {item}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        )}
 
         {/*  */}
 
