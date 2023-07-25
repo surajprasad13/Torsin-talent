@@ -6,7 +6,7 @@ import {
 } from '../actions/jobAction';
 
 type JobType = {
-  error: string;
+  error: string | any;
   message: string;
   loading: boolean;
   success: boolean;

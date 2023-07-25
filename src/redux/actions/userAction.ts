@@ -22,7 +22,7 @@ const addSkill = createAsyncThunk(
   'user/addSkill',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.post(`talent/add/skill`, value.inputs);
+      const {data} = await api.post(`talent/add/skill`, value);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -36,11 +36,12 @@ const addSkill = createAsyncThunk(
 
 const fetchSkill = createAsyncThunk(
   'user/fetchSkill',
-  async (value: any, {rejectWithValue}) => {
+  async (_, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/skill/detail`);
       return data;
     } catch (error: any) {
+      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {

@@ -81,47 +81,46 @@ const HomeScreen = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+      <View style={[appstyle.rowBetween, {padding: 10}]}>
+        <TouchableOpacity
+          onPress={() => {
+            //@ts-ignore
+            navigation.openDrawer();
+          }}>
+          <MaterialIcons name="sort" size={20} color="#14226D" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flex: 0.9,
+            backgroundColor: colors.white,
+            borderRadius: 100,
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderWidth: 0.2,
+          }}>
+          <Feather
+            name="search"
+            size={18}
+            color={colors.primary}
+            style={{marginLeft: 10}}
+          />
+
+          <TextInput
+            placeholder="Search Talent"
+            disableFullscreenUI
+            placeholderTextColor="#BDBDBD"
+            style={{
+              padding: 10,
+              flex: 1,
+            }}
+          />
+        </TouchableOpacity>
+      </View>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={onRefresh} />
         }
         style={{}}>
-        <View style={[appstyle.rowBetween, {padding: 10}]}>
-          <TouchableOpacity
-            onPress={() => {
-              //@ts-ignore
-              navigation.openDrawer();
-            }}>
-            <MaterialIcons name="sort" size={20} color="#14226D" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flex: 0.9,
-              backgroundColor: colors.white,
-              borderRadius: 100,
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderWidth: 0.2,
-            }}>
-            <Feather
-              name="search"
-              size={18}
-              color={colors.primary}
-              style={{marginLeft: 10}}
-            />
-
-            <TextInput
-              placeholder="Search Talent"
-              disableFullscreenUI
-              placeholderTextColor="#BDBDBD"
-              style={{
-                padding: 10,
-                flex: 1,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-
         <View
           style={{
             borderRadius: 15,

@@ -1,7 +1,3 @@
-/**
- * @format
- */
-
 import {AppRegistry} from 'react-native';
 import App from './src/App';
 import {name as appName} from './app.json';
@@ -18,17 +14,22 @@ async function onMessageReceived(message) {
 
 notifee.onBackgroundEvent(async ({type, detail}) => {
   if (type === EventType.PRESS) {
-    console.log('Background Pressed');
     //navigationRef?.navigate('ChatUser', {item: {}});
     await notifee.cancelNotification(detail.notification.id);
   }
 });
 
-notifee.onForegroundEvent(async ({type, detail}) => {
+notifee.onForegroundEvent(async ({type, detail: {notification}}) => {
   if (type === EventType.PRESS) {
-    console.log('Foreground Pressed');
-    navigationRef?.navigate('ChatUser', {item: {}});
-    await notifee.cancelNotification(detail.notification.id);
+    if (notification.data.scree == 'proposal') {
+      navigationRef?.navigate('DrawerNavigation', {
+        screen: 'ProposalNavigator',
+        params: {
+          screen: '',
+        },
+      });
+    }
+    await notifee.cancelNotification(notification.id);
   }
 });
 
