@@ -22,15 +22,13 @@ const addSkill = createAsyncThunk(
   'user/addSkill',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.post(`talent/add/skill`, value.inputs, {
-        headers: {Authorization: `Bearer ${value.userToken}`},
-      });
+      const {data} = await api.post(`talent/add/skill`, value.inputs);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
-        return rejectWithValue('Something went wrong');
+        return rejectWithValue('Something went wrosng');
       }
     }
   },

@@ -15,7 +15,7 @@ import Notification from '../screens/notification/Notification';
 import {fonts} from '../theme';
 import ContractNavigator from './ContractNavigator';
 import ProposalNavigator from './ProposalNavigator';
-import PaymentMethod from '../screens/drawerScreens/PaymentMethod';
+import PaymentMethod from '../screens/payment/PaymentMethod';
 import JobNavigator from './JobNavigator';
 import HelpSupport from '../screens/help/HelpSupport';
 

@@ -167,6 +167,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
     marginTop: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
