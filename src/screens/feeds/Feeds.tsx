@@ -23,8 +23,9 @@ const Feeds = () => {
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <Title title="Feeds" />
       <ScrollView>
-        {[0, 1, 2, 3, 4, 5, 6].map(item => (
+        {[0, 1, 2, 3, 4, 5, 6].map((item, index) => (
           <TouchableOpacity
+            key={index}
             onPress={() => navigation.navigate('FeedDetails')}
             style={styles.container}>
             <FastImage
