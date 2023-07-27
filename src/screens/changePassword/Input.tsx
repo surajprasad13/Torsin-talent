@@ -6,8 +6,12 @@ import {
   ScrollView,
   SafeAreaView,
   Alert,
+  Button,
+  Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {Dialog, Portal} from 'react-native-paper';
 
 //icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,16 +22,14 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 
 // components
 import {CustomButton, CustomInput, Title} from '../../components';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {AuthScreenParamList} from '../../routes/RouteType';
+
 import {changePassword} from '../../redux/actions/authAction';
 import {resetSuccess} from '../../redux/reducers/authSlice';
+import {logout} from '../../redux/reducers/authSlice';
 
-type NavigationProp = StackNavigationProp<AuthScreenParamList>;
-
-const InputPass = () => {
+const ChangePassword = () => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation();
 
   const [input, setInput] = useState({
     oldPassword: '',
@@ -119,12 +121,11 @@ const InputPass = () => {
   };
 
   useEffect(() => {
-    if (success) {
+    const listener = navigation.addListener('focus', () => {
       dispatch(resetSuccess());
-      //   navigation.navigate('Successfull');
-      Alert.alert('Success');
-    }
-  }, [success]);
+    });
+    return () => listener;
+  }, []);
 
   const handleOnchange = (text, input) => {
     setInput(prevState => ({...prevState, [input]: text}));
@@ -135,81 +136,128 @@ const InputPass = () => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <Title title="" />
-      <ScrollView
-        contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
-        <View style={{flex: 0.8}}>
-          <View>
+      <Title title="Change Password" />
+      <Portal>
+        <Dialog visible={!!success}>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: 10,
+            }}>
             <Text
               style={{
-                fontFamily: fonts.semibold,
-                fontSize: 22,
-                color: '#0E184D',
+                padding: 10,
+                fontSize: 16,
+                fontFamily: fonts.medium,
+                color: colors.grey,
               }}>
-              Reset Password
+              Your Password has been changed successfully.
             </Text>
-
-            <Text
+          </View>
+          <Dialog.Actions>
+            <View
               style={{
-                fontFamily: fonts.regular,
-                alignItems: 'center',
-                color: '#000F1A',
-                top: 10,
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
               }}>
-              It's important to choose a strong and unique password for your
-              account to keep it secure
-            </Text>
-          </View>
+              <Pressable
+                style={{
+                  width: '40%',
+                  backgroundColor: colors.primary,
+                  borderRadius: 10,
+                  padding: 10,
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  dispatch(resetSuccess());
+                  if (navigation.canGoBack()) {
+                    navigation.goBack();
+                  }
+                }}>
+                <Text style={{fontFamily: fonts.semibold, color: colors.white}}>
+                  Stay Login
+                </Text>
+              </Pressable>
+              <TouchableOpacity
+                style={{
+                  width: '40%',
+                  backgroundColor: colors.primary,
+                  borderRadius: 10,
+                  padding: 10,
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  dispatch(logout());
+                }}>
+                <Text style={{fontFamily: fonts.semibold, color: colors.white}}>
+                  Log Out
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
 
-          <View style={{top: 16}}>
-            <CustomInput
-              onChangeText={(text: string) => {
-                handleError(null, 'oldPassword');
-                handleOnchange(text, 'oldPassword');
-              }}
-              onFocus={() => handleError(null, 'oldPassword')}
-              label="Current password"
-              maxLength={16}
-              placeholder="Enter password"
-              autoCapitalize="none"
-              password
-            />
-          </View>
+      <ScrollView>
+        <View style={{margin: 10}}>
+          <Text
+            style={{
+              fontFamily: fonts.semibold,
+              fontSize: 22,
+              color: '#0E184D',
+              marginTop: 20,
+            }}>
+            Change Password
+          </Text>
 
-          <View style={{top: 32}}>
-            <CustomInput
-              onChangeText={(text: string) => {
-                setIsValid(handleValidation(text));
-                handleError(null, 'newPassword');
-                handleOnchange(text, 'newPassword');
-              }}
-              onFocus={() => handleError(null, 'newPassword')}
-              label="New password"
-              maxLength={16}
-              placeholder="Enter password"
-              autoCapitalize="none"
-              password
-            />
-          </View>
+          <CustomInput
+            onChangeText={(text: string) => {
+              handleError(null, 'oldPassword');
+              handleOnchange(text, 'oldPassword');
+            }}
+            onFocus={() => handleError(null, 'oldPassword')}
+            label="Current password"
+            maxLength={16}
+            placeholder="Enter password"
+            autoCapitalize="none"
+            password
+            containerStyle={{marginTop: 10}}
+          />
 
-          <View style={{top: 50}}>
-            <CustomInput
-              onChangeText={(text: string) => {
-                handleError(null, 'confirmPassword');
-                handleOnchange(text, 'confirmPassword');
-              }}
-              onFocus={() => {
-                handleError(null, 'confirmPassword');
-              }}
-              maxLength={16}
-              label="Re-enter new password"
-              placeholder="Re-enter password"
-              autoCapitalize="none"
-              password
-            />
-          </View>
+          <CustomInput
+            onChangeText={(text: string) => {
+              setIsValid(handleValidation(text));
+              handleError(null, 'newPassword');
+              handleOnchange(text, 'newPassword');
+            }}
+            onFocus={() => handleError(null, 'newPassword')}
+            label="New password"
+            maxLength={16}
+            placeholder="Enter password"
+            autoCapitalize="none"
+            password
+            containerStyle={{marginTop: 20}}
+          />
 
-          <View style={{marginTop: 66}}>
+          <CustomInput
+            onChangeText={(text: string) => {
+              handleError(null, 'confirmPassword');
+              handleOnchange(text, 'confirmPassword');
+            }}
+            onFocus={() => {
+              handleError(null, 'confirmPassword');
+            }}
+            maxLength={16}
+            label="Re-enter new password"
+            placeholder="Re-enter password"
+            autoCapitalize="none"
+            password
+            containerStyle={{marginTop: 20}}
+          />
+
+          <View style={{marginTop: 20}}>
             {passwordStrength.map((_item: string, index: number) => {
               const _active = checkStatus(index);
               return (
@@ -245,11 +293,11 @@ const InputPass = () => {
             input.confirmPassword.length >= 8 &&
             isValid.every(_item => _item == true)
           }
-          style={{marginTop: 200}}
+          style={{bottom: 20, marginTop: 40}}
         />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default InputPass;
+export default ChangePassword;

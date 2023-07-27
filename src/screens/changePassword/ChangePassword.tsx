@@ -6,8 +6,12 @@ import {
   ScrollView,
   SafeAreaView,
   Alert,
+  Button,
+  Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {Dialog, Portal} from 'react-native-paper';
 
 //icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,16 +22,14 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 
 // components
 import {CustomButton, CustomInput, Title} from '../../components';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {AuthScreenParamList} from '../../routes/RouteType';
+
 import {changePassword} from '../../redux/actions/authAction';
 import {resetSuccess} from '../../redux/reducers/authSlice';
-
-type NavigationProp = StackNavigationProp<AuthScreenParamList>;
+import {logout} from '../../redux/reducers/authSlice';
 
 const ChangePassword = () => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation();
 
   const [input, setInput] = useState({
     oldPassword: '',
@@ -119,15 +121,11 @@ const ChangePassword = () => {
   };
 
   useEffect(() => {
-    if (success) {
+    const listener = navigation.addListener('focus', () => {
       dispatch(resetSuccess());
-      Alert.alert(
-        'Password Changed Successfully',
-        'Your password has been changed successfully!',
-        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-      );
-    }
-  }, [success]);
+    });
+    return () => listener;
+  }, []);
 
   const handleOnchange = (text, input) => {
     setInput(prevState => ({...prevState, [input]: text}));
@@ -139,6 +137,69 @@ const ChangePassword = () => {
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
       <Title title="Change Password" />
+      <Portal>
+        <Dialog visible={!!success}>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: 10,
+            }}>
+            <Text
+              style={{
+                padding: 10,
+                fontSize: 16,
+                fontFamily: fonts.medium,
+                color: colors.grey,
+              }}>
+              Your Password has been changed successfully.
+            </Text>
+          </View>
+          <Dialog.Actions>
+            <View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Pressable
+                style={{
+                  width: '40%',
+                  backgroundColor: colors.primary,
+                  borderRadius: 10,
+                  padding: 10,
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  dispatch(resetSuccess());
+                  if (navigation.canGoBack()) {
+                    navigation.goBack();
+                  }
+                }}>
+                <Text style={{fontFamily: fonts.semibold, color: colors.white}}>
+                  Stay Login
+                </Text>
+              </Pressable>
+              <TouchableOpacity
+                style={{
+                  width: '40%',
+                  backgroundColor: colors.primary,
+                  borderRadius: 10,
+                  padding: 10,
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  dispatch(logout());
+                }}>
+                <Text style={{fontFamily: fonts.semibold, color: colors.white}}>
+                  Log Out
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
       <ScrollView>
         <View style={{margin: 10}}>
           <Text

@@ -13,23 +13,23 @@ async function onMessageReceived(message) {
 }
 
 notifee.onBackgroundEvent(async ({type, detail}) => {
+  console.log('onBackgorund');
   if (type === EventType.PRESS) {
-    //navigationRef?.navigate('ChatUser', {item: {}});
     await notifee.cancelNotification(detail.notification.id);
   }
 });
 
-notifee.onForegroundEvent(async ({type, detail: {notification}}) => {
+notifee.onForegroundEvent(async ({type, detail}) => {
   if (type === EventType.PRESS) {
-    if (notification.data.scree == 'proposal') {
-      navigationRef?.navigate('DrawerNavigation', {
-        screen: 'ProposalNavigator',
-        params: {
-          screen: '',
-        },
+    const data = detail.notification.data;
+    if (data.screen == 'proposal') {
+      console.log('Foreground Pressed', detail.notification.data);
+      navigationRef?.navigate('ProposalDetail', {
+        jobId: data.jobId,
+        proposalId: data.id,
       });
     }
-    await notifee.cancelNotification(notification.id);
+    await notifee.cancelNotification(detail.notification.id);
   }
 });
 

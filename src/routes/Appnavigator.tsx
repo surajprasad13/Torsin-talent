@@ -38,6 +38,7 @@ import ReceivedPayment from '../screens/payment/ReceivedPaymentDetail';
 import RatingDetail from '../screens/rating/RatingDetail';
 import RaiseQuery from '../screens/help/RaiseQuery';
 import FeedDetails from '../screens/feeds/FeedDetails';
+import ChangePassword from '../screens/changePassword/ChangePassword';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -199,6 +200,11 @@ export default function AppNavigator() {
             <Stack.Screen
               name="ResetPassword"
               component={ResetPassword}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="ChangePassword"
+              component={ChangePassword}
               options={{headerShown: false}}
             />
             <Stack.Screen
