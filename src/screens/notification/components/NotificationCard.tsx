@@ -26,13 +26,19 @@ const NotificationCard: FC<NotificationCardProp> = ({item}) => {
   const onPress = () => {
     switch (item.type) {
       case NotificationEnumType.Contract_detail:
-        navigation.navigate('ViewContract', {
-          contractId: item.renderId,
+        navigation.navigate('ContractNavigator', {
+          screen: 'ViewContract',
+          params: {
+            contractId: item.renderId,
+          },
         });
         break;
       case NotificationEnumType.Proposal_Sent_By_Talent:
-        navigation.navigate('ProposalDetail', {
-          proposalId: item.renderId,
+        navigation.navigate('ProposalNavigator', {
+          screen: 'ProposalDetail',
+          params: {
+            proposalId: item.renderId,
+          },
         });
         break;
       default:
