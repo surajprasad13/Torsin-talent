@@ -7,6 +7,7 @@ import {
   fetchNotification,
   fetchService,
   fetchSkill,
+  filterCity,
   getAccepted,
   getAdminPercentage,
   getContract,
@@ -38,6 +39,7 @@ interface UserInterface {
   correspond: Array<JobDetail>;
   notCorrespond: Array<JobDetail>;
   search: Array<JobDetail>;
+  city: [];
   addSuccess: string;
   acceptList: Array<any>;
   proposalStatus: Array<any>;
@@ -65,6 +67,7 @@ const initialState: UserInterface = {
   correspond: [],
   notCorrespond: [],
   search: [],
+  city: [],
   addSuccess: '',
   acceptList: [],
   proposalStatus: [],
@@ -335,6 +338,20 @@ const userSlice = createSlice({
         state.adminPercentage = action.payload.response[0].adminPercentage;
       })
       .addCase(getAdminPercentage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //Filter City
+      .addCase(filterCity.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(filterCity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.city = action.payload;
+      })
+      .addCase(filterCity.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

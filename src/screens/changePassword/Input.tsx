@@ -25,7 +25,7 @@ import {resetSuccess} from '../../redux/reducers/authSlice';
 
 type NavigationProp = StackNavigationProp<AuthScreenParamList>;
 
-const ChangePassword = () => {
+const InputPass = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp>();
 
@@ -121,11 +121,8 @@ const ChangePassword = () => {
   useEffect(() => {
     if (success) {
       dispatch(resetSuccess());
-      Alert.alert(
-        'Password Changed Successfully',
-        'Your password has been changed successfully!',
-        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-      );
+      //   navigation.navigate('Successfull');
+      Alert.alert('Success');
     }
   }, [success]);
 
@@ -138,65 +135,81 @@ const ChangePassword = () => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <Title title="Change Password" />
-      <ScrollView>
-        <View style={{margin: 10}}>
-          <Text
-            style={{
-              fontFamily: fonts.semibold,
-              fontSize: 22,
-              color: '#0E184D',
-              marginTop: 20,
-            }}>
-            Change Password
-          </Text>
+      <Title title="" />
+      <ScrollView
+        contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
+        <View style={{flex: 0.8}}>
+          <View>
+            <Text
+              style={{
+                fontFamily: fonts.semibold,
+                fontSize: 22,
+                color: '#0E184D',
+              }}>
+              Reset Password
+            </Text>
 
-          <CustomInput
-            onChangeText={(text: string) => {
-              handleError(null, 'oldPassword');
-              handleOnchange(text, 'oldPassword');
-            }}
-            onFocus={() => handleError(null, 'oldPassword')}
-            label="Current password"
-            maxLength={16}
-            placeholder="Enter password"
-            autoCapitalize="none"
-            password
-            containerStyle={{marginTop: 10}}
-          />
+            <Text
+              style={{
+                fontFamily: fonts.regular,
+                alignItems: 'center',
+                color: '#000F1A',
+                top: 10,
+              }}>
+              It's important to choose a strong and unique password for your
+              account to keep it secure
+            </Text>
+          </View>
 
-          <CustomInput
-            onChangeText={(text: string) => {
-              setIsValid(handleValidation(text));
-              handleError(null, 'newPassword');
-              handleOnchange(text, 'newPassword');
-            }}
-            onFocus={() => handleError(null, 'newPassword')}
-            label="New password"
-            maxLength={16}
-            placeholder="Enter password"
-            autoCapitalize="none"
-            password
-            containerStyle={{marginTop: 20}}
-          />
+          <View style={{top: 16}}>
+            <CustomInput
+              onChangeText={(text: string) => {
+                handleError(null, 'oldPassword');
+                handleOnchange(text, 'oldPassword');
+              }}
+              onFocus={() => handleError(null, 'oldPassword')}
+              label="Current password"
+              maxLength={16}
+              placeholder="Enter password"
+              autoCapitalize="none"
+              password
+            />
+          </View>
 
-          <CustomInput
-            onChangeText={(text: string) => {
-              handleError(null, 'confirmPassword');
-              handleOnchange(text, 'confirmPassword');
-            }}
-            onFocus={() => {
-              handleError(null, 'confirmPassword');
-            }}
-            maxLength={16}
-            label="Re-enter new password"
-            placeholder="Re-enter password"
-            autoCapitalize="none"
-            password
-            containerStyle={{marginTop: 20}}
-          />
+          <View style={{top: 32}}>
+            <CustomInput
+              onChangeText={(text: string) => {
+                setIsValid(handleValidation(text));
+                handleError(null, 'newPassword');
+                handleOnchange(text, 'newPassword');
+              }}
+              onFocus={() => handleError(null, 'newPassword')}
+              label="New password"
+              maxLength={16}
+              placeholder="Enter password"
+              autoCapitalize="none"
+              password
+            />
+          </View>
 
-          <View style={{marginTop: 20}}>
+          <View style={{top: 50}}>
+            <CustomInput
+              onChangeText={(text: string) => {
+                handleError(null, 'confirmPassword');
+                handleOnchange(text, 'confirmPassword');
+              }}
+              onFocus={() => {
+                handleError(null, 'confirmPassword');
+              }}
+              maxLength={16}
+              label="Re-enter new password"
+              placeholder="Re-enter password"
+              autoCapitalize="none"
+              password
+            />
+          </View>
+
+          <View style={{marginTop: 66}}>
             {passwordStrength.map((_item: string, index: number) => {
               const _active = checkStatus(index);
               return (
@@ -232,11 +245,11 @@ const ChangePassword = () => {
             input.confirmPassword.length >= 8 &&
             isValid.every(_item => _item == true)
           }
-          style={{bottom: 20, marginTop: 40}}
+          style={{marginTop: 200}}
         />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default ChangePassword;
+export default InputPass;

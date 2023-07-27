@@ -171,7 +171,7 @@ const LoginScreen = ({}) => {
               onPress={handleSubmit}
               disabled={!!values.email && !!values.password}
               loading={loading}
-              style={{marginTop: 200}}
+              style={{marginTop: 150, bottom: 20}}
             />
 
             <View

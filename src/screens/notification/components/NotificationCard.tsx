@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
@@ -9,38 +9,40 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import {colors, fonts, appstyle} from '../../../theme';
-import {NotificationInterface} from '../../../types/notification';
+import {
+  NotificationEnumType,
+  NotificationItem,
+} from '../../../types/notification';
 import {DrawerScreenParamaList} from '../../../routes/RouteType';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 
 interface NotificationCardProp {
-  item: NotificationInterface;
+  item: NotificationItem;
 }
-
-enum screenType {
-  Contract = 1 | 2,
-  Proposal = 3 | 4,
-}
-
-type NavigationProp = DrawerNavigationProp<DrawerScreenParamaList>;
 
 const NotificationCard: FC<NotificationCardProp> = ({item}) => {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation();
+
+  const onPress = () => {
+    switch (item.type) {
+      case NotificationEnumType.Contract_detail:
+        navigation.navigate('ViewContract', {
+          contractId: item.renderId,
+        });
+        break;
+      case NotificationEnumType.Proposal_Sent_By_Talent:
+        navigation.navigate('ProposalDetail', {
+          proposalId: item.renderId,
+        });
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <View style={{}}>
-      <TouchableOpacity
-        onPress={() => {
-          if (item.type == 1 || item.type == 2) {
-            navigation.navigate('ContractNavigator', {
-              screen: 'ViewContract',
-              params: {
-                id: item.renderId,
-              },
-            });
-          }
-        }}
-        style={styles.container}>
+      <TouchableOpacity onPress={onPress} style={styles.container}>
         <View
           style={{
             width: 50,

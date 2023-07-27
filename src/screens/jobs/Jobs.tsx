@@ -21,7 +21,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Octicons from 'react-native-vector-icons/Octicons';
 
 // components
-
 import {colors, fonts} from '../../theme';
 import ExpertiseCard from '../../screens/home/components/ExpertiseCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';

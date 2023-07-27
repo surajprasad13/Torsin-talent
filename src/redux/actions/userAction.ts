@@ -322,6 +322,28 @@ const getAdminPercentage = createAsyncThunk(
     }
   },
 );
+const filterCity = createAsyncThunk(
+  'https://torsin-admin.apponward.com/v1/api/city/filter',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(
+        `https://torsin-admin.apponward.com/v1/api/city/filter`,
+        {
+          params: {
+            search: value.search,
+          },
+        },
+      );
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
 
 export {
   addService,
@@ -341,6 +363,7 @@ export {
   getRating,
   createRating,
   getAdminPercentage,
+  filterCity,
 };
 
 export default {};
