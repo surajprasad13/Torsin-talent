@@ -1,9 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Keyboard, ScrollView, SafeAreaView} from 'react-native';
+import {
+  View,
+  Text,
+  Keyboard,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 //icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 
 // helpers
 import {colors, fonts} from '../../../theme';
@@ -128,7 +136,22 @@ const ResetPassword = ({route}: any) => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <Title title="" />
+      <View style={{flexDirection: 'row', padding: 10}}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('LoginScreen')}
+          style={{}}>
+          <Feather name="arrow-left" size={20} />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontFamily: fonts.medium,
+            color: colors.almostBlack,
+            textAlign: 'center',
+            flex: 1,
+          }}>
+          Reset Password
+        </Text>
+      </View>
       <ScrollView
         contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
         <View style={{flex: 0.8}}>
@@ -222,7 +245,7 @@ const ResetPassword = ({route}: any) => {
             input.confirmPassword.length >= 8 &&
             isValid.every(_item => _item == true)
           }
-          style={{marginTop: 200}}
+          style={{marginTop: 150, bottom: 20}}
         />
       </ScrollView>
     </SafeAreaView>

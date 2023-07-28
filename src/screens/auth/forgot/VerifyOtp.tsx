@@ -13,8 +13,10 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+import {Formik, useFormik} from 'formik';
+import * as Yup from 'yup';
 
-//helpers
+// Helpers
 import {CustomButton, Title} from '../../../components';
 import {colors, fonts} from '../../../theme';
 import {useNavigation} from '@react-navigation/native';
@@ -25,7 +27,6 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthScreenParamList} from '../../../routes/RouteType';
 
 const {width} = Dimensions.get('window');
-
 const CELL_COUNT = 6;
 
 type NavigationProp = StackNavigationProp<AuthScreenParamList>;
@@ -34,7 +35,14 @@ const VerifyOtp = ({route}: any) => {
   const {email} = route.params;
   const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
-  const {loading, success, emailVerified} = useAppSelector(state => state.auth);
+  const {loading, success, error} = useAppSelector(state => state.auth);
+
+  const validationSchema = Yup.object().shape({
+    otp: Yup.string()
+      .length(CELL_COUNT, 'OTP must be exactly 6 characters')
+      .matches(/^\d+$/, 'OTP must only contain numbers')
+      .required('OTP is required'),
+  });
 
   const onPressResend = () => {
     if (email) {
@@ -49,19 +57,11 @@ const VerifyOtp = ({route}: any) => {
   };
 
   useEffect(() => {
-    if (value.length >= 6) {
-      const field = {
-        email,
-        otp: Number(value),
-      };
-      dispatch(otpverify(field));
+    if (success) {
+      dispatch(resetSuccess());
+      navigation.navigate('ResetPassword', {email});
     }
-  }, [value]);
-
-  useEffect(() => {
-    if (emailVerified) {
-    }
-  }, [emailVerified]);
+  }, [success]);
 
   const [value, setValue] = useState('');
 
@@ -70,13 +70,6 @@ const VerifyOtp = ({route}: any) => {
     value,
     setValue,
   });
-
-  useEffect(() => {
-    if (success) {
-      dispatch(resetSuccess());
-      navigation.navigate('ResetPassword', {email});
-    }
-  }, [success]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -100,54 +93,92 @@ const VerifyOtp = ({route}: any) => {
           }}>
           Please wait till we verify your Email address
         </Text>
-        <CodeField
-          ref={ref}
-          {...props}
-          value={value}
-          onChangeText={setValue}
-          cellCount={CELL_COUNT}
-          rootStyle={styles.codeFiledRoot}
-          keyboardType="number-pad"
-          textContentType="oneTimeCode"
-          renderCell={({index, symbol, isFocused}) => (
-            <View
-              onLayout={getCellOnLayoutHandler(index)}
-              key={index}
-              style={[]}>
-              <Text style={styles.cell}>
-                {symbol || (isFocused ? <Cursor /> : null)}
-              </Text>
-            </View>
+
+        <Formik
+          initialValues={{otp: ''}}
+          validationSchema={validationSchema}
+          onSubmit={values => {
+            const field = {
+              email,
+              otp: Number(values.otp),
+            };
+            dispatch(otpverify(field));
+          }}>
+          {({
+            values,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            errors,
+            touched,
+          }) => (
+            <>
+              <CodeField
+                ref={ref}
+                {...props}
+                value={values.otp}
+                onChangeText={handleChange('otp')}
+                cellCount={CELL_COUNT}
+                rootStyle={styles.codeFiledRoot}
+                keyboardType="number-pad"
+                textContentType="oneTimeCode"
+                renderCell={({index, symbol, isFocused}) => (
+                  <View
+                    onLayout={getCellOnLayoutHandler(index)}
+                    key={index}
+                    style={[]}>
+                    <Text style={styles.cell}>
+                      {symbol || (isFocused ? <Cursor /> : null)}
+                    </Text>
+                  </View>
+                )}
+              />
+              {!!error && (
+                <Text
+                  style={{
+                    textAlign: 'left',
+                    left: 10,
+                    color: 'red',
+                    fontFamily: fonts.medium,
+                  }}>
+                  {error}
+                </Text>
+              )}
+              {touched.otp && errors.otp && (
+                <Text style={{color: 'red', marginTop: 10}}>{errors.otp}</Text>
+              )}
+              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    color: '#000000',
+                  }}>
+                  I didn't receive code?
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(resetOtpSent({email}));
+                  }}>
+                  <Text
+                    style={{
+                      color: '#27AE60',
+                      fontFamily: fonts.regular,
+                    }}>
+                    {' '}
+                    Resend Code
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <CustomButton
+                onPress={handleSubmit}
+                title="Submit & Verify"
+                disabled={!loading && values.otp.length > 5}
+                loading={loading}
+                style={{marginTop: 300}}
+              />
+            </>
           )}
-        />
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Text
-            style={{
-              fontFamily: fonts.regular,
-              color: '#000000',
-            }}>
-            I didn't receive code?
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              dispatch(resetOtpSent({email}));
-            }}>
-            <Text
-              style={{
-                color: '#27AE60',
-                fontFamily: fonts.regular,
-              }}>
-              {''} Resend Code
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <CustomButton
-          onPress={onPressResend}
-          title="Submit & Verify"
-          disabled
-          loading={loading}
-          style={{marginTop: 300}}
-        />
+        </Formik>
       </View>
     </SafeAreaView>
   );

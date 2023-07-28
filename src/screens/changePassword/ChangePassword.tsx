@@ -36,15 +36,15 @@ const ChangePassword = () => {
     newPassword: '',
     confirmPassword: '',
   });
-  const {loading, success} = useAppSelector(state => state.auth);
+  const {loading, success, error} = useAppSelector(state => state.auth);
 
   const [isValid, setIsValid] = useState<Array<boolean>>([]);
 
   const passwordStrength = [
-    'Atleast one upper character.',
+    'Atleast one upper case.',
     'Atleast one numeric digit.',
-    'Atleast one speical character (E.g @%$)',
-    'Atleast 8 character',
+    'Atleast one special character (E.g @%$)',
+    'Atleast 8 characters',
   ];
 
   function handleValidation(value: string) {
@@ -94,6 +94,7 @@ const ChangePassword = () => {
       handleError('Please enter valid password', 'password');
       _isValid = false;
     }
+
     if (input.newPassword.length < 8) {
       handleError('Min password length of 8', 'password');
       _isValid = false;
@@ -202,25 +203,15 @@ const ChangePassword = () => {
 
       <ScrollView>
         <View style={{margin: 10}}>
-          <Text
-            style={{
-              fontFamily: fonts.semibold,
-              fontSize: 22,
-              color: '#0E184D',
-              marginTop: 20,
-            }}>
-            Change Password
-          </Text>
-
           <CustomInput
             onChangeText={(text: string) => {
               handleError(null, 'oldPassword');
               handleOnchange(text, 'oldPassword');
             }}
             onFocus={() => handleError(null, 'oldPassword')}
-            label="Current password"
+            label="Current Password"
             maxLength={16}
-            placeholder="Enter password"
+            placeholder="Enter current password"
             autoCapitalize="none"
             password
             containerStyle={{marginTop: 10}}
@@ -233,9 +224,9 @@ const ChangePassword = () => {
               handleOnchange(text, 'newPassword');
             }}
             onFocus={() => handleError(null, 'newPassword')}
-            label="New password"
+            label="New Password"
             maxLength={16}
-            placeholder="Enter password"
+            placeholder="Enter new password"
             autoCapitalize="none"
             password
             containerStyle={{marginTop: 20}}
@@ -250,12 +241,23 @@ const ChangePassword = () => {
               handleError(null, 'confirmPassword');
             }}
             maxLength={16}
-            label="Re-enter new password"
-            placeholder="Re-enter password"
+            label="Confirm New password"
+            placeholder="Enter confirm password"
             autoCapitalize="none"
             password
             containerStyle={{marginTop: 20}}
           />
+
+          {!!error && (
+            <Text
+              style={{
+                color: 'red',
+                fontFamily: fonts.medium,
+                marginTop: 5,
+              }}>
+              {error}
+            </Text>
+          )}
 
           <View style={{marginTop: 20}}>
             {passwordStrength.map((_item: string, index: number) => {
@@ -293,7 +295,7 @@ const ChangePassword = () => {
             input.confirmPassword.length >= 8 &&
             isValid.every(_item => _item == true)
           }
-          style={{bottom: 20, marginTop: 40}}
+          style={{bottom: 20, marginTop: 120}}
         />
       </ScrollView>
     </SafeAreaView>

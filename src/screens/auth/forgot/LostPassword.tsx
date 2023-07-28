@@ -39,7 +39,7 @@ const LostPasswordScreen = ({}) => {
 
   const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
-  const {loading, success} = useAppSelector(state => state.auth);
+  const {loading, success, error} = useAppSelector(state => state.auth);
 
   const handleOnSubmit = (values: any) => {
     dispatch(resetOtpSent({email: values.email}));
@@ -101,12 +101,24 @@ const LostPasswordScreen = ({}) => {
               </View>
             </View>
 
+            {!!error && (
+              <Text
+                style={{
+                  textAlign: 'left',
+                  left: 10,
+                  color: 'red',
+                  fontFamily: fonts.medium,
+                }}>
+                {error}
+              </Text>
+            )}
+
             <CustomButton
               title="Send Otp"
-              disabled
+              disabled={!!values.email}
               loading={loading}
               onPress={handleSubmit}
-              style={{marginTop: verticalScale(200)}}
+              style={{marginTop: 300, bottom: 20}}
             />
           </ScrollView>
         )}

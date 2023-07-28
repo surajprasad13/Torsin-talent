@@ -19,7 +19,12 @@ const Successfull = ({}) => {
 
   return (
     <View style={{backgroundColor: '#ffffff', flex: 1}}>
-      <View style={{marginTop: 150, alignItems: 'center'}}>
+      <View
+        style={{
+          marginTop: 150,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <Image
           source={require('../../../assets/images/succes.png')}
           style={{width: 280, height: 150}}
