@@ -23,9 +23,7 @@ async function checkApplicationPermission() {
 
 async function onAppBootstrap() {
   // Register the device with FCM
-  await messaging().registerDeviceForRemoteMessages();
-
-  // Get the token
+  //  await messaging().registerDeviceForRemoteMessages();
   const token = await messaging().getToken();
 
   // Save the token

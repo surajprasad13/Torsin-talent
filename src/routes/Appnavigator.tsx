@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {} from 'react-native';
+import React, {FC, useEffect} from 'react';
+import {ActivityIndicator, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import notifee from '@notifee/react-native';
@@ -40,9 +40,11 @@ import RaiseQuery from '../screens/help/RaiseQuery';
 import FeedDetails from '../screens/feeds/FeedDetails';
 import ChangePassword from '../screens/changePassword/ChangePassword';
 
+import {useFlipper} from '@react-navigation/devtools';
+
 const Stack = createStackNavigator<RootStackParamList>();
 
-export default function AppNavigator() {
+const AppNavigator: FC = () => {
   const {userToken, isFirstOpen} = useAppSelector(state => state.auth);
 
   const config = {
@@ -60,8 +62,6 @@ export default function AppNavigator() {
   const openAppBootStrap = async () => {
     const initialNotification = await notifee.getInitialNotification();
     if (initialNotification) {
-      console.log('Initial Notification');
-      // this.handleNotificationOpen(initialNotification.notification);
       navigationRef?.navigate('ChatUser', {item: {}});
       await notifee.cancelNotification(
         initialNotification.notification.id ?? '',
@@ -70,11 +70,21 @@ export default function AppNavigator() {
   };
 
   useEffect(() => {
+    console.log('Rootstate', navigationRef.current?.getRootState());
     openAppBootStrap();
   }, []);
 
+  useFlipper(navigationRef);
+
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer
+      ref={navigationRef}
+      linking={linking}
+      fallback={
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator />
+        </View>
+      }>
       <Stack.Navigator
         screenOptions={{}}
         initialRouteName={isFirstOpen ? 'OnboardingScreen' : 'LoginScreen'}>
@@ -272,4 +282,6 @@ export default function AppNavigator() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default AppNavigator;

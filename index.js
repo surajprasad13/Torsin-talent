@@ -5,30 +5,46 @@ import notifee, {EventType} from '@notifee/react-native';
 
 import messaging from '@react-native-firebase/messaging';
 
-import {navigationRef} from './src/routes/RootNavigation';
+import {navigationRef, navigate} from './src/routes/RootNavigation';
 
-// is required for both subscribers.
 async function onMessageReceived(message) {
   // Do something
+  console.log(message, 'onMessageReceived');
+  await notifee.displayNotification({
+    title: message.notification?.title,
+    body: message.notification?.body,
+    data: message.data,
+  });
 }
 
 notifee.onBackgroundEvent(async ({type, detail}) => {
-  console.log('onBackgorund');
   if (type === EventType.PRESS) {
+    console.log('onBackgorund Press');
+    const data = detail.notification.data;
+    if (data.screen == 'proposal') {
+      navigate('ProposalNavigator', {
+        screen: 'ProposalDetail',
+        params: {
+          id: data.id,
+        },
+      });
+    }
     await notifee.cancelNotification(detail.notification.id);
   }
 });
 
 notifee.onForegroundEvent(async ({type, detail}) => {
   if (type === EventType.PRESS) {
+    console.log('OnForeground Press', detail);
     const data = detail.notification.data;
-    if (data.screen == 'proposal') {
-      console.log('Foreground Pressed', detail.notification.data);
-      navigationRef?.navigate('ProposalDetail', {
-        jobId: data.jobId,
-        proposalId: data.id,
-      });
-    }
+    // if (data.screen == 'proposal') {
+    navigate('ProposalNavigator', {
+      screen: 'ProposalDetail',
+      params: {
+        id: data.id,
+      },
+    });
+    // }
     await notifee.cancelNotification(detail.notification.id);
   }
 });

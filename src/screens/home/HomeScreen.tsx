@@ -116,6 +116,7 @@ const HomeScreen = ({}) => {
           />
         </TouchableOpacity>
       </View>
+
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={onRefresh} />

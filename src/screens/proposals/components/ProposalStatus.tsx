@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
 import {Divider} from 'react-native-paper';
-import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 
@@ -12,7 +11,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // helpers
 import {appstyle, colors, fonts} from '../../../theme';
 
-const ProposalStatus = ({item}: any) => {
+const ProposalStatus: FC = ({item}: any) => {
   const navigation = useNavigation();
 
   const renderStatus = (id: number) => {
@@ -38,7 +37,9 @@ const ProposalStatus = ({item}: any) => {
 
   return (
     <Pressable
-      onPress={() => navigation.navigate('ProposalDetail', {item})}
+      onPress={() =>
+        navigation.navigate('ProposalDetail', {id: item.proposalId})
+      }
       key={item.toString()}
       style={[styles.cardContainer, {}]}>
       <View

@@ -41,7 +41,6 @@ const fetchSkill = createAsyncThunk(
       const {data} = await api.get(`talent/skill/detail`);
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -50,11 +49,32 @@ const fetchSkill = createAsyncThunk(
     }
   },
 );
+
 const fetchService = createAsyncThunk(
   'user/fetchService',
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/service/detail`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const fetchAdminService = createAsyncThunk(
+  'user/fetchAdminService',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`admin/services`, {
+        params: {
+          serviceName: value,
+        },
+      });
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -176,6 +196,26 @@ const getProposalStatus = createAsyncThunk(
   },
 );
 
+const getProposalDetail = createAsyncThunk(
+  'user/proposal/detail',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`talent/proposal/status`, {
+        params: {
+          proposalId: value,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 const getContract = createAsyncThunk(
   'user/contract/list',
   async (value: any, {rejectWithValue}) => {
@@ -271,12 +311,10 @@ async function fetchDataFromDatabase(item: any, userId: number) {
 }
 
 const getRating = createAsyncThunk(
-  'https://torsin-admin.apponward.com/v1/api/common/rating/get',
+  'rating/get',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(
-        `https://torsin-admin.apponward.com/v1/api/common/rating/get`,
-      );
+      const {data} = await api.get(`common/rating/get`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -289,13 +327,10 @@ const getRating = createAsyncThunk(
 );
 
 const createRating = createAsyncThunk(
-  'https://torsin-admin.apponward.com/v1/api/common/rating/create',
+  'rating/create',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.post(
-        `https://torsin-admin.apponward.com/v1/api/common/rating/create`,
-        value,
-      );
+      const {data} = await api.post(`common/rating/create`, value);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -323,17 +358,14 @@ const getAdminPercentage = createAsyncThunk(
   },
 );
 const filterCity = createAsyncThunk(
-  'https://torsin-admin.apponward.com/v1/api/city/filter',
+  'country/city',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(
-        `https://torsin-admin.apponward.com/v1/api/city/filter`,
-        {
-          params: {
-            search: value.search,
-          },
+      const {data} = await api.get(`city/filter`, {
+        params: {
+          search: value.search,
         },
-      );
+      });
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -364,6 +396,8 @@ export {
   createRating,
   getAdminPercentage,
   filterCity,
+  fetchAdminService,
+  getProposalDetail,
 };
 
 export default {};

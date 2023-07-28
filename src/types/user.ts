@@ -25,10 +25,24 @@ export interface ProposalDetail {
   job: number;
   message: string;
   video: string;
-  portfolio: string;
+  portfolio: string | null;
   projectType: number;
   charge: number;
   images: Array<string>;
+  jobId: number;
+  jobName: string;
+  jobDescription: string;
+  jobProjectType: number;
+  jobPriceRate: number;
+  adminService: string[];
+  proposalId: number;
+  proposalStatus: number;
+  charges: number;
+  photos: string[];
+  videos: null;
+  createdAt: string;
+  location: string;
+  countryName: string;
 }
 
 export interface Rating {
