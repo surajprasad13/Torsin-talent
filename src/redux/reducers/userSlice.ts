@@ -4,6 +4,7 @@ import {
   addService,
   addSkill,
   createRating,
+  fetchAdminService,
   fetchNotification,
   fetchService,
   fetchSkill,
@@ -12,13 +13,14 @@ import {
   getAdminPercentage,
   getContract,
   getContractDetail,
+  getProposalDetail,
   getProposalStatus,
   getRating,
   jobCorrespondSkill,
   notJobCorrespondSkill,
   updateContract,
 } from '../actions/userAction';
-import {JobDetail, Rating, Service} from '../../types/user';
+import {JobDetail, ProposalDetail, Rating, Service} from '../../types/user';
 import {searchJob} from '../actions/userAction';
 import {Contract} from '../../types/contract';
 
@@ -35,6 +37,7 @@ interface UserInterface {
   status: null | Status;
   registerSuccess: false;
   skills: Array<string>;
+  adminService: Array<{id: number; serviceName: string}> | string;
   services: Array<Service>;
   correspond: Array<JobDetail>;
   notCorrespond: Array<JobDetail>;
@@ -43,6 +46,7 @@ interface UserInterface {
   addSuccess: string;
   acceptList: Array<any>;
   proposalStatus: Array<any>;
+  proposalDetail: null | ProposalDetail;
   contracts: {
     accepted: Array<any>;
     rejected: Array<any>;
@@ -63,6 +67,7 @@ const initialState: UserInterface = {
   status: null,
   registerSuccess: false,
   skills: [],
+  adminService: [],
   services: [],
   correspond: [],
   notCorrespond: [],
@@ -71,6 +76,7 @@ const initialState: UserInterface = {
   addSuccess: '',
   acceptList: [],
   proposalStatus: [],
+  proposalDetail: null,
   contracts: {
     accepted: [],
     rejected: [],
@@ -147,6 +153,20 @@ const userSlice = createSlice({
         state.services = action.payload.response;
       })
       .addCase(fetchService.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // admin service
+      .addCase(fetchAdminService.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(fetchAdminService.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminService = action.payload.response;
+      })
+      .addCase(fetchAdminService.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
@@ -232,6 +252,21 @@ const userSlice = createSlice({
         state.proposalStatus = action.payload.response;
       })
       .addCase(getProposalStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // proposal detail
+      .addCase(getProposalDetail.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getProposalDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.proposalDetail = action.payload.response[0];
+      })
+      .addCase(getProposalDetail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

@@ -6,6 +6,8 @@ import Profile from './Profile';
 import CustomInput from './CustomInput';
 import Title from './Title';
 import GridImageView from './GridImageView';
+import Stepper from './Stepper';
+import Textarea from './Textarea';
 
 export {
   CustomButton,
@@ -16,4 +18,6 @@ export {
   CustomInput,
   Title,
   GridImageView,
+  Stepper,
+  Textarea,
 };

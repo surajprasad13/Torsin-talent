@@ -8,6 +8,7 @@ export function navigate(name: any, params: any) {
   if (navigationRef.isReady()) {
     navigationRef.navigate(name, params);
   } else {
+    console.log('Not initialized');
   }
 }
 

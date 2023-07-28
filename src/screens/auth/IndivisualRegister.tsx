@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
@@ -8,6 +9,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
 } from 'react-native';
 import {} from 'react-native-paper';
 import {useSelector} from 'react-redux';
@@ -28,7 +30,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // helpers
-import {metrics, colors, fonts} from '../../theme';
+import {metrics, colors, fonts, appstyle} from '../../theme';
 
 // components
 import Input from '../../components/Input';
@@ -38,7 +40,7 @@ import ProFile from '../../components/Profile';
 
 // redux
 import {RootState} from '../../redux';
-import {CustomButton, CustomInput} from '../../components';
+import {CustomButton, CustomInput, Stepper} from '../../components';
 
 import {uploadFileToS3} from '../../services/s3';
 import {useAppDispatch} from '../../hooks';
@@ -73,8 +75,7 @@ const IndivisualRegister = ({}) => {
   });
 
   const [profileImage, setProfileImage] = useState('');
-  const [formattedValue, setFormattedValue] = useState('');
-  const phoneInput = useRef(null);
+  const phoneInput = useRef<any | null>(null);
 
   const locales = getLocales();
 
@@ -122,6 +123,7 @@ const IndivisualRegister = ({}) => {
     }
   };
 
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {
       dispatch(resetEmailVerified());
@@ -130,6 +132,7 @@ const IndivisualRegister = ({}) => {
     return () => listener;
   }, []);
 
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(resetEmailVerified());
@@ -158,41 +161,9 @@ const IndivisualRegister = ({}) => {
             style={{flex: 1}}
             behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
             <ScrollView contentContainerStyle={{padding: 10}}>
-              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                <View
-                  style={{
-                    width: 20,
-                    height: 20,
-                    borderRadius: 10,
-                    backgroundColor: '#14226D',
-                    right: -1,
-                  }}></View>
+              <Stepper step={0} />
 
-                <View
-                  style={{
-                    width: 120,
-                    height: 10,
-                    backgroundColor: '#E0E0E0',
-                    top: 5,
-                  }}></View>
-
-                <View
-                  style={{
-                    width: 20,
-                    height: 20,
-                    borderRadius: 10,
-                    backgroundColor: '#E0E0E0',
-                    left: -2,
-                  }}></View>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  top: 36,
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
+              <View style={[appstyle.rowBetween, {top: 36}]}>
                 <TouchableOpacity
                   onPress={() => {
                     if (navigation.canGoBack()) {
@@ -322,16 +293,13 @@ const IndivisualRegister = ({}) => {
                         handleChange('mobileNo')(text);
                       }
                     }}
-                    onChangeFormattedText={text => {
-                      setFormattedValue(text);
-                    }}
+                    onChangeFormattedText={() => {}}
                     textInputProps={{
                       maxLength: 15,
                       onFocus: () => setErrors({mobileNo: ''}),
                     }}
                     withDarkTheme
                     withShadow
-                    error={errors.mobileNo}
                   />
                   <Pressable
                     style={{
@@ -426,10 +394,7 @@ const IndivisualRegister = ({}) => {
                     value={selectedCountry?.name || values.countryName}
                     onChangeText={text => {
                       setCountryPickerOpen(true);
-                      handleChange('countryName')(text); // Add this line to update the 'countryName' value
-                    }}
-                    onBlur={() => {
-                      setCountryPickerOpen(false); // Update the state to close the CountryPicker
+                      handleChange('countryName')(text);
                     }}
                     onFocus={() => {
                       setErrors({countryName: ''});
@@ -456,9 +421,12 @@ const IndivisualRegister = ({}) => {
                   <CountryPicker
                     withFilter
                     withFlag={false}
-                    onSelect={handleCountrySelect}
+                    onSelect={country => {
+                      handleCountrySelect(country);
+                      handleChange('countryName')(country.name as string);
+                    }}
                     countryCode={selectedCountry?.cca2}
-                    visible={isCountryPickerOpen}
+                    visible
                     containerButtonStyle={{
                       display: 'none',
                     }}
@@ -541,5 +509,7 @@ const IndivisualRegister = ({}) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({});
 
 export default IndivisualRegister;

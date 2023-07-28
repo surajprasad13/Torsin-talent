@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {} from 'react-native';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 
@@ -12,7 +12,7 @@ import AddJobDetails from '../screens/proposals/AddJobDetails';
 
 const Stack = createStackNavigator<HomeScreenParamList>();
 
-const HomeNavigator = () => {
+const HomeNavigator: FC = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen

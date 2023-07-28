@@ -4,26 +4,14 @@ import type {
   StackScreenProps,
 } from '@react-navigation/stack';
 import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {DrawerScreenProps} from '@react-navigation/drawer';
 
-export type RootStackParamList = {
+export type RootStackParamList = AuthScreenParamList & {
   OnboardingScreen: undefined;
-  LoginScreen: undefined;
-  RegisterScreen: undefined;
-  LostPassword: undefined;
-  VerifyOtp: {
-    email: undefined | string;
-  };
-  ResetPassword: {
-    email: undefined | string;
-  };
-  Successfull: undefined;
   VerifyOtpRegister: undefined;
   WalkthroughScreen: undefined;
-  IndivisualRegister: undefined;
-  ThroughRegister: undefined;
-  BusinessRegister: undefined;
   BusinessPassword: undefined;
-  DrawerNavigation: DrawerScreenParamaList;
+  DrawerNavigation: DrawerScreenProps<DrawerScreenParamaList>;
   PostDetails: {id: string};
   NotFound: undefined;
   BottomScreens: undefined;
@@ -51,7 +39,6 @@ export type RootStackParamList = {
 export type AuthScreenParamList = {
   OnboardingScreen: undefined;
   LoginScreen: undefined;
-  RegisterScreen: undefined;
   LostPassword: undefined;
   VerifyOtp: {
     email: undefined | string;
@@ -67,6 +54,7 @@ export type AuthScreenParamList = {
   BusinessRegister: undefined;
   BusinessPassword: undefined;
   IndivisualCreatePassword: undefined;
+  ChangePassword: undefined;
 };
 
 export type DrawerScreenParamaList = {
@@ -81,7 +69,7 @@ export type DrawerScreenParamaList = {
   AboutUs: undefined;
   TermsPrivacy: undefined;
   HelpSupport: undefined;
-  BottomNavigation: BottomScreenParamList;
+  BottomNavigation: BottomTabScreenProps<BottomScreenParamList>;
   DrawerSetting: undefined;
   PaymentMethod: undefined;
   Feeds: undefined;
@@ -92,7 +80,7 @@ export type BottomScreenParamList = {
   HomeNavigator: undefined;
   JobNavigator: undefined;
   Chat: undefined;
-  SettingNavigator: SettingScreenParamList;
+  SettingNavigator: StackScreenProps<SettingScreenParamList>;
 };
 
 export type SettingScreenParamList = {

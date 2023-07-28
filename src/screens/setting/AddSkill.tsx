@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,7 +9,6 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  TextInput,
 } from 'react-native';
 
 // icons
@@ -16,28 +16,27 @@ import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {colors, fonts} from '../../theme';
-import {CustomButton, CustomInput} from '../../components';
+import {CustomButton, CustomInput, Title} from '../../components';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {addSkill, fetchSkill} from '../../redux/actions/userAction';
+import {addSkill, fetchAdminService} from '../../redux/actions/userAction';
 import {Button, Dialog, Portal} from 'react-native-paper';
 import {updateSuccess} from '../../redux/reducers/userSlice';
 
-const AddSkill = () => {
+const AddSkill: FC = () => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
 
-  const {loading, error, success, skills} = useAppSelector(state => state.user);
+  const {loading, error, success, adminService} = useAppSelector(
+    state => state.user,
+  );
 
-  const [inputValue, setInputValue] = useState('');
-  const [filteredItems, setFilteredItems] = useState(skills);
+  const [inputValue, setInputValue] = useState<string>('');
   const [selectedItems, setSelectedItem] = useState<string[]>([]);
 
   const handleSearch = (text: string) => {
-    const filter = skills.filter(item =>
-      item.toLowerCase().includes(text.toLowerCase()),
-    );
-    setFilteredItems(filter);
+    if (selectedItems.length > 10) return;
     setInputValue(text);
+    dispatch(fetchAdminService(text));
   };
 
   const handleRemoveItem = (item: any) => {
@@ -45,13 +44,11 @@ const AddSkill = () => {
     setSelectedItem(updatedItems);
   };
 
-  useEffect(() => {
-    dispatch(fetchSkill());
-  }, []);
-
   const valid =
-    inputValue !== '' && skills.length > 0 && typeof skills !== 'string';
-
+    inputValue !== '' &&
+    typeof adminService !== 'string' &&
+    adminService.length > 0;
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {
       dispatch(updateSuccess());
@@ -77,81 +74,58 @@ const AddSkill = () => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: colors.white,
-          padding: 10,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-            }
-          }}
-          style={{padding: 10}}>
-          <Feather name="arrow-left" size={20} />
-        </TouchableOpacity>
 
-        <Text
-          style={{
-            fontFamily: fonts.medium,
-            color: '#000C14',
-          }}>
-          Add Skills
-        </Text>
-        <View style={{flex: 0.14}} />
-      </View>
+      <Title title="Add Skill" />
+
       <View style={{flex: 1, padding: 10}}>
-        <Text
-          style={{
-            fontFamily: fonts.semibold,
-            color: colors.black,
-            fontSize: 16,
-          }}>
-          Add skills
-        </Text>
-
-        <View style={styles.inputContainer}>
-          <View style={styles.chipContainer}>
-            {selectedItems.map((item, index) => (
-              <TouchableOpacity
-                key={index.toString()}
-                style={styles.chip}
-                onPress={() => handleRemoveItem(item)}>
-                <Text>{item}</Text>
-                <View style={styles.cancelContainer}>
-                  <Icon
-                    name="close"
-                    size={10}
-                    style={{}}
-                    color={colors.white}
-                  />
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-          <TextInput
+        <View>
+          <CustomInput
             placeholder="Search Skill..."
             value={inputValue}
+            label="Add Skills"
             onChangeText={handleSearch}
-            style={{padding: 15}}
           />
+          <Pressable
+            style={{position: 'absolute', right: 10, top: 44}}
+            onPress={() => {
+              if (selectedItems.length > 10) return;
+              selectedItems.push(inputValue);
+              setSelectedItem([...selectedItems]);
+            }}>
+            <Feather name="plus-circle" size={18} color={colors.primary} />
+          </Pressable>
+        </View>
+
+        <View style={[styles.chipContainer, {marginTop: 10}]}>
+          {selectedItems.map((item, index) => (
+            <TouchableOpacity
+              key={index.toString()}
+              style={styles.chip}
+              onPress={() => handleRemoveItem(item)}>
+              <Text style={{fontFamily: fonts.regular, fontSize: 10}}>
+                {item}
+              </Text>
+              <View style={styles.cancelContainer}>
+                <Icon name="close" size={8} style={{}} color={colors.white} />
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
 
         <ScrollView
           style={[styles.sectionContainer, {borderWidth: valid ? 1 : 0}]}>
           {inputValue.length > 0 &&
-            filteredItems.map((item, index) => (
+            adminService.length > 0 &&
+            typeof adminService !== 'string' &&
+            adminService.map((item, index) => (
               <Pressable
                 onPress={() => {
-                  setSelectedItem([...selectedItems, item]);
+                  selectedItems.push(item.serviceName);
+                  setSelectedItem([...selectedItems]);
                 }}
                 key={index}
                 style={styles.section}>
-                <Text>{item}</Text>
+                <Text>{item.serviceName}</Text>
               </Pressable>
             ))}
         </ScrollView>
@@ -189,16 +163,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  inputContainer: {
-    borderRadius: 10,
-    marginTop: 10,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: colors.grey4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-  },
   chipContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -209,16 +173,17 @@ const styles = StyleSheet.create({
     padding: 5,
     borderWidth: 0.5,
     borderColor: colors.primary,
-    borderRadius: 10,
+    borderRadius: 100,
     margin: 3,
   },
   cancelContainer: {
-    width: 15,
-    height: 15,
+    width: 12,
+    height: 12,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.primary,
     borderRadius: 7.5,
+    marginLeft: 5,
   },
   section: {
     padding: 15,

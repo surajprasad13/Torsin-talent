@@ -5,8 +5,6 @@ import {
   Keyboard,
   ScrollView,
   SafeAreaView,
-  Alert,
-  Button,
   Pressable,
   TouchableOpacity,
 } from 'react-native';
@@ -139,7 +137,7 @@ const ChangePassword = () => {
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
       <Title title="Change Password" />
       <Portal>
-        <Dialog visible={!!success}>
+        <Dialog visible={false}>
           <View
             style={{
               alignItems: 'center',

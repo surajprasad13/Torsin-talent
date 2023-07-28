@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {FC, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -34,7 +35,7 @@ const validationSchema = yup.object().shape({
 
 type NavigationProp = StackNavigationProp<AuthScreenParamList>;
 
-const LostPasswordScreen = ({}) => {
+const LostPasswordScreen: FC = ({}) => {
   const [value, setValue] = useState('');
 
   const navigation = useNavigation<NavigationProp>();
@@ -96,7 +97,7 @@ const LostPasswordScreen = ({}) => {
                   onFocus={() => {}}
                   label="Email"
                   placeholder="Email"
-                  error={errors.email}
+                  error={errors.email || error}
                 />
               </View>
             </View>

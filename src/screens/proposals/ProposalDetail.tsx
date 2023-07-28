@@ -1,15 +1,16 @@
-import React, {useRef, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   SafeAreaView,
   ScrollView,
-  TextInput,
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
@@ -25,22 +26,37 @@ import {
   CustomButton,
   CustomInput,
   GridImageView,
+  Textarea,
   Title,
 } from '../../components';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {getProposalDetail} from '../../redux/actions/userAction';
 
 const projectType = ['', 'Hourly', 'Fixed'];
 
-const ProposalDetail = ({route}: any) => {
-  const ref = useRef(null);
+interface ProposalDetailProp {
+  route: any;
+}
+
+const ProposalDetail: FC<ProposalDetailProp> = ({route}) => {
+  const dispatch = useAppDispatch();
+  const {id} = route.params;
+
+  const {proposalDetail: item, loading} = useAppSelector(state => state.user);
+
+  const ref = useRef<any | null>(null);
   const [imageVisible, setImageVisible] = useState<boolean>(false);
 
-  const {item} = route.params;
   const navigation = useNavigation();
   const [isExpanded, setIsExpanded] = useState(false);
   const heightProgress = useSharedValue(150);
+
+  useEffect(() => {
+    dispatch(getProposalDetail(Number(id)));
+  }, []);
 
   const handleViewMore = () => {
     setIsExpanded(!isExpanded);
@@ -50,6 +66,14 @@ const ProposalDetail = ({route}: any) => {
   const rStyle = useAnimatedStyle(() => {
     return {height: heightProgress.value};
   });
+
+  if (loading && item == null) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
@@ -65,39 +89,39 @@ const ProposalDetail = ({route}: any) => {
               {margin: 10, padding: 10, borderRadius: 12},
             ]}>
             <Animated.View style={[rStyle, {overflow: 'hidden'}]}>
-              <Text style={styles.title}>{item.jobName}</Text>
+              <Text style={styles.title}>{item?.jobName}</Text>
               <View style={{marginTop: 10}}>
                 <Text style={styles.titleName}>
                   Published date:{' '}
                   <Text style={styles.description}>
-                    {moment(item.createdAt).format('lll')}
+                    {moment(item?.createdAt).format('lll')}
                   </Text>
                 </Text>
                 <Text style={styles.titleName}>
                   Service:
-                  <Text style={styles.description}> {item.adminService}</Text>
+                  <Text style={styles.description}> {item?.adminService}</Text>
                 </Text>
                 <Text style={styles.titleName}>
                   Payment type:
                   <Text style={styles.description}>
                     {' '}
-                    {projectType[item.jobProjectType]}
+                    {projectType[item?.projectType ?? 1]}
                   </Text>
                 </Text>
                 <Text style={styles.titleName}>
                   Location:
-                  <Text style={styles.description}> {item.location}</Text>
+                  <Text style={styles.description}> {item?.location}</Text>
                 </Text>
                 <Text style={styles.titleName}>
                   Country:
-                  <Text style={styles.description}> {item.countryName}</Text>
+                  <Text style={styles.description}> {item?.countryName}</Text>
                 </Text>
               </View>
 
               <Text style={styles.title}>Description</Text>
-              <Text style={styles.description}>{item.jobDescription}</Text>
+              <Text style={styles.description}>{item?.jobDescription}</Text>
 
-              {item.photos && item.photos.length > 0 && (
+              {item?.photos && item?.photos.length > 0 && (
                 <View style={{margin: 5, padding: 5}}>
                   <Text style={styles.title}>Photos</Text>
                   <View
@@ -106,7 +130,7 @@ const ProposalDetail = ({route}: any) => {
                       justifyContent: 'space-between',
                       flexWrap: 'wrap',
                     }}>
-                    {item.photos.map((_item: string, index: number) => {
+                    {item?.photos.map((_item: string, index: number) => {
                       return (
                         <FastImage
                           key={index.toString()}
@@ -140,7 +164,7 @@ const ProposalDetail = ({route}: any) => {
                       fontFamily: fonts.semibold,
                       padding: 5,
                     }}>
-                    ${item.jobPriceRate}
+                    ${item?.jobPriceRate}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -160,42 +184,7 @@ const ProposalDetail = ({route}: any) => {
             </TouchableOpacity>
           </View>
 
-          <View style={{marginTop: 0, margin: 15}}>
-            <Text
-              style={{
-                fontFamily: fonts.regular,
-                color: '#4F4F4F',
-                fontSize: 16,
-              }}>
-              Message
-            </Text>
-            <View
-              style={{
-                width: '100%',
-                height: 170,
-                borderWidth: 0.5,
-                borderRadius: 8,
-                borderColor: colors.light,
-                marginTop: 10,
-                backgroundColor: colors.white,
-              }}>
-              <TextInput
-                placeholder="Message"
-                value={item.message}
-                multiline={true}
-                placeholderTextColor="#4F4F4F"
-                editable={false}
-                style={{
-                  padding: 15,
-                  top: 10,
-                  fontSize: 14,
-                  width: '100%',
-                  lineHeight: 20,
-                  fontFamily: fonts.regular,
-                }}
-              />
-            </View>
-          </View>
+          <Textarea title="Message" value={item?.message ?? ''} />
 
           <View
             style={{
@@ -208,21 +197,23 @@ const ProposalDetail = ({route}: any) => {
               keyboardType="number-pad"
               editable={false}
               value={
-                item.projectType !== null ? projectType[item.projectType] : 'NA'
+                item?.projectType !== null
+                  ? projectType[item?.projectType ?? 1]
+                  : 'NA'
               }
               containerStyle={{marginTop: 10, width: '45%'}}
             />
 
             <CustomInput
               label="Service Charge"
-              value={item.charges !== null ? String(item.charges) : 'NA'}
+              value={item?.charges !== null ? String(item?.charges) : 'NA'}
               keyboardType="number-pad"
               editable={false}
               containerStyle={{marginTop: 10, width: 'auto'}}
             />
           </View>
 
-          {item.photos !== null && item.photos.length > 0 && (
+          {item?.photos !== null && item && item?.photos.length > 0 && (
             <View
               style={{
                 ...appstyle.shadow,
@@ -241,7 +232,7 @@ const ProposalDetail = ({route}: any) => {
               </Text>
 
               <View style={styles.photoContainer}>
-                {item.photos?.map((a: any, b: any) => (
+                {item?.photos?.map((a: any, b: any) => (
                   <Pressable
                     onPress={() => {
                       setImageVisible(true);
@@ -259,7 +250,7 @@ const ProposalDetail = ({route}: any) => {
             </View>
           )}
 
-          {item.videos !== null && (
+          {item?.videos !== null && (
             <View style={styles.textContainer}>
               <Text
                 style={{
@@ -272,7 +263,7 @@ const ProposalDetail = ({route}: any) => {
             </View>
           )}
 
-          {item.videos !== null ? (
+          {item?.videos !== null ? (
             <View style={styles.videoInput}>
               <FastImage
                 source={require('../../assets/images/video1.png')}
@@ -286,11 +277,11 @@ const ProposalDetail = ({route}: any) => {
             </View>
           ) : null}
 
-          {item.portfolio !== null && (
+          {item?.portfolio !== null && (
             <CustomInput
               label="Portfolio link"
               placeholder="https://portfolio.link.com"
-              value={item.portfolio}
+              value={item?.portfolio}
               containerStyle={{marginTop: 10, margin: 15}}
               editable={false}
             />
@@ -300,17 +291,17 @@ const ProposalDetail = ({route}: any) => {
             title="Chat now"
             onPress={() =>
               navigation.navigate('ChatUser', {
-                item,
+                item: item as object,
               })
             }
-            disabled={item.proposalStatus == 2}
+            disabled={item?.proposalStatus == 2}
             style={{marginTop: 20}}
           />
           <View style={{marginTop: 50}} />
         </ScrollView>
-        {item.photos !== null && item.photos.length > 0 && (
+        {item?.photos !== null && item && item?.photos.length > 0 && (
           <GridImageView
-            data={item.photos}
+            data={item?.photos ?? []}
             visible={imageVisible}
             onRequestClose={() => {
               setImageVisible(false);
