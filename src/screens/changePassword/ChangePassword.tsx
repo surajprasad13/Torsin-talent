@@ -5,6 +5,8 @@ import {
   Keyboard,
   ScrollView,
   SafeAreaView,
+  Alert,
+  Button,
   Pressable,
   TouchableOpacity,
 } from 'react-native';
@@ -119,6 +121,13 @@ const ChangePassword = () => {
     );
   };
 
+  const handleSuccessDialogClose = () => {
+    dispatch(resetSuccess());
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
+
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(resetSuccess());
@@ -137,7 +146,7 @@ const ChangePassword = () => {
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
       <Title title="Change Password" />
       <Portal>
-        <Dialog visible={false}>
+        <Dialog visible={!!success}>
           <View
             style={{
               alignItems: 'center',
@@ -169,12 +178,7 @@ const ChangePassword = () => {
                   padding: 10,
                   alignItems: 'center',
                 }}
-                onPress={() => {
-                  dispatch(resetSuccess());
-                  if (navigation.canGoBack()) {
-                    navigation.goBack();
-                  }
-                }}>
+                onPress={handleSuccessDialogClose}>
                 <Text style={{fontFamily: fonts.semibold, color: colors.white}}>
                   Stay Login
                 </Text>
@@ -208,7 +212,7 @@ const ChangePassword = () => {
             }}
             onFocus={() => handleError(null, 'oldPassword')}
             label="Current Password"
-            maxLength={16}
+            maxLength={30}
             placeholder="Enter current password"
             autoCapitalize="none"
             password
@@ -223,7 +227,7 @@ const ChangePassword = () => {
             }}
             onFocus={() => handleError(null, 'newPassword')}
             label="New Password"
-            maxLength={16}
+            maxLength={30}
             placeholder="Enter new password"
             autoCapitalize="none"
             password
@@ -238,7 +242,7 @@ const ChangePassword = () => {
             onFocus={() => {
               handleError(null, 'confirmPassword');
             }}
-            maxLength={16}
+            maxLength={30}
             label="Confirm New password"
             placeholder="Enter confirm password"
             autoCapitalize="none"

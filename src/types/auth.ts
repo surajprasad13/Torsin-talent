@@ -26,6 +26,7 @@ export interface LoginResponseData {
   gender?: number | null;
   location?: string;
   countryName?: string;
+  bio?: string | null;
 }
 
 export interface LoginResponse {

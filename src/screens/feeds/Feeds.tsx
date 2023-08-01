@@ -24,35 +24,43 @@ const Feeds = () => {
       <Title title="Feeds" />
       <ScrollView>
         {[0, 1, 2, 3, 4, 5, 6].map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() => navigation.navigate('FeedDetails')}
-            style={styles.container}>
-            <FastImage
-              source={{uri: 'https://source.unsplash.com/400x400?stone'}}
-              resizeMode="cover"
-              style={styles.image}
-            />
-            <View style={{width: '80%'}}>
-              <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
-                Blog Heading
-              </Text>
-
-              <Text style={styles.title}>
-                As a musician minim mollit non deseruntAmet minim mollit non
-                deserunt .{' '}
-              </Text>
-              <Divider style={{marginTop: 10}} />
-              <Text
-                style={{
-                  color: '#1E202B',
-                  fontSize: 8,
-                  marginTop: 10,
-                }}>
-                5 hour ago
-              </Text>
+          <View key={index} style={styles.feedContainer}>
+            <View style={{flexDirection: 'row', width: '100%'}}>
+              <FastImage
+                source={{uri: 'https://source.unsplash.com/400x400?stone'}}
+                resizeMode="cover"
+                style={styles.image}
+              />
+              <TouchableOpacity
+                onPress={() => navigation.navigate('FeedDetails')}
+                style={styles.container}>
+                <View style={{width: '65%'}}>
+                  <Text
+                    style={{
+                      fontFamily: fonts.semibold,
+                      color: '#1E202B',
+                      left: 10,
+                    }}>
+                    Blog Heading
+                  </Text>
+                  <Text style={styles.title}>
+                    As a musician minim mollit non deseruntAmet minim mollit non
+                    deserunt .{' '}
+                  </Text>
+                  <Divider style={{marginTop: 10, left: 10}} />
+                  <Text
+                    style={{
+                      color: '#1E202B',
+                      fontSize: 8,
+                      marginTop: 10,
+                      left: 10,
+                    }}>
+                    5 hour ago
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          </View>
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -60,41 +68,31 @@ const Feeds = () => {
 };
 
 const styles = StyleSheet.create({
-  innerView: {
-    ...appstyle.shadow,
-    margin: 10,
+  feedContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 10,
+    marginVertical: 5,
     borderRadius: 12,
+    ...appstyle.shadow,
   },
   container: {
-    padding: 15,
-    borderRadius: 15,
-    justifyContent: 'space-between',
-    alignItems: 'center',
     flexDirection: 'row',
-    ...appstyle.shadow,
-    margin: 10,
+    alignItems: 'center',
   },
   image: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 120,
+    height: 100,
+    borderBottomLeftRadius: 15,
+    borderTopLeftRadius: 15,
   },
   title: {
     fontFamily: fonts.regular,
     color: '#1E202B',
     fontSize: 12,
     marginTop: 5,
-  },
-  description: {
-    fontFamily: fonts.regular,
-    color: '#1E202B',
-    opacity: 0.6,
-    marginTop: 5,
-  },
-  time: {
-    fontFamily: fonts.regular,
-    color: 'blue',
-    textAlign: 'right',
+    left: 10,
   },
 });
 

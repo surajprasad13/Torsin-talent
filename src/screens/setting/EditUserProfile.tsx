@@ -10,13 +10,16 @@ import {
   Platform,
   Keyboard,
   Pressable,
+  TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, Dialog, Portal, RadioButton} from 'react-native-paper';
+import CountryPicker from 'react-native-country-picker-modal';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // components
 import ProFile from '../../components/Profile';
@@ -47,7 +50,17 @@ const EditUserProfile = ({}) => {
     profileImage: userInfo?.profileImage,
     gender: userInfo?.gender ?? 1,
     countryName: userInfo?.countryName ?? '',
+    bio: userInfo?.bio ?? '',
   });
+
+  const [selectedCountry, setSelectedCountry] = useState<any | null>(null);
+  const [isCountryPickerOpen, setCountryPickerOpen] = useState(false);
+
+  const handleCountrySelect = (country: any) => {
+    setSelectedCountry(country);
+    setCountryPickerOpen(false);
+    setInputs(prevState => ({...prevState, countryName: country.name}));
+  };
 
   const [errors, setErrors] = React.useState<any>({});
   const [image, setImage] = useState('');
@@ -107,6 +120,19 @@ const EditUserProfile = ({}) => {
     if (!inputs.countryName) {
       handleError('Please enter country', 'countryName');
       isValid = false;
+    }
+
+    if (inputs.bio == '') {
+      // setInputs(prevState => ({...prevState, bio: null}));
+      inputs.bio = null;
+    } else {
+      const wordCount = inputs.bio
+        .split(/\s+/)
+        .filter(word => word.trim() !== '').length;
+      if (wordCount < 30) {
+        handleError('Bio must be at least 30 words', 'bio');
+        isValid = false;
+      }
     }
 
     if (isValid) {
@@ -274,18 +300,90 @@ const EditUserProfile = ({}) => {
             error={errors.location}
           />
 
-          <CustomInput
-            value={inputs.countryName}
-            onChangeText={(text: string) => {
-              const name = text.replace(/[^a-zA-Z ]/g, '');
-              handleOnchange(name, 'countryName');
-            }}
-            onFocus={() => handleError(null, 'location')}
-            label="Country"
-            placeholder={inputs.countryName}
-            containerStyle={{marginTop: 20}}
-            error={errors.countryName}
-          />
+          <View style={{position: 'relative'}}>
+            <CustomInput
+              value={inputs.countryName}
+              onChangeText={(text: string) => {
+                const name = text.replace(/[^a-zA-Z ]/g, '');
+                handleOnchange(name, 'countryName');
+              }}
+              onBlur={() => {
+                setCountryPickerOpen(true);
+              }}
+              onFocus={() => {
+                handleError(null, 'location');
+                setCountryPickerOpen(true);
+              }}
+              label="Country"
+              placeholder={inputs.countryName}
+              containerStyle={{marginTop: 20}}
+              error={errors.countryName}
+            />
+            <Pressable
+              onPress={() => setCountryPickerOpen(true)}
+              style={{
+                alignItems: 'center',
+                position: 'absolute',
+                right: 10,
+                justifyContent: 'center',
+                marginTop: 65,
+              }}>
+              <AntDesign name="down" size={15} />
+            </Pressable>
+          </View>
+
+          {isCountryPickerOpen && (
+            <CountryPicker
+              withFilter
+              withFlag={false}
+              onSelect={handleCountrySelect}
+              countryCode={selectedCountry?.cca2}
+              visible={isCountryPickerOpen}
+              containerButtonStyle={{
+                display: 'none',
+              }}
+            />
+          )}
+
+          <View style={{marginTop: 20}}>
+            <Text
+              style={{
+                fontFamily: fonts.regular,
+                color: '#4F4F4F',
+                fontSize: 16,
+              }}>
+              Bio
+            </Text>
+
+            <TextInput
+              placeholder="Weite here"
+              multiline={true}
+              placeholderTextColor="#4F4F4F"
+              maxLength={500}
+              value={inputs.bio}
+              onChangeText={(text: string) => handleOnchange(text, 'bio')}
+              onFocus={() => handleError(null, 'bio')}
+              style={{
+                marginTop: 10,
+                padding: 15,
+                height: 170,
+                borderWidth: 0.5,
+                borderRadius: 8,
+                borderColor: colors.light,
+                backgroundColor: colors.white,
+              }}
+            />
+          </View>
+
+          {errors && (
+            <Text
+              style={{
+                marginTop: 5,
+                color: 'red',
+              }}>
+              {errors.bio}
+            </Text>
+          )}
 
           {!!error && (
             <Text

@@ -186,7 +186,7 @@ const ResetPassword = ({route}: any) => {
               }}
               onFocus={() => handleError(null, 'password')}
               label="New password"
-              maxLength={16}
+              maxLength={30}
               placeholder="Enter password"
               autoCapitalize="none"
               password
@@ -202,7 +202,7 @@ const ResetPassword = ({route}: any) => {
               onFocus={() => {
                 handleError(null, 'confirmPassword');
               }}
-              maxLength={16}
+              maxLength={30}
               label="Re-enter new password"
               placeholder="Re-enter password"
               autoCapitalize="none"

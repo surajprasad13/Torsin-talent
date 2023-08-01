@@ -153,7 +153,19 @@ const HomeScreen = ({}) => {
             </TouchableOpacity>
           </View>
         </View>
-
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            margin: 10,
+          }}>
+          <Text style={{fontFamily: fonts.semibold, fontSize: 16}}>Blogs</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Feeds')}>
+            <Text style={{fontFamily: fonts.medium, color: colors.primary}}>
+              View All
+            </Text>
+          </TouchableOpacity>
+        </View>
         <ImageSlider />
 
         <View

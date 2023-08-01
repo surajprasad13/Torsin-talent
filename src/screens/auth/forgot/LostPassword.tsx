@@ -98,6 +98,7 @@ const LostPasswordScreen: FC = ({}) => {
                   label="Email"
                   placeholder="Email"
                   error={errors.email || error}
+                  maxLength={30}
                 />
               </View>
             </View>
