@@ -159,13 +159,16 @@ const HomeScreen = ({}) => {
             justifyContent: 'space-between',
             margin: 10,
           }}>
-          <Text style={{fontFamily: fonts.semibold, fontSize: 16}}>Blogs</Text>
+          <Text style={{fontFamily: fonts.semibold, fontSize: 16}}>
+            Blogs / News
+          </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Feeds')}>
             <Text style={{fontFamily: fonts.medium, color: colors.primary}}>
               View All
             </Text>
           </TouchableOpacity>
         </View>
+
         <ImageSlider />
 
         <View

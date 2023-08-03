@@ -13,6 +13,7 @@ import {
   getAdminPercentage,
   getContract,
   getContractDetail,
+  getFeedList,
   getProposalDetail,
   getProposalStatus,
   getRating,
@@ -20,7 +21,13 @@ import {
   notJobCorrespondSkill,
   updateContract,
 } from '../actions/userAction';
-import {JobDetail, ProposalDetail, Rating, Service} from '../../types/user';
+import {
+  Feed,
+  JobDetail,
+  ProposalDetail,
+  Rating,
+  Service,
+} from '../../types/user';
 import {searchJob} from '../actions/userAction';
 import {Contract} from '../../types/contract';
 
@@ -55,6 +62,7 @@ interface UserInterface {
   notification: Array<any>;
   contractDetail: null | Contract;
   rating: Array<Rating>;
+  feed: Array<Feed>;
   created: boolean;
   adminPercentage: number;
 }
@@ -85,6 +93,7 @@ const initialState: UserInterface = {
   notification: [],
   contractDetail: null,
   rating: [],
+  feed: [],
   adminPercentage: 0,
 };
 
@@ -387,6 +396,20 @@ const userSlice = createSlice({
         state.city = action.payload;
       })
       .addCase(filterCity.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //feed
+      .addCase(getFeedList.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getFeedList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.feed = action.payload.response;
+      })
+      .addCase(getFeedList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

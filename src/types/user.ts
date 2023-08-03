@@ -62,4 +62,14 @@ export interface Rating {
   ratingCreatedAt: string;
 }
 
+export interface Feed {
+  feedType: number;
+  feedHeadline: string;
+  feedPhoto: string;
+  feedDescription: string;
+  createdAt: string;
+  isMain: string;
+  isActive: string;
+}
+
 export interface Skill {}

@@ -8,6 +8,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
 } from 'react-native';
 import {} from 'react-native-paper';
 import {useSelector} from 'react-redux';
@@ -45,6 +46,7 @@ import {
   resetEmailVerified,
   resetMobileVerified,
 } from '../../redux/reducers/authSlice';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const {moderateScale} = metrics;
 
@@ -345,16 +347,40 @@ const BusinessRegister = ({}) => {
                 </View>
 
                 <View style={{marginTop: 10}}>
-                  <Input
-                    onChangeText={(text: any) => handleChange('location')(text)}
-                    onFocus={() => setErrors({location: ''})}
-                    label="Location"
-                    placeholder="Enter Location"
-                    error={errors.location}
+                  <Text
+                    style={{
+                      fontFamily: fonts.regular,
+                      color: '#4F4F4F',
+                      fontSize: 16,
+                    }}>
+                    Location
+                  </Text>
+
+                  <GooglePlacesAutocomplete
+                    placeholder="Search"
+                    fetchDetails={true}
+                    onPress={(data, details = null) => {
+                      handleChange('location')(data.description);
+                    }}
+                    query={{
+                      key: 'AIzaSyD9HAzCj-r9Zw8dZnQWkNgrkewOc4aRjGc', // Replace with your own Google Maps API key
+                      language: 'en',
+                    }}
+                    styles={{
+                      container: styles.autocompleteContainer,
+                      textInput: styles.textInput,
+                      listView: styles.listView,
+                      poweredContainer: styles.powered,
+                    }}
+                    textInputProps={{
+                      onChangeText: text => handleChange('location')(text),
+                      onFocus: () => setErrors({location: ''}),
+                      error: errors.location,
+                    }}
                   />
                 </View>
 
-                <View style={{position: 'relative'}}>
+                <View style={{position: 'relative', marginTop: 10}}>
                   <Input
                     label="Country"
                     placeholder="eg. India"
@@ -476,5 +502,27 @@ const BusinessRegister = ({}) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  autocompleteContainer: {
+    flex: 1,
+
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  textInput: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 12,
+    padding: 10,
+    marginTop: 10,
+  },
+  listView: {
+    padding: 5,
+  },
+  powered: {},
+});
 
 export default BusinessRegister;

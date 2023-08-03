@@ -15,6 +15,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {Button, Dialog, Portal, RadioButton} from 'react-native-paper';
 import CountryPicker from 'react-native-country-picker-modal';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -290,15 +291,42 @@ const EditUserProfile = ({}) => {
               </Pressable>
             </View>
           )}
-          <CustomInput
-            value={inputs.location}
-            onChangeText={(text: string) => handleOnchange(text, 'location')}
-            onFocus={() => handleError(null, 'location')}
-            label="Location"
-            placeholder={inputs.location}
-            containerStyle={{marginTop: 20}}
-            error={errors.location}
-          />
+
+          <View style={{marginTop: 20}}>
+            <Text
+              style={{
+                fontFamily: fonts.regular,
+                color: '#4F4F4F',
+                fontSize: 16,
+              }}>
+              Location
+            </Text>
+
+            <GooglePlacesAutocomplete
+              placeholder="Search"
+              fetchDetails={true}
+              onPress={(data, details = null) => {
+                const location = data.description;
+                setInputs(prevState => ({...prevState, location}));
+              }}
+              query={{
+                key: 'AIzaSyD9HAzCj-r9Zw8dZnQWkNgrkewOc4aRjGc', // Replace with your own Google Maps API key
+                language: 'en',
+              }}
+              styles={{
+                container: styles.autocompleteContainer,
+                textInput: styles.textInput,
+                listView: styles.listView,
+                poweredContainer: styles.powered,
+              }}
+              textInputProps={{
+                onChangeText: text => handleOnchange(text, 'location'),
+                onFocus: () => handleError(null, 'location'),
+                error: errors.location,
+                value: inputs.location,
+              }}
+            />
+          </View>
 
           <View style={{position: 'relative'}}>
             <CustomInput
@@ -356,7 +384,7 @@ const EditUserProfile = ({}) => {
             </Text>
 
             <TextInput
-              placeholder="Weite here"
+              placeholder="Write here"
               multiline={true}
               placeholderTextColor="#4F4F4F"
               maxLength={500}
@@ -425,6 +453,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  autocompleteContainer: {
+    flex: 1,
+
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  textInput: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 12,
+    padding: 10,
+    marginTop: 10,
+  },
+  listView: {
+    padding: 5,
+  },
+  powered: {},
 });
 
 export default EditUserProfile;

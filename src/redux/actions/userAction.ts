@@ -377,6 +377,22 @@ const filterCity = createAsyncThunk(
   },
 );
 
+const getFeedList = createAsyncThunk(
+  '/feed/list',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`/feed/list`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -398,6 +414,7 @@ export {
   filterCity,
   fetchAdminService,
   getProposalDetail,
+  getFeedList,
 };
 
 export default {};

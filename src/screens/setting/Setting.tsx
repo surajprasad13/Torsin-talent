@@ -65,7 +65,7 @@ const Setting = ({}) => {
       <Title title="View Profile" />
       <ScrollView style={{flex: 1}}>
         <View style={{flex: 1, padding: 10}}>
-          <View style={{backgroundColor: '#f9fbff', flex: 2}}>
+          <View style={{backgroundColor: '#ffffff'}}>
             <Profile
               image={image.length > 0 ? image : userInfo?.profileImage}
               onPress={() => {

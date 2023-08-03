@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  FlatList,
+  ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
@@ -15,84 +18,77 @@ import {Divider} from 'react-native-paper';
 //helpers
 import {Title} from '../../components';
 import {colors, fonts, appstyle} from '../../theme';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {getFeedList} from '../../redux/actions/userAction';
+import FeedCard from './component/FeedCard';
+
+const {height} = Dimensions.get('window');
 
 const Feeds = () => {
   const navigation = useNavigation();
 
+  const dispatch = useAppDispatch();
+
+  const {feed, loading} = useAppSelector(state => state.user);
+
+  useEffect(() => {
+    dispatch(getFeedList(''));
+  }, []);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <Title title="Feeds" />
-      <ScrollView>
-        {[0, 1, 2, 3, 4, 5, 6].map((item, index) => (
-          <View key={index} style={styles.feedContainer}>
-            <View style={{flexDirection: 'row', width: '100%'}}>
-              <FastImage
-                source={{uri: 'https://source.unsplash.com/400x400?stone'}}
-                resizeMode="cover"
-                style={styles.image}
-              />
-              <TouchableOpacity
-                onPress={() => navigation.navigate('FeedDetails')}
-                style={styles.container}>
-                <View style={{width: '65%'}}>
-                  <Text
-                    style={{
-                      fontFamily: fonts.semibold,
-                      color: '#1E202B',
-                      left: 10,
-                    }}>
-                    Blog Heading
-                  </Text>
-                  <Text style={styles.title}>
-                    As a musician minim mollit non deseruntAmet minim mollit non
-                    deserunt .{' '}
-                  </Text>
-                  <Divider style={{marginTop: 10, left: 10}} />
-                  <Text
-                    style={{
-                      color: '#1E202B',
-                      fontSize: 8,
-                      marginTop: 10,
-                      left: 10,
-                    }}>
-                    5 hour ago
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+
+      <FlatList
+        data={feed}
+        ListEmptyComponent={
+          <View
+            style={{
+              flex: 1,
+              minHeight: height * 0.7,
+              justifyContent: 'center',
+            }}>
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <>
+                <FastImage
+                  source={require('../../assets/images/noModule/job.png')}
+                  style={styles.emptyImage}
+                />
+                <Text
+                  style={{
+                    fontFamily: fonts.semibold,
+                    fontSize: 20,
+                    color: '#000F1A',
+                    textAlign: 'center',
+                    marginTop: 10,
+                  }}>
+                  No Blogs / News!
+                </Text>
+              </>
+            )}
           </View>
-        ))}
-      </ScrollView>
+        }
+        renderItem={({item, index}) => {
+          return <FeedCard item={item} key={index.toString()} />;
+        }}
+        keyExtractor={(_, index) => index.toString()}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  feedContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginHorizontal: 10,
-    marginVertical: 5,
-    borderRadius: 12,
-    ...appstyle.shadow,
-  },
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flex: 1,
+    backgroundColor: '#f9fbff',
   },
-  image: {
-    width: 120,
-    height: 100,
-    borderBottomLeftRadius: 15,
-    borderTopLeftRadius: 15,
-  },
-  title: {
-    fontFamily: fonts.regular,
-    color: '#1E202B',
-    fontSize: 12,
-    marginTop: 5,
-    left: 10,
+  emptyImage: {
+    width: '70%',
+    height: 200,
+    resizeMode: 'contain',
+    marginLeft: '15%',
   },
 });
 

@@ -22,6 +22,7 @@ import {decode} from 'base64-arraybuffer';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import CountryPicker from 'react-native-country-picker-modal';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -377,13 +378,37 @@ const IndivisualRegister = ({}) => {
                   </Pressable>
                 </View>
 
-                <View style={{marginTop: 10}}>
-                  <Input
-                    onChangeText={(text: any) => handleChange('location')(text)}
-                    onFocus={() => setErrors({location: ''})}
-                    label="Location"
-                    placeholder="Enter Location"
-                    error={errors.location}
+                <View style={{marginTop: 20}}>
+                  <Text
+                    style={{
+                      fontFamily: fonts.regular,
+                      color: '#4F4F4F',
+                      fontSize: 16,
+                    }}>
+                    Location
+                  </Text>
+
+                  <GooglePlacesAutocomplete
+                    placeholder="Search"
+                    fetchDetails={true}
+                    onPress={(data, details = null) => {
+                      handleChange('location')(data.description);
+                    }}
+                    query={{
+                      key: 'AIzaSyD9HAzCj-r9Zw8dZnQWkNgrkewOc4aRjGc', // Replace with your own Google Maps API key
+                      language: 'en',
+                    }}
+                    styles={{
+                      container: styles.autocompleteContainer,
+                      textInput: styles.textInput,
+                      listView: styles.listView,
+                      poweredContainer: styles.powered,
+                    }}
+                    textInputProps={{
+                      onChangeText: text => handleChange('location')(text),
+                      onFocus: () => setErrors({location: ''}),
+                      error: errors.location,
+                    }}
                   />
                 </View>
 
@@ -510,6 +535,26 @@ const IndivisualRegister = ({}) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  autocompleteContainer: {
+    flex: 1,
+
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  textInput: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 12,
+    padding: 10,
+    marginTop: 10,
+  },
+  listView: {
+    padding: 5,
+  },
+  powered: {},
+});
 
 export default IndivisualRegister;
