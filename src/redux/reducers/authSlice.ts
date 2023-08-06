@@ -20,6 +20,7 @@ interface AuthState {
   userToken: null | string;
   error: null | any;
   success: null | object | boolean;
+  otpVerified: boolean;
   status: null | string;
   registerSuccess: boolean;
   message: null | string;
@@ -42,6 +43,7 @@ const initialState: AuthState = {
   mobileVerified: false,
   isFirstOpen: true,
   expired: false,
+  otpVerified: false,
 };
 
 const authSlice = createSlice({
@@ -70,6 +72,9 @@ const authSlice = createSlice({
     },
     phoneVerified: state => {
       state.mobileVerified = true;
+    },
+    resetOtpVerified: state => {
+      state.otpVerified = false;
     },
     resetFirst: state => {
       state.isFirstOpen = false;
@@ -194,10 +199,12 @@ const authSlice = createSlice({
       .addCase(resetOtpSent.pending, state => {
         state.error = null;
         state.loading = true;
+        state.message = '';
       })
-      .addCase(resetOtpSent.fulfilled, state => {
+      .addCase(resetOtpSent.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true; // registration successful
+        state.success = true;
+        state.message = action.payload.response.message.successMessage;
       })
       .addCase(resetOtpSent.rejected, (state, action) => {
         state.loading = false;
@@ -212,9 +219,9 @@ const authSlice = createSlice({
       })
       .addCase(otpverify.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true; // registration successful
+        state.success = true;
         state.message = action.payload.response.message.successMessage;
-        state.emailVerified = true;
+        state.otpVerified = true;
       })
       .addCase(otpverify.rejected, (state, action) => {
         state.loading = false;
@@ -267,6 +274,7 @@ export const {
   resetMobileVerified,
   phoneVerified,
   resetFirst,
+  resetOtpVerified,
 } = authSlice.actions;
 
 export default authSlice.reducer;

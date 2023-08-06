@@ -108,6 +108,9 @@ const userSlice = createSlice({
     resetSuccess: state => {
       state.addSuccess = '';
     },
+    resetAdminService: state => {
+      state.adminService = [];
+    },
   },
   extraReducers: builder => {
     builder
@@ -416,6 +419,7 @@ const userSlice = createSlice({
   },
 });
 
-export const {updateSuccess, resetSuccess} = userSlice.actions;
+export const {updateSuccess, resetSuccess, resetAdminService} =
+  userSlice.actions;
 
 export default userSlice.reducer;

@@ -20,7 +20,7 @@ import {CustomButton, CustomInput, Title} from '../../components';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {addSkill, fetchAdminService} from '../../redux/actions/userAction';
 import {Button, Dialog, Portal} from 'react-native-paper';
-import {updateSuccess} from '../../redux/reducers/userSlice';
+import {resetAdminService, updateSuccess} from '../../redux/reducers/userSlice';
 
 const AddSkill: FC = () => {
   const navigation = useNavigation();
@@ -80,6 +80,7 @@ const AddSkill: FC = () => {
       <View style={{flex: 1, padding: 10}}>
         <View>
           <CustomInput
+            editable={selectedItems.length <= 10}
             placeholder="Search Skill..."
             value={inputValue}
             label="Add Skills"
@@ -122,6 +123,7 @@ const AddSkill: FC = () => {
                 onPress={() => {
                   selectedItems.push(item.serviceName);
                   setSelectedItem([...selectedItems]);
+                  dispatch(resetAdminService());
                 }}
                 key={index}
                 style={styles.section}>
@@ -147,7 +149,7 @@ const AddSkill: FC = () => {
         loading={loading}
         disabled={selectedItems.length > 0}
         onPress={() => {
-          if (inputValue.length > 0) {
+          if (selectedItems.length > 0) {
             let value = {skillArray: selectedItems};
             dispatch(addSkill(value));
           }

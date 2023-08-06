@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -7,23 +8,27 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {
   CodeField,
   Cursor,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import {Formik, useFormik} from 'formik';
+import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 // Helpers
+import {fonts, appstyle} from '../../../theme';
+
 import {CustomButton, Title} from '../../../components';
-import {colors, fonts} from '../../../theme';
-import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {otpverify, resetOtpSent} from '../../../redux/actions/authAction';
-import {resetSuccess} from '../../../redux/reducers/authSlice';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {
+  resetOtpVerified,
+  resetSuccess,
+} from '../../../redux/reducers/authSlice';
 import {AuthScreenParamList} from '../../../routes/RouteType';
 
 const {width} = Dimensions.get('window');
@@ -35,7 +40,9 @@ const VerifyOtp = ({route}: any) => {
   const {email} = route.params;
   const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
-  const {loading, success, error} = useAppSelector(state => state.auth);
+  const {loading, success, error, otpVerified, message} = useAppSelector(
+    state => state.auth,
+  );
 
   const validationSchema = Yup.object().shape({
     otp: Yup.string()
@@ -44,24 +51,13 @@ const VerifyOtp = ({route}: any) => {
       .required('OTP is required'),
   });
 
-  const onPressResend = () => {
-    if (email) {
-      let field = {
-        inputs: {
-          email,
-        },
-      };
-      dispatch(otpverify(field));
-      navigation.navigate('ResetPassword', {email});
-    }
-  };
-
   useEffect(() => {
-    if (success) {
+    if (success && otpVerified) {
       dispatch(resetSuccess());
       navigation.navigate('ResetPassword', {email});
+      dispatch(resetOtpVerified());
     }
-  }, [success]);
+  }, [success, otpVerified]);
 
   const [value, setValue] = useState('');
 
@@ -89,7 +85,7 @@ const VerifyOtp = ({route}: any) => {
             fontFamily: fonts.regular,
             alignItems: 'center',
             color: '#000F1A',
-            top: 10,
+            marginTop: 10,
           }}>
           Please wait till we verify your Email address
         </Text>
@@ -104,14 +100,7 @@ const VerifyOtp = ({route}: any) => {
             };
             dispatch(otpverify(field));
           }}>
-          {({
-            values,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            errors,
-            touched,
-          }) => (
+          {({values, handleChange, handleSubmit, errors, touched}) => (
             <>
               <CodeField
                 ref={ref}
@@ -136,14 +125,27 @@ const VerifyOtp = ({route}: any) => {
               {!!error && (
                 <Text
                   style={{
-                    textAlign: 'left',
-                    left: 10,
+                    textAlign: 'center',
                     color: 'red',
                     fontFamily: fonts.medium,
+                    padding: 10,
                   }}>
                   {error}
                 </Text>
               )}
+
+              {!!message && (
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    color: 'green',
+                    fontFamily: fonts.medium,
+                    padding: 10,
+                  }}>
+                  {message}
+                </Text>
+              )}
+
               {touched.otp && errors.otp && (
                 <Text style={{color: 'red', marginTop: 10}}>{errors.otp}</Text>
               )}
@@ -172,7 +174,7 @@ const VerifyOtp = ({route}: any) => {
               <CustomButton
                 onPress={handleSubmit}
                 title="Submit & Verify"
-                disabled={!loading && values.otp.length > 5}
+                disabled={values.otp.length > 5}
                 loading={loading}
                 style={{marginTop: 300}}
               />
@@ -204,20 +206,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.3,
     borderRadius: 2,
     color: '#0C0900',
-    backgroundColor: colors.white,
     textAlign: 'center',
     padding: 10,
-
-    // IOS
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    // Android
-    elevation: 1,
+    ...appstyle.shadow,
   },
 });
 

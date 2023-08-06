@@ -25,6 +25,7 @@ const addSkill = createAsyncThunk(
       const {data} = await api.post(`talent/add/skill`, value);
       return data;
     } catch (error: any) {
+      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {

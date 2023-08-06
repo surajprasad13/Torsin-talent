@@ -171,10 +171,7 @@ const HomeScreen = ({}) => {
 
         <ImageSlider />
 
-        <View
-          style={{
-            margin: 10,
-          }}>
+        <View style={{margin: 10}}>
           <Text
             style={{
               fontFamily: fonts.regular,
