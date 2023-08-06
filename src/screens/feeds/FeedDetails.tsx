@@ -13,7 +13,7 @@ const FeedDetails = ({route}: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title title="View Blogs / News" />
+      <Title title={item.feedType === 1 ? 'Blog Details' : 'News Details'} />
       <ScrollView>
         <View style={styles.innerContainer}>
           <FastImage

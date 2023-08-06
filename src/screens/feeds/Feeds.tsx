@@ -31,6 +31,10 @@ const Feeds = () => {
 
   const {feed, loading} = useAppSelector(state => state.user);
 
+  const mainFeed = feed?.filter(item => item?.isMain);
+
+  const otherFeed = feed?.filter(item => item?.isMain == false);
+
   useEffect(() => {
     dispatch(getFeedList(''));
   }, []);
@@ -38,9 +42,21 @@ const Feeds = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <Title title="Feeds" />
-
+      {mainFeed?.length > 0 &&
+        mainFeed?.map((item, index) => (
+          <FastImage
+            source={{uri: item?.feedPhoto}}
+            resizeMode="cover"
+            style={{
+              width: 'auto',
+              height: 150,
+              margin: 10,
+              borderRadius: 10,
+            }}
+          />
+        ))}
       <FlatList
-        data={feed}
+        data={otherFeed}
         ListEmptyComponent={
           <View
             style={{
@@ -71,7 +87,11 @@ const Feeds = () => {
           </View>
         }
         renderItem={({item, index}) => {
-          return <FeedCard item={item} key={index.toString()} />;
+          return (
+            <View>
+              <FeedCard item={item} key={index.toString()} />
+            </View>
+          );
         }}
         keyExtractor={(_, index) => index.toString()}
       />

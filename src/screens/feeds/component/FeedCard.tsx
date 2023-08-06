@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: 10,
-    marginVertical: 5,
+    marginVertical: 10,
     borderRadius: 12,
     ...appstyle.shadow,
   },

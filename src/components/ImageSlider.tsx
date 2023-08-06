@@ -19,7 +19,7 @@ const ImageSlider = () => {
 
   const dispatch = useAppDispatch();
 
-  const {feed, loading} = useAppSelector(state => state.user);
+  const {feed} = useAppSelector(state => state.user);
 
   useEffect(() => {
     dispatch(getFeedList(''));
