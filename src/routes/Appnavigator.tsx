@@ -70,7 +70,6 @@ const AppNavigator: FC = () => {
   };
 
   useEffect(() => {
-    console.log('Rootstate', navigationRef.current?.getRootState());
     openAppBootStrap();
   }, []);
 
