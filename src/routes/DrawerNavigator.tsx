@@ -19,7 +19,7 @@ import PaymentMethod from '../screens/payment/PaymentMethod';
 import JobNavigator from './JobNavigator';
 import HelpSupport from '../screens/help/HelpSupport';
 import Feeds from '../screens/feeds/Feeds';
-import ChangePassword from '../screens/changePassword/ChangePassword';
+import ChangePassword from '../screens/auth/ChangePassword';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 

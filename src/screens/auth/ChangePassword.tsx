@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -5,8 +7,6 @@ import {
   Keyboard,
   ScrollView,
   SafeAreaView,
-  Alert,
-  Button,
   Pressable,
   TouchableOpacity,
 } from 'react-native';
@@ -24,7 +24,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {CustomButton, CustomInput, Title} from '../../components';
 
 import {changePassword} from '../../redux/actions/authAction';
-import {resetSuccess} from '../../redux/reducers/authSlice';
+import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
 import {logout} from '../../redux/reducers/authSlice';
 
 const ChangePassword = () => {
@@ -36,15 +36,15 @@ const ChangePassword = () => {
     newPassword: '',
     confirmPassword: '',
   });
-  const {loading, success} = useAppSelector(state => state.auth);
+  const {loading, success, error} = useAppSelector(state => state.auth);
 
   const [isValid, setIsValid] = useState<Array<boolean>>([]);
 
   const passwordStrength = [
-    'Atleast one upper character.',
+    'Atleast one upper case.',
     'Atleast one numeric digit.',
-    'Atleast one speical character (E.g @%$)',
-    'Atleast 8 character',
+    'Atleast one special character (E.g @%$)',
+    'Atleast 8 characters',
   ];
 
   function handleValidation(value: string) {
@@ -94,6 +94,7 @@ const ChangePassword = () => {
       handleError('Please enter valid password', 'password');
       _isValid = false;
     }
+
     if (input.newPassword.length < 8) {
       handleError('Min password length of 8', 'password');
       _isValid = false;
@@ -120,6 +121,20 @@ const ChangePassword = () => {
     );
   };
 
+  const handleSuccessDialogClose = () => {
+    setInput({
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    });
+    setIsValid([]);
+    dispatch(resetSuccess());
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
+
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(resetSuccess());
@@ -127,11 +142,11 @@ const ChangePassword = () => {
     return () => listener;
   }, []);
 
-  const handleOnchange = (text, input) => {
-    setInput(prevState => ({...prevState, [input]: text}));
+  const handleOnchange = (text: string, _input: string) => {
+    setInput(prevState => ({...prevState, [_input]: text}));
   };
-  const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+  const handleError = (_error: any, _input: string) => {
+    setErrors(prevState => ({...prevState, [_input]: _error}));
   };
 
   return (
@@ -170,12 +185,7 @@ const ChangePassword = () => {
                   padding: 10,
                   alignItems: 'center',
                 }}
-                onPress={() => {
-                  dispatch(resetSuccess());
-                  if (navigation.canGoBack()) {
-                    navigation.goBack();
-                  }
-                }}>
+                onPress={handleSuccessDialogClose}>
                 <Text style={{fontFamily: fonts.semibold, color: colors.white}}>
                   Stay Login
                 </Text>
@@ -202,60 +212,67 @@ const ChangePassword = () => {
 
       <ScrollView>
         <View style={{margin: 10}}>
-          <Text
-            style={{
-              fontFamily: fonts.semibold,
-              fontSize: 22,
-              color: '#0E184D',
-              marginTop: 20,
-            }}>
-            Change Password
-          </Text>
-
           <CustomInput
+            value={input.oldPassword}
             onChangeText={(text: string) => {
-              handleError(null, 'oldPassword');
+              handleError('', 'oldPassword');
               handleOnchange(text, 'oldPassword');
             }}
             onFocus={() => handleError(null, 'oldPassword')}
-            label="Current password"
-            maxLength={16}
-            placeholder="Enter password"
+            label="Current Password"
+            maxLength={30}
+            placeholder="Enter current password"
             autoCapitalize="none"
             password
             containerStyle={{marginTop: 10}}
           />
 
           <CustomInput
+            value={input.newPassword}
             onChangeText={(text: string) => {
+              //@ts-ignore
               setIsValid(handleValidation(text));
-              handleError(null, 'newPassword');
+              handleError('', 'newPassword');
+              dispatch(loginValue());
               handleOnchange(text, 'newPassword');
             }}
-            onFocus={() => handleError(null, 'newPassword')}
-            label="New password"
-            maxLength={16}
-            placeholder="Enter password"
+            onFocus={() => handleError('', 'newPassword')}
+            label="New Password"
+            maxLength={30}
+            placeholder="Enter new password"
             autoCapitalize="none"
             password
             containerStyle={{marginTop: 20}}
           />
 
           <CustomInput
+            value={input.confirmPassword}
             onChangeText={(text: string) => {
-              handleError(null, 'confirmPassword');
+              handleError('', 'confirmPassword');
+              dispatch(loginValue());
               handleOnchange(text, 'confirmPassword');
             }}
             onFocus={() => {
-              handleError(null, 'confirmPassword');
+              handleError('', 'confirmPassword');
             }}
-            maxLength={16}
-            label="Re-enter new password"
-            placeholder="Re-enter password"
+            maxLength={30}
+            label="Confirm New password"
+            placeholder="Enter confirm password"
             autoCapitalize="none"
             password
             containerStyle={{marginTop: 20}}
           />
+
+          {!!error && (
+            <Text
+              style={{
+                color: 'red',
+                fontFamily: fonts.medium,
+                marginTop: 5,
+              }}>
+              {error}
+            </Text>
+          )}
 
           <View style={{marginTop: 20}}>
             {passwordStrength.map((_item: string, index: number) => {
@@ -293,7 +310,7 @@ const ChangePassword = () => {
             input.confirmPassword.length >= 8 &&
             isValid.every(_item => _item == true)
           }
-          style={{bottom: 20, marginTop: 40}}
+          style={{bottom: 20, marginTop: 120}}
         />
       </ScrollView>
     </SafeAreaView>

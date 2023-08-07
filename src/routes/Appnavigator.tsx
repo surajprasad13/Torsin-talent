@@ -38,7 +38,7 @@ import ReceivedPayment from '../screens/payment/ReceivedPaymentDetail';
 import RatingDetail from '../screens/rating/RatingDetail';
 import RaiseQuery from '../screens/help/RaiseQuery';
 import FeedDetails from '../screens/feeds/FeedDetails';
-import ChangePassword from '../screens/changePassword/ChangePassword';
+import ChangePassword from '../screens/auth/ChangePassword';
 
 import {useFlipper} from '@react-navigation/devtools';
 
