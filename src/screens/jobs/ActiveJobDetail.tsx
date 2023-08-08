@@ -35,8 +35,6 @@ const contractType = ['', 'Hourly', 'Fixed'];
 const ActiveJobDetail: FC = ({route}: any) => {
   const {item} = route.params;
 
-  
-
   const [isExpanded, setIsExpanded] = useState(false);
   const heightProgress = useSharedValue(150);
 
@@ -451,109 +449,106 @@ const ActiveJobDetail: FC = ({route}: any) => {
           )}
         </View>
 
-        {item.status == 4 && (
-          <View>
-            <Pressable
-              onPress={() => {
-                navigation.navigate('ChatUser', {item});
-              }}
+        {/* {item.status == 4 && ( )} */}
+        <View>
+          <Pressable
+            onPress={() => {
+              navigation.navigate('ChatUser', {item});
+            }}
+            style={{
+              ...appstyle.shadow,
+              marginTop: 10,
+              padding: 15,
+              margin: 5,
+              flexDirection: 'row',
+              borderRadius: 15,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View
               style={{
-                ...appstyle.shadow,
-                marginTop: 10,
+                backgroundColor: '#D6DFFF',
                 padding: 15,
-                margin: 10,
-                flexDirection: 'row',
-                borderRadius: 15,
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                borderRadius: 100,
               }}>
-              <View
+              <AntDesign
+                name="star"
+                size={30}
+                style={{color: colors.primary}}
+              />
+            </View>
+            <View
+              style={{
+                width: '80%',
+              }}>
+              <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
+                Chats
+              </Text>
+              <Text
                 style={{
-                  backgroundColor: '#D6DFFF',
-                  padding: 15,
-                  borderRadius: 100,
+                  fontFamily: fonts.regular,
+                  marginTop: 5,
+                  fontSize: 10,
+                  opacity: 0.8,
+                  color: '#1E202B',
+                  lineHeight: 15,
                 }}>
-                <AntDesign
-                  name="star"
-                  size={30}
-                  style={{color: colors.primary}}
-                />
-              </View>
-              <View
-                style={{
-                  width: '80%',
-                }}>
-                <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-                  Chats
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: fonts.regular,
-                    marginTop: 5,
-                    fontSize: 10,
-                    opacity: 0.8,
-                    color: '#1E202B',
-                    lineHeight: 15,
-                  }}>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Blanditiis labore iusto velit aspernatur deleniti
-                  necessitatibus molestias ad, dolores nisi harum placeat quis
-                  consequuntur hic libero laboriosam nam iste, ipsam
-                  accusantium.
-                </Text>
-              </View>
-            </Pressable>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Blanditiis labore iusto velit aspernatur deleniti necessitatibus
+                molestias ad, dolores nisi harum placeat quis consequuntur hic
+                libero laboriosam nam iste, ipsam accusantium.
+              </Text>
+            </View>
+          </Pressable>
 
-            <Pressable
-              onPress={() => navigation.navigate('ReportProblem')}
+          <Pressable
+            onPress={() => navigation.navigate('ReportProblem')}
+            style={{
+              ...appstyle.shadow,
+              marginTop: 10,
+              padding: 15,
+              margin: 5,
+              flexDirection: 'row',
+              borderRadius: 15,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View
               style={{
-                ...appstyle.shadow,
-                marginTop: 10,
+                backgroundColor: '#D6DFFF',
                 padding: 15,
-                margin: 10,
-                flexDirection: 'row',
-                borderRadius: 15,
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                borderRadius: 100,
               }}>
-              <View
+              <Ionicons
+                name="md-shield-checkmark"
+                size={30}
+                style={{color: colors.primary}}
+              />
+            </View>
+            <View
+              style={{
+                width: '80%',
+              }}>
+              <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
+                Report a problems
+              </Text>
+              <Text
                 style={{
-                  backgroundColor: '#D6DFFF',
-                  padding: 15,
-                  borderRadius: 100,
+                  fontFamily: fonts.regular,
+                  marginTop: 5,
+                  fontSize: 10,
+                  opacity: 0.8,
+                  color: '#1E202B',
+                  lineHeight: 15,
                 }}>
-                <Ionicons
-                  name="md-shield-checkmark"
-                  size={30}
-                  style={{color: colors.primary}}
-                />
-              </View>
-              <View
-                style={{
-                  width: '80%',
-                }}>
-                <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-                  Report a problems
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: fonts.regular,
-                    marginTop: 5,
-                    fontSize: 10,
-                    opacity: 0.8,
-                    color: '#1E202B',
-                    lineHeight: 15,
-                  }}>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Blanditiis labore iusto velit aspernatur deleniti
-                  necessitatibus molestias ad, dolores nisi harum placeat quis
-                  consequuntur hic libero laboriosam nam iste, ipsam
-                  accusantium.
-                </Text>
-              </View>
-            </Pressable>
-          </View>
-        )}
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Blanditiis labore iusto velit aspernatur deleniti necessitatibus
+                molestias ad, dolores nisi harum placeat quis consequuntur hic
+                libero laboriosam nam iste, ipsam accusantium.
+              </Text>
+            </View>
+          </Pressable>
+        </View>
 
         {/* <Pressable
           style={{

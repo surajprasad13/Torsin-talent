@@ -116,7 +116,7 @@ const List = [
     ),
   },
   {
-    title: 'Help and Support',
+    title: 'Complaints',
     route: 'HelpSupport',
     icon: ({color}: {color: string}) => (
       <IonIcon name="md-headset" color={color} size={20} />

@@ -4,6 +4,7 @@ import {
   addService,
   addSkill,
   createRating,
+  createSupport,
   fetchAdminService,
   fetchNotification,
   fetchService,
@@ -14,6 +15,7 @@ import {
   getContract,
   getContractDetail,
   getFeedList,
+  getHelpSupport,
   getProposalDetail,
   getProposalStatus,
   getRating,
@@ -23,6 +25,7 @@ import {
 } from '../actions/userAction';
 import {
   Feed,
+  Help,
   JobDetail,
   ProposalDetail,
   Rating,
@@ -62,6 +65,7 @@ interface UserInterface {
   notification: Array<any>;
   contractDetail: null | Contract;
   rating: Array<Rating>;
+  help: Array<Help>;
   feed: Array<Feed>;
   created: boolean;
   adminPercentage: number;
@@ -94,6 +98,7 @@ const initialState: UserInterface = {
   contractDetail: null,
   rating: [],
   feed: [],
+  help: [],
   adminPercentage: 0,
 };
 
@@ -413,6 +418,34 @@ const userSlice = createSlice({
         state.feed = action.payload.response;
       })
       .addCase(getFeedList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //help
+      .addCase(getHelpSupport.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getHelpSupport.fulfilled, (state, action) => {
+        state.loading = false;
+        state.help = action.payload.response;
+      })
+      .addCase(getHelpSupport.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // create help
+      .addCase(createSupport.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(createSupport.fulfilled, state => {
+        state.loading = false;
+        state.created = true;
+      })
+      .addCase(createSupport.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

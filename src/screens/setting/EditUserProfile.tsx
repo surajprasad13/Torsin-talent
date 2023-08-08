@@ -292,42 +292,6 @@ const EditUserProfile = ({}) => {
             </View>
           )}
 
-          <View style={{marginTop: 20}}>
-            <Text
-              style={{
-                fontFamily: fonts.regular,
-                color: '#4F4F4F',
-                fontSize: 16,
-              }}>
-              Location
-            </Text>
-
-            <GooglePlacesAutocomplete
-              placeholder="Search"
-              fetchDetails={true}
-              onPress={(data, details = null) => {
-                const location = data.description;
-                setInputs(prevState => ({...prevState, location}));
-              }}
-              query={{
-                key: 'AIzaSyD9HAzCj-r9Zw8dZnQWkNgrkewOc4aRjGc', // Replace with your own Google Maps API key
-                language: 'en',
-              }}
-              styles={{
-                container: styles.autocompleteContainer,
-                textInput: styles.textInput,
-                listView: styles.listView,
-                poweredContainer: styles.powered,
-              }}
-              textInputProps={{
-                onChangeText: text => handleOnchange(text, 'location'),
-                onFocus: () => handleError(null, 'location'),
-                error: errors.location,
-                value: inputs.location,
-              }}
-            />
-          </View>
-
           <View style={{position: 'relative'}}>
             <CustomInput
               value={inputs.countryName}
@@ -372,6 +336,42 @@ const EditUserProfile = ({}) => {
               }}
             />
           )}
+
+          <View style={{marginTop: 20}}>
+            <Text
+              style={{
+                fontFamily: fonts.regular,
+                color: '#4F4F4F',
+                fontSize: 16,
+              }}>
+              Location
+            </Text>
+
+            <GooglePlacesAutocomplete
+              placeholder="Search"
+              fetchDetails={true}
+              onPress={(data, details = null) => {
+                const location = data.description;
+                setInputs(prevState => ({...prevState, location}));
+              }}
+              query={{
+                key: 'AIzaSyD9HAzCj-r9Zw8dZnQWkNgrkewOc4aRjGc', // Replace with your own Google Maps API key
+                language: 'en',
+              }}
+              styles={{
+                container: styles.autocompleteContainer,
+                textInput: styles.textInput,
+                listView: styles.listView,
+                poweredContainer: styles.powered,
+              }}
+              textInputProps={{
+                onChangeText: text => handleOnchange(text, 'location'),
+                onFocus: () => handleError(null, 'location'),
+                error: errors.location,
+                value: inputs.location,
+              }}
+            />
+          </View>
 
           <View style={{marginTop: 20}}>
             <Text

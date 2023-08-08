@@ -72,4 +72,9 @@ export interface Feed {
   isActive: string;
 }
 
+export interface Help {
+  topicId: number;
+  topicName: string;
+}
+
 export interface Skill {}

@@ -394,6 +394,40 @@ const getFeedList = createAsyncThunk(
   },
 );
 
+const getHelpSupport = createAsyncThunk(
+  'support/topic/list',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`support/topic/list`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const createSupport = createAsyncThunk(
+  'support/ticket/initiate',
+  async (value: {topicId: string; description: string}, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`support/ticket/initiate`, value);
+      console.log(value, 'success');
+      return data;
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -416,6 +450,8 @@ export {
   fetchAdminService,
   getProposalDetail,
   getFeedList,
+  getHelpSupport,
+  createSupport,
 };
 
 export default {};

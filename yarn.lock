@@ -1777,7 +1777,7 @@
 
 "@react-navigation/devtools@^6.0.19":
   version "6.0.19"
-  resolved "https://registry.yarnpkg.com/@react-navigation/devtools/-/devtools-6.0.19.tgz#27f5f2e76fc927976a44d9dacf8035b0a79e9fde"
+  resolved "https://registry.npmjs.org/@react-navigation/devtools/-/devtools-6.0.19.tgz#27f5f2e76fc927976a44d9dacf8035b0a79e9fde"
   integrity sha512-TfOOy26boJa4FuTYrwrLYIqv3uXZYt1Ighe5vH892ky5xCYgWY8TBwmHVpXQT/3XBCRkqW6ADyrXLCh5/F0JXg==
   dependencies:
     deep-equal "^2.0.5"
