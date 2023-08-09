@@ -8,6 +8,8 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  SafeAreaView,
+  RefreshControl,
 } from 'react-native';
 
 // helpers
@@ -26,9 +28,16 @@ const Proposed = () => {
     dispatch(getProposalStatus());
   }, []);
 
+  const onRefresh = () => {
+    dispatch(getProposalStatus());
+  };
+
   return (
-    <View>
+    <SafeAreaView style={{backgroundColor: '#f9fbff', flex: 1}}>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
         ListEmptyComponent={
           <View
             style={{
@@ -65,7 +74,7 @@ const Proposed = () => {
         }}
         keyExtractor={(_, index) => index.toString()}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

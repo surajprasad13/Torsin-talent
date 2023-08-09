@@ -352,6 +352,7 @@ const EditUserProfile = ({}) => {
               fetchDetails={true}
               onPress={(data, details = null) => {
                 const location = data.description;
+                console.log(details);
                 setInputs(prevState => ({...prevState, location}));
               }}
               query={{

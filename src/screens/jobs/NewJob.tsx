@@ -7,6 +7,7 @@ import {
   Image,
   Text,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 
 //icons
@@ -27,9 +28,16 @@ const NewJob = ({}) => {
     dispatch(fetchNewJobAndContract(''));
   }, []);
 
+  const onRefresh = () => {
+    dispatch(fetchNewJobAndContract(''));
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
         data={newjob}
         style={{backgroundColor: colors.white}}
         ListEmptyComponent={

@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 
 // helpers
@@ -27,8 +28,15 @@ const Reject = () => {
     dispatch(getContract(2));
   }, []);
 
+  const onRefresh = () => {
+    dispatch(getContract(2));
+  };
+
   return (
     <FlatList
+      refreshControl={
+        <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+      }
       data={contracts.rejected}
       ListEmptyComponent={
         <View style={styles.emptyContainer}>

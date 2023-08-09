@@ -1,5 +1,12 @@
 import React, {FC, useEffect} from 'react';
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 //icons
 
@@ -22,8 +29,15 @@ const ArchiveContract: FC = () => {
     dispatch(getContract(3));
   }, []);
 
+  const onRefresh = () => {
+    dispatch(getContract(3));
+  };
+
   return (
     <FlatList
+      refreshControl={
+        <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+      }
       data={contracts.archived}
       ListEmptyComponent={
         <View style={styles.emptyContainer}>

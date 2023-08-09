@@ -6,6 +6,8 @@ import {
   Text,
   StyleSheet,
   Dimensions,
+  RefreshControl,
+  SafeAreaView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
@@ -25,9 +27,16 @@ const Rejected = () => {
     dispatch(getProposalStatus());
   }, []);
 
+  const onRefresh = () => {
+    dispatch(getProposalStatus());
+  };
+
   return (
-    <View>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
         ListEmptyComponent={
           <View
             style={{
@@ -64,7 +73,7 @@ const Rejected = () => {
         }}
         keyExtractor={(_, index) => index.toString()}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

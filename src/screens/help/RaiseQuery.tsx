@@ -8,6 +8,7 @@ import {
   ScrollView,
   TextInput,
   FlatList,
+  LayoutAnimation,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -40,13 +41,28 @@ const RaiseQuery = () => {
 
   const filteredHelp = showMoreTopics ? help : help.slice(0, 5);
 
+  const CustomLayoutAnimation = {
+    duration: 400,
+    create: {
+      type: LayoutAnimation.Types.linear,
+      property: LayoutAnimation.Properties.scaleXY,
+    },
+    update: {
+      type: LayoutAnimation.Types.linear,
+      property: LayoutAnimation.Properties.scaleXY,
+    },
+  };
+
   const handleShowMoreTopics = () => {
+    setSelectedReasonIndex(-1);
+    LayoutAnimation.configureNext(CustomLayoutAnimation);
     setShowMoreTopics(true);
   };
 
   const handleCloseTopics = () => {
-    setShowMoreTopics(false);
     setSelectedReasonIndex(-1);
+    LayoutAnimation.configureNext(CustomLayoutAnimation);
+    setShowMoreTopics(false);
   };
 
   return (
@@ -120,7 +136,7 @@ const RaiseQuery = () => {
                     justifyContent: 'space-between',
                     borderWidth: 1,
                     borderColor:
-                      selectedReasonIndex === index ? colors.primary : 'white',
+                      topic === item.topicId ? colors.primary : 'white',
                   }}>
                   <Text
                     style={{
@@ -133,13 +149,11 @@ const RaiseQuery = () => {
 
                   <MaterialIcons
                     name={
-                      selectedReasonIndex === index
+                      topic === item.topicId
                         ? 'check-circle'
                         : 'radio-button-unchecked'
                     }
-                    color={
-                      selectedReasonIndex === index ? colors.primary : '#D9D9D9'
-                    }
+                    color={topic === item.topicId ? colors.primary : '#D9D9D9'}
                     size={25}
                     style={{position: 'absolute', right: 10}}
                   />
@@ -148,7 +162,13 @@ const RaiseQuery = () => {
             />
 
             {help.length > 5 && (
-              <View style={{marginTop: 10, alignItems: 'center'}}>
+              <View
+                style={{
+                  marginTop: 10,
+                  alignItems: 'center',
+                  height: showMoreTopics ? 'auto' : 40,
+                  overflow: 'hidden',
+                }}>
                 {!showMoreTopics ? (
                   <Pressable onPress={handleShowMoreTopics}>
                     <Text style={{color: colors.primary}}>

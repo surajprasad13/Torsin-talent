@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   FlatList,
   Image,
+  RefreshControl,
 } from 'react-native';
 import notifee from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
@@ -24,7 +25,7 @@ const Notification = ({}) => {
   const {userInfo} = useAppSelector(state => state.auth);
 
   const dispatch = useAppDispatch();
-  const {notification} = useAppSelector(state => state.user);
+  const {notification, loading} = useAppSelector(state => state.user);
 
   const toggleSwitch = async () => {
     setIsEnabled(previousState => !previousState);
@@ -43,11 +44,18 @@ const Notification = ({}) => {
     dispatch(fetchNotification());
   }, []);
 
+  const onRefresh = () => {
+    dispatch(fetchNotification());
+  };
+
   return (
     <SafeAreaView style={{backgroundColor: '#f9fbff', flex: 1}}>
       <Title title="Notification" />
 
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
         data={notification}
         style={{flex: 1}}
         ListHeaderComponent={

@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Dimensions,
   Text,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect} from 'react';
 import {colors, fonts} from '../../theme';
@@ -31,11 +32,18 @@ const MyRating = () => {
     dispatch(getRating(''));
   }, []);
 
+  const onRefresh = () => {
+    dispatch(getRating(''));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Title title="My Rating" />
 
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
         data={rating}
         ListEmptyComponent={
           <View

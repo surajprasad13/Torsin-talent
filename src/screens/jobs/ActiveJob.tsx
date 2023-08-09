@@ -8,6 +8,7 @@ import {
   Image,
   Text,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 
 // helpers
@@ -28,9 +29,16 @@ const ActiveJob: FC = ({}) => {
     dispatch(fetchActiveJobAndContract(''));
   }, []);
 
+  const onRefresh = () => {
+    dispatch(fetchActiveJobAndContract(''));
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
         data={jobs}
         style={{backgroundColor: colors.white}}
         ListEmptyComponent={

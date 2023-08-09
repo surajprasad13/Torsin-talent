@@ -60,7 +60,9 @@ const ProposalStatus: FC = ({item}: any) => {
               {item.jobName}
             </Text>
             <Text style={[styles.headertext, {marginTop: 10}]}>
-              {item.jobDescription}
+              {item.jobDescription.length > 50
+                ? item.jobDescription.substring(0, 50) + '...'
+                : item.jobDescription}
             </Text>
           </View>
           {renderStatus(item.proposalStatus)}

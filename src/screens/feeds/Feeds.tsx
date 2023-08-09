@@ -4,16 +4,15 @@ import {
   Text,
   SafeAreaView,
   StyleSheet,
-  TouchableOpacity,
-  ScrollView,
   FlatList,
   ActivityIndicator,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
-import {Divider} from 'react-native-paper';
+
 
 //helpers
 import {Title} from '../../components';
@@ -39,6 +38,10 @@ const Feeds = () => {
     dispatch(getFeedList(''));
   }, []);
 
+  const onRefresh = () => {
+    dispatch(getFeedList(''));
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <Title title="Feeds" />
@@ -56,6 +59,9 @@ const Feeds = () => {
           />
         ))}
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
         data={otherFeed}
         ListEmptyComponent={
           <View

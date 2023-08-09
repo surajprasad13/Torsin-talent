@@ -8,6 +8,8 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  RefreshControl,
+  SafeAreaView,
 } from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getProposalStatus} from '../../redux/actions/userAction';
@@ -24,9 +26,16 @@ const Accepted: FC = () => {
     dispatch(getProposalStatus());
   }, []);
 
+  const onRefresh = () => {
+    dispatch(getProposalStatus());
+  };
+
   return (
-    <View>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#f9fbff'}}>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
         ListEmptyComponent={
           <View
             style={{
@@ -63,7 +72,7 @@ const Accepted: FC = () => {
         }}
         keyExtractor={(_, index) => index.toString()}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
