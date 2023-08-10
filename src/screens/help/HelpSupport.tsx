@@ -24,15 +24,14 @@ const HelpSupport: FC = ({}) => {
     <SafeAreaView style={{backgroundColor: '#f9fbff', flex: 1}}>
       <Title title="Help & Support" />
 
+      <CustomButton
+        disabled
+        title="Raise a query"
+        onPress={() => navigation.navigate('RaiseQuery')}
+        style={{marginTop: 10}}
+      />
+
       <FlatList
-        ListHeaderComponent={
-          <CustomButton
-            disabled
-            title="Raise a query"
-            onPress={() => navigation.navigate('RaiseQuery')}
-            style={{marginTop: 10}}
-          />
-        }
         contentContainerStyle={{paddingBottom: 20, margin: 10}}
         data={ticket}
         renderItem={({item, index}) => {

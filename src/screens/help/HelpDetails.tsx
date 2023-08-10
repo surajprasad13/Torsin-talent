@@ -1,5 +1,12 @@
 import React, {FC} from 'react';
-import {View, Text, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import {Divider} from 'react-native-paper';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -10,6 +17,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
 import {CustomButton, Title} from '../../components';
+import {useAppSelector} from '../../hooks';
 
 interface ProposalDetailProp {
   route: any;
@@ -17,6 +25,8 @@ interface ProposalDetailProp {
 
 const HelpDetails: FC<ProposalDetailProp> = ({}) => {
   const navigation = useNavigation();
+
+  const {loading} = useAppSelector(state => state.user);
 
   const {
     params: {item},
@@ -55,46 +65,26 @@ const HelpDetails: FC<ProposalDetailProp> = ({}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Title title="Job Details" />
+      {loading && <ActivityIndicator />}
       <ScrollView>
         <View style={styles.cardContainer}>
-          <Text style={styles.cardTitle}>Ticket No : #0035</Text>
+          <Text style={styles.cardTitle}>Ticket No : #{item.ticketId}</Text>
           <Text style={styles.cardSubtitle}>
-            Name: <Text style={styles.description}>Talent Name</Text>
+            Topic Name: <Text style={styles.description}>{item.topicName}</Text>
           </Text>
-          <Text style={styles.cardSubtitle}>
-            User: <Text style={styles.description}>Talent User</Text>
-          </Text>
-          <View style={styles.detailsContainer}>
-            <View style={styles.detailsItem}>
-              <AntDesign name="clockcircleo" size={20} style={styles.icon} />
-              <Text style={styles.detailsText}>06/06/2006</Text>
-            </View>
-            <View style={styles.detailsItem}>
-              <Entypo name="location-pin" size={20} style={styles.icon} />
-              <Text style={styles.detailsText}>Noida, India</Text>
-            </View>
-          </View>
           <Divider style={styles.divider} />
           <Text style={styles.sectionTitle}>Job Description</Text>
-          <Text style={styles.descriptionText}>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit
-            magni error facilis placeat necessitatibus dolores debitis,
-            laboriosam, voluptate porro quibusdam tempore vero. Quas alias esse
-            explicabo odit debitis, non obcaecati.
-          </Text>
+          <Text style={styles.descriptionText}>{item.description}</Text>
           <Divider style={styles.divider} />
           {renderButtons()}
         </View>
-        {item.status === 2 && (
+        {item.status === 3 && (
           <View style={[styles.cardContainer, {marginTop: 20}]}>
             <Text style={[styles.sectionTitle, {bottom: 20}]}>
               Reason for Rejection
             </Text>
             <Text style={[styles.descriptionText, {bottom: 20}]}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
-              perspiciatis labore ab commodi, ut ducimus id accusamus similique
-              corrupti voluptas possimus necessitatibus culpa quibusdam
-              voluptatem quia. Odio molestias aut rerum.
+              {item.reason}
             </Text>
           </View>
         )}

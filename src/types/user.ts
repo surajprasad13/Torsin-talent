@@ -79,6 +79,8 @@ export interface Ticket {
   topicName: string;
   description: string;
   status: Status;
+  ticketId: number;
+  reason: string;
 }
 
 export interface Help {

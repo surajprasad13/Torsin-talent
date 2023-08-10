@@ -50,23 +50,30 @@ const HelpCard = ({item}: {item: Ticket}) => {
         style={{
           ...styles.container,
         }}>
-        <FastImage
-          source={{uri: 'https://source.unsplash.com/400x400?stone'}}
-          resizeMode="cover"
-          style={styles.image}
-        />
-        <View style={{width: '80%'}}>
+        <View style={{width: '100%'}}>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
-              {item.topicName}
+            <Text
+              style={{
+                fontFamily: fonts.semibold,
+                color: '#1E202B',
+                width: '80%',
+              }}>
+              {item.topicName.length > 30
+                ? item.topicName.slice(0, 30) + '...'
+                : item.topicName}
             </Text>
+
             <Text style={styles.time}>Just Now</Text>
           </View>
-          <Text style={styles.title}>{item.description}</Text>
+          <Text style={[styles.title, {width: '80%'}]}>
+            {item.description.length > 50
+              ? item.description.slice(0, 50) + '...'
+              : item.description}
+          </Text>
           <Text
             style={{
               ...styles.status,
