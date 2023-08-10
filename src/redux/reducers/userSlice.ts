@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {
+  TicketList,
   addProposal,
   addService,
   addSkill,
@@ -30,6 +31,7 @@ import {
   ProposalDetail,
   Rating,
   Service,
+  Ticket,
 } from '../../types/user';
 import {searchJob} from '../actions/userAction';
 import {Contract} from '../../types/contract';
@@ -67,6 +69,7 @@ interface UserInterface {
   rating: Array<Rating>;
   help: Array<Help>;
   feed: Array<Feed>;
+  ticket: Array<Ticket>;
   created: boolean;
   adminPercentage: number;
 }
@@ -99,6 +102,7 @@ const initialState: UserInterface = {
   rating: [],
   feed: [],
   help: [],
+  ticket: [],
   adminPercentage: 0,
 };
 
@@ -446,6 +450,20 @@ const userSlice = createSlice({
         state.created = true;
       })
       .addCase(createSupport.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //TicketList
+      .addCase(TicketList.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(TicketList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ticket = action.payload.response;
+      })
+      .addCase(TicketList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

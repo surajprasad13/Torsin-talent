@@ -72,6 +72,15 @@ export interface Feed {
   isActive: string;
 }
 
+export type Status = 1 | 2 | 3 | 4;
+
+export interface Ticket {
+  topicId: number;
+  topicName: string;
+  description: string;
+  status: Status;
+}
+
 export interface Help {
   topicId: number;
   topicName: string;

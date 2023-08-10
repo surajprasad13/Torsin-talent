@@ -428,6 +428,22 @@ const createSupport = createAsyncThunk(
   },
 );
 
+const TicketList = createAsyncThunk(
+  'support/ticket/list',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`support/ticket/list`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -452,6 +468,7 @@ export {
   getFeedList,
   getHelpSupport,
   createSupport,
+  TicketList,
 };
 
 export default {};

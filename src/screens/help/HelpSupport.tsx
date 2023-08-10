@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -14,43 +14,25 @@ import {useNavigation} from '@react-navigation/native';
 //helpers
 import {colors, fonts, appstyle} from '../../theme';
 import {CustomButton, Title} from '../../components';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {TicketList} from '../../redux/actions/userAction';
+import {Ticket} from '../../types/user';
+import HelpCard from './component/HelpCard';
 
-const HelpSupport = () => {
+const HelpSupport = ({item}: {item: Ticket}) => {
   const navigation = useNavigation();
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() => navigation.navigate('PaymentDetail')}
-      style={styles.container}>
-      <FastImage
-        source={{uri: 'https://source.unsplash.com/400x400?stone'}}
-        resizeMode="cover"
-        style={styles.image}
-      />
-      <View style={{width: '80%'}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
-            Film Maker
-          </Text>
-          <Text style={styles.time}>Just Now</Text>
-        </View>
-        <Text style={styles.title}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque in
-          laborum.
-        </Text>
-        <Text
-          style={{
-            right: 5,
-            position: 'absolute',
-            bottom: -10,
-            color: 'green',
-            fontSize: 8,
-          }}>
-          Open
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const handleCardPress = status => {
+    navigation.navigate('HelpDetails', {status});
+  };
+
+  const dispatch = useAppDispatch();
+
+  const {ticket, loading} = useAppSelector(state => state.user);
+
+  useEffect(() => {
+    dispatch(TicketList(''));
+  }, []);
 
   return (
     <SafeAreaView style={{backgroundColor: '#f9fbff', flex: 1}}>
@@ -65,13 +47,19 @@ const HelpSupport = () => {
         />
       </View>
       <View style={{margin: 10}}>
-        <Text style={{fontSize: 15, fontFamily: fonts.medium}}>
+        <Text
+          style={{
+            fontSize: 15,
+            fontFamily: fonts.medium,
+          }}>
           All Queries
         </Text>
         <FlatList
-          data={[0, 1, 2, 3, 4, 5, 6]}
-          keyExtractor={item => item.toString()}
-          renderItem={renderItem}
+          data={ticket}
+          renderItem={({item, index}) => {
+            return <HelpCard item={item} key={index.toString()} />;
+          }}
+          keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={{paddingBottom: 20}}
         />
       </View>
@@ -105,6 +93,12 @@ const styles = StyleSheet.create({
     color: colors.grey,
     textAlign: 'right',
     fontSize: 10,
+  },
+  status: {
+    right: 5,
+    position: 'absolute',
+    bottom: -10,
+    fontSize: 8,
   },
 });
 
