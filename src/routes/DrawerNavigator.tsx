@@ -20,6 +20,7 @@ import JobNavigator from './JobNavigator';
 import HelpSupport from '../screens/help/HelpSupport';
 import Feeds from '../screens/feeds/Feeds';
 import ChangePassword from '../screens/auth/ChangePassword';
+import HelpDetails from '../screens/help/HelpDetails';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
@@ -68,6 +69,14 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="MyServices" component={MyService} options={{}} />
       <Drawer.Screen name="TermsPrivacy" component={Terms} options={{}} />
       <Drawer.Screen name="HelpSupport" component={HelpSupport} options={{}} />
+      <Drawer.Screen
+        name="HelpDetail"
+        component={HelpDetails}
+        options={{}}
+        initialParams={{
+          item: {},
+        }}
+      />
       <Drawer.Screen name="PaymentMethod" component={PaymentMethod} />
       <Drawer.Screen name="Feeds" component={Feeds} />
       <Drawer.Screen name="ChangePassword" component={ChangePassword} />

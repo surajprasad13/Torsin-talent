@@ -41,7 +41,6 @@ import FeedDetails from '../screens/feeds/FeedDetails';
 import ChangePassword from '../screens/auth/ChangePassword';
 
 import {useFlipper} from '@react-navigation/devtools';
-import HelpDetails from '../screens/help/HelpDetails';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -133,15 +132,6 @@ const AppNavigator: FC = () => {
             <Stack.Screen
               name="Rating"
               component={RatingReview}
-              options={{
-                headerShown: false,
-                ...TransitionPresets.SlideFromRightIOS,
-              }}
-            />
-
-            <Stack.Screen
-              name="HelpDetails"
-              component={HelpDetails}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,

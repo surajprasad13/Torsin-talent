@@ -1,51 +1,50 @@
-import React, {FC, useEffect} from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Pressable,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import React, {FC} from 'react';
+import {View, Text, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
 import {Divider} from 'react-native-paper';
-import {CustomButton, Title} from '../../components';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-import {appstyle, colors, fonts} from '../../theme';
-import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+// icons
 import Entypo from 'react-native-vector-icons/Entypo';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import {TicketList} from '../../redux/actions/userAction';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+// helpers
+import {appstyle, colors, fonts} from '../../theme';
+import {CustomButton, Title} from '../../components';
 
 interface ProposalDetailProp {
   route: any;
 }
 
-const HelpDetails: FC<ProposalDetailProp> = ({route}) => {
-  const {id} = route.params;
-  const dispatch = useAppDispatch();
+const HelpDetails: FC<ProposalDetailProp> = ({}) => {
+  const navigation = useNavigation();
 
-  const {ticket: item, loading} = useAppSelector(state => state.user);
-
-  useEffect(() => {
-    dispatch(TicketList(Number(id)));
-  }, []);
-
-  
+  const {
+    params: {item},
+  } = useRoute();
 
   const renderButtons = () => {
     if (item.status === 2) {
       return (
         <View style={styles.button}>
-          <CustomButton title="Chat Now" onPress={() => {}} />
+          <CustomButton
+            disabled
+            title="Chat Now"
+            onPress={() => {
+              navigation.navigate('ChatUser', {item});
+            }}
+          />
         </View>
       );
     } else if (item.status === 4) {
       return (
         <View style={styles.button}>
-          <CustomButton title="Old Chat" onPress={() => {}} />
+          <CustomButton
+            disabled
+            title="Old Chat"
+            onPress={() => {
+              navigation.navigate('ChatUser', {item});
+            }}
+          />
         </View>
       );
     }
@@ -86,7 +85,7 @@ const HelpDetails: FC<ProposalDetailProp> = ({route}) => {
           <Divider style={styles.divider} />
           {renderButtons()}
         </View>
-        {/* {status === 2 && (
+        {item.status === 2 && (
           <View style={[styles.cardContainer, {marginTop: 20}]}>
             <Text style={[styles.sectionTitle, {bottom: 20}]}>
               Reason for Rejection
@@ -98,7 +97,7 @@ const HelpDetails: FC<ProposalDetailProp> = ({route}) => {
               voluptatem quia. Odio molestias aut rerum.
             </Text>
           </View>
-        )} */}
+        )}
       </ScrollView>
     </SafeAreaView>
   );

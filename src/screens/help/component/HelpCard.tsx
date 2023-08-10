@@ -1,12 +1,16 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
-import {colors, fonts, appstyle} from '../../../theme';
 import {useNavigation} from '@react-navigation/native';
+
+import {colors, fonts, appstyle} from '../../../theme';
 import {Ticket} from '../../../types/user';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {DrawerScreenParamaList} from '../../../routes/RouteType';
 
 const HelpCard = ({item}: {item: Ticket}) => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<DrawerNavigationProp<DrawerScreenParamaList>>();
 
   const renderStatus = (id: number) => {
     switch (id) {
@@ -42,7 +46,7 @@ const HelpCard = ({item}: {item: Ticket}) => {
   return (
     <View>
       <TouchableOpacity
-        onPress={() => navigation.navigate('HelpDetails', {id: item.status})}
+        onPress={() => navigation.navigate('HelpDetail', {item})}
         style={{
           ...styles.container,
         }}>

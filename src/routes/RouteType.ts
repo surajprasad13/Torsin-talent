@@ -70,6 +70,9 @@ export type DrawerScreenParamaList = {
   AboutUs: undefined;
   TermsPrivacy: undefined;
   HelpSupport: undefined;
+  HelpDetail: {
+    item: undefined | any;
+  };
   BottomNavigation: BottomTabScreenProps<BottomScreenParamList>;
   DrawerSetting: undefined;
   PaymentMethod: undefined;
