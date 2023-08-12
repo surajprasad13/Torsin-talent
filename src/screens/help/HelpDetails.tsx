@@ -40,7 +40,7 @@ const HelpDetails: FC<ProposalDetailProp> = ({}) => {
             disabled
             title="Chat Now"
             onPress={() => {
-              navigation.navigate('ChatUser', {item});
+              navigation.navigate('ChatCard', {item});
             }}
           />
         </View>

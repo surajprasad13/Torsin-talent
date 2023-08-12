@@ -444,6 +444,43 @@ const TicketList = createAsyncThunk(
   },
 );
 
+const supportChat = createAsyncThunk(
+  'support/ticket/chat/list',
+  async (value: any, {rejectWithValue}) => {
+    console.log(value, 'Hello');
+    try {
+      const {data} = await api.get(`support/ticket/chat/list`, {
+        params: {
+          ticketId: value,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const supportPostChat = createAsyncThunk(
+  'support/ticket/chat/initiate',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`support/ticket/chat/initiate`, value);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -469,6 +506,8 @@ export {
   getHelpSupport,
   createSupport,
   TicketList,
+  supportChat,
+  supportPostChat,
 };
 
 export default {};

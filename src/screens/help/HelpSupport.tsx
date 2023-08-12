@@ -9,7 +9,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {TicketList} from '../../redux/actions/userAction';
 import HelpCard from './component/HelpCard';
 
-const HelpSupport: FC = ({}) => {
+const Helps: FC = ({}) => {
   const navigation = useNavigation();
 
   const dispatch = useAppDispatch();
@@ -43,4 +43,4 @@ const HelpSupport: FC = ({}) => {
   );
 };
 
-export default HelpSupport;
+export default Helps;

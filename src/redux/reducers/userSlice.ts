@@ -22,6 +22,8 @@ import {
   getRating,
   jobCorrespondSkill,
   notJobCorrespondSkill,
+  supportChat,
+  supportPostChat,
   updateContract,
 } from '../actions/userAction';
 import {
@@ -72,6 +74,7 @@ interface UserInterface {
   ticket: Array<Ticket>;
   created: boolean;
   adminPercentage: number;
+  support: [];
 }
 
 const initialState: UserInterface = {
@@ -104,6 +107,7 @@ const initialState: UserInterface = {
   help: [],
   ticket: [],
   adminPercentage: 0,
+  support: [],
 };
 
 const userSlice = createSlice({
@@ -464,6 +468,34 @@ const userSlice = createSlice({
         state.ticket = action.payload.response;
       })
       .addCase(TicketList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //Support Chat
+      .addCase(supportChat.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(supportChat.fulfilled, (state, action) => {
+        state.loading = false;
+        state.support = action.payload.response;
+      })
+      .addCase(supportChat.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // create support chat
+      .addCase(supportPostChat.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(supportPostChat.fulfilled, state => {
+        state.loading = false;
+        state.created = true;
+      })
+      .addCase(supportPostChat.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -78,6 +78,7 @@ export type DrawerScreenParamaList = {
   PaymentMethod: undefined;
   Feeds: undefined;
   ChangePassword: undefined;
+  ChatCard: undefined;
 };
 
 export type BottomScreenParamList = {

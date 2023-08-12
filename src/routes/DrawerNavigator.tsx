@@ -21,6 +21,7 @@ import HelpSupport from '../screens/help/HelpSupport';
 import Feeds from '../screens/feeds/Feeds';
 import ChangePassword from '../screens/auth/ChangePassword';
 import HelpDetails from '../screens/help/HelpDetails';
+import ChatCard from '../screens/help/ChatCard';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
@@ -77,6 +78,7 @@ const DrawerNavigation = () => {
           item: {},
         }}
       />
+      <Drawer.Screen name="ChatCard" component={ChatCard} />
       <Drawer.Screen name="PaymentMethod" component={PaymentMethod} />
       <Drawer.Screen name="Feeds" component={Feeds} />
       <Drawer.Screen name="ChangePassword" component={ChangePassword} />

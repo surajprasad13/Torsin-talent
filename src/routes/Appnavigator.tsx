@@ -155,6 +155,7 @@ const AppNavigator: FC = () => {
                 ...TransitionPresets.SlideFromRightIOS,
               }}
             />
+
             <Stack.Screen
               name="RatingDetail"
               component={RatingDetail}
