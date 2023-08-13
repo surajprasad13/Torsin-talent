@@ -358,7 +358,6 @@ const BusinessRegister = ({}) => {
               <CustomInput
                 placeholder="Location"
                 label="Location"
-                value={formik.values.location}
                 onChangeText={(text: string) => {
                   formik.handleChange('location')(text);
                   if (formik.values.location.length >= 3) {

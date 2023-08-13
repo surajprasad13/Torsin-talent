@@ -37,7 +37,7 @@ const Location: FC = () => {
         }}
         query={{
           key: 'AIzaSyD5ZBkfaJ4fOC-c8RZXEN9dxmwxZrAgooI',
-          // key: 'AIzaSyD9HAzCj-r9Zw8dZnQWkNgrkewOc4aRjGc', // Replace with your own Google Maps API key
+          // key: 'AIzaSyD9HAzCj-r9Zw8dZnQWkNgrkewOc4aRjGc',
           language: 'en',
         }}
         styles={{

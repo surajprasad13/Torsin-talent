@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {metrics} from '../theme';
+import {fonts, metrics} from '../theme';
 import {useNavigation} from '@react-navigation/native';
 
 const {moderateScale, verticalScale} = metrics;
@@ -44,9 +44,7 @@ const WalkthroughScreen = ({}) => {
               fontSize: moderateScale(16),
               textAlign: 'center',
               color: '#6180F4',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '700',
+              fontFamily: fonts.bold,
             }}>
             Login
           </Text>
@@ -55,7 +53,6 @@ const WalkthroughScreen = ({}) => {
 
       <TouchableOpacity
         onPress={() => {
-          //@ts-expect-error
           navigation.navigate('ThroughRegister');
         }}
         style={{
@@ -75,9 +72,7 @@ const WalkthroughScreen = ({}) => {
               fontSize: moderateScale(16),
               textAlign: 'center',
               color: '#ffffff',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '700',
+              fontFamily: fonts.bold,
             }}>
             Create an Account
           </Text>

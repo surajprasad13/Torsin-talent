@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -7,10 +7,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {fonts} from '../theme';
+import {useAppDispatch, useAppSelector} from '../hooks';
+import {updateUserInfo} from '../redux/reducers/authSlice';
 
 const ThroughRegister = ({}) => {
   const navigation = useNavigation();
 
+  const dispatch = useAppDispatch();
+  const {userInfo} = useAppSelector(state => state.auth);
+
+  useEffect(() => {
+    const listener = navigation.addListener('focus', () => {
+      dispatch(updateUserInfo({...userInfo, location: ''}));
+    });
+    return () => listener;
+  }, []);
   return (
     <ImageBackground
       source={require('../assets/images/back.png')}

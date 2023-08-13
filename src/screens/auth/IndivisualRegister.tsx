@@ -48,6 +48,7 @@ import {useAppDispatch} from '../../hooks';
 import {
   resetEmailVerified,
   resetMobileVerified,
+  updateUserInfo,
 } from '../../redux/reducers/authSlice';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../routes/RouteType';
@@ -139,12 +140,19 @@ const IndivisualRegister = ({}) => {
 
   //@ts-ignore
   useEffect(() => {
+    const listener = navigation.addListener('state', () => {
+      console.log('Changing');
+      if (userInfo?.location)
+        formik.handleChange('location')(userInfo?.location);
+    });
+    return () => listener;
+  }, []);
+
+  //@ts-ignore
+  useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(resetEmailVerified());
       dispatch(resetMobileVerified());
-      if (userInfo?.location) {
-        formik.handleChange('location')(userInfo.location);
-      }
     });
     return () => listener;
   }, []);
@@ -154,7 +162,7 @@ const IndivisualRegister = ({}) => {
       fullName: '',
       email: '',
       mobileNo: '',
-      location: '',
+      location: userInfo?.location,
       confirmPassword: '',
       gender: 1,
       countryName: '',
@@ -394,14 +402,18 @@ const IndivisualRegister = ({}) => {
               <CustomInput
                 placeholder="Location"
                 label="Location"
-                value={formik.values.location}
+                value={userInfo?.location}
                 onChangeText={(text: string) => {
                   formik.handleChange('location')(text);
-                  if (formik.values.location.length >= 3) {
+                  if (text.length >= 2) {
                     navigation.navigate('Location');
                   }
                 }}
-                onFocus={() => navigation.navigate('Location')}
+                onFocus={() => {
+                  if (!formik.values.location) {
+                    navigation.navigate('Location');
+                  }
+                }}
               />
             </View>
 

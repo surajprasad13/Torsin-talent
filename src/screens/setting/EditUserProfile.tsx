@@ -155,6 +155,7 @@ const EditUserProfile = ({}) => {
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(loginValue());
+    
       dispatch(resetSuccess());
     });
     return () => listener;
