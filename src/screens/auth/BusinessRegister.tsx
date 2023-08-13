@@ -44,9 +44,9 @@ import {uploadFileToS3} from '../../services/s3';
 import {useAppDispatch} from '../../hooks';
 import {
   resetEmailVerified,
+  updateUserInfo,
   resetMobileVerified,
 } from '../../redux/reducers/authSlice';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const {moderateScale} = metrics;
 
@@ -358,13 +358,19 @@ const BusinessRegister = ({}) => {
               <CustomInput
                 placeholder="Location"
                 label="Location"
+                value={userInfo?.location}
                 onChangeText={(text: string) => {
+                  dispatch(updateUserInfo({...userInfo, location: text}));
                   formik.handleChange('location')(text);
-                  if (formik.values.location.length >= 3) {
+                  if (text.length >= 2) {
                     navigation.navigate('Location');
                   }
                 }}
-                onFocus={() => navigation.navigate('Location')}
+                onFocus={() => {
+                  if (!formik.values.location) {
+                    navigation.navigate('Location');
+                  }
+                }}
               />
             </View>
 

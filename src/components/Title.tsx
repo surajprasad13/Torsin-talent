@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
 // icons
@@ -8,7 +8,11 @@ import Feather from 'react-native-vector-icons/Feather';
 import {colors, fonts} from '../theme';
 import {useNavigation} from '@react-navigation/native';
 
-const Title = ({title}: {title: string}) => {
+interface TitleProp {
+  title: string;
+}
+
+const Title: FC<TitleProp> = ({title}) => {
   const navigation = useNavigation();
 
   return (

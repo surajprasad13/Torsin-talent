@@ -30,7 +30,11 @@ import {colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {CustomButton, CustomInput, Title} from '../../components';
 import {userUpdate} from '../../redux/actions/authAction';
-import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
+import {
+  loginValue,
+  resetSuccess,
+  updateUserInfo,
+} from '../../redux/reducers/authSlice';
 import {alphabets, email, number} from '../../utils/regex';
 import {uploadFileToS3} from '../../services/s3';
 import {decode} from 'base64-arraybuffer';
@@ -123,13 +127,8 @@ const EditUserProfile = ({}) => {
       isValid = false;
     }
 
-    if (inputs.bio == '') {
-      // setInputs(prevState => ({...prevState, bio: null}));
-      inputs.bio = null;
-    } else {
-      const wordCount = inputs.bio
-        .split(/\s+/)
-        .filter(word => word.trim() !== '').length;
+    if (inputs.bio.length > 0) {
+      const wordCount = inputs.bio.length;
       if (wordCount < 30) {
         handleError('Bio must be at least 30 words', 'bio');
         isValid = false;
@@ -142,7 +141,7 @@ const EditUserProfile = ({}) => {
   };
 
   const update = () => {
-    dispatch(userUpdate({inputs, userToken}));
+    dispatch(userUpdate({...inputs, location: userInfo?.location}));
   };
 
   const handleOnchange = (text: string, input: any) => {
@@ -155,7 +154,6 @@ const EditUserProfile = ({}) => {
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(loginValue());
-    
       dispatch(resetSuccess());
     });
     return () => listener;
@@ -180,7 +178,7 @@ const EditUserProfile = ({}) => {
         </Dialog>
       </Portal>
 
-      <Title title={userInfo?.fullName} />
+      <Title title={userInfo?.fullName ?? ''} />
 
       <KeyboardAvoidingView
         style={{flex: 1}}
@@ -342,13 +340,18 @@ const EditUserProfile = ({}) => {
             <CustomInput
               placeholder="Location"
               label="Location"
-              value={inputs.location}
+              value={userInfo?.location}
               onChangeText={(text: string) => {
-                if (text.length >= 3) {
+                dispatch(updateUserInfo({...userInfo, location: text}));
+                if (text.length >= 2) {
                   navigation.navigate('Location');
                 }
               }}
-              onFocus={() => navigation.navigate('Location')}
+              onFocus={() => {
+                if (inputs.location) {
+                  navigation.navigate('Location');
+                }
+              }}
             />
           </View>
 

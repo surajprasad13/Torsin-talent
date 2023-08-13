@@ -57,7 +57,7 @@ const userUpdate = createAsyncThunk(
   'auth/update',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.put(`talent/user/update`, value.inputs);
+      const {data} = await api.put(`talent/user/update`, value);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {

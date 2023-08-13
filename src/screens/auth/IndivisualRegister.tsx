@@ -404,6 +404,7 @@ const IndivisualRegister = ({}) => {
                 label="Location"
                 value={userInfo?.location}
                 onChangeText={(text: string) => {
+                  dispatch(updateUserInfo({...userInfo, location: text}));
                   formik.handleChange('location')(text);
                   if (text.length >= 2) {
                     navigation.navigate('Location');
