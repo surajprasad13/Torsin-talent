@@ -20,10 +20,11 @@ export type RootStackParamList = AuthScreenParamList & {
   PaymentDetail: undefined;
   ReceivePayment: undefined;
   Rating: undefined;
+  Location: undefined;
   HelpDetails: undefined;
   FeedDetails: undefined;
-  RaiseQuery: undefined;
   Report: undefined;
+  Complaints: undefined;
   ChatUser: {
     item: undefined | {};
   };

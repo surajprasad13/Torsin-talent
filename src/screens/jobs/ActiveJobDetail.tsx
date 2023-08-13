@@ -502,7 +502,7 @@ const ActiveJobDetail: FC = ({route}: any) => {
           </Pressable>
 
           <Pressable
-            onPress={() => navigation.navigate('ReportProblem')}
+            onPress={() => navigation.navigate('Complaints')}
             style={{
               ...appstyle.shadow,
               marginTop: 10,

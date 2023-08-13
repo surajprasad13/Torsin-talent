@@ -338,39 +338,16 @@ const EditUserProfile = ({}) => {
           )}
 
           <View style={{marginTop: 20}}>
-            <Text
-              style={{
-                fontFamily: fonts.regular,
-                color: '#4F4F4F',
-                fontSize: 16,
-              }}>
-              Location
-            </Text>
-
-            <GooglePlacesAutocomplete
-              placeholder="Search"
-              fetchDetails={true}
-              onPress={(data, details = null) => {
-                const location = data.description;
-                console.log(details);
-                setInputs(prevState => ({...prevState, location}));
+            <CustomInput
+              placeholder="Location"
+              label="Location"
+              value={inputs.location}
+              onChangeText={(text: string) => {
+                if (text.length >= 3) {
+                  navigation.navigate('Location');
+                }
               }}
-              query={{
-                key: 'AIzaSyD9HAzCj-r9Zw8dZnQWkNgrkewOc4aRjGc', // Replace with your own Google Maps API key
-                language: 'en',
-              }}
-              styles={{
-                container: styles.autocompleteContainer,
-                textInput: styles.textInput,
-                listView: styles.listView,
-                poweredContainer: styles.powered,
-              }}
-              textInputProps={{
-                onChangeText: text => handleOnchange(text, 'location'),
-                onFocus: () => handleError(null, 'location'),
-                error: errors.location,
-                value: inputs.location,
-              }}
+              onFocus={() => navigation.navigate('Location')}
             />
           </View>
 

@@ -17,7 +17,7 @@ import moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 
 //helpers
-import {colors, appstyle, fonts} from '../../theme';
+import {colors, appstyles, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {Title} from '../../components';
 import {supportChat, supportPostChat} from '../../redux/actions/userAction';
@@ -156,6 +156,7 @@ const ChatCard = ({route}) => {
         contentContainerStyle={{flexGrow: 1}}
         inverted
       />
+
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
         <View
@@ -163,7 +164,7 @@ const ChatCard = ({route}) => {
             flexDirection: 'row',
             alignItems: 'center',
             padding: 8,
-            ...appstyle.shadow,
+            ...appstyles.shadow,
             justifyContent: 'space-evenly',
           }}>
           {/* <TouchableOpacity style={{}}>

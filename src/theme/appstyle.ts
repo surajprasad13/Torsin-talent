@@ -16,4 +16,9 @@ export default StyleSheet.create({
     shadowOpacity: 0.2,
     backgroundColor: 'white',
   },
+  rowBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 });

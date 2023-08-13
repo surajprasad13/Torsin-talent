@@ -412,7 +412,7 @@ const getHelpSupport = createAsyncThunk(
 
 const createSupport = createAsyncThunk(
   'support/ticket/initiate',
-  async (value: {topicId: string; description: string}, {rejectWithValue}) => {
+  async (value: {topicId: number; description: string}, {rejectWithValue}) => {
     try {
       const {data} = await api.post(`support/ticket/initiate`, value);
       console.log(value, 'success');

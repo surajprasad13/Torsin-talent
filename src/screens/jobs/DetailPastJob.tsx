@@ -573,7 +573,7 @@ const OldJobDetail = ({route}: any) => {
           </Pressable>
 
           <Pressable
-            onPress={() => navigation.navigate('Report')}
+            onPress={() => navigation.navigate('Complaints')}
             style={{
               ...appstyle.shadow,
               marginTop: 10,

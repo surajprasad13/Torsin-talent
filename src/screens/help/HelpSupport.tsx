@@ -7,14 +7,22 @@ import {useNavigation} from '@react-navigation/native';
 import {CustomButton, Title} from '../../components';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {TicketList} from '../../redux/actions/userAction';
-import HelpCard from './component/HelpCard';
+import HelpCard from './components/HelpCard';
 
-const Helps: FC = ({}) => {
+const HelpSupport: FC = ({}) => {
   const navigation = useNavigation();
 
   const dispatch = useAppDispatch();
 
   const {ticket} = useAppSelector(state => state.user);
+
+  //@ts-ignore
+  useEffect(() => {
+    const listener = navigation.addListener('focus', () => {
+      dispatch(TicketList(''));
+    });
+    return () => listener;
+  }, []);
 
   useEffect(() => {
     dispatch(TicketList(''));
@@ -27,7 +35,7 @@ const Helps: FC = ({}) => {
       <CustomButton
         disabled
         title="Raise a query"
-        onPress={() => navigation.navigate('RaiseQuery')}
+        onPress={() => navigation.navigate('Complaints')}
         style={{marginTop: 10}}
       />
 
@@ -43,4 +51,4 @@ const Helps: FC = ({}) => {
   );
 };
 
-export default Helps;
+export default HelpSupport;

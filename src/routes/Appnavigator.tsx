@@ -36,11 +36,12 @@ import PaymentDetail from '../screens/payment/PendingPaymentDetail';
 import ReportProblem from '../screens/jobs/services/ReportProblem';
 import ReceivedPayment from '../screens/payment/ReceivedPaymentDetail';
 import RatingDetail from '../screens/rating/RatingDetail';
-import RaiseQuery from '../screens/help/RaiseQuery';
 import FeedDetails from '../screens/feeds/FeedDetails';
 import ChangePassword from '../screens/auth/ChangePassword';
 
 import {useFlipper} from '@react-navigation/devtools';
+import Complaints from '../screens/help/Complaints';
+import Location from '../screens/common/Location';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -148,17 +149,16 @@ const AppNavigator: FC = () => {
             />
 
             <Stack.Screen
-              name="RaiseQuery"
-              component={RaiseQuery}
+              name="RatingDetail"
+              component={RatingDetail}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,
               }}
             />
-
             <Stack.Screen
-              name="RatingDetail"
-              component={RatingDetail}
+              name="Complaints"
+              component={Complaints}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,
@@ -180,6 +180,14 @@ const AppNavigator: FC = () => {
                 ...TransitionPresets.SlideFromRightIOS,
               }}
               initialParams={{item: ''}}
+            />
+            <Stack.Screen
+              name="Location"
+              component={Location}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
             />
           </Stack.Group>
         ) : (
@@ -276,6 +284,14 @@ const AppNavigator: FC = () => {
                 ...TransitionPresets.SlideFromRightIOS,
               }}
               initialParams={{item: ''}}
+            />
+            <Stack.Screen
+              name="Location"
+              component={Location}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
             />
           </Stack.Group>
         )}

@@ -47,6 +47,8 @@ enum Status {
 interface UserInterface {
   loading: boolean;
   error: null | string | any;
+  message: string | null;
+  addMessage: string;
   success: boolean;
   status: null | Status;
   registerSuccess: false;
@@ -79,6 +81,8 @@ interface UserInterface {
 
 const initialState: UserInterface = {
   loading: false,
+  message: '',
+  addMessage: '',
   created: false,
   error: null,
   success: false,
@@ -117,6 +121,10 @@ const userSlice = createSlice({
     updateSuccess: state => {
       state.success = false;
       state.error = '';
+    },
+    resetMessage: state => {
+      state.message = '';
+      state.addMessage = '';
     },
     resetSuccess: state => {
       state.addSuccess = '';
@@ -449,9 +457,10 @@ const userSlice = createSlice({
         state.error = null;
         state.loading = true;
       })
-      .addCase(createSupport.fulfilled, state => {
+      .addCase(createSupport.fulfilled, (state, action) => {
         state.loading = false;
         state.created = true;
+        state.message = action.payload.response.message.successMessage;
       })
       .addCase(createSupport.rejected, (state, action) => {
         state.loading = false;
@@ -502,7 +511,7 @@ const userSlice = createSlice({
   },
 });
 
-export const {updateSuccess, resetSuccess, resetAdminService} =
+export const {updateSuccess, resetSuccess, resetAdminService, resetMessage} =
   userSlice.actions;
 
 export default userSlice.reducer;

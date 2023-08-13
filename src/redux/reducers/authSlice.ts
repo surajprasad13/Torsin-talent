@@ -79,6 +79,10 @@ const authSlice = createSlice({
     resetFirst: state => {
       state.isFirstOpen = false;
     },
+    updateUserInfo: (state, action) => {
+      console.log(action.payload);
+      state.userInfo = action.payload;
+    },
   },
   extraReducers: builder => {
     //login
@@ -275,6 +279,7 @@ export const {
   phoneVerified,
   resetFirst,
   resetOtpVerified,
+  updateUserInfo,
 } = authSlice.actions;
 
 export default authSlice.reducer;
