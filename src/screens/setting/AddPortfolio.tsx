@@ -12,6 +12,7 @@ import {
   Pressable,
   ActivityIndicator,
   Modal,
+  Button,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -20,7 +21,7 @@ import {decode} from 'base64-arraybuffer';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import {Button, Dialog, Divider, Portal} from 'react-native-paper';
+import {Divider} from 'react-native-paper';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -32,14 +33,9 @@ import {CustomButton, Title} from '../../components';
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {addService} from '../../redux/actions/userAction';
 import {updateSuccess} from '../../redux/reducers/userSlice';
 
 type InputProps = {
-  serviceName: string;
-  chargeType: string;
-  serviceCharge: string;
-  serviceDescription: string;
   serviceImage: Array<string>;
   serviceVideo: string;
 };
@@ -79,29 +75,28 @@ const AddService = ({}) => {
     }
 
     if (isValid) {
-      postService();
+    }
+  };
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const selectImageHandler = async () => {
+    try {
+      const response = await ImageCropPicker.openPicker({
+        width: 800,
+        height: 600,
+        cropping: true,
+      });
+
+      setSelectedImage(response.path);
+      navigation.navigate('OpenCamera', {selectedImage: response.path});
+    } catch (error) {
+      console.log('ImagePicker Error: ', error);
     }
   };
 
   const handleError = (_error: any, input: any) => {
     setErrors((prevState: any) => ({...prevState, [input]: _error}));
-  };
-
-  const postService = () => {
-    if (inputs.serviceVideo == '') {
-      delete inputs.serviceVideo;
-      let value = {
-        inputs,
-        userToken,
-      };
-      dispatch(addService(value));
-    } else {
-      let value = {
-        inputs,
-        userToken,
-      };
-      dispatch(addService(value));
-    }
   };
 
   useEffect(() => {
@@ -110,38 +105,6 @@ const AddService = ({}) => {
     });
     return () => listener;
   }, []);
-
-  const uploadImage = (index: number) => {
-    handleError('', 'image');
-    let options: any = {
-      mediaType: 'photo',
-      quality: 1,
-      includeBase64: true,
-    };
-    launchImageLibrary(options, async response => {
-      if (response.didCancel) {
-        return false;
-      } else {
-        try {
-          setImageLoading(true);
-          var base64data = decode(response.assets[0].base64);
-          const url = await uploadFileToS3(
-            base64data,
-            `${response.assets[0].fileName}`,
-            'image/jpeg',
-          );
-          setInputs((prevState: any) => ({
-            ...prevState,
-            serviceImage: [...inputs.serviceImage, url.Location],
-          }));
-          image[index] = response.assets[0].base64;
-          setImageLoading(false);
-        } catch (_error: any) {
-          setImageLoading(false);
-        }
-      }
-    });
-  };
 
   const uploadVideo = async () => {
     handleError('', 'video');
@@ -303,7 +266,7 @@ const AddService = ({}) => {
               <Divider />
 
               <Pressable
-                onPress={uploadImage}
+                onPress={selectImageHandler}
                 style={{
                   padding: 5,
                   margin: 5,
@@ -510,32 +473,30 @@ const AddService = ({}) => {
                   {imageLoading && <ActivityIndicator style={{margin: 20}} />}
 
                   <View style={styles.photoContainer}>
-                    {image[index].length === 0 ? (
-                      <Pressable
-                        onPress={() => uploadImage(index)}
-                        style={styles.innerPhotos}>
-                        <Feather name="image" size={30} color="#14226D" />
+                    <Pressable
+                      onPress={() => setPopupVisible1(true)}
+                      style={styles.innerPhotos}>
+                      <Feather name="image" size={30} color="#14226D" />
+                      <Text
+                        style={{
+                          fontFamily: fonts.regular,
+                          color: colors.black,
+                        }}>
+                        Click{' '}
                         <Text
                           style={{
-                            fontFamily: fonts.regular,
-                            color: colors.black,
+                            color: colors.primary,
+                            fontFamily: fonts.bold,
                           }}>
-                          Click{' '}
-                          <Text
-                            style={{
-                              color: colors.primary,
-                              fontFamily: fonts.bold,
-                            }}>
-                            here{' '}
-                          </Text>
+                          here{' '}
                         </Text>
-                      </Pressable>
-                    ) : (
-                      <FastImage
-                        source={{uri: `data:image/jpeg;base64,${image[index]}`}}
-                        style={styles.innerPhotos}
-                      />
-                    )}
+                      </Text>
+                    </Pressable>
+
+                    <FastImage
+                      source={{uri: `data:image/jpeg;base64,${image[index]}`}}
+                      style={styles.innerPhotos}
+                    />
                   </View>
                   {/*  */}
 
@@ -641,9 +602,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   dropdwon: {},
-  photoContainer: {
-    flexDirection: 'row',
-  },
+  photoContainer: {},
   container1: {
     flex: 1,
     flexDirection: 'column',

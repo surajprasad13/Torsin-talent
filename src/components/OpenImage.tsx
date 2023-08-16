@@ -1,17 +1,17 @@
 import React from 'react';
 import {View, Image} from 'react-native';
 
-const OpenCamera = ({route}) => {
+const OpenImage = ({route}) => {
   const {selectedImage} = route.params;
 
   return (
-    <View>
+    <View style={{margin: 10}}>
       <Image
         source={{uri: selectedImage}}
-        style={{width: '100%', height: '100%'}}
+        style={{width: 'auto', height: 200}}
       />
     </View>
   );
 };
 
-export default OpenCamera;
+export default OpenImage;

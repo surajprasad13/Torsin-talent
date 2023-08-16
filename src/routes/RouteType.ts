@@ -23,7 +23,7 @@ export type RootStackParamList = AuthScreenParamList & {
   Location: undefined;
   HelpDetails: undefined;
   FeedDetails: undefined;
-  OpenCamera: undefined;
+  OpenImage: undefined;
   Report: undefined;
   Complaints: undefined;
   ChatUser: {
