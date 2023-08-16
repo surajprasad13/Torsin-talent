@@ -165,7 +165,6 @@ const AddService = ({}) => {
           setImageLoading(false);
         } catch (_error: any) {
           setImageLoading(false);
-          console.log('Error uploading file:', _error);
         }
       }
     });
@@ -184,7 +183,6 @@ const AddService = ({}) => {
         response.sourceURL as string,
         response.filename as string,
       );
-      console.log(url.body.postResponse.location, 'Url');
       setInputs((prevState: any) => ({
         ...prevState,
         serviceVideo: url.body.postResponse.location,
@@ -307,9 +305,7 @@ const AddService = ({}) => {
                       chargeType: Number(item.value),
                     }));
                   }}
-                  onChangeText={() => {
-                    //console.log(text);
-                  }}
+                  onChangeText={() => {}}
                 />
               </View>
             </View>

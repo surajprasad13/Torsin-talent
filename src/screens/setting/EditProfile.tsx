@@ -10,6 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 import {appstyle, colors, fonts} from '../../theme';
 import {useAppSelector} from '../../hooks';
@@ -97,6 +98,29 @@ const EditProfile = ({}: any) => {
                 color: '#1E202B',
                 marginTop: 5,
               }}>
+              Complete your profile. Set your profile completely so that
+              recruiter will find your profile easily.
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.cardContainer}
+          onPress={() => navigation.navigate('AddPortfolio')}>
+          <View style={styles.iconContainer}>
+            <Entypo name="suitcase" size={20} />
+          </View>
+
+          <View style={styles.textContainer}>
+            <Text
+              style={{
+                fontFamily: fonts.semibold,
+                fontSize: 16,
+                color: '#1E202B',
+              }}>
+              Add Portfolio
+            </Text>
+            <Text style={{fontFamily: fonts.regular, color: '#1E202B'}}>
               Complete your profile. Set your profile completely so that
               recruiter will find your profile easily.
             </Text>

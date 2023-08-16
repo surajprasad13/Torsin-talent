@@ -42,6 +42,7 @@ import ChangePassword from '../screens/auth/ChangePassword';
 import {useFlipper} from '@react-navigation/devtools';
 import Complaints from '../screens/help/Complaints';
 import Location from '../screens/common/Location';
+import OpenCamera from '../components/OpenCamera';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -159,6 +160,14 @@ const AppNavigator: FC = () => {
             <Stack.Screen
               name="Complaints"
               component={Complaints}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="OpenCamera"
+              component={OpenCamera}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,

@@ -52,7 +52,7 @@ const HelpDetails: FC<ProposalDetailProp> = ({}) => {
             disabled
             title="Old Chat"
             onPress={() => {
-              navigation.navigate('ChatUser', {item});
+              navigation.navigate('ChatCard', {item});
             }}
           />
         </View>

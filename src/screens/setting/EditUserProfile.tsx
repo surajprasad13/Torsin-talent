@@ -127,8 +127,13 @@ const EditUserProfile = ({}) => {
       isValid = false;
     }
 
-    if (inputs.bio.length > 0) {
-      const wordCount = inputs.bio.length;
+    if (inputs.bio == '') {
+      // setInputs(prevState => ({...prevState, bio: null}));
+      inputs.bio = null;
+    } else {
+      const wordCount = inputs.bio
+        .split(/\s+/)
+        .filter(word => word.trim() !== '').length;
       if (wordCount < 30) {
         handleError('Bio must be at least 30 words', 'bio');
         isValid = false;

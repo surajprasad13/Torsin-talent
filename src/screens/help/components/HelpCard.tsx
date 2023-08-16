@@ -37,7 +37,7 @@ const HelpCard = ({item}: {item: Ticket}) => {
             Rejected
           </Text>
         );
-      case 3:
+      case 4:
         return (
           <Text style={{fontFamily: fonts.regular, color: 'blue'}}>
             Completed

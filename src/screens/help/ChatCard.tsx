@@ -17,7 +17,7 @@ import moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 
 //helpers
-import {colors, appstyles, fonts} from '../../theme';
+import {colors, appstyle, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {Title} from '../../components';
 import {supportChat, supportPostChat} from '../../redux/actions/userAction';
@@ -29,8 +29,6 @@ const ChatCard = ({route}) => {
   const dispatch = useAppDispatch();
 
   const [newMessage, setNewMessage] = useState('');
-
-  const reversedMessages = [...support].reverse();
 
   const onPressText = () => {
     dispatch(
@@ -45,7 +43,8 @@ const ChatCard = ({route}) => {
 
   useEffect(() => {
     dispatch(supportChat(item?.ticketId));
-  }, []);
+    setNewMessage('');
+  }, [item?.ticketId]); 
 
   const LeftMessage = ({message, createdAt}) => {
     const messageDate = moment(createdAt);
@@ -115,27 +114,20 @@ const ChatCard = ({route}) => {
     );
   };
 
-  const renderItem = ({item}) => {
+  const renderItem = ({item, index}) => {
     return (
       <View
+        key={index}
         style={{
           alignItems: item.sender === 'user' ? 'center' : 'flex-start',
           marginVertical: 8,
           margin: 5,
         }}>
-        {support?.length > 0 &&
-          support
-            ?.slice()
-            .reverse()
-            .map((_message, index) => (
-              <React.Fragment key={index}>
-                {_message?.isSenderAdmin ? (
-                  <LeftMessage message={_message.message} />
-                ) : (
-                  <RightMessage message={_message.message} />
-                )}
-              </React.Fragment>
-            ))}
+        {item.isSenderAdmin ? (
+          <LeftMessage message={item.message} createdAt={item.createdAt} />
+        ) : (
+          <RightMessage message={item.message} createdAt={item.createdAt} />
+        )}
       </View>
     );
   };
@@ -150,9 +142,9 @@ const ChatCard = ({route}) => {
       <Title title={`Ticke No : #${item.ticketId}`} />
 
       <FlatList
-        data={reversedMessages}
+        data={support}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{flexGrow: 1}}
         inverted
       />
@@ -164,7 +156,7 @@ const ChatCard = ({route}) => {
             flexDirection: 'row',
             alignItems: 'center',
             padding: 8,
-            ...appstyles.shadow,
+            ...appstyle.shadow,
             justifyContent: 'space-evenly',
           }}>
           {/* <TouchableOpacity style={{}}>

@@ -11,6 +11,8 @@ import EditProfile from '../screens/setting/EditProfile';
 import EditUserProfile from '../screens/setting/EditUserProfile';
 import ServiceSkill from '../screens/setting/ServiceSkill';
 import ServiceDetail from '../screens/setting/ServiceDetail';
+import AddPortfolio from '../screens/setting/AddPortfolio';
+import OpenCamera from '../components/OpenCamera';
 
 const Stack = createStackNavigator<SettingScreenParamList>();
 
@@ -24,6 +26,8 @@ const SettingNavigator = () => {
       <Stack.Screen name="EditUserProfile" component={EditUserProfile} />
       <Stack.Screen name="ServiceSkill" component={ServiceSkill} />
       <Stack.Screen name="ServiceDetail" component={ServiceDetail} />
+      <Stack.Screen name='AddPortfolio' component= {AddPortfolio}/>
+      <Stack.Screen name='OpenCamera' component = {OpenCamera}/>
     </Stack.Navigator>
   );
 };
