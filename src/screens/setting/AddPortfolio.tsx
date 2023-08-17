@@ -12,14 +12,10 @@ import {
   Pressable,
   ActivityIndicator,
   Modal,
-  Button,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {uploadFileToS3, uploadVideoToS3} from '../../services/s3';
-import {decode} from 'base64-arraybuffer';
+import {uploadVideoToS3} from '../../services/s3';
 import Video from 'react-native-video';
-import FastImage from 'react-native-fast-image';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {Divider} from 'react-native-paper';
 
@@ -40,7 +36,7 @@ type InputProps = {
   serviceVideo: string;
 };
 
-const AddService = ({}) => {
+const AddPortfolio = ({}) => {
   const navigation = useNavigation();
 
   const dispatch = useAppDispatch();
@@ -55,7 +51,6 @@ const AddService = ({}) => {
 
   const [errors, setErrors] = useState<any>({});
 
-  const [image, setImage] = useState(['', '', '', '', '']);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
   const [videoLoading, setVideoLoading] = useState<boolean>(false);
   const [video, setVideo] = useState('');
@@ -68,17 +63,25 @@ const AddService = ({}) => {
     Keyboard.dismiss();
 
     let isValid = true;
+    let newErrors = {};
 
-    if (inputs.serviceImage.length == 0) {
-      handleError('Please add atleast one image', 'image');
+    if (inputs.serviceImage.length === 0) {
+      newErrors.image = 'Please add at least one image';
+      isValid = false;
+    }
+
+    if (!inputs.serviceVideo) {
+      newErrors.video = 'Please add a video';
       isValid = false;
     }
 
     if (isValid) {
+      // Handle valid case
     }
-  };
 
-  const [selectedImage, setSelectedImage] = useState(null);
+    setErrors(newErrors);
+  };
+  const [selectedImages, setSelectedImages] = useState(null);
 
   const selectImageHandler = async () => {
     try {
@@ -88,7 +91,7 @@ const AddService = ({}) => {
         cropping: true,
       });
 
-      setSelectedImage(response.path);
+      setSelectedImages(response.path);
       navigation.navigate('OpenCamera', {selectedImage: response.path});
     } catch (error) {
       console.log('ImagePicker Error: ', error);
@@ -125,6 +128,7 @@ const AddService = ({}) => {
       }));
 
       setVideo(response.sourceURL);
+      navigation.navigate('OpenCamera', {selectedImage: response.path});
       setVideoLoading(false);
     } else {
       setVideoLoading(false);
@@ -319,55 +323,6 @@ const AddService = ({}) => {
         <Title title="Add Portfolio" />
 
         <ScrollView>
-          {/* <View style={styles.inputContainer}>
-            <View style={{marginTop: 10}}>
-              <Text
-                style={{
-                  fontFamily: fonts.regular,
-                  color: '#4F4F4F',
-                  fontSize: 16,
-                }}>
-                Service Description
-              </Text>
-              <View
-                style={{
-                  width: '100%',
-                  height: 170,
-                  borderWidth: 0.5,
-                  borderRadius: 8,
-                  borderColor: colors.light,
-                  marginTop: 10,
-                  backgroundColor: colors.white,
-                }}>
-                <TextInput
-                  placeholder="Type description here..."
-                  multiline={true}
-                  placeholderTextColor="#333333"
-                  value={inputs.serviceDescription}
-                  maxLength={500}
-                  onChangeText={text => {
-                    handleError('', 'serviceDescription');
-                    handleOnchange(text, 'serviceDescription');
-                  }}
-                  blurOnSubmit={true}
-                  onSubmitEditing={() => {
-                    Keyboard.dismiss();
-                  }}
-                  style={{padding: 15}}
-                />
-              </View>
-              {errors && (
-                <Text
-                  style={{
-                    marginTop: 5,
-                    color: 'red',
-                  }}>
-                  {errors.serviceDescription}
-                </Text>
-              )}
-            </View>
-          </View> */}
-
           <View style={styles.textContainer}>
             <Text
               style={{
@@ -492,11 +447,6 @@ const AddService = ({}) => {
                         </Text>
                       </Text>
                     </Pressable>
-
-                    <FastImage
-                      source={{uri: `data:image/jpeg;base64,${image[index]}`}}
-                      style={styles.innerPhotos}
-                    />
                   </View>
                   {/*  */}
 
@@ -552,7 +502,7 @@ const AddService = ({}) => {
             title="Save"
             onPress={validate}
             style={{marginTop: 20}}
-            disabled={!loading}
+            disabled={loading && !(video || inputs.serviceImage.length > 0)}
             loading={loading}
           />
           <View style={{marginTop: 50}} />
@@ -624,4 +574,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddService;
+export default AddPortfolio;

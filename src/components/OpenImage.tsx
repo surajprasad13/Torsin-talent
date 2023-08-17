@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Image,
@@ -7,17 +7,28 @@ import {
   Text,
   TextInput,
   Keyboard,
+  ScrollView,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+
+//helpers
 import CustomInput from './CustomInput';
 import {colors, fonts} from '../theme';
 import CustomButton from './CustomButton';
-import {ScrollView} from 'react-native-gesture-handler';
+import Title from './Title';
 
 const OpenImage = ({route}) => {
   const {selectedImage} = route.params;
+  const navigation = useNavigation();
+
+  const handleAddPhotos = () => {
+    navigation.navigate('AddPortfolio', {selectedImage}); // Navigating back to AddPortfolio with selected image
+  };
 
   return (
     <SafeAreaView style={styles.container}>
+      <Title title="Add Image" />
+
       <ScrollView showsVerticalScrollIndicator={false} style={{margin: 10}}>
         <Image
           source={{uri: selectedImage}}
@@ -58,7 +69,7 @@ const OpenImage = ({route}) => {
         </View>
         <CustomButton
           title="Add Photos"
-          disabled
+          onPress={handleAddPhotos}
           style={{marginTop: 50, marginBottom: 10}}
         />
       </ScrollView>
