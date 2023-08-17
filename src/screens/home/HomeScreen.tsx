@@ -90,6 +90,7 @@ const HomeScreen = ({}) => {
           <MaterialIcons name="sort" size={20} color="#14226D" />
         </TouchableOpacity>
         <TouchableOpacity
+          onPress={() => navigation.navigate('JobNavigator')}
           style={{
             flex: 0.9,
             backgroundColor: colors.white,
@@ -106,7 +107,7 @@ const HomeScreen = ({}) => {
           />
 
           <TextInput
-            placeholder="Search Talent"
+            placeholder="Search Jobs"
             disableFullscreenUI
             placeholderTextColor="#BDBDBD"
             style={{

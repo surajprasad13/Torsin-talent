@@ -216,6 +216,7 @@ const ChangePassword = () => {
             value={input.oldPassword}
             onChangeText={(text: string) => {
               handleError('', 'oldPassword');
+              dispatch(loginValue());
               handleOnchange(text, 'oldPassword');
             }}
             onFocus={() => handleError(null, 'oldPassword')}

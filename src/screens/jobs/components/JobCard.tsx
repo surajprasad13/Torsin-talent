@@ -36,6 +36,7 @@ const JobCard: FC<JobCardProp> = ({item}) => {
         <View style={{width: '80%'}}>
           <Text style={[styles.headertext, {marginTop: 10}]}>
             {item.jobName}
+            {item.adminService}
           </Text>
           <Text style={styles.text}>
             {' '}

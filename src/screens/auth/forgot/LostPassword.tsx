@@ -11,7 +11,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {} from 'react-native-paper';
 import {Formik} from 'formik';
-import * as yup from 'yup';
+import * as Yup from 'yup';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -29,8 +29,10 @@ import {AuthScreenParamList} from '../../../routes/RouteType';
 
 const {moderateScale, verticalScale} = metrics;
 
-const validationSchema = yup.object().shape({
-  email: yup.string().email('Invalid email').required('Email is required *'),
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Please enter valid email')
+    .required('Please enter email'),
 });
 
 type NavigationProp = StackNavigationProp<AuthScreenParamList>;
@@ -103,20 +105,8 @@ const LostPasswordScreen: FC = ({}) => {
               </View>
             </View>
 
-            {!!error && (
-              <Text
-                style={{
-                  textAlign: 'left',
-                  left: 10,
-                  color: 'red',
-                  fontFamily: fonts.medium,
-                }}>
-                {error}
-              </Text>
-            )}
-
             <CustomButton
-              title="Send Otp"
+              title="Send OTP"
               disabled={!!values.email}
               loading={loading}
               onPress={handleSubmit}

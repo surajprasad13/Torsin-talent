@@ -307,6 +307,8 @@ const BusinessRegister = ({}) => {
                   width: '100%',
                   backgroundColor: 'white',
                   borderColor: '#BDBDBD',
+                  maxHeight: 50,
+                  padding: 0,
                 }}
                 textContainerStyle={{
                   borderTopRightRadius: 10,
@@ -334,8 +336,6 @@ const BusinessRegister = ({}) => {
                   maxLength: 15,
                   onFocus: () => formik.setErrors({mobileNo: ''}),
                 }}
-                withDarkTheme
-                withShadow
                 error={formik.errors.mobileNo}
               />
               <Pressable

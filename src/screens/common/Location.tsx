@@ -6,6 +6,7 @@ import {fonts} from '../../theme';
 import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {updateUserInfo} from '../../redux/reducers/authSlice';
+import {Title} from '../../components';
 
 const Location: FC = () => {
   const {userInfo} = useAppSelector(state => state.auth);
@@ -16,16 +17,8 @@ const Location: FC = () => {
   const [value, setValue] = useState<string>('');
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#F8F8F8', margin: 10}}>
-      <Text
-        style={{
-          fontFamily: fonts.regular,
-          color: '#4F4F4F',
-          fontSize: 16,
-        }}>
-        Location
-      </Text>
-
+    <SafeAreaView style={{flex: 1, backgroundColor: '#F9fbff'}}>
+      <Title title="Location" />
       <GooglePlacesAutocomplete
         placeholder="Search"
         fetchDetails={true}
@@ -66,6 +59,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 10,
     marginTop: 10,
+    margin: 10,
   },
   listView: {
     padding: 5,

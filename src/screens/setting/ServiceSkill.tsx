@@ -56,43 +56,43 @@ const ServiceSkill = ({}) => {
             </Text>
           </TouchableOpacity>
         </View>
-        {skills && skills.length > 0 && (
-          <View
-            style={{
-              ...appstyle.shadow,
-              borderRadius: 10,
-              margin: 10,
-              padding: 10,
-              flexWrap: 'wrap',
-              flexDirection: 'row',
-              minHeight: skills.length > 0 ? 0 : 100,
-            }}>
-            {/*  */}
-
-            {skills.map((item, index) => {
-              return (
-                <View
-                  key={index.toString()}
+        <View
+          style={{
+            ...appstyle.shadow,
+            borderRadius: 10,
+            margin: 10,
+            padding: 10,
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            minHeight: skills.length > 0 ? 0 : 100,
+          }}>
+          {skills.length > 0 ? (
+            skills.map((item, index) => (
+              <View
+                key={index.toString()}
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#08161433',
+                  margin: 5,
+                  padding: 10,
+                  borderRadius: 30,
+                }}>
+                <Text
                   style={{
-                    borderWidth: 1,
-                    borderColor: '#08161433',
-                    margin: 5,
-                    padding: 10,
-                    borderRadius: 30,
+                    fontFamily: fonts.regular,
+                    color: colors.black,
+                    opacity: 0.4,
                   }}>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      color: colors.black,
-                      opacity: 0.4,
-                    }}>
-                    {item}
-                  </Text>
-                </View>
-              );
-            })}
-          </View>
-        )}
+                  {item}
+                </Text>
+              </View>
+            ))
+          ) : (
+            <Text style={{fontFamily: fonts.medium, color: colors.black}}>
+              No Skills
+            </Text>
+          )}
+        </View>
 
         {/*  */}
 
@@ -124,9 +124,26 @@ const ServiceSkill = ({}) => {
         {/*  */}
 
         <View style={{marginTop: 20}}>
-          {services.map((item: Service, index) => (
-            <ServiceCard item={item} key={index.toString()} />
-          ))}
+          {services.length === 0 ? (
+            <View
+              style={{
+                ...appstyle.shadow,
+                borderRadius: 10,
+                margin: 10,
+                padding: 10,
+                minHeight: 100,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={{fontFamily: fonts.medium, color: colors.black}}>
+                No Services
+              </Text>
+            </View>
+          ) : (
+            services.map((item: Service, index) => (
+              <ServiceCard item={item} key={index.toString()} />
+            ))
+          )}
         </View>
 
         {/*  */}

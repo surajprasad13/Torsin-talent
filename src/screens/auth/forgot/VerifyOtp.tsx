@@ -20,7 +20,7 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 // Helpers
-import {fonts, appstyle} from '../../../theme';
+import {fonts, appstyle, colors} from '../../../theme';
 
 import {CustomButton, Title} from '../../../components';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
@@ -111,6 +111,9 @@ const VerifyOtp = ({route}: any) => {
                 rootStyle={styles.codeFiledRoot}
                 keyboardType="number-pad"
                 textContentType="oneTimeCode"
+                onFocus={() => {
+                  dispatch(resetSuccess());
+                }}
                 renderCell={({index, symbol, isFocused}) => (
                   <View
                     onLayout={getCellOnLayoutHandler(index)}
@@ -146,10 +149,12 @@ const VerifyOtp = ({route}: any) => {
                 </Text>
               )}
 
-              {touched.otp && errors.otp && (
-                <Text style={{color: 'red', marginTop: 10}}>{errors.otp}</Text>
-              )}
-              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  marginTop: 10,
+                }}>
                 <Text
                   style={{
                     fontFamily: fonts.regular,
@@ -200,15 +205,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 9,
     width: width * 0.2,
     height: width * 0.2,
-    maxWidth: 45,
+    maxWidth: 40,
     maxHeight: 45,
     fontSize: 20,
     borderWidth: 0.3,
-    borderRadius: 2,
+    borderRadius: 4,
     color: '#0C0900',
     textAlign: 'center',
     padding: 10,
-    ...appstyle.shadow,
+    backgroundColor: colors.white,
   },
 });
 

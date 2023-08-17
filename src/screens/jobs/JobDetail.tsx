@@ -30,6 +30,7 @@ const JobDetails = ({route}: any) => {
   const navigation = useNavigation();
 
   const [imageVisible, setImageVisible] = useState<boolean>(false);
+  console.log(item?.adminService);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,6 +47,10 @@ const JobDetails = ({route}: any) => {
             <Text
               style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
               Cost : {item.priceRate}
+            </Text>
+            <Text
+              style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
+              Skills Required: {item.adminService?.join(', ')}
             </Text>
           </View>
           <View

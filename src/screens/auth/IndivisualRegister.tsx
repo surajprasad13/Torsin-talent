@@ -19,10 +19,9 @@ import {CountryCode} from 'react-native-country-picker-modal';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {getLocales} from 'react-native-localize';
 import {decode} from 'base64-arraybuffer';
-import {Formik, useFormik} from 'formik';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import CountryPicker from 'react-native-country-picker-modal';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -75,7 +74,9 @@ const IndivisualRegister = ({}) => {
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Please enter name'),
-    email: Yup.string().email('').required('Please enter email'),
+    email: Yup.string()
+      .email('Please enter valid email')
+      .required('Please enter email'),
     mobileNo: Yup.string(),
     location: Yup.string().required('Please enter location'),
   });
@@ -293,6 +294,8 @@ const IndivisualRegister = ({}) => {
                   width: '100%',
                   backgroundColor: 'white',
                   borderColor: '#BDBDBD',
+                  maxHeight: 50,
+                  padding: 0,
                 }}
                 textContainerStyle={{
                   borderTopRightRadius: 10,
@@ -318,8 +321,6 @@ const IndivisualRegister = ({}) => {
                   maxLength: 15,
                   onFocus: () => formik.setErrors({mobileNo: ''}),
                 }}
-                withDarkTheme
-                withShadow
               />
               <Pressable
                 style={{

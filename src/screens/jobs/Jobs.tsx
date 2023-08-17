@@ -62,6 +62,8 @@ const Jobs = ({}) => {
     },
   ]);
 
+  const [isSearching, setIsSearching] = useState(false);
+
   const onChangeSearch = (query: string) => {
     setSearchQuery(query);
     if (query.length > 0) {
@@ -70,6 +72,9 @@ const Jobs = ({}) => {
         userToken,
       };
       dispatch(searchJob(value));
+      setIsSearching(true); // Set the flag to indicate search is active
+    } else {
+      setIsSearching(false); // Reset the flag when query is empty
     }
   };
 
@@ -118,7 +123,7 @@ const Jobs = ({}) => {
             />
           </View>
         </TouchableOpacity>
-        {search.length > 0 && searchQuery.length > 0 && (
+        {isSearching && (
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -159,7 +164,7 @@ const Jobs = ({}) => {
           </ScrollView>
         )}
 
-        {(search.length == 0 || searchQuery.length == 0) && (
+        {isSearching && (
           <View style={{padding: 10, marginTop: 10}}>
             <Text
               style={{
@@ -173,7 +178,7 @@ const Jobs = ({}) => {
         )}
       </View>
 
-      {search.length > 0 && searchQuery.length > 0 && (
+      {isSearching && (
         <View style={{padding: 10}}>
           <Text style={{fontFamily: fonts.medium}}>Search Results</Text>
         </View>
@@ -181,9 +186,7 @@ const Jobs = ({}) => {
 
       <FlatList
         ListHeaderComponent={<View>{loading && <ActivityIndicator />}</View>}
-        data={
-          search.length > 0 || searchQuery.length > 0 ? search : notCorrespond
-        }
+        data={isSearching ? search : notCorrespond}
         contentContainerStyle={{padding: 10}}
         renderItem={({item, index}) => {
           return <ExpertiseCard item={item} key={index.toString()} />;

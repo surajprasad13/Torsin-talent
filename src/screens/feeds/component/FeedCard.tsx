@@ -43,9 +43,9 @@ const FeedCard = ({item}: {item: Feed}) => {
               <Text
                 style={{
                   color: '#1E202B',
-                  fontSize: 8,
-                  marginTop: 5,
+                  fontSize: 10,
                   left: 10,
+                  marginTop: 5,
                 }}>
                 {moment(item.createdAt).format('lll')}
               </Text>
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 12,
     ...appstyle.shadow,
+    height: 110,
   },
   container: {
     flexDirection: 'row',
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 120,
-    height: 100,
+    height: 110,
     borderBottomLeftRadius: 12,
     borderTopLeftRadius: 12,
   },

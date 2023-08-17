@@ -18,7 +18,6 @@ import CountryPicker from 'react-native-country-picker-modal';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 // icons
-import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -127,15 +126,11 @@ const EditUserProfile = ({}) => {
       isValid = false;
     }
 
-    if (inputs.bio == '') {
-      // setInputs(prevState => ({...prevState, bio: null}));
-      inputs.bio = null;
+    if (inputs.bio.trim() === '') {
     } else {
-      const wordCount = inputs.bio
-        .split(/\s+/)
-        .filter(word => word.trim() !== '').length;
-      if (wordCount < 30) {
-        handleError('Bio must be at least 30 words', 'bio');
+      const characterCount = inputs.bio.trim().length;
+      if (characterCount < 30) {
+        handleError('Bio must be at least 30 characters', 'bio');
         isValid = false;
       }
     }

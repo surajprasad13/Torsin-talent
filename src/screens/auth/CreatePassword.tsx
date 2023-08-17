@@ -311,15 +311,6 @@ const CreatePassword = ({}) => {
           style={{marginTop: 50}}
           loading={loading}
         />
-        <Text
-          style={{
-            textAlign: 'center',
-            fontFamily: fonts.regular,
-            marginTop: 10,
-          }}>
-          Already have an account?{' '}
-          <Text style={{fontFamily: fonts.bold}}>Log In</Text>
-        </Text>
       </ScrollView>
     </SafeAreaView>
   );

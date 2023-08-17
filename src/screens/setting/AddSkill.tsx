@@ -88,12 +88,18 @@ const AddSkill: FC = () => {
           />
           <Pressable
             style={{position: 'absolute', right: 10, top: 44}}
+            disabled={!inputValue} // Disable the button when inputValue is empty
             onPress={() => {
               if (selectedItems.length > 10) return;
               selectedItems.push(inputValue);
               setSelectedItem([...selectedItems]);
+              setInputValue('');
             }}>
-            <Feather name="plus-circle" size={18} color={colors.primary} />
+            <Feather
+              name="plus-circle"
+              size={18}
+              color={inputValue ? colors.primary : colors.grey4}
+            />
           </Pressable>
         </View>
 
@@ -112,6 +118,16 @@ const AddSkill: FC = () => {
             </TouchableOpacity>
           ))}
         </View>
+        {!!error && (
+          <Text
+            style={{
+              padding: 10,
+              color: colors.red,
+              fontFamily: fonts.medium,
+            }}>
+            {error}
+          </Text>
+        )}
 
         <ScrollView
           style={[styles.sectionContainer, {borderWidth: valid ? 1 : 0}]}>
@@ -131,17 +147,6 @@ const AddSkill: FC = () => {
               </Pressable>
             ))}
         </ScrollView>
-
-        {!!error && (
-          <Text
-            style={{
-              padding: 10,
-              color: colors.red,
-              fontFamily: fonts.medium,
-            }}>
-            {error}
-          </Text>
-        )}
       </View>
 
       <CustomButton
@@ -172,7 +177,7 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 5,
+    padding: 7,
     borderWidth: 0.5,
     borderColor: colors.primary,
     borderRadius: 100,
