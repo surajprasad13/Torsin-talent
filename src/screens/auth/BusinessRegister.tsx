@@ -29,6 +29,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // helpers
 import {metrics, colors, fonts} from '../../theme';
+import {email} from '../../utils/regex';
 
 // components
 import Input from '../../components/Input';
@@ -59,7 +60,9 @@ const BusinessRegister = ({}) => {
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Please enter name'),
-    email: Yup.string().email('').required('Please enter email'),
+    email: Yup.string()
+      .email('Please enter valid email')
+      .required('Please enter email'),
     mobileNo: Yup.string(),
     location: Yup.string().required('Please enter location'),
   });
@@ -279,7 +282,7 @@ const BusinessRegister = ({}) => {
                   right: 10,
                 }}>
                 <EmailModal
-                  active={formik.values.email}
+                  active={email(formik.values.email)}
                   email={formik.values.email}
                 />
               </Pressable>
