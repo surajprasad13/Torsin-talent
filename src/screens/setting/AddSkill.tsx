@@ -137,6 +137,7 @@ const AddSkill: FC = () => {
             adminService.map((item, index) => (
               <Pressable
                 onPress={() => {
+                  setInputValue('');
                   selectedItems.push(item.serviceName);
                   setSelectedItem([...selectedItems]);
                   dispatch(resetAdminService());

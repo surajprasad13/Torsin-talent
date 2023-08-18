@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {FC} from 'react';
 import {
   View,
   Image,
@@ -12,12 +12,12 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 //helpers
-import CustomInput from './CustomInput';
-import {colors, fonts} from '../theme';
-import CustomButton from './CustomButton';
-import Title from './Title';
+import CustomInput from '../../components/CustomInput';
+import {colors, fonts} from '../../theme';
+import CustomButton from '../../components/CustomButton';
+import Title from '../../components/Title';
 
-const OpenImage = ({route}) => {
+const OpenImage: FC = ({route}) => {
   const {selectedImage} = route.params;
   const navigation = useNavigation();
 
@@ -36,24 +36,8 @@ const OpenImage = ({route}) => {
         />
         <CustomInput label="Tag People" containerStyle={{marginTop: 20}} />
         <View style={{marginTop: 20}}>
-          <Text
-            style={{
-              fontFamily: fonts.regular,
-              color: '#4F4F4F',
-              fontSize: 16,
-            }}>
-            Description
-          </Text>
-          <View
-            style={{
-              width: '100%',
-              height: 150,
-              borderWidth: 0.5,
-              borderRadius: 8,
-              borderColor: colors.light,
-              marginTop: 10,
-              backgroundColor: colors.white,
-            }}>
+          <Text style={styles.description}>Description</Text>
+          <View style={styles.inputContainer}>
             <TextInput
               placeholder="Type description here..."
               multiline={true}
@@ -81,6 +65,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9fbff',
+  },
+  inputContainer: {
+    width: '100%',
+    height: 150,
+    borderWidth: 0.5,
+    borderRadius: 8,
+    borderColor: colors.light,
+    marginTop: 10,
+    backgroundColor: colors.white,
+  },
+  description: {
+    fontFamily: fonts.regular,
+    color: '#4F4F4F',
+    fontSize: 16,
   },
 });
 

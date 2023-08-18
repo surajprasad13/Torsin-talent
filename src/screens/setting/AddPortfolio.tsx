@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {FC, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,7 +11,6 @@ import {
   Platform,
   Keyboard,
   Pressable,
-  ActivityIndicator,
   Modal,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -36,13 +36,12 @@ type InputProps = {
   serviceVideo: string;
 };
 
-const AddPortfolio = ({}) => {
+const AddPortfolio: FC = ({}) => {
   const navigation = useNavigation();
 
   const dispatch = useAppDispatch();
 
-  const {userToken} = useAppSelector(state => state.auth);
-  const {loading, success, error} = useAppSelector(state => state.user);
+  const {loading, error} = useAppSelector(state => state.user);
 
   const [inputs, setInputs] = useState<InputProps>({
     serviceImage: [],
@@ -51,11 +50,9 @@ const AddPortfolio = ({}) => {
 
   const [errors, setErrors] = useState<any>({});
 
-  const [imageLoading, setImageLoading] = useState<boolean>(false);
-  const [videoLoading, setVideoLoading] = useState<boolean>(false);
-  const [video, setVideo] = useState('');
-  const [isPopupVisible, setPopupVisible] = useState(false);
-  const [isPopupVisible1, setPopupVisible1] = useState(false);
+  const [video, setVideo] = useState<string>('');
+  const [isPopupVisible, setPopupVisible] = useState<boolean>(false);
+  const [isPopupVisible1, setPopupVisible1] = useState<boolean>(false);
 
   const [list, setList] = useState(1);
 
@@ -63,7 +60,7 @@ const AddPortfolio = ({}) => {
     Keyboard.dismiss();
 
     let isValid = true;
-    let newErrors = {};
+    let newErrors: any = {};
 
     if (inputs.serviceImage.length === 0) {
       newErrors.image = 'Please add at least one image';
@@ -81,7 +78,6 @@ const AddPortfolio = ({}) => {
 
     setErrors(newErrors);
   };
-  const [selectedImages, setSelectedImages] = useState(null);
 
   const selectImageHandler = async () => {
     try {
@@ -91,10 +87,9 @@ const AddPortfolio = ({}) => {
         cropping: true,
       });
 
-      setSelectedImages(response.path);
       navigation.navigate('OpenCamera', {selectedImage: response.path});
-    } catch (error) {
-      console.log('ImagePicker Error: ', error);
+    } catch (_error: any) {
+      console.log('ImagePicker Error: ', _error);
     }
   };
 
@@ -102,6 +97,7 @@ const AddPortfolio = ({}) => {
     setErrors((prevState: any) => ({...prevState, [input]: _error}));
   };
 
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {
       dispatch(updateSuccess());
@@ -117,7 +113,6 @@ const AddPortfolio = ({}) => {
       includeBase64: true,
     });
     if (response) {
-      setVideoLoading(true);
       const url = await uploadVideoToS3(
         response.sourceURL as string,
         response.filename as string,
@@ -127,11 +122,8 @@ const AddPortfolio = ({}) => {
         serviceVideo: url.body.postResponse.location,
       }));
 
-      setVideo(response.sourceURL);
       navigation.navigate('OpenCamera', {selectedImage: response.path});
-      setVideoLoading(false);
     } else {
-      setVideoLoading(false);
     }
   };
 
@@ -337,8 +329,6 @@ const AddPortfolio = ({}) => {
           <Pressable
             onPress={() => setPopupVisible(true)}
             style={styles.videoInput}>
-            {videoLoading && <ActivityIndicator style={{margin: 20}} />}
-
             {video ? (
               <Video
                 source={{uri: video}}
@@ -425,8 +415,6 @@ const AddPortfolio = ({}) => {
                     margin: 10,
                     padding: 10,
                   }}>
-                  {imageLoading && <ActivityIndicator style={{margin: 20}} />}
-
                   <View style={styles.photoContainer}>
                     <Pressable
                       onPress={() => setPopupVisible1(true)}

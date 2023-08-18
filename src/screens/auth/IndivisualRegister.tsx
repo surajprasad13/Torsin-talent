@@ -51,6 +51,7 @@ import {
 } from '../../redux/reducers/authSlice';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../routes/RouteType';
+import {email} from '../../utils/regex';
 
 const {moderateScale} = metrics;
 
@@ -142,7 +143,6 @@ const IndivisualRegister = ({}) => {
   //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('state', () => {
-      console.log('Changing');
       if (userInfo?.location)
         formik.handleChange('location')(userInfo?.location);
     });
@@ -266,7 +266,7 @@ const IndivisualRegister = ({}) => {
                   right: 10,
                 }}>
                 <EmailModal
-                  active={formik.values.email}
+                  active={email(formik.values.email)}
                   email={formik.values.email}
                 />
               </Pressable>

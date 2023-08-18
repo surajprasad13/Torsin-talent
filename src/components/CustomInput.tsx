@@ -6,7 +6,7 @@ import {
   TextInputProps,
   ViewStyle,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import {colors, fonts} from '../theme';
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -17,9 +17,10 @@ type CustomInputProp = {
   style?: any;
   containerStyle?: ViewStyle;
   error?: string;
+  onFocus?: () => void;
 };
 
-const CustomInput = (props: TextInputProps & CustomInputProp) => {
+const CustomInput: FC<TextInputProps & CustomInputProp> = props => {
   const [active, setActive] = useState<boolean>(false);
 
   const [visible, setVisible] = useState<boolean>(props.password ?? false);
@@ -34,7 +35,10 @@ const CustomInput = (props: TextInputProps & CustomInputProp) => {
         ]}>
         <TextInput
           {...props}
-          onFocus={() => setActive(true)}
+          onFocus={() => {
+            props.onFocus?.();
+            setActive(true);
+          }}
           onBlur={() => setActive(true)}
           style={[styles.input]}
           secureTextEntry={visible}

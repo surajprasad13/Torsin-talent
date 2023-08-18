@@ -42,7 +42,7 @@ import ChangePassword from '../screens/auth/ChangePassword';
 import {useFlipper} from '@react-navigation/devtools';
 import Complaints from '../screens/help/Complaints';
 import Location from '../screens/common/Location';
-import OpenImage from '../components/OpenImage';
+import OpenImage from '../screens/common/OpenImage';
 
 const Stack = createStackNavigator<RootStackParamList>();
 

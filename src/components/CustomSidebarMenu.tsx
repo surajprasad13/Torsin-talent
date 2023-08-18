@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {
   View,
   Text,
@@ -9,123 +9,29 @@ import {
   Pressable,
 } from 'react-native';
 import {Divider} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
-import EvilIcon from 'react-native-vector-icons/EvilIcons';
-import IonIcon from 'react-native-vector-icons/Ionicons';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import {DrawerScreenData} from '../constants/navigation';
 
 // components
 import Logout from './Logout';
 import CircleProgress from './CircleProgress';
 import {colors, fonts} from '../theme';
 import {useAppSelector} from '../hooks';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {DrawerScreenParamaList, RootStackParamList} from '../routes/RouteType';
+import {StackNavigationProp} from '@react-navigation/stack';
 
-const List = [
-  {
-    title: 'Notifications',
-    route: 'Notifications',
-    icon: ({color}: {color: string}) => (
-      <EvilIcon name="bell" color={color} size={20} />
-    ),
-  },
+type NavigationProp = CompositeNavigationProp<
+  DrawerNavigationProp<DrawerScreenParamaList, 'BottomNavigation'>,
+  StackNavigationProp<RootStackParamList>
+>;
 
-  {
-    title: 'Proposals',
-    route: 'ProposalNavigator',
-    icon: ({color}: {color: string}) => (
-      <IonIcon name="newspaper-outline" color={color} size={20} />
-    ),
-  },
-  {
-    title: 'My Jobs',
-    route: 'JobNavigator',
-    icon: ({color}: {color: string}) => (
-      <FontAwesome name="calendar-check-o" color={color} size={20} />
-    ),
-  },
-  {
-    title: 'My Rating',
-    route: 'MyRatings',
-    icon: ({color}: {color: string}) => (
-      <EvilIcon name="star" color={color} size={20} />
-    ),
-  },
-  {
-    title: 'My Contracts',
-    route: 'ContractNavigator',
-    icon: ({color}: {color: string}) => (
-      <Feather name="briefcase" color={color} size={20} />
-    ),
-  },
-  {
-    title: 'My Services',
-    route: 'MyServices',
-    icon: ({color}: {color: string}) => (
-      <EvilIcon name="star" color={color} size={20} />
-    ),
-  },
-  {
-    title: 'Payment Method',
-    route: 'PaymentMethod',
-    icon: ({color}: {color: string}) => (
-      <MaterialIcon name="payments" color={color} size={20} />
-    ),
-  },
-  {
-    title: 'Payment',
-    route: 'PaymentNavigator',
-    icon: ({color}: {color: string}) => (
-      <MaterialIcon name="payments" color={color} size={20} />
-    ),
-  },
-
-  {
-    title: 'Feeds',
-    route: 'Feeds',
-    icon: ({color}: {color: string}) => (
-      <FontAwesome name="feed" color={color} size={20} />
-    ),
-  },
-
-  {
-    title: 'ChangePassword',
-    route: 'ChangePassword',
-    icon: ({color}: {color: string}) => (
-      <MaterialCommunityIcons name="onepassword" color={color} size={20} />
-    ),
-  },
-
-  {
-    title: 'About us',
-    route: 'AboutUs',
-    icon: ({color}: {color: string}) => (
-      <AntDesign name="infocirlceo" color={color} size={20} />
-    ),
-  },
-  {
-    title: 'Terms and Privacy',
-    route: 'TermsPrivacy',
-    icon: ({color}: {color: string}) => (
-      <IonIcon name="shield-checkmark-outline" color={color} size={20} />
-    ),
-  },
-  {
-    title: 'Complaints',
-    route: 'HelpSupport',
-    icon: ({color}: {color: string}) => (
-      <IonIcon name="md-headset" color={color} size={20} />
-    ),
-  },
-];
-
-const CustomSidebarMenu = ({state, ...rest}: any) => {
-  const navigation = useNavigation();
+const CustomSidebarMenu: FC<any> = ({state: navigationState}: any) => {
+  const navigation = useNavigation<NavigationProp>();
 
   const {userInfo} = useAppSelector(state => state.auth);
 
@@ -179,7 +85,7 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
 
         <View style={styles.profileHeaderLine} />
         <ScrollView>
-          {List.map((item, index) => {
+          {DrawerScreenData.map((item, index) => {
             return (
               <Pressable
                 key={index}
@@ -187,14 +93,16 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                   styles.card,
                   {
                     backgroundColor:
-                      state.index == index ? colors.white : 'transparent',
+                      navigationState.index == index
+                        ? colors.white
+                        : 'transparent',
                   },
                 ]}
                 onPress={() => {
                   switch (item.route) {
-                    case 'Proposals':
-                      navigation.navigate('Proposals', {
-                        sectionId: 'sent',
+                    case 'ProposalNavigator':
+                      navigation.navigate('ProposalNavigator', {
+                        screen: 'Proposals',
                       });
                       break;
                     case 'JobNavigator':
@@ -213,15 +121,19 @@ const CustomSidebarMenu = ({state, ...rest}: any) => {
                       });
                       break;
                     case 'HelpSupport':
-                      navigation.navigate('HelpSupport', {});
+                      navigation.navigate('HelpSupport');
                       break;
                     default:
+                      //@ts-ignore
                       navigation.navigate(item.route);
                   }
                 }}>
                 <View>
                   {item.icon({
-                    color: state.index == index ? colors.primary : colors.grey,
+                    color:
+                      navigationState.index == index
+                        ? colors.primary
+                        : colors.grey,
                   })}
                 </View>
                 <View style={{flex: 1, marginLeft: 10}}>

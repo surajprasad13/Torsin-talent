@@ -5,8 +5,9 @@ import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 // screens
 import Proposals from '../screens/proposals/Proposals';
 import ProposalDetail from '../screens/proposals/ProposalDetail';
+import {ProposalScreenParamList} from './RouteType';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<ProposalScreenParamList>();
 
 const ProposalNavigator = () => {
   return (

@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -13,9 +12,8 @@ import {
   TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Button, Dialog, Portal, RadioButton} from 'react-native-paper';
+import {Button, Dialog, Portal} from 'react-native-paper';
 import CountryPicker from 'react-native-country-picker-modal';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 // icons
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -348,9 +346,7 @@ const EditUserProfile = ({}) => {
                 }
               }}
               onFocus={() => {
-                if (inputs.location) {
-                  navigation.navigate('Location');
-                }
+                navigation.navigate('Location');
               }}
             />
           </View>

@@ -1,6 +1,9 @@
 import * as React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
+import {DrawerScreenParamaList} from './RouteType';
+import {fonts} from '../theme';
+
 import AboutUs from '../screens/drawerScreens/AboutUs';
 import CustomSidebarMenu from '../components/CustomSidebarMenu';
 import MyRating from '../screens/rating/MyRating';
@@ -10,9 +13,7 @@ import Terms from '../screens/drawerScreens/Terms';
 
 import BottomNavigation from './BottomNavigator';
 
-import {DrawerScreenParamaList} from './RouteType';
 import Notification from '../screens/notification/Notification';
-import {fonts} from '../theme';
 import ContractNavigator from './ContractNavigator';
 import ProposalNavigator from './ProposalNavigator';
 import PaymentMethod from '../screens/payment/PaymentMethod';
@@ -25,7 +26,7 @@ import ChatCard from '../screens/help/ChatCard';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
-const DrawerNavigation = () => {
+const DrawerNavigation: React.FC = ({}) => {
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomSidebarMenu {...props} />}

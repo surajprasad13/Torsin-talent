@@ -1,17 +1,16 @@
-import type {CompositeScreenProps} from '@react-navigation/native';
 import type {
-  StackNavigationProp,
-  StackScreenProps,
-} from '@react-navigation/stack';
+  CompositeScreenProps,
+  NavigatorScreenParams,
+} from '@react-navigation/native';
+import type {StackScreenProps} from '@react-navigation/stack';
 import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {DrawerScreenProps} from '@react-navigation/drawer';
 
 export type RootStackParamList = AuthScreenParamList & {
   OnboardingScreen: undefined;
   VerifyOtpRegister: undefined;
   WalkthroughScreen: undefined;
   BusinessPassword: undefined;
-  DrawerNavigation: DrawerScreenProps<DrawerScreenParamaList>;
+  DrawerNavigation: NavigatorScreenParams<DrawerScreenParamaList>;
   PostDetails: {id: string};
   NotFound: undefined;
   BottomScreens: undefined;
@@ -62,12 +61,12 @@ export type AuthScreenParamList = {
 
 export type DrawerScreenParamaList = {
   Notifications: undefined;
-  ProposalNavigator: undefined;
+  ProposalNavigator: NavigatorScreenParams<ProposalScreenParamList>;
   MyRatings: undefined;
-  ContractNavigator: StackNavigationProp<ContractsScreenParamList>;
+  ContractNavigator: NavigatorScreenParams<ContractsScreenParamList>;
   MyServices: undefined;
-  JobNavigator: undefined;
-  PaymentNavigator: undefined;
+  JobNavigator: NavigatorScreenParams<JobScreenParamList>;
+  PaymentNavigator: NavigatorScreenParams<PaymentScreenParamList>;
   SwitchAccount: undefined;
   AboutUs: undefined;
   TermsPrivacy: undefined;
@@ -75,7 +74,7 @@ export type DrawerScreenParamaList = {
   HelpDetail: {
     item: undefined | any;
   };
-  BottomNavigation: BottomTabScreenProps<BottomScreenParamList>;
+  BottomNavigation: NavigatorScreenParams<BottomScreenParamList>;
   DrawerSetting: undefined;
   PaymentMethod: undefined;
   Feeds: undefined;
@@ -87,7 +86,7 @@ export type BottomScreenParamList = {
   HomeNavigator: undefined;
   JobNavigator: undefined;
   Chat: undefined;
-  SettingNavigator: StackScreenProps<SettingScreenParamList>;
+  SettingNavigator: NavigatorScreenParams<SettingScreenParamList>;
 };
 
 export type SettingScreenParamList = {
@@ -149,6 +148,13 @@ export type ContractsScreenParamList = {
   CreateContract: undefined;
   ViewContract: {
     id: undefined | string;
+  };
+};
+
+export type ProposalScreenParamList = {
+  Proposals: undefined;
+  ProposalDetail: {
+    item: undefined;
   };
 };
 
