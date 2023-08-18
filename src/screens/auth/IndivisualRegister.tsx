@@ -22,6 +22,7 @@ import {decode} from 'base64-arraybuffer';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import CountryPicker from 'react-native-country-picker-modal';
+import Geolocation from '@react-native-community/geolocation';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -172,6 +173,8 @@ const IndivisualRegister = ({}) => {
     validationSchema,
     onSubmit,
   });
+
+  Geolocation.getCurrentPosition(info => console.log(info));
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>

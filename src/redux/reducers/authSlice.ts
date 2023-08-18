@@ -80,7 +80,6 @@ const authSlice = createSlice({
       state.isFirstOpen = false;
     },
     updateUserInfo: (state, action) => {
-      console.log(action.payload);
       state.userInfo = action.payload;
     },
   },
