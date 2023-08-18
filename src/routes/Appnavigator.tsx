@@ -310,3 +310,4 @@ const AppNavigator: FC = () => {
 };
 
 export default AppNavigator;
+

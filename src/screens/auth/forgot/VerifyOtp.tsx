@@ -31,6 +31,7 @@ import {otpverify, resetOtpSent} from '../../../redux/actions/authAction';
 import {
   resetOtpVerified,
   resetSuccess,
+  loginValue,
 } from '../../../redux/reducers/authSlice';
 import {AuthScreenParamList} from '../../../routes/RouteType';
 
@@ -112,7 +113,10 @@ const VerifyOtp = ({route}: any) => {
                   ref={ref}
                   {...props}
                   value={values.otp}
-                  onChangeText={handleChange('otp')}
+                  onChangeText={text => {
+                    handleChange('otp')(text);
+                    dispatch(loginValue());
+                  }}
                   cellCount={CELL_COUNT}
                   rootStyle={styles.codeFiledRoot}
                   keyboardType="number-pad"
