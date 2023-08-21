@@ -8,6 +8,8 @@ import {
   ScrollView,
   TextInput,
   LayoutAnimation,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -96,112 +98,118 @@ const Complaints: FC = ({}) => {
           errors,
           touched,
         }) => (
-          <ScrollView>
-            <View
-              style={{
-                margin: 15,
-                ...appstyle.shadow,
-                padding: 10,
-                borderRadius: 15,
-                justifyContent: 'center',
-              }}>
-              <Text style={{fontFamily: fonts.medium, fontSize: 18}}>
-                What brings you here?
-              </Text>
-              <Text
-                style={{
-                  fontFamily: fonts.regular,
-                  fontSize: 14,
-                  color: '#52525B',
-                  marginTop: 10,
-                }}>
-                Pick the option that most applies to you.
-              </Text>
-            </View>
-
-            {filteredHelp.map((item, index) => (
-              <ComplaintCard
-                item={item}
-                topic={topic}
-                key={index.toString()}
-                onPress={() => handleReasonSelection(index, item?.topicId)}
-              />
-            ))}
-
-            {help.length > 5 && (
+          <KeyboardAvoidingView
+            style={{flex: 1}}
+            behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+            <ScrollView>
               <View
                 style={{
-                  marginTop: 10,
-                  alignItems: 'center',
-                  height: showMoreTopics ? 'auto' : 40,
-                  overflow: 'hidden',
+                  margin: 15,
+                  ...appstyle.shadow,
+                  padding: 10,
+                  borderRadius: 15,
+                  justifyContent: 'center',
                 }}>
-                {!showMoreTopics ? (
-                  <Pressable onPress={handleShowMoreTopics}>
-                    <Text style={{color: colors.primary}}>
-                      Show More Topics
-                    </Text>
-                  </Pressable>
-                ) : (
-                  <Pressable onPress={handleCloseTopics}>
-                    <Text style={{color: colors.primary}}>Close Topics</Text>
-                  </Pressable>
+                <Text style={{fontFamily: fonts.medium, fontSize: 18}}>
+                  What brings you here?
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    fontSize: 14,
+                    color: '#52525B',
+                    marginTop: 10,
+                  }}>
+                  Pick the option that most applies to you.
+                </Text>
+              </View>
+
+              {filteredHelp.map((item, index) => (
+                <ComplaintCard
+                  item={item}
+                  topic={topic}
+                  key={index.toString()}
+                  onPress={() => handleReasonSelection(index, item?.topicId)}
+                />
+              ))}
+
+              {help.length > 5 && (
+                <View
+                  style={{
+                    marginTop: 10,
+                    alignItems: 'center',
+                    height: showMoreTopics ? 'auto' : 40,
+                    overflow: 'hidden',
+                  }}>
+                  {!showMoreTopics ? (
+                    <Pressable onPress={handleShowMoreTopics}>
+                      <Text style={{color: colors.primary}}>
+                        Show More Topics
+                      </Text>
+                    </Pressable>
+                  ) : (
+                    <Pressable onPress={handleCloseTopics}>
+                      <Text style={{color: colors.primary}}>Close Topics</Text>
+                    </Pressable>
+                  )}
+                </View>
+              )}
+
+              <View
+                style={{
+                  margin: 15,
+                  ...appstyle.shadow,
+                  padding: 10,
+                  borderRadius: 15,
+                }}>
+                <Text style={{fontFamily: fonts.medium, fontSize: 18}}>
+                  Problem
+                </Text>
+                <View
+                  style={{
+                    minHeight: 170,
+                    borderWidth: 0.5,
+                    borderRadius: 8,
+                    borderColor: colors.grey,
+                    backgroundColor: colors.white,
+                    marginTop: 10,
+                  }}>
+                  <TextInput
+                    placeholder="Describe the problem here..."
+                    multiline={true}
+                    placeholderTextColor="#333333"
+                    style={{padding: 15}}
+                    onChangeText={handleChange('problemDescription')}
+                    onBlur={handleBlur('problemDescription')}
+                    value={values.problemDescription}
+                    maxLength={300}
+                  />
+                </View>
+                {touched.problemDescription && errors.problemDescription && (
+                  <Text style={{color: 'red'}}>
+                    {errors.problemDescription}
+                  </Text>
                 )}
               </View>
-            )}
 
-            <View
-              style={{
-                margin: 15,
-                ...appstyle.shadow,
-                padding: 10,
-                borderRadius: 15,
-              }}>
-              <Text style={{fontFamily: fonts.medium, fontSize: 18}}>
-                Problem
-              </Text>
-              <View
-                style={{
-                  minHeight: 170,
-                  borderWidth: 0.5,
-                  borderRadius: 8,
-                  borderColor: colors.grey,
-                  backgroundColor: colors.white,
-                  marginTop: 10,
-                }}>
-                <TextInput
-                  placeholder="Describe the problem here..."
-                  multiline={true}
-                  placeholderTextColor="#333333"
-                  style={{padding: 15}}
-                  onChangeText={handleChange('problemDescription')}
-                  onBlur={handleBlur('problemDescription')}
-                  value={values.problemDescription}
-                  maxLength={300}
-                />
-              </View>
-              {touched.problemDescription && errors.problemDescription && (
-                <Text style={{color: 'red'}}>{errors.problemDescription}</Text>
+              {/* Existing content */}
+              {/* ... */}
+
+              {error && (
+                <Text style={{color: colors.red, fontFamily: fonts.semibold}}>
+                  {error}
+                </Text>
               )}
-            </View>
 
-            {/* Existing content */}
-            {/* ... */}
-
-            {error && (
-              <Text style={{color: colors.red, fontFamily: fonts.semibold}}>
-                {error}
-              </Text>
-            )}
-
-            <CustomButton
-              style={{marginTop: 10, bottom: 10}}
-              title="Report Problem"
-              loading={loading}
-              onPress={handleSubmit}
-              disabled
-            />
-          </ScrollView>
+              <CustomButton
+                style={{marginTop: 10, bottom: 10}}
+                title="Report Problem"
+                loading={loading}
+                onPress={handleSubmit}
+                disabled
+              />
+            </ScrollView>
+          </KeyboardAvoidingView>
         )}
       </Formik>
       <Snackbar

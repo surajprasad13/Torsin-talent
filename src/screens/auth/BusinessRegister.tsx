@@ -21,6 +21,7 @@ import {decode} from 'base64-arraybuffer';
 import {Formik, useFormik} from 'formik';
 import * as Yup from 'yup';
 import CountryPicker from 'react-native-country-picker-modal';
+import Geolocation from '@react-native-community/geolocation';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -110,6 +111,8 @@ const BusinessRegister = ({}) => {
     validationSchema,
     onSubmit,
   });
+
+  Geolocation.getCurrentPosition(info => console.log(info));
 
   const [image, setImage] = useState('');
   const [imageLoading, setImageLoading] = useState<boolean>(false);
@@ -297,64 +300,64 @@ const BusinessRegister = ({}) => {
                 }}>
                 Mobile Number
               </Text>
-              <PhoneInput
-                ref={phoneInput}
-                defaultValue={''}
-                defaultCode={locales[0].countryCode as CountryCode}
-                layout="first"
-                placeholder="eg. 7895325085"
-                containerStyle={{
-                  borderWidth: 1,
-                  marginTop: 10,
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   borderRadius: 10,
-                  width: '100%',
+                  marginTop: 10,
                   backgroundColor: 'white',
                   borderColor: '#BDBDBD',
-                  maxHeight: 50,
-                  padding: 0,
-                }}
-                textContainerStyle={{
-                  borderTopRightRadius: 10,
-                  borderBottomRightRadius: 10,
-                  borderColor: '#BDBDBD',
-                  backgroundColor: 'transparent',
-                }}
-                textInputStyle={{
-                  color: '#333333',
-                  fontSize: 14,
-                  fontFamily: fonts.regular,
-                }}
-                codeTextStyle={{color: '#333333'}}
-                onChangeText={(text: string) => {
-                  const pattern = /^[0-9]*$/;
-                  const pass = pattern.test(text);
-                  if (pass) {
-                    formik.handleChange('mobileNo')(text);
-                  }
-                }}
-                onChangeFormattedText={text => {
-                  setFormattedValue(text);
-                }}
-                textInputProps={{
-                  maxLength: 15,
-                  onFocus: () => formik.setErrors({mobileNo: ''}),
-                }}
-                error={formik.errors.mobileNo}
-              />
-              <Pressable
-                style={{
-                  position: 'absolute',
-                  marginTop: 46,
-                  right: 10,
+                  borderWidth: 1,
                 }}>
-                <PhoneModal
-                  active={formik.values.mobileNo.length >= 9}
-                  phone={
-                    phoneInput?.current?.getCallingCode() +
-                    formik.values.mobileNo
-                  }
+                <PhoneInput
+                  ref={phoneInput}
+                  defaultValue={''}
+                  defaultCode={locales[0].countryCode as CountryCode}
+                  layout="first"
+                  placeholder="eg. 7895325085"
+                  containerStyle={{borderRadius: 10, alignItems: 'center'}}
+                  textContainerStyle={{
+                    borderColor: '#BDBDBD',
+                    backgroundColor: 'transparent',
+                  }}
+                  textInputStyle={{
+                    color: '#333333',
+                    fontSize: 14,
+                    fontFamily: fonts.regular,
+                  }}
+                  codeTextStyle={{color: '#333333'}}
+                  onChangeText={(text: string) => {
+                    const pattern = /^[0-9]*$/;
+                    const pass = pattern.test(text);
+                    if (pass) {
+                      formik.handleChange('mobileNo')(text);
+                    }
+                  }}
+                  onChangeFormattedText={text => {
+                    setFormattedValue(text);
+                  }}
+                  textInputProps={{
+                    maxLength: 15,
+                    onFocus: () => formik.setErrors({mobileNo: ''}),
+                  }}
+                  error={formik.errors.mobileNo}
                 />
-              </Pressable>
+                <Pressable
+                  style={{
+                    position: 'absolute',
+                    marginTop: 46,
+                    right: 10,
+                  }}>
+                  <PhoneModal
+                    active={formik.values.mobileNo.length >= 9}
+                    phone={
+                      phoneInput?.current?.getCallingCode() +
+                      formik.values.mobileNo
+                    }
+                  />
+                </Pressable>
+              </View>
             </View>
 
             <View style={{marginTop: 10}}>

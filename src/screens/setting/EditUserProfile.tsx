@@ -124,8 +124,11 @@ const EditUserProfile = ({}) => {
       isValid = false;
     }
 
-    if (inputs.bio.trim() === '') {
-    } else {
+    if (inputs.bio.length == 0) {
+      isValid = true;
+    }
+
+    if (inputs.bio.length > 0) {
       const characterCount = inputs.bio.trim().length;
       if (characterCount < 30) {
         handleError('Bio must be at least 30 characters', 'bio');
