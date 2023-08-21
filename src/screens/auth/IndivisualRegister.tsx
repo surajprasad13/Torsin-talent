@@ -22,7 +22,7 @@ import {decode} from 'base64-arraybuffer';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import CountryPicker from 'react-native-country-picker-modal';
-import Geolocation from '@react-native-community/geolocation';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -50,7 +50,6 @@ import {
   resetMobileVerified,
   updateUserInfo,
 } from '../../redux/reducers/authSlice';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../routes/RouteType';
 import {email} from '../../utils/regex';
 
@@ -173,8 +172,6 @@ const IndivisualRegister = ({}) => {
     validationSchema,
     onSubmit,
   });
-
-  Geolocation.getCurrentPosition(info => console.log(info));
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
