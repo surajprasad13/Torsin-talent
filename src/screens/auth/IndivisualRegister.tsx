@@ -79,7 +79,7 @@ const IndivisualRegister = ({}) => {
       .email('Please enter valid email')
       .required('Please enter email'),
     mobileNo: Yup.string(),
-    location: Yup.string().required('Please enter location'),
+    location: Yup.string(),
   });
 
   const [profileImage, setProfileImage] = useState('');
@@ -143,8 +143,9 @@ const IndivisualRegister = ({}) => {
   //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('state', () => {
-      if (userInfo?.location)
+      if (userInfo?.location) {
         formik.handleChange('location')(userInfo?.location);
+      }
     });
     return () => listener;
   }, []);
@@ -399,25 +400,25 @@ const IndivisualRegister = ({}) => {
               </Pressable>
             </View>
 
-            <View style={{marginTop: 20}}>
-              <CustomInput
-                placeholder="Location"
-                label="Location"
-                value={userInfo?.location}
-                onChangeText={(text: string) => {
-                  dispatch(updateUserInfo({...userInfo, location: text}));
-                  formik.handleChange('location')(text);
-                  if (text.length >= 2) {
-                    navigation.navigate('Location');
-                  }
-                }}
-                onFocus={() => {
-                  if (!formik.values.location) {
-                    navigation.navigate('Location');
-                  }
-                }}
-              />
-            </View>
+            <CustomInput
+              label="Location"
+              placeholder="Location "
+              value={userInfo?.location}
+              onChangeText={(text: string) => {
+                dispatch(updateUserInfo({...userInfo, location: text}));
+                formik.handleChange('location')(text);
+                if (text.length >= 2) {
+                  navigation.navigate('Location');
+                }
+              }}
+              onFocus={() => {
+                if (!formik.values.location) {
+                  navigation.navigate('Location');
+                }
+              }}
+              containerStyle={{marginTop: 20}}
+              error={formik.errors.location}
+            />
 
             <View style={{position: 'relative', marginTop: 10}}>
               <Input
@@ -499,11 +500,10 @@ const IndivisualRegister = ({}) => {
             <CustomButton
               title="Next"
               disabled={
-                formik.values.fullName &&
-                formik.values.email &&
-                formik.values.mobileNo &&
-                formik.values.location &&
-                formik.values.countryName
+                !!formik.values.fullName &&
+                !!formik.values.email &&
+                !!formik.values.mobileNo &&
+                !!formik.values.countryName
                   ? true
                   : false
               }
