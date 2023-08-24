@@ -7,6 +7,7 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import IndivisualRegister from '../screens/auth/IndivisualRegister';
 import BusinessRegister from '../screens/auth/BusinessRegister';
 
+
 const Stack = createStackNavigator<AuthScreenParamList>();
 
 const AuthNavigator: FC = () => {
@@ -15,6 +16,7 @@ const AuthNavigator: FC = () => {
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="IndivisualRegister" component={IndivisualRegister} />
       <Stack.Screen name="BusinessRegister" component={BusinessRegister} />
+      
     </Stack.Navigator>
   );
 };

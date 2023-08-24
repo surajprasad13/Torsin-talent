@@ -11,12 +11,15 @@ import {
   fetchService,
   fetchSkill,
   filterCity,
+  filterUser,
   getAccepted,
   getAdminPercentage,
   getContract,
   getContractDetail,
   getFeedList,
   getHelpSupport,
+  getPaymentDetails,
+  getPaymentStatus,
   getProposalDetail,
   getProposalStatus,
   getRating,
@@ -30,6 +33,7 @@ import {
   Feed,
   Help,
   JobDetail,
+  PaymentDetails,
   ProposalDetail,
   Rating,
   Service,
@@ -59,10 +63,13 @@ interface UserInterface {
   notCorrespond: Array<JobDetail>;
   search: Array<JobDetail>;
   city: [];
+  user: [];
   addSuccess: string;
   acceptList: Array<any>;
   proposalStatus: Array<any>;
+  paymentStatus: Array<any>;
   proposalDetail: null | ProposalDetail;
+  paymentDetail: null | PaymentDetails;
   contracts: {
     accepted: Array<any>;
     rejected: Array<any>;
@@ -95,10 +102,13 @@ const initialState: UserInterface = {
   notCorrespond: [],
   search: [],
   city: [],
+  user: [],
   addSuccess: '',
   acceptList: [],
   proposalStatus: [],
+  paymentStatus: [],
   proposalDetail: null,
+  paymentDetail: null,
   contracts: {
     accepted: [],
     rejected: [],
@@ -505,6 +515,50 @@ const userSlice = createSlice({
         state.created = true;
       })
       .addCase(supportPostChat.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // payment Status
+      .addCase(getPaymentStatus.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getPaymentStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.paymentStatus = action.payload.response;
+      })
+      .addCase(getPaymentStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // proposal detail
+      .addCase(getPaymentDetails.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getPaymentDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.paymentDetail = action.payload.response[0];
+      })
+      .addCase(getPaymentDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // search user
+      .addCase(filterUser.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(filterUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(filterUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

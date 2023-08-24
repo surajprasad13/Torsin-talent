@@ -89,3 +89,23 @@ export interface Help {
 }
 
 export interface Skill {}
+
+export interface ComplaintList {
+  createdAt: string | Date;
+  isSenderAdmin: boolean;
+  message: string;
+}
+
+export interface PaymentDetails {
+  contractId: string;
+  milestoneId: number;
+  jobId: number;
+  jobName: string;
+  jobDescription: string;
+  photos: string;
+  paymentStatus: number;
+  createdAt: string;
+  receivedAmount: number;
+  projectType: number;
+  location: string;
+}

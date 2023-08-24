@@ -481,6 +481,62 @@ const supportPostChat = createAsyncThunk(
   },
 );
 
+const getPaymentStatus = createAsyncThunk(
+  'user/payment/status',
+  async (_, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`/talent/payment/status`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getPaymentDetails = createAsyncThunk(
+  'user/payment/detail',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`/talent/payment/status`, {
+        params: {
+          proposalId: value,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const filterUser = createAsyncThunk(
+  'filter/user',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`user/search`, {
+        params: {
+          name: value.name,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -508,6 +564,9 @@ export {
   TicketList,
   supportChat,
   supportPostChat,
+  getPaymentStatus,
+  getPaymentDetails,
+  filterUser,
 };
 
 export default {};

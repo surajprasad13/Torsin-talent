@@ -65,7 +65,7 @@ const BusinessRegister = ({}) => {
       .email('Please enter valid email')
       .required('Please enter email'),
     mobileNo: Yup.string(),
-    location: Yup.string().required('Please enter location'),
+    location: Yup.string(),
   });
 
   const [profileImage, setProfileImage] = useState('');
@@ -155,12 +155,15 @@ const BusinessRegister = ({}) => {
     const listener = navigation.addListener('focus', () => {
       dispatch(resetEmailVerified());
       dispatch(resetMobileVerified());
-      if (userInfo?.location) {
-        formik.handleChange('location')(userInfo.location);
-      }
     });
     return () => listener;
   }, []);
+
+  useEffect(() => {
+    if (userInfo?.location) {
+      formik.setFieldValue('location', userInfo.location); // Use setFieldValue to set the value
+    }
+  }, [userInfo?.location]);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
@@ -360,25 +363,25 @@ const BusinessRegister = ({}) => {
               </View>
             </View>
 
-            <View style={{marginTop: 10}}>
-              <CustomInput
-                placeholder="Location"
-                label="Location"
-                value={userInfo?.location}
-                onChangeText={(text: string) => {
-                  dispatch(updateUserInfo({...userInfo, location: text}));
-                  formik.handleChange('location')(text);
-                  if (text.length >= 2) {
-                    navigation.navigate('Location');
-                  }
-                }}
-                onFocus={() => {
-                  if (!formik.values.location) {
-                    navigation.navigate('Location');
-                  }
-                }}
-              />
-            </View>
+            <CustomInput
+              label="Location"
+              placeholder="Location "
+              value={userInfo?.location}
+              onChangeText={(text: string) => {
+                dispatch(updateUserInfo({...userInfo, location: text}));
+                formik.handleChange('location')(text);
+                if (text.length >= 2) {
+                  navigation.navigate('Location');
+                }
+              }}
+              onFocus={() => {
+                if (!formik.values.location) {
+                  navigation.navigate('Location');
+                }
+              }}
+              containerStyle={{marginTop: 20}}
+              error={formik.errors.location}
+            />
 
             <View style={{position: 'relative', marginTop: 10}}>
               <Input
@@ -463,11 +466,11 @@ const BusinessRegister = ({}) => {
             <CustomButton
               title="Next"
               disabled={
-                formik.values.fullName &&
-                formik.values.email &&
-                formik.values.mobileNo &&
-                formik.values.location &&
-                formik.values.countryName
+                !!formik.values.fullName &&
+                !!formik.values.email &&
+                !!formik.values.mobileNo &&
+                !!formik.values.location &&
+                !!formik.values.countryName
                   ? true
                   : false
               }

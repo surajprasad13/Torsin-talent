@@ -164,7 +164,7 @@ const IndivisualRegister = ({}) => {
       fullName: '',
       email: '',
       mobileNo: '',
-      location: userInfo?.location,
+      location: '',
       confirmPassword: '',
       gender: 1,
       countryName: '',
@@ -173,6 +173,12 @@ const IndivisualRegister = ({}) => {
     validationSchema,
     onSubmit,
   });
+
+  useEffect(() => {
+    if (userInfo?.location) {
+      formik.setFieldValue('location', userInfo.location); // Use setFieldValue to set the value
+    }
+  }, [userInfo?.location]);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
@@ -503,6 +509,7 @@ const IndivisualRegister = ({}) => {
                 !!formik.values.fullName &&
                 !!formik.values.email &&
                 !!formik.values.mobileNo &&
+                !!formik.values.location &&
                 !!formik.values.countryName
                   ? true
                   : false

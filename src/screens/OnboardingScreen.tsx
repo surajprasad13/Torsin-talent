@@ -128,6 +128,25 @@ const OnboardingScreen = ({}) => {
           Create an Account
         </Text>
       </TouchableOpacity>
+
+      {/* <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('WithoutSignupHome');
+        }}
+        style={{
+          margin: 10,
+          borderRadius: 8,
+        }}>
+        <Text
+          style={{
+            fontSize: 16,
+            textAlign: 'center',
+            color: '#6180F4',
+            fontFamily: fonts.bold,
+          }}>
+          Continue without signup
+        </Text>
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };

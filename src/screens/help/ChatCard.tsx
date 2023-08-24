@@ -21,13 +21,16 @@ import {colors, appstyle, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {Title} from '../../components';
 import {supportChat, supportPostChat} from '../../redux/actions/userAction';
+import {ComplaintList} from '../../types/user';
 
 const ChatCard = ({route}) => {
   const item = route.params.item;
   const {loading, support} = useAppSelector(state => state.user);
-  const insets = useSafeAreaInsets();
+  const [data, setData] = useState<ComplaintList[]>(support);
+
   const dispatch = useAppDispatch();
 
+  const insets = useSafeAreaInsets();
   const [newMessage, setNewMessage] = useState('');
 
   const onPressText = () => {
@@ -37,14 +40,22 @@ const ChatCard = ({route}) => {
         message: newMessage,
       }),
     );
-    dispatch(supportChat(item?.ticketId));
+    const newData = {
+      isSenderAdmin: false,
+      createdAt: new Date(),
+      message: newMessage,
+    };
+    setData([newData, ...data]);
     setNewMessage('');
   };
 
   useEffect(() => {
     dispatch(supportChat(item?.ticketId));
-    setNewMessage('');
-  }, [item?.ticketId]); 
+  }, []);
+
+  useEffect(() => {
+    setData(support);
+  }, [support]);
 
   const LeftMessage = ({message, createdAt}) => {
     const messageDate = moment(createdAt);
@@ -139,12 +150,12 @@ const ChatCard = ({route}) => {
         backgroundColor: 'white',
         paddingBottom: insets.bottom - 50,
       }}>
-      <Title title={`Ticke No : #${item.ticketId}`} />
+      <Title title={`Ticket No : #${item.ticketId}`} />
 
       <FlatList
-        data={support}
+        data={data}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={{flexGrow: 1}}
         inverted
       />
@@ -159,10 +170,6 @@ const ChatCard = ({route}) => {
             ...appstyle.shadow,
             justifyContent: 'space-evenly',
           }}>
-          {/* <TouchableOpacity style={{}}>
-                        <Feather name="plus" color={colors.primary} size={20} />
-                    </TouchableOpacity> */}
-
           <TextInput
             style={{
               borderRadius: 8,

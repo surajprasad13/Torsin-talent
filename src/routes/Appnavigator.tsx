@@ -32,7 +32,7 @@ import {RootStackParamList} from './RouteType';
 import {useAppSelector} from '../hooks';
 import ThroughRegister from '../screens/ThroughRegister';
 import PdfScreen from '../screens/chat/PdfScreen';
-import PaymentDetail from '../screens/payment/PendingPaymentDetail';
+import PaymentDetail from '../screens/payment/PaymentDetail';
 import ReportProblem from '../screens/jobs/services/ReportProblem';
 import ReceivedPayment from '../screens/payment/ReceivedPaymentDetail';
 import RatingDetail from '../screens/rating/RatingDetail';
@@ -43,6 +43,9 @@ import {useFlipper} from '@react-navigation/devtools';
 import Complaints from '../screens/help/Complaints';
 import Location from '../screens/common/Location';
 import OpenImage from '../screens/common/OpenImage';
+import WithoutSignupHome from '../screens/withoutsignupHome/WithoutSignupHome';
+
+import ViewAllTalent from '../screens/withoutsignupHome/ViewAllTalent';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -173,6 +176,7 @@ const AppNavigator: FC = () => {
                 ...TransitionPresets.SlideFromRightIOS,
               }}
             />
+
             <Stack.Screen
               name="Report"
               component={ReportProblem}
@@ -252,6 +256,24 @@ const AppNavigator: FC = () => {
             />
 
             <Stack.Screen
+              name="WithoutSignupHome"
+              component={WithoutSignupHome}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
+            <Stack.Screen
+              name="ViewAllTalent"
+              component={ViewAllTalent}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
+            <Stack.Screen
               name="IndivisualRegister"
               component={IndivisualRegister}
               options={{headerShown: false}}
@@ -310,4 +332,3 @@ const AppNavigator: FC = () => {
 };
 
 export default AppNavigator;
-
