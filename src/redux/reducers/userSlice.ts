@@ -38,6 +38,7 @@ import {
   Rating,
   Service,
   Ticket,
+  UserTag,
 } from '../../types/user';
 import {searchJob} from '../actions/userAction';
 import {Contract} from '../../types/contract';
@@ -63,7 +64,7 @@ interface UserInterface {
   notCorrespond: Array<JobDetail>;
   search: Array<JobDetail>;
   city: [];
-  user: [];
+  user: UserTag[];
   addSuccess: string;
   acceptList: Array<any>;
   proposalStatus: Array<any>;
@@ -556,7 +557,7 @@ const userSlice = createSlice({
       })
       .addCase(filterUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.response;
       })
       .addCase(filterUser.rejected, (state, action) => {
         state.loading = false;

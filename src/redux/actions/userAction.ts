@@ -523,7 +523,7 @@ const filterUser = createAsyncThunk(
     try {
       const {data} = await api.get(`user/search`, {
         params: {
-          name: value.name,
+          fullName: value,
         },
       });
       return data;

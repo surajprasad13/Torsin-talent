@@ -36,7 +36,8 @@ type InputProps = {
   serviceVideo: string;
 };
 
-const AddPortfolio: FC = ({}) => {
+const AddPortfolio: FC = ({route}) => {
+  // const {selectedImage} = route.params;
   const navigation = useNavigation();
 
   const dispatch = useAppDispatch();

@@ -89,3 +89,5 @@ export interface ActiveJobDetailInterface extends Contract {
   profileImage: string;
   receievedAmount: number;
 }
+
+

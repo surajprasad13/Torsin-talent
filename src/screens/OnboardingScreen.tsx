@@ -60,7 +60,7 @@ const OnboardingScreen = ({}) => {
           fontFamily: fonts.bold,
           fontSize: 24,
           textAlign: 'center',
-          color: '#0E184D',
+          color: colors.primary,
         }}
         subTitleStyles={{
           fontFamily: fonts.regular,

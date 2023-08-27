@@ -109,3 +109,9 @@ export interface PaymentDetails {
   projectType: number;
   location: string;
 }
+
+export interface UserTag {
+  id: number;
+  fullName: string;
+  profileImage: string;
+}
