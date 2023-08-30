@@ -9,94 +9,65 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Keyboard,
   Pressable,
   Modal,
+  ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {uploadVideoToS3} from '../../services/s3';
+import {StackNavigationProp} from '@react-navigation/stack';
 import Video from 'react-native-video';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {Divider} from 'react-native-paper';
+import {useFormik} from 'formik';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // components
-import {CustomButton, Title} from '../../components';
+import {Title} from '../../components';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {updateSuccess} from '../../redux/reducers/userSlice';
+import {uploadFileToS3, uploadVideoToS3} from '../../services/s3';
+import {SettingScreenParamList} from '../../routes/RouteType';
+import {decode} from 'base64-arraybuffer';
+import {getPortfolio} from '../../redux/actions/userAction';
+import FastImage from 'react-native-fast-image';
+
+type Source = 'camera' | 'library';
+
+type NavigationProp = StackNavigationProp<SettingScreenParamList>;
 
 type InputProps = {
   serviceImage: Array<string>;
   serviceVideo: string;
 };
 
-const AddPortfolio: FC = ({route}) => {
-  // const {selectedImage} = route.params;
-  const navigation = useNavigation();
+const {width} = Dimensions.get('window');
+
+const AddPortfolio: FC = ({}) => {
+  const navigation = useNavigation<NavigationProp>();
 
   const dispatch = useAppDispatch();
 
-  const {loading, error} = useAppSelector(state => state.user);
+  const {loading, error, portfolio} = useAppSelector(state => state.user);
 
   const [inputs, setInputs] = useState<InputProps>({
     serviceImage: [],
     serviceVideo: '',
   });
 
-  const [errors, setErrors] = useState<any>({});
-
   const [video, setVideo] = useState<string>('');
-  const [isPopupVisible, setPopupVisible] = useState<boolean>(false);
-  const [isPopupVisible1, setPopupVisible1] = useState<boolean>(false);
+
+  const [videoModal, setVideoModal] = useState<boolean>(false);
+  const [imageModal, setImageModal] = useState<boolean>(false);
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
 
   const [list, setList] = useState(1);
-
-  const validate = () => {
-    Keyboard.dismiss();
-
-    let isValid = true;
-    let newErrors: any = {};
-
-    if (inputs.serviceImage.length === 0) {
-      newErrors.image = 'Please add at least one image';
-      isValid = false;
-    }
-
-    if (!inputs.serviceVideo) {
-      newErrors.video = 'Please add a video';
-      isValid = false;
-    }
-
-    if (isValid) {
-      // Handle valid case
-    }
-
-    setErrors(newErrors);
-  };
-
-  const selectImageHandler = async () => {
-    try {
-      const response = await ImageCropPicker.openPicker({
-        width: 800,
-        height: 600,
-        cropping: true,
-      });
-
-      navigation.navigate('OpenCamera', {selectedImage: response.path});
-    } catch (_error: any) {
-      console.log('ImagePicker Error: ', _error);
-    }
-  };
-
-  const handleError = (_error: any, input: any) => {
-    setErrors((prevState: any) => ({...prevState, [input]: _error}));
-  };
 
   //@ts-ignore
   useEffect(() => {
@@ -106,9 +77,71 @@ const AddPortfolio: FC = ({route}) => {
     return () => listener;
   }, []);
 
-  const uploadVideo = async () => {
-    handleError('', 'video');
+  useEffect(() => {
+    dispatch(getPortfolio(''));
+  }, []);
 
+  const onPressVideo = async (source: Source) => {
+    try {
+      let response: any = null;
+      if (source == 'camera') {
+        setVideoModal(false);
+      } else {
+        response = await ImageCropPicker.openPicker({
+          width: 800,
+          height: 600,
+          cropping: true,
+          mediaType: 'video',
+        });
+      }
+      console.log(response);
+    } catch (_error: any) {
+      console.log('ImagePicker Error: ', _error);
+    }
+  };
+
+  const onPressImage = async (source: Source) => {
+    try {
+      let response: any = null;
+
+      if (source == 'camera') {
+        response = await ImageCropPicker.openCamera({
+          width: 800,
+          height: 600,
+          cropping: true,
+          mediaType: 'photo',
+        });
+
+        setImageLoading(true);
+      } else {
+        response = await ImageCropPicker.openPicker({
+          width: 800,
+          height: 600,
+          cropping: true,
+          mediaType: 'photo',
+          includeBase64: true,
+        });
+
+        setImageLoading(true);
+      }
+
+      var base64data = decode(response.data as any);
+      const url = await uploadFileToS3(
+        base64data,
+        `${response.filename}`,
+        'image/jpeg',
+      );
+
+      setImageLoading(false);
+      setImageModal(false);
+      navigation.navigate('OpenImage', {item: url.Location, type: 'image'});
+    } catch (_error: any) {
+      console.log('ImagePicker Error: ', _error);
+      setImageLoading(false);
+    }
+  };
+
+  const uploadVideo = async () => {
     const response = await ImageCropPicker.openPicker({
       mediaType: 'video',
       includeBase64: true,
@@ -122,19 +155,30 @@ const AddPortfolio: FC = ({route}) => {
         ...prevState,
         serviceVideo: url.body.postResponse.location,
       }));
-
-      navigation.navigate('OpenCamera', {selectedImage: response.path});
+      navigation.navigate('OpenImage', {item: '', type: 'video'});
     } else {
     }
   };
 
+  const onSubmit = (event: any) => {
+    console.log(event);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      image: false,
+      video: false,
+    },
+    onSubmit,
+  });
+
+  console.log(portfolio);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
-      <Modal
-        visible={isPopupVisible}
-        animationType="slide"
-        style={{}}
-        transparent>
+      {/* Video Modal */}
+
+      <Modal visible={videoModal} animationType="slide" transparent>
         <View style={{backgroundColor: 'rgba(0,0,0,0.5)', flex: 1}}>
           <View
             style={{
@@ -150,15 +194,16 @@ const AddPortfolio: FC = ({route}) => {
                 borderRadius: 10,
               }}>
               <Pressable
-                // onPress={() => navigation.navigate('OpenCamera')}
+                onPress={() => {
+                  onPressVideo('camera');
+                }}
                 style={{
                   padding: 5,
                   margin: 5,
                   flexDirection: 'row',
-                  flex: 1,
                   alignItems: 'center',
                 }}>
-                <Feather name="camera" size={20} color="#ADD8E6" />
+                <Feather name="camera" size={20} color={colors.primary} />
                 <Text
                   style={{
                     fontFamily: fonts.regular,
@@ -173,7 +218,9 @@ const AddPortfolio: FC = ({route}) => {
               <Divider />
 
               <Pressable
-                onPress={uploadVideo}
+                onPress={() => {
+                  onPressVideo('library');
+                }}
                 style={{
                   padding: 5,
                   margin: 5,
@@ -181,7 +228,7 @@ const AddPortfolio: FC = ({route}) => {
                   flex: 1,
                   alignItems: 'center',
                 }}>
-                <Feather name="video" size={20} color="#ADD8E6" />
+                <Feather name="video" size={20} color={colors.primary} />
                 <Text
                   style={{
                     fontFamily: fonts.regular,
@@ -192,13 +239,12 @@ const AddPortfolio: FC = ({route}) => {
                   Video Library
                 </Text>
               </Pressable>
-
-              <Divider />
             </View>
+
             <View style={{margin: 20, marginTop: -10}}>
               <TouchableOpacity
                 onPress={() => {
-                  setPopupVisible(false);
+                  setVideoModal(false);
                 }}
                 style={{
                   backgroundColor: 'white',
@@ -220,11 +266,9 @@ const AddPortfolio: FC = ({route}) => {
         </View>
       </Modal>
 
-      <Modal
-        visible={isPopupVisible1}
-        animationType="slide"
-        style={{}}
-        transparent>
+      {/* Photo Modal */}
+
+      <Modal visible={imageModal} animationType="slide" style={{}} transparent>
         <View style={{backgroundColor: 'rgba(0,0,0,0.5)', flex: 1}}>
           <View
             style={{
@@ -240,7 +284,9 @@ const AddPortfolio: FC = ({route}) => {
                 borderRadius: 10,
               }}>
               <Pressable
-                // onPress={() => navigation.navigate('OpenCamera')}
+                onPress={() => {
+                  onPressImage('camera');
+                }}
                 style={{
                   padding: 5,
                   margin: 5,
@@ -248,7 +294,7 @@ const AddPortfolio: FC = ({route}) => {
                   flex: 1,
                   alignItems: 'center',
                 }}>
-                <Feather name="camera" size={20} color="#ADD8E6" />
+                <Feather name="camera" size={20} color={colors.primary} />
                 <Text
                   style={{
                     fontFamily: fonts.regular,
@@ -263,7 +309,9 @@ const AddPortfolio: FC = ({route}) => {
               <Divider />
 
               <Pressable
-                onPress={selectImageHandler}
+                onPress={() => {
+                  onPressImage('library');
+                }}
                 style={{
                   padding: 5,
                   margin: 5,
@@ -271,7 +319,7 @@ const AddPortfolio: FC = ({route}) => {
                   flex: 1,
                   alignItems: 'center',
                 }}>
-                <Feather name="video" size={20} color="#ADD8E6" />
+                <Feather name="image" size={20} color={colors.primary} />
                 <Text
                   style={{
                     fontFamily: fonts.regular,
@@ -285,10 +333,11 @@ const AddPortfolio: FC = ({route}) => {
 
               <Divider />
             </View>
+
             <View style={{margin: 20, marginTop: -10}}>
               <TouchableOpacity
                 onPress={() => {
-                  setPopupVisible1(false);
+                  setImageModal(false);
                 }}
                 style={{
                   backgroundColor: 'white',
@@ -328,7 +377,7 @@ const AddPortfolio: FC = ({route}) => {
           </View>
 
           <Pressable
-            onPress={() => setPopupVisible(true)}
+            onPress={() => setVideoModal(true)}
             style={styles.videoInput}>
             {video ? (
               <Video
@@ -364,17 +413,6 @@ const AddPortfolio: FC = ({route}) => {
                 </Text>
               </View>
             )}
-
-            {errors.video && (
-              <Text
-                style={{
-                  marginTop: 5,
-                  fontFamily: fonts.medium,
-                  color: colors.red,
-                }}>
-                {errors.video}
-              </Text>
-            )}
           </Pressable>
 
           <View
@@ -404,21 +442,44 @@ const AddPortfolio: FC = ({route}) => {
               </Text>
             </TouchableOpacity>
           </View>
-          {Array(list)
-            .fill('')
-            .map((_, index) => {
-              return (
-                <View
-                  key={index}
-                  style={{
-                    ...appstyle.shadow,
-                    borderRadius: 10,
-                    margin: 10,
-                    padding: 10,
-                  }}>
-                  <View style={styles.photoContainer}>
+
+          {imageLoading && <ActivityIndicator />}
+
+          <View
+            style={{
+              ...appstyle.shadow,
+              borderRadius: 10,
+              margin: 10,
+              padding: 10,
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: 10,
+            }}>
+            {portfolio?.photos.map((item, index) => (
+              <Pressable
+                key={index}
+                style={{}}
+                onPress={() => {
+                  navigation.navigate('PortfolioDetail', {
+                    item: item,
+                    type: 'image',
+                  });
+                }}>
+                <FastImage
+                  source={{uri: item.photos}}
+                  resizeMode="cover"
+                  style={{width: width * 0.4, height: 150, borderRadius: 10}}
+                />
+              </Pressable>
+            ))}
+
+            {Array(list)
+              .fill('')
+              .map((_, index) => {
+                return (
+                  <View key={index} style={styles.photoContainer}>
                     <Pressable
-                      onPress={() => setPopupVisible1(true)}
+                      onPress={() => setImageModal(true)}
                       style={styles.innerPhotos}>
                       <Feather name="image" size={30} color="#14226D" />
                       <Text
@@ -437,21 +498,9 @@ const AddPortfolio: FC = ({route}) => {
                       </Text>
                     </Pressable>
                   </View>
-                  {/*  */}
-
-                  {errors.image && (
-                    <Text
-                      style={{
-                        marginTop: 5,
-                        fontFamily: fonts.medium,
-                        color: colors.red,
-                      }}>
-                      {errors.image}
-                    </Text>
-                  )}
-                </View>
-              );
-            })}
+                );
+              })}
+          </View>
 
           {list >= 2 && (
             <View
@@ -477,24 +526,8 @@ const AddPortfolio: FC = ({route}) => {
               </Pressable>
             </View>
           )}
-          {!!error && (
-            <Text
-              style={{
-                margin: 10,
-                color: colors.red,
-                fontFamily: fonts.medium,
-              }}>
-              {error}
-            </Text>
-          )}
-          <CustomButton
-            title="Save"
-            onPress={validate}
-            style={{marginTop: 20}}
-            disabled={loading && !(video || inputs.serviceImage.length > 0)}
-            loading={loading}
-          />
-          <View style={{marginTop: 50}} />
+
+          {/*  */}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

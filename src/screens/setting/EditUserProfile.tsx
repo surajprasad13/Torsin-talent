@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   SafeAreaView,
   ScrollView,
   KeyboardAvoidingView,
@@ -40,7 +40,7 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 const EditUserProfile = ({}) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const {userInfo, userToken, error, success, loading} = useAppSelector(
+  const {userInfo, error, success, loading} = useAppSelector(
     state => state.auth,
   );
 
@@ -152,6 +152,7 @@ const EditUserProfile = ({}) => {
     setErrors((prevState: any) => ({...prevState, [input]: _error}));
   };
 
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(loginValue());
@@ -418,41 +419,5 @@ const EditUserProfile = ({}) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: colors.white,
-    padding: 10,
-  },
-  backContainer: {
-    backgroundColor: '#ffffff',
-    height: 100,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  autocompleteContainer: {
-    flex: 1,
-
-    top: 0,
-    left: 0,
-    right: 0,
-  },
-  textInput: {
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 12,
-    padding: 10,
-    marginTop: 10,
-  },
-  listView: {
-    padding: 5,
-  },
-  powered: {},
-});
 
 export default EditUserProfile;

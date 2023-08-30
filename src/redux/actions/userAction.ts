@@ -537,6 +537,38 @@ const filterUser = createAsyncThunk(
   },
 );
 
+const createPortfolio = createAsyncThunk(
+  'create/portfolio',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`talent/portfolio/created`, value);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getPortfolio = createAsyncThunk(
+  'get/portfolio',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`talent/portfolio/retrieve`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -567,6 +599,8 @@ export {
   getPaymentStatus,
   getPaymentDetails,
   filterUser,
+  createPortfolio,
+  getPortfolio,
 };
 
 export default {};

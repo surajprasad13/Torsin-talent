@@ -4,6 +4,7 @@ import {
   addProposal,
   addService,
   addSkill,
+  createPortfolio,
   createRating,
   createSupport,
   fetchAdminService,
@@ -20,6 +21,7 @@ import {
   getHelpSupport,
   getPaymentDetails,
   getPaymentStatus,
+  getPortfolio,
   getProposalDetail,
   getProposalStatus,
   getRating,
@@ -34,6 +36,7 @@ import {
   Help,
   JobDetail,
   PaymentDetails,
+  PortfolioResponse,
   ProposalDetail,
   Rating,
   Service,
@@ -85,6 +88,7 @@ interface UserInterface {
   created: boolean;
   adminPercentage: number;
   support: [];
+  portfolio: null | PortfolioResponse;
 }
 
 const initialState: UserInterface = {
@@ -123,6 +127,7 @@ const initialState: UserInterface = {
   ticket: [],
   adminPercentage: 0,
   support: [],
+  portfolio: null,
 };
 
 const userSlice = createSlice({
@@ -562,7 +567,37 @@ const userSlice = createSlice({
       .addCase(filterUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // create portfolio
+      .addCase(createPortfolio.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(createPortfolio.fulfilled, state => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(createPortfolio.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Get Porfolio
+      .addCase(getPortfolio.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getPortfolio.fulfilled, (state, action) => {
+        state.loading = false;
+        state.portfolio = action.payload.response;
+      })
+      .addCase(getPortfolio.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+
+    // last
   },
 });
 

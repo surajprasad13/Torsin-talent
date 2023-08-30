@@ -17,7 +17,6 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 // components
-import ProFile from '../../components/Profile';
 import {colors, fonts} from '../../theme';
 import {useAppSelector} from '../../hooks';
 import ImageCropPicker from 'react-native-image-crop-picker';

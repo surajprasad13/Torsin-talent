@@ -7,6 +7,7 @@ import notifee from '@notifee/react-native';
 /**
  * Screens
  */
+
 import OnboardingScreen from '../screens/OnboardingScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import LostPassword from '../screens/auth/forgot/LostPassword';
@@ -42,7 +43,6 @@ import ChangePassword from '../screens/auth/ChangePassword';
 import {useFlipper} from '@react-navigation/devtools';
 import Complaints from '../screens/help/Complaints';
 import Location from '../screens/common/Location';
-import OpenImage from '../screens/common/OpenImage';
 import WithoutSignupHome from '../screens/withoutsignupHome/WithoutSignupHome';
 
 import ViewAllTalent from '../screens/withoutsignupHome/ViewAllTalent';
@@ -163,14 +163,6 @@ const AppNavigator: FC = () => {
             <Stack.Screen
               name="Complaints"
               component={Complaints}
-              options={{
-                headerShown: false,
-                ...TransitionPresets.SlideFromRightIOS,
-              }}
-            />
-            <Stack.Screen
-              name="OpenImage"
-              component={OpenImage}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,
