@@ -1,7 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {FC, useEffect, useState} from 'react';
 import {
   View,
-  Image,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -10,33 +10,37 @@ import {
   ScrollView,
   TouchableOpacity,
   Pressable,
-  ActivityIndicator,
+  Dimensions,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import FastImage from 'react-native-fast-image';
+import Video from 'react-native-video';
 
 //icons
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 //helpers
-import CustomInput from '../../components/CustomInput';
 import {colors, fonts} from '../../theme';
 import CustomButton from '../../components/CustomButton';
 import Title from '../../components/Title';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {filterUser} from '../../redux/actions/userAction';
-import FastImage from 'react-native-fast-image';
+import {createPortfolio, filterUser} from '../../redux/actions/userAction';
 import {UserTag} from '../../types/user';
+import {SettingScreenParamList} from '../../routes/RouteType';
+import {resetSuccess} from '../../redux/reducers/userSlice';
 
-const OpenImage: FC = ({route}) => {
-  const {selectedImage} = route.params;
-  const navigation = useNavigation();
+const {height} = Dimensions.get('window');
+
+type NavigationProp = StackNavigationProp<SettingScreenParamList>;
+
+const OpenImage: FC = ({}) => {
+  const {params} = useRoute<RouteProp<SettingScreenParamList, 'OpenImage'>>();
+
+  const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
 
-  const {loading, error, success, user} = useAppSelector(state => state.user);
-
-  const handleAddPhotos = () => {
-    navigation.navigate('AddPortfolio', {selectedImage});
-  };
+  const {user, loading, success} = useAppSelector(state => state.user);
 
   const [isFormComplete, setIsFormComplete] = useState(false);
 
@@ -47,7 +51,7 @@ const OpenImage: FC = ({route}) => {
 
   const handleSearch = (text: string) => {
     setInputValue(text);
-    if (text.startsWith('@') && text.length > 1) {
+    if (text.startsWith('@') && text.length > 0) {
       setActive(true);
       const query = text.slice(1);
       const data = user.filter(item => item.fullName.includes(query));
@@ -74,20 +78,68 @@ const OpenImage: FC = ({route}) => {
     }
   }, [selectedItems, inputValue]);
 
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {});
     return () => listener;
   }, []);
 
+  const handleAddPhotos = () => {
+    if (params?.type == 'video') {
+      dispatch(
+        createPortfolio({
+          videos: params?.item,
+          id: selectedItems.map(item => item.id),
+        }),
+      );
+    } else {
+      dispatch(
+        createPortfolio({
+          photos: params?.item,
+          id: selectedItems.map(item => item.id),
+        }),
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (success) {
+      navigation.navigate('AddPortfolio');
+      dispatch(resetSuccess());
+    }
+  }, [success, loading]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Title title="Add Image" />
 
-      <ScrollView showsVerticalScrollIndicator={false} style={{margin: 10}}>
-        <Image
-          source={{uri: selectedImage}}
-          style={{width: 'auto', height: 200, borderRadius: 10}}
-        />
+      <ScrollView
+        nestedScrollEnabled
+        showsVerticalScrollIndicator={false}
+        style={{margin: 10}}>
+        {/* Image */}
+
+        {params?.type == 'image' && (
+          <FastImage
+            source={{uri: params?.item}}
+            resizeMode="cover"
+            style={{width: 'auto', height: 200, borderRadius: 10}}
+          />
+        )}
+
+        {/* Video */}
+
+        {params?.type == 'video' && (
+          <Video
+            source={{uri: params?.item}}
+            style={{
+              width: 'auto',
+              height: 200,
+              borderRadius: 10,
+            }}
+          />
+        )}
+
         <View style={styles.inputContainer1}>
           <View style={[styles.chipContainer, {marginTop: 10}]}>
             {selectedItems.map((item, index) => (
@@ -115,6 +167,7 @@ const OpenImage: FC = ({route}) => {
               </TouchableOpacity>
             ))}
           </View>
+
           <TextInput
             style={styles.input}
             value={inputValue}
@@ -123,7 +176,9 @@ const OpenImage: FC = ({route}) => {
           />
         </View>
 
-        <ScrollView style={[styles.sectionContainer]}>
+        <ScrollView
+          style={[styles.sectionContainer]}
+          contentContainerStyle={{maxHeight: height * 0.3}}>
           {active
             ? filterdItem.map((item, index) => (
                 <Pressable
@@ -131,6 +186,7 @@ const OpenImage: FC = ({route}) => {
                     const mention = `@${item.fullName}`;
                     setInputValue(inputValue.replace(/@\S*$/, mention));
                     setSelectedItem([item, ...selectedItems]);
+                    setInputValue('');
                     setActive(false);
                   }}
                   key={index}
@@ -144,28 +200,30 @@ const OpenImage: FC = ({route}) => {
             : null}
         </ScrollView>
 
-        <View style={{marginTop: 20}}>
-          <Text style={styles.description}>Description</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Type description here..."
-              multiline={true}
-              placeholderTextColor="#333333"
-              maxLength={500}
-              blurOnSubmit={true}
-              onSubmitEditing={() => {
-                Keyboard.dismiss();
-              }}
-              style={{padding: 15}}
-            />
-          </View>
+        <Text style={[styles.description, {marginTop: 20}]}>Description</Text>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Type description here..."
+            multiline={true}
+            placeholderTextColor="#333333"
+            maxLength={500}
+            blurOnSubmit={true}
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+            }}
+            style={{padding: 15}}
+          />
         </View>
+
         <CustomButton
           title="Add Photos"
           onPress={handleAddPhotos}
           style={{marginTop: 50, marginBottom: 10}}
           disabled={!isFormComplete}
         />
+
+        {/*  */}
       </ScrollView>
     </SafeAreaView>
   );

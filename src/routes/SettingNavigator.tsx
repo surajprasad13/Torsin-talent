@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {SettingScreenParamList} from './RouteType';
@@ -12,11 +12,12 @@ import EditUserProfile from '../screens/setting/EditUserProfile';
 import ServiceSkill from '../screens/setting/ServiceSkill';
 import ServiceDetail from '../screens/setting/ServiceDetail';
 import AddPortfolio from '../screens/setting/AddPortfolio';
-import OpenCamera from '../screens/common/OpenImage';
+import OpenImage from '../screens/common/OpenImage';
+import PortfolioDetail from '../screens/setting/PortfolioDetail';
 
 const Stack = createStackNavigator<SettingScreenParamList>();
 
-const SettingNavigator = () => {
+const SettingNavigator: FC = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen
@@ -75,9 +76,18 @@ const SettingNavigator = () => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />
+
       <Stack.Screen
-        name="OpenCamera"
-        component={OpenCamera}
+        name="OpenImage"
+        component={OpenImage}
+        options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
+
+      <Stack.Screen
+        name="PortfolioDetail"
+        component={PortfolioDetail}
         options={{
           ...TransitionPresets.SlideFromRightIOS,
         }}

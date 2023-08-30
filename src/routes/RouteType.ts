@@ -23,7 +23,6 @@ export type RootStackParamList = AuthScreenParamList & {
   HelpDetails: undefined;
   FeedDetails: undefined;
   WithoutSignupHome: undefined;
-  OpenImage: undefined;
   Report: undefined;
   ViewAllTalent: undefined;
   Complaints: undefined;
@@ -100,7 +99,13 @@ export type SettingScreenParamList = {
   ServiceSkill: undefined;
   ServiceDetail: undefined;
   AddPortfolio: undefined;
-  OpenCamera: undefined;
+  OpenImage: {item: any; type: 'image' | 'video'} | undefined;
+  PortfolioDetail:
+    | {
+        item: {tagUser: string[]; photos: string; description: null | string};
+        type: 'image' | 'video';
+      }
+    | undefined;
 };
 
 export type HomeScreenParamList = {

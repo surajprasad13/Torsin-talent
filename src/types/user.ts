@@ -115,3 +115,16 @@ export interface UserTag {
   fullName: string;
   profileImage: string;
 }
+
+export interface PortfolioResponse {
+  photos: {
+    tagUser: string[];
+    photos: string;
+    description: null | string;
+  }[];
+  videos: {
+    tagUser: string[];
+    video: string;
+    description: null | string;
+  }[];
+}

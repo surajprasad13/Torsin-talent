@@ -1,4 +1,6 @@
 import {StyleSheet} from 'react-native';
+import fonts from './fonts';
+import colors from './colors';
 
 export default StyleSheet.create({
   rowBetween: {
@@ -16,9 +18,9 @@ export default StyleSheet.create({
     shadowOpacity: 0.2,
     backgroundColor: 'white',
   },
-  rowBetween: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  errorText: {
+    fontFamily: fonts.medium,
+    color: colors.red,
+    lineHeight: 20,
   },
 });

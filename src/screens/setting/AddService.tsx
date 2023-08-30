@@ -177,6 +177,7 @@ const AddService = ({}) => {
       mediaType: 'video',
       includeBase64: true,
     });
+
     if (response) {
       setVideoLoading(true);
       const url = await uploadVideoToS3(
