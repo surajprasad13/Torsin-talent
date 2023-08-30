@@ -155,7 +155,7 @@ const AddPortfolio: FC = ({}) => {
         ...prevState,
         serviceVideo: url.body.postResponse.location,
       }));
-      navigation.navigate('OpenImage', {item: '', type: 'video'});
+      navigation.navigate('OpenImage', {item: url.location, type: 'video'});
     } else {
     }
   };
@@ -171,8 +171,6 @@ const AddPortfolio: FC = ({}) => {
     },
     onSubmit,
   });
-
-  console.log(portfolio);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
@@ -195,7 +193,7 @@ const AddPortfolio: FC = ({}) => {
               }}>
               <Pressable
                 onPress={() => {
-                  onPressVideo('camera');
+                  uploadVideo('camera');
                 }}
                 style={{
                   padding: 5,
@@ -219,7 +217,7 @@ const AddPortfolio: FC = ({}) => {
 
               <Pressable
                 onPress={() => {
-                  onPressVideo('library');
+                  uploadVideo('library');
                 }}
                 style={{
                   padding: 5,
@@ -451,9 +449,7 @@ const AddPortfolio: FC = ({}) => {
               borderRadius: 10,
               margin: 10,
               padding: 10,
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              gap: 10,
+              gap: 5,
             }}>
             {portfolio?.photos.map((item, index) => (
               <Pressable
@@ -468,7 +464,11 @@ const AddPortfolio: FC = ({}) => {
                 <FastImage
                   source={{uri: item.photos}}
                   resizeMode="cover"
-                  style={{width: width * 0.4, height: 150, borderRadius: 10}}
+                  style={{
+                    width: '100%',
+                    height: 150,
+                    borderRadius: 10,
+                  }}
                 />
               </Pressable>
             ))}

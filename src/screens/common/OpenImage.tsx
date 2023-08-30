@@ -33,6 +33,9 @@ import {resetSuccess} from '../../redux/reducers/userSlice';
 const {height} = Dimensions.get('window');
 
 type NavigationProp = StackNavigationProp<SettingScreenParamList>;
+type InputProps = {
+  description: string;
+};
 
 const OpenImage: FC = ({}) => {
   const {params} = useRoute<RouteProp<SettingScreenParamList, 'OpenImage'>>();
@@ -48,6 +51,14 @@ const OpenImage: FC = ({}) => {
   const [selectedItems, setSelectedItem] = useState<UserTag[]>([]);
   const [filterdItem, setFilterdItem] = useState<UserTag[]>([]);
   const [active, setActive] = useState<boolean>(false);
+
+  const [inputs, setInputs] = useState<InputProps>({
+    description: '',
+  });
+
+  const handleOnchange = (text: string, input: any) => {
+    setInputs((prevState: any) => ({...prevState, [input]: text}));
+  };
 
   const handleSearch = (text: string) => {
     setInputValue(text);
@@ -70,14 +81,6 @@ const OpenImage: FC = ({}) => {
     dispatch(filterUser(''));
   }, []);
 
-  useEffect(() => {
-    if (selectedItems.length > 0 && inputValue.length > 0) {
-      setIsFormComplete(true);
-    } else {
-      setIsFormComplete(false);
-    }
-  }, [selectedItems, inputValue]);
-
   //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {});
@@ -97,10 +100,23 @@ const OpenImage: FC = ({}) => {
         createPortfolio({
           photos: params?.item,
           id: selectedItems.map(item => item.id),
+          description: inputs.description,
         }),
       );
     }
   };
+
+  useEffect(() => {
+    if (
+      selectedItems.length > 0 &&
+      inputValue.length > 0 &&
+      inputs.description.length > 0
+    ) {
+      setIsFormComplete(true);
+    } else {
+      setIsFormComplete(false);
+    }
+  }, [selectedItems, inputValue, inputs.description]);
 
   useEffect(() => {
     if (success) {
@@ -207,7 +223,11 @@ const OpenImage: FC = ({}) => {
             placeholder="Type description here..."
             multiline={true}
             placeholderTextColor="#333333"
+            value={inputs.description}
             maxLength={500}
+            onChangeText={text => {
+              handleOnchange(text, 'description');
+            }}
             blurOnSubmit={true}
             onSubmitEditing={() => {
               Keyboard.dismiss();
