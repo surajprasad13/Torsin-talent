@@ -19,7 +19,6 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import Video from 'react-native-video';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {Divider} from 'react-native-paper';
-import {useFormik} from 'formik';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -42,11 +41,6 @@ type Source = 'camera' | 'library';
 
 type NavigationProp = StackNavigationProp<SettingScreenParamList>;
 
-type InputProps = {
-  serviceImage: Array<string>;
-  serviceVideo: string;
-};
-
 const {width} = Dimensions.get('window');
 
 const AddPortfolio: FC = ({}) => {
@@ -54,14 +48,7 @@ const AddPortfolio: FC = ({}) => {
 
   const dispatch = useAppDispatch();
 
-  const {loading, error, portfolio} = useAppSelector(state => state.user);
-
-  const [inputs, setInputs] = useState<InputProps>({
-    serviceImage: [],
-    serviceVideo: '',
-  });
-
-  const [video, setVideo] = useState<string>('');
+  const {portfolio} = useAppSelector(state => state.user);
 
   const [videoModal, setVideoModal] = useState<boolean>(false);
   const [imageModal, setImageModal] = useState<boolean>(false);
@@ -92,9 +79,22 @@ const AddPortfolio: FC = ({}) => {
           height: 600,
           cropping: true,
           mediaType: 'video',
+          includeBase64: true,
         });
       }
-      console.log(response);
+
+      if (response) {
+        const url = await uploadVideoToS3(
+          response.sourceURL as string,
+          response.filename as string,
+        );
+        console.log(url);
+        navigation.navigate('OpenImage', {
+          item: url.body.postResponse.location,
+          type: 'video',
+        });
+      } else {
+      }
     } catch (_error: any) {
       console.log('ImagePicker Error: ', _error);
     }
@@ -141,37 +141,6 @@ const AddPortfolio: FC = ({}) => {
     }
   };
 
-  const uploadVideo = async () => {
-    const response = await ImageCropPicker.openPicker({
-      mediaType: 'video',
-      includeBase64: true,
-    });
-    if (response) {
-      const url = await uploadVideoToS3(
-        response.sourceURL as string,
-        response.filename as string,
-      );
-      setInputs((prevState: any) => ({
-        ...prevState,
-        serviceVideo: url.body.postResponse.location,
-      }));
-      navigation.navigate('OpenImage', {item: url.location, type: 'video'});
-    } else {
-    }
-  };
-
-  const onSubmit = (event: any) => {
-    console.log(event);
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      image: false,
-      video: false,
-    },
-    onSubmit,
-  });
-
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
       {/* Video Modal */}
@@ -193,7 +162,7 @@ const AddPortfolio: FC = ({}) => {
               }}>
               <Pressable
                 onPress={() => {
-                  uploadVideo('camera');
+                  onPressVideo('camera');
                 }}
                 style={{
                   padding: 5,
@@ -217,7 +186,7 @@ const AddPortfolio: FC = ({}) => {
 
               <Pressable
                 onPress={() => {
-                  uploadVideo('library');
+                  onPressVideo('library');
                 }}
                 style={{
                   padding: 5,
@@ -377,40 +346,26 @@ const AddPortfolio: FC = ({}) => {
           <Pressable
             onPress={() => setVideoModal(true)}
             style={styles.videoInput}>
-            {video ? (
-              <Video
-                source={{uri: video}}
-                resizeMode="contain"
-                style={{
-                  width: '100%',
-                  height: 150,
-                  borderWidth: 0.3,
-                  borderRadius: 2,
-                  backgroundColor: 'black',
-                }}
-              />
-            ) : (
-              <View
-                style={{
-                  backgroundColor: '#EBEFFF',
-                  minHeight: 150,
-                  borderRadius: 10,
-                  borderColor: colors.primary,
-                  borderWidth: 1,
-                  borderStyle: 'dashed',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <AntDesign name="cloudupload" size={40} color="#14226D" />
-                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                  Click{' '}
-                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                    here{' '}
-                  </Text>
-                  upload
+            <View
+              style={{
+                backgroundColor: '#EBEFFF',
+                minHeight: 150,
+                borderRadius: 10,
+                borderColor: colors.primary,
+                borderWidth: 1,
+                borderStyle: 'dashed',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <AntDesign name="cloudupload" size={40} color="#14226D" />
+              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+                Click{' '}
+                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
+                  here{' '}
                 </Text>
-              </View>
-            )}
+                upload
+              </Text>
+            </View>
           </Pressable>
 
           <View
