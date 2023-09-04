@@ -569,6 +569,29 @@ const getPortfolio = createAsyncThunk(
   },
 );
 
+const withoutSignupSkill = createAsyncThunk(
+  'skill/corresponding/withoutjob',
+  async (value: any, {rejectWithValue}) => {
+    console.log(value);
+    try {
+      const {data} = await api.get(`skill/corresponding/job`, {
+        params: {
+          skill: value,
+        },
+      });
+      console.log(data);
+      return data;
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
 export {
   addService,
   addSkill,
@@ -601,6 +624,7 @@ export {
   filterUser,
   createPortfolio,
   getPortfolio,
+  withoutSignupSkill,
 };
 
 export default {};

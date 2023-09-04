@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,9 +7,9 @@ import {
   Pressable,
   TouchableOpacity,
   ScrollView,
+  Animated,
   FlatList,
   ActivityIndicator,
-  Animated,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
@@ -19,37 +19,52 @@ import {useNavigation} from '@react-navigation/native';
 //icons
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 //helpers
 import {colors, fonts, appstyle} from '../../theme';
 import ImageSlider from '../../components/ImageSlider';
 import {useAppDispatch, useAppSelector} from '../../hooks';
+import {withoutSignupSkill} from '../../redux/actions/userAction';
+import ExpertiseWithoutCard from './component/ExpertiseWithoutCard';
+import {WithoutSkill} from '../../types/user';
+import {updateSuccess} from '../../redux/reducers/userSlice';
+import {CustomInput} from '../../components';
 
 const WithoutSignupHome = () => {
   const navigation = useNavigation();
-
   const dispatch = useAppDispatch();
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const {loading, error, success, without} = useAppSelector(
+    state => state.user,
+  );
 
-  const [isSearching, setIsSearching] = useState(false);
-  const {} = useAppSelector(state => state.user);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [selectedItems, setSelectedItem] = useState<string[]>([]);
 
-  const onChangeSearch = (query: string) => {
-    setSearchQuery(query);
-    if (query.length > 0) {
-      const value = {
-        search: query,
-      };
-      // dispatch(searchJob(value));
-      setIsSearching(true); // Set the flag to indicate search is active
-    } else {
-      setIsSearching(false); // Reset the flag when query is empty
-    }
+  const handleSearch = (text: string) => {
+    if (selectedItems.length > 10) return;
+    setInputValue(text);
+    dispatch(withoutSignupSkill(text));
   };
 
+  const handleRemoveItem = (item: any) => {
+    const updatedItems = selectedItems.filter(i => i !== item);
+    setSelectedItem(updatedItems);
+  };
+
+  const valid =
+    inputValue !== '' && typeof without !== 'string' && without.length > 0;
+  //@ts-ignore
+  useEffect(() => {
+    const listener = navigation.addListener('beforeRemove', () => {
+      dispatch(updateSuccess());
+    });
+    return () => listener;
+  }, []);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const interpolatedSlide = new Animated.Value(isMenuOpen ? 0 : 1000); // Adjust the 1000 value as needed
+  const interpolatedSlide = new Animated.Value(isMenuOpen ? 0 : 1000);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -59,6 +74,8 @@ const WithoutSignupHome = () => {
       useNativeDriver: false, // Adjust as needed
     }).start();
   };
+
+  console.log(without, 'success');
 
   return (
     <SafeAreaView style={styles.container}>
@@ -136,32 +153,50 @@ const WithoutSignupHome = () => {
           work in an instant, tailored to your needs.
         </Text>
 
-        <Searchbar
-          autoCapitalize="none"
-          placeholder="Search Jobs"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-          placeholderTextColor="#BDBDBD"
-          iconColor="#333333"
-          style={{
-            marginHorizontal: 20,
-            marginTop: 20,
-            borderRadius: 30,
-          }}
-          inputStyle={styles.searchInput}
+        <CustomInput
+          editable={selectedItems.length <= 10}
+          placeholder="Search Skill..."
+          value={inputValue}
+          onChangeText={handleSearch}
+          containerStyle={{margin: 15}}
         />
       </LinearGradient>
 
       <ScrollView>
-        {/* <FlatList
-          ListHeaderComponent={<View>{loading && <ActivityIndicator />}</View>}
-          data={isSearching ? search : notCorrespond}
-          contentContainerStyle={{padding: 10}}
-          renderItem={({item, index}) => {
-            return <ExpertiseCard item={item} key={index.toString()} />;
-          }}
-          keyExtractor={(_, index) => index.toString()}
-        /> */}
+        <View style={[styles.chipContainer, {marginTop: 10}]}>
+          {selectedItems.map((item, index) => (
+            <TouchableOpacity
+              key={index.toString()}
+              style={styles.chip}
+              onPress={() => handleRemoveItem(item)}>
+              <Text style={{fontFamily: fonts.regular, fontSize: 10}}>
+                {item}
+              </Text>
+              <View style={styles.cancelContainer}>
+                <Icon name="close" size={8} style={{}} color={colors.white} />
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <ScrollView
+          style={[styles.sectionContainer, {borderWidth: valid ? 1 : 0}]}>
+          {inputValue.length > 0 &&
+            without.length > 0 &&
+            typeof without !== 'string' &&
+            without.map((item, index) => (
+              <Pressable
+                onPress={() => {
+                  setInputValue('');
+                  setSelectedItem([...selectedItems]);
+                }}
+                key={index}
+                style={styles.section}>
+                <Text>{item.adminService}</Text>
+              </Pressable>
+            ))}
+        </ScrollView>
+
         <View
           style={{
             flexDirection: 'row',
@@ -223,60 +258,28 @@ const WithoutSignupHome = () => {
             }}>
             You need it, we've got it
           </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-            }}>
-            <TouchableOpacity
+
+          {without.map((_item, index) => (
+            <View
+              key={index}
               style={{
-                ...appstyle.shadow,
-                padding: 10,
-                borderRadius: 20,
-                justifyContent: 'center',
-                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                marginTop: index > 0 ? 20 : 0,
+                bottom: 10,
               }}>
-              <Text style={{padding: 5}}>Graphic design</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                ...appstyle.shadow,
-                padding: 10,
-                borderRadius: 20,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text style={{padding: 5}}>Graphic design</Text>
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              marginTop: 20,
-              bottom: 10,
-            }}>
-            <TouchableOpacity
-              style={{
-                ...appstyle.shadow,
-                padding: 10,
-                borderRadius: 20,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text style={{padding: 5}}>Graphic design</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                ...appstyle.shadow,
-                padding: 10,
-                borderRadius: 20,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text style={{padding: 5}}>Graphic design</Text>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                style={{
+                  ...appstyle.shadow,
+                  padding: 10,
+                  borderRadius: 20,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{padding: 5}}>{_item.adminService}</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -335,6 +338,41 @@ const styles = StyleSheet.create({
   menuItem1: {
     flex: 1,
     alignItems: 'flex-end',
+  },
+  chipContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 7,
+    borderWidth: 0.5,
+    borderColor: colors.primary,
+    borderRadius: 100,
+    margin: 3,
+  },
+  cancelContainer: {
+    width: 12,
+    height: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: 7.5,
+    marginLeft: 5,
+  },
+  section: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderColor: colors.grey4,
+    borderRadius: 10,
+  },
+  sectionContainer: {
+    backgroundColor: colors.white,
+    borderColor: colors.grey4,
+    borderBottomWidth: 0,
+    borderRadius: 10,
+    margin: 5,
   },
 });
 

@@ -116,6 +116,20 @@ export interface UserTag {
   profileImage: string;
 }
 
+export interface WithoutSkill {
+  proposalStatus: number;
+  id: number;
+  location: string;
+  countryName: string;
+  jobName: string;
+  jobDescription: string;
+  photos: string[];
+  adminService: string[];
+  projectType: number;
+  priceRate: number;
+  createdAt: string;
+}
+
 export interface PortfolioResponse {
   photos: {
     tagUser: string[];

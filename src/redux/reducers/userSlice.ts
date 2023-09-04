@@ -30,6 +30,7 @@ import {
   supportChat,
   supportPostChat,
   updateContract,
+  withoutSignupSkill,
 } from '../actions/userAction';
 import {
   Feed,
@@ -42,6 +43,7 @@ import {
   Service,
   Ticket,
   UserTag,
+  WithoutSkill,
 } from '../../types/user';
 import {searchJob} from '../actions/userAction';
 import {Contract} from '../../types/contract';
@@ -68,6 +70,7 @@ interface UserInterface {
   search: Array<JobDetail>;
   city: [];
   user: UserTag[];
+  without: WithoutSkill[];
   addSuccess: string;
   acceptList: Array<any>;
   proposalStatus: Array<any>;
@@ -108,6 +111,7 @@ const initialState: UserInterface = {
   search: [],
   city: [],
   user: [],
+  without: [],
   addSuccess: '',
   acceptList: [],
   proposalStatus: [],
@@ -593,6 +597,20 @@ const userSlice = createSlice({
         state.portfolio = action.payload.response;
       })
       .addCase(getPortfolio.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // search user
+      .addCase(withoutSignupSkill.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(withoutSignupSkill.fulfilled, (state, action) => {
+        state.loading = false;
+        state.without = action.payload.response;
+      })
+      .addCase(withoutSignupSkill.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
