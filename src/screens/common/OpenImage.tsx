@@ -93,6 +93,7 @@ const OpenImage: FC = ({}) => {
         createPortfolio({
           videos: params?.item,
           id: selectedItems.map(item => item.id),
+          description: inputs.description,
         }),
       );
     } else {

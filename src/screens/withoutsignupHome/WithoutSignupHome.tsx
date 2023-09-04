@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,9 @@ import {
   TouchableOpacity,
   ScrollView,
   Animated,
-  FlatList,
-  ActivityIndicator,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
-import {Divider, Menu, Searchbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
 //icons
@@ -26,18 +23,14 @@ import {colors, fonts, appstyle} from '../../theme';
 import ImageSlider from '../../components/ImageSlider';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {withoutSignupSkill} from '../../redux/actions/userAction';
-import ExpertiseWithoutCard from './component/ExpertiseWithoutCard';
-import {WithoutSkill} from '../../types/user';
 import {updateSuccess} from '../../redux/reducers/userSlice';
 import {CustomInput} from '../../components';
 
-const WithoutSignupHome = () => {
+const WithoutSignupHome: FC = ({}) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
 
-  const {loading, error, success, without} = useAppSelector(
-    state => state.user,
-  );
+  const {without} = useAppSelector(state => state.user);
 
   const [inputValue, setInputValue] = useState<string>('');
   const [selectedItems, setSelectedItem] = useState<string[]>([]);
@@ -75,8 +68,6 @@ const WithoutSignupHome = () => {
     }).start();
   };
 
-  console.log(without);
-
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={['#6585FC', '#162470']} style={{height: 300}}>
@@ -102,6 +93,7 @@ const WithoutSignupHome = () => {
             }}>
             Torsin
           </Text>
+
           <View style={styles.menuItem1}>
             <Pressable onPress={toggleMenu} style={styles.menuButton}>
               <Feather name="menu" size={20} color={colors.white} />
@@ -188,11 +180,13 @@ const WithoutSignupHome = () => {
               <Pressable
                 onPress={() => {
                   setInputValue('');
-                  setSelectedItem([...selectedItems]);
+                  navigation.navigate('FilterJobs', {
+                    item: item['adminService:'][0],
+                  });
                 }}
                 key={index}
                 style={styles.section}>
-                <Text>{item.adminService}</Text>
+                <Text>{item['adminService:'].join(', ')}</Text>
               </Pressable>
             ))}
         </ScrollView>
@@ -259,27 +253,23 @@ const WithoutSignupHome = () => {
             You need it, we've got it
           </Text>
 
-          {without.map((_item, index) => (
-            <View
-              key={index}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                marginTop: index > 0 ? 20 : 0,
-                bottom: 10,
-              }}>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            {without.slice(0, 4).map((_item, index) => (
               <TouchableOpacity
+                key={index.toString()}
                 style={{
                   ...appstyle.shadow,
                   padding: 10,
                   borderRadius: 20,
-                  justifyContent: 'center',
                   alignItems: 'center',
+                  margin: 5,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
                 }}>
-                <Text style={{padding: 5}}>{_item.adminService}</Text>
+                <Text style={{}}>{_item['adminService:'].join(', ')}</Text>
               </TouchableOpacity>
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -307,6 +297,7 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 50,
     height: 200,
+    zIndex: 1,
   },
   closeButton: {
     position: 'absolute',

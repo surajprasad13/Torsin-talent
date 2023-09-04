@@ -11,8 +11,6 @@ const PortfolioDetail = () => {
   const {params} =
     useRoute<RouteProp<SettingScreenParamList, 'PortfolioDetail'>>();
 
-  console.log(params?.item, params?.type);
-
   return (
     <SafeAreaView style={{backgroundColor: '#f9fbff', flex: 1}}>
       <Title title="Portfolio Details" />
@@ -49,7 +47,7 @@ const PortfolioDetail = () => {
       {params?.type == 'video' && (
         <View style={{margin: 10}}>
           <Video
-            source={{uri: params?.item}}
+            source={{uri: params?.item?.video}}
             style={{
               width: 'auto',
               height: 200,

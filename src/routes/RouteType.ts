@@ -37,6 +37,7 @@ export type RootStackParamList = AuthScreenParamList & {
     item: undefined | object;
   };
   RatingDetail: undefined;
+  FilterJobs: {item: string | undefined} | undefined;
 };
 
 export type AuthScreenParamList = {

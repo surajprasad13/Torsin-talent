@@ -16,9 +16,11 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import Video from 'react-native-video';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {Divider} from 'react-native-paper';
+import FastImage from 'react-native-fast-image';
+import {decode} from 'base64-arraybuffer';
+import Video from 'react-native-video';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -33,9 +35,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {updateSuccess} from '../../redux/reducers/userSlice';
 import {uploadFileToS3, uploadVideoToS3} from '../../services/s3';
 import {SettingScreenParamList} from '../../routes/RouteType';
-import {decode} from 'base64-arraybuffer';
 import {getPortfolio} from '../../redux/actions/userAction';
-import FastImage from 'react-native-fast-image';
 
 type Source = 'camera' | 'library';
 
@@ -75,9 +75,6 @@ const AddPortfolio: FC = ({}) => {
         setVideoModal(false);
       } else {
         response = await ImageCropPicker.openPicker({
-          width: 800,
-          height: 600,
-          cropping: true,
           mediaType: 'video',
           includeBase64: true,
         });
@@ -89,6 +86,7 @@ const AddPortfolio: FC = ({}) => {
           response.filename as string,
         );
         console.log(url);
+        setVideoModal(false);
         navigation.navigate('OpenImage', {
           item: url.body.postResponse.location,
           type: 'video',
@@ -341,6 +339,35 @@ const AddPortfolio: FC = ({}) => {
               }}>
               Video
             </Text>
+          </View>
+
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            {portfolio?.videos.map((item, index) => (
+              <Pressable
+                key={index.toString()}
+                style={{}}
+                onPress={() => {
+                  navigation.navigate('PortfolioDetail', {
+                    item: item,
+                    type: 'video',
+                  });
+                }}>
+                {item.video.length > 10 ? (
+                  <Video
+                    source={{uri: item.video}}
+                    resizeMode="cover"
+                    controls
+                    paused
+                    style={{
+                      width: 200,
+                      height: 200,
+                    }}
+                  />
+                ) : (
+                  <Text>Invalid Link</Text>
+                )}
+              </Pressable>
+            ))}
           </View>
 
           <Pressable

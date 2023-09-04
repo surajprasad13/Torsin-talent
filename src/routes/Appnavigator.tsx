@@ -46,6 +46,7 @@ import Location from '../screens/common/Location';
 import WithoutSignupHome from '../screens/withoutsignupHome/WithoutSignupHome';
 
 import ViewAllTalent from '../screens/withoutsignupHome/ViewAllTalent';
+import FliterJobs from '../screens/withoutsignupHome/FliterJobs';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -311,6 +312,14 @@ const AppNavigator: FC = () => {
             <Stack.Screen
               name="Location"
               component={Location}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="FilterJobs"
+              component={FliterJobs}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,

@@ -124,7 +124,7 @@ export interface WithoutSkill {
   jobName: string;
   jobDescription: string;
   photos: string[];
-  adminService: string[];
+  'adminService:': string[];
   projectType: number;
   priceRate: number;
   createdAt: string;
