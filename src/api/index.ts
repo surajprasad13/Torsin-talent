@@ -32,6 +32,7 @@ const onRequest = (
     'talent/lostPassword/otpsent',
     'talent/lostPassword/otpverify',
     'talent/resetPassword',
+    'skill/corresponding/job',
   ];
 
   if (notValid.includes(url as string)) {

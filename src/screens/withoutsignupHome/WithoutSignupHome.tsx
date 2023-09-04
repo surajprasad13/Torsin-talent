@@ -75,7 +75,7 @@ const WithoutSignupHome = () => {
     }).start();
   };
 
-  console.log(without, 'success');
+  console.log(without);
 
   return (
     <SafeAreaView style={styles.container}>
