@@ -22,15 +22,18 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors, fonts, appstyle} from '../../theme';
 import ImageSlider from '../../components/ImageSlider';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {withoutSignupSkill} from '../../redux/actions/userAction';
-import {updateSuccess} from '../../redux/reducers/userSlice';
+import {
+  withoutSignupSkill,
+  fetchAdminService,
+} from '../../redux/actions/userAction';
+import {resetAdminService, updateSuccess} from '../../redux/reducers/userSlice';
 import {CustomInput} from '../../components';
 
 const WithoutSignupHome: FC = ({}) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
 
-  const {without} = useAppSelector(state => state.user);
+  const {without, adminService} = useAppSelector(state => state.user);
 
   const [inputValue, setInputValue] = useState<string>('');
   const [selectedItems, setSelectedItem] = useState<string[]>([]);
@@ -38,7 +41,7 @@ const WithoutSignupHome: FC = ({}) => {
   const handleSearch = (text: string) => {
     if (selectedItems.length > 10) return;
     setInputValue(text);
-    dispatch(withoutSignupSkill(text));
+    dispatch(fetchAdminService(text));
   };
 
   const handleRemoveItem = (item: any) => {
@@ -47,7 +50,9 @@ const WithoutSignupHome: FC = ({}) => {
   };
 
   const valid =
-    inputValue !== '' && typeof without !== 'string' && without.length > 0;
+    inputValue !== '' &&
+    typeof adminService !== 'string' &&
+    adminService.length > 0;
   //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {
@@ -70,58 +75,60 @@ const WithoutSignupHome: FC = ({}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient colors={['#6585FC', '#162470']} style={{height: 300}}>
+      <LinearGradient colors={['#6585FC', '#162470']} style={{height: 320}}>
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
             alignItems: 'center',
             marginHorizontal: 10,
-            marginTop: 20,
+            justifyContent: 'space-between',
           }}>
-          <FastImage
-            source={require('../../assets/images/logo1.png')}
-            style={{width: 30, height: 30}}
-            resizeMode="cover"
-          />
-          <Text
-            style={{
-              marginLeft: 20,
-              fontFamily: fonts.bold,
-              color: colors.white,
-              fontSize: 18,
-            }}>
-            Torsin
-          </Text>
-
-          <View style={styles.menuItem1}>
-            <Pressable onPress={toggleMenu} style={styles.menuButton}>
-              <Feather name="menu" size={20} color={colors.white} />
-            </Pressable>
-            <Animated.View
-              style={[styles.menuContainer, {right: interpolatedSlide}]}>
-              <Pressable style={styles.closeButton} onPress={toggleMenu}>
-                <AntDesign name="close" size={15} color={colors.black} />
-              </Pressable>
-              <View style={styles.menuItems}>
-                <Pressable style={styles.menuItem}>
-                  <Text style={styles.menuItemText}>Sign in</Text>
-                  <AntDesign name="right" size={10} color={colors.black} />
-                </Pressable>
-                <Pressable style={styles.menuItem}>
-                  <Text style={styles.menuItemText}>Blogs</Text>
-                  <AntDesign name="right" size={10} color={colors.black} />
-                </Pressable>
-                <Pressable style={styles.menuItem}>
-                  <Text style={styles.menuItemText}>Terms & conditions</Text>
-                  <AntDesign name="right" size={10} color={colors.black} />
-                </Pressable>
-              </View>
-              <Pressable style={styles.joinButton}>
-                <Text style={styles.joinButtonText}>Join</Text>
-              </Pressable>
-            </Animated.View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <FastImage
+              source={require('../../assets/images/logo1.png')}
+              style={{width: 30, height: 30}}
+              resizeMode="cover"
+            />
+            <Text
+              style={{
+                marginLeft: 20,
+                fontFamily: fonts.bold,
+                color: colors.white,
+                fontSize: 18,
+              }}>
+              Torsin
+            </Text>
           </View>
+
+          <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
+            <Feather name="menu" size={20} color={colors.white} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.menuItem1}>
+          <Animated.View
+            style={[styles.menuContainer, {right: interpolatedSlide}]}>
+            <Pressable style={styles.closeButton} onPress={toggleMenu}>
+              <AntDesign name="close" size={15} color={colors.black} />
+            </Pressable>
+            <View style={styles.menuItems}>
+              <Pressable style={styles.menuItem}>
+                <Text style={styles.menuItemText}>Sign in</Text>
+                <AntDesign name="right" size={10} color={colors.black} />
+              </Pressable>
+              <Pressable style={styles.menuItem}>
+                <Text style={styles.menuItemText}>Blogs</Text>
+                <AntDesign name="right" size={10} color={colors.black} />
+              </Pressable>
+              <Pressable style={styles.menuItem}>
+                <Text style={styles.menuItemText}>Terms & conditions</Text>
+                <AntDesign name="right" size={10} color={colors.black} />
+              </Pressable>
+            </View>
+            <Pressable style={styles.joinButton}>
+              <Text style={styles.joinButtonText}>Join</Text>
+            </Pressable>
+          </Animated.View>
         </View>
 
         <Text
@@ -150,7 +157,7 @@ const WithoutSignupHome: FC = ({}) => {
           placeholder="Search Skill..."
           value={inputValue}
           onChangeText={handleSearch}
-          containerStyle={{margin: 15}}
+          containerStyle={{margin: 15, marginTop: 70}}
         />
       </LinearGradient>
 
@@ -174,19 +181,19 @@ const WithoutSignupHome: FC = ({}) => {
         <ScrollView
           style={[styles.sectionContainer, {borderWidth: valid ? 1 : 0}]}>
           {inputValue.length > 0 &&
-            without.length > 0 &&
-            typeof without !== 'string' &&
-            without.map((item, index) => (
+            adminService.length > 0 &&
+            typeof adminService !== 'string' &&
+            adminService.map((item, index) => (
               <Pressable
                 onPress={() => {
                   setInputValue('');
                   navigation.navigate('FilterJobs', {
-                    item: item['adminService:'][0],
+                    item: item.serviceName,
                   });
                 }}
                 key={index}
                 style={styles.section}>
-                <Text>{item['adminService:'].join(', ')}</Text>
+                <Text>{item.serviceName}</Text>
               </Pressable>
             ))}
         </ScrollView>
@@ -200,7 +207,7 @@ const WithoutSignupHome: FC = ({}) => {
           <Text style={{fontFamily: fonts.semibold, fontSize: 16}}>
             Blogs / News
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Feeds')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Feedss')}>
             <Text style={{fontFamily: fonts.medium, color: colors.primary}}>
               View All
             </Text>
@@ -254,8 +261,9 @@ const WithoutSignupHome: FC = ({}) => {
           </Text>
 
           <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            {without.slice(0, 4).map((_item, index) => (
+            {adminService?.slice(0, 4).map((_item, index) => (
               <TouchableOpacity
+                // onPress={() => navigation.navigate('FilterJobDetail', {_item})}
                 key={index.toString()}
                 style={{
                   ...appstyle.shadow,
@@ -266,7 +274,7 @@ const WithoutSignupHome: FC = ({}) => {
                   flexDirection: 'row',
                   justifyContent: 'center',
                 }}>
-                <Text style={{}}>{_item['adminService:'].join(', ')}</Text>
+                <Text style={{}}>{_item['serviceName']}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -290,14 +298,13 @@ const styles = StyleSheet.create({
     margin: 16,
   },
   menuContainer: {
-    position: 'absolute',
+    position: 'relative',
     width: 280,
     backgroundColor: colors.white,
     borderRadius: 16,
     padding: 20,
     paddingTop: 50,
     height: 200,
-    zIndex: 1,
   },
   closeButton: {
     position: 'absolute',

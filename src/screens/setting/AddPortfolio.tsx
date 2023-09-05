@@ -53,6 +53,15 @@ const AddPortfolio: FC = ({}) => {
   const [videoModal, setVideoModal] = useState<boolean>(false);
   const [imageModal, setImageModal] = useState<boolean>(false);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
+  const [showAllImages, setShowAllImages] = useState(false);
+  const [showAllVideos, setShowAllVideos] = useState(false);
+  const videosToShow = showAllVideos
+    ? portfolio?.videos
+    : portfolio?.videos.slice(0, 9);
+
+  const imagesToShow = showAllImages
+    ? portfolio?.photos
+    : portfolio?.photos.slice(0, 9);
 
   const [list, setList] = useState(1);
 
@@ -341,33 +350,54 @@ const AddPortfolio: FC = ({}) => {
             </Text>
           </View>
 
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            {portfolio?.videos.map((item, index) => (
-              <Pressable
-                key={index.toString()}
-                style={{}}
-                onPress={() => {
-                  navigation.navigate('PortfolioDetail', {
-                    item: item,
-                    type: 'video',
-                  });
-                }}>
-                {item.video.length > 10 ? (
-                  <Video
-                    source={{uri: item.video}}
-                    resizeMode="cover"
-                    controls
-                    paused
-                    style={{
-                      width: 200,
-                      height: 200,
-                    }}
-                  />
-                ) : (
-                  <Text>Invalid Link</Text>
-                )}
-              </Pressable>
-            ))}
+          <View>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              {videosToShow.map((item, index) => (
+                <Pressable
+                  key={index.toString()}
+                  style={{width: '33%', padding: 5}}
+                  onPress={() => {
+                    navigation.navigate('PortfolioDetail', {
+                      item: item,
+                      type: 'video',
+                    });
+                  }}>
+                  {item.video.length > 10 ? (
+                    <Video
+                      source={{uri: item.video}}
+                      resizeMode="cover"
+                      controls
+                      paused
+                      style={{
+                        width: '100%',
+                        height: 200,
+                        borderRadius: 20,
+                      }}
+                    />
+                  ) : (
+                    <Text>Invalid Link</Text>
+                  )}
+                </Pressable>
+              ))}
+            </View>
+            {portfolio?.videos.length > 9 && !showAllVideos && (
+              <View style={{alignItems: 'center'}}>
+                <Pressable
+                  onPress={() => setShowAllVideos(true)}
+                  style={{paddingVertical: 10}}>
+                  <Text style={{color: 'blue'}}>Show More</Text>
+                </Pressable>
+              </View>
+            )}
+            {showAllVideos && (
+              <View style={{alignItems: 'center'}}>
+                <Pressable
+                  onPress={() => setShowAllVideos(false)}
+                  style={{paddingVertical: 10}}>
+                  <Text style={{color: 'blue'}}>Show Less</Text>
+                </Pressable>
+              </View>
+            )}
           </View>
 
           <Pressable
@@ -433,27 +463,49 @@ const AddPortfolio: FC = ({}) => {
               padding: 10,
               gap: 5,
             }}>
-            {portfolio?.photos.map((item, index) => (
-              <Pressable
-                key={index}
-                style={{}}
-                onPress={() => {
-                  navigation.navigate('PortfolioDetail', {
-                    item: item,
-                    type: 'image',
-                  });
-                }}>
-                <FastImage
-                  source={{uri: item.photos}}
-                  resizeMode="cover"
-                  style={{
-                    width: '100%',
-                    height: 150,
-                    borderRadius: 10,
-                  }}
-                />
-              </Pressable>
-            ))}
+            <View>
+              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                {imagesToShow.map((item, index) => (
+                  <Pressable
+                    key={index}
+                    style={{width: '33%', padding: 5}} // Each image takes up 33% of the width with some padding
+                    onPress={() => {
+                      navigation.navigate('PortfolioDetail', {
+                        item: item,
+                        type: 'image',
+                      });
+                    }}>
+                    <FastImage
+                      source={{uri: item.photos}}
+                      resizeMode="cover"
+                      style={{
+                        width: '100%',
+                        height: 150,
+                        borderRadius: 10,
+                      }}
+                    />
+                  </Pressable>
+                ))}
+              </View>
+              {portfolio?.photos.length > 9 && !showAllImages && (
+                <View style={{alignItems: 'center'}}>
+                  <Pressable
+                    onPress={() => setShowAllImages(true)}
+                    style={{paddingVertical: 10}}>
+                    <Text style={{color: 'blue'}}>Show More</Text>
+                  </Pressable>
+                </View>
+              )}
+              {showAllImages && (
+                <View style={{alignItems: 'center'}}>
+                  <Pressable
+                    onPress={() => setShowAllImages(false)}
+                    style={{paddingVertical: 10}}>
+                    <Text style={{color: 'blue'}}>Show Less</Text>
+                  </Pressable>
+                </View>
+              )}
+            </View>
 
             {Array(list)
               .fill('')

@@ -47,6 +47,8 @@ import WithoutSignupHome from '../screens/withoutsignupHome/WithoutSignupHome';
 
 import ViewAllTalent from '../screens/withoutsignupHome/ViewAllTalent';
 import FliterJobs from '../screens/withoutsignupHome/FliterJobs';
+import FilterJobDetail from '../screens/withoutsignupHome/FilterJobDetail';
+import Feeds from '../screens/feeds/Feeds';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -147,6 +149,15 @@ const AppNavigator: FC = () => {
             <Stack.Screen
               name="FeedDetails"
               component={FeedDetails}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
+            <Stack.Screen
+              name="Feeds"
+              component={Feeds}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,
@@ -320,6 +331,14 @@ const AppNavigator: FC = () => {
             <Stack.Screen
               name="FilterJobs"
               component={FliterJobs}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="FilterJobDetail"
+              component={FilterJobDetail}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,

@@ -22,6 +22,7 @@ export type RootStackParamList = AuthScreenParamList & {
   Location: undefined;
   HelpDetails: undefined;
   FeedDetails: undefined;
+  Feeds: undefined;
   WithoutSignupHome: undefined;
   Report: undefined;
   ViewAllTalent: undefined;
@@ -38,6 +39,7 @@ export type RootStackParamList = AuthScreenParamList & {
   };
   RatingDetail: undefined;
   FilterJobs: {item: string | undefined} | undefined;
+  FilterJobDetail: undefined;
 };
 
 export type AuthScreenParamList = {

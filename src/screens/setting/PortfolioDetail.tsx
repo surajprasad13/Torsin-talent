@@ -48,10 +48,12 @@ const PortfolioDetail = () => {
         <View style={{margin: 10}}>
           <Video
             source={{uri: params?.item?.video}}
+            controls
+            paused
             style={{
               width: 'auto',
               height: 200,
-              borderRadius: 10,
+              borderRadius: 20,
             }}
           />
           <View style={{marginTop: 10}}>
