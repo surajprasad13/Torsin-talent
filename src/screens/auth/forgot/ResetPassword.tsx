@@ -136,22 +136,12 @@ const ResetPassword = ({route}: any) => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <View style={{flexDirection: 'row', padding: 10}}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('LoginScreen')}
-          style={{}}>
-          <Feather name="arrow-left" size={20} />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontFamily: fonts.medium,
-            color: colors.almostBlack,
-            textAlign: 'center',
-            flex: 1,
-          }}>
-          Reset Password
-        </Text>
-      </View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('LoginScreen')}
+        style={{padding: 10}}>
+        <Feather name="arrow-left" size={20} />
+      </TouchableOpacity>
+
       <ScrollView
         contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
         <View style={{flex: 0.8}}>

@@ -19,7 +19,7 @@ import Feather from 'react-native-vector-icons/Feather';
 //helpers
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {resetOtpSent} from '../../../redux/actions/authAction';
-import {resetSuccess} from '../../../redux/reducers/authSlice';
+import {resetSuccess, loginValue} from '../../../redux/reducers/authSlice';
 
 // components
 import {metrics, colors, fonts} from '../../../theme';
@@ -95,8 +95,11 @@ const LostPasswordScreen: FC = ({}) => {
                     setErrors({email: ''});
                     handleChange('email')(text);
                     setValue(text);
+                    dispatch(loginValue());
                   }}
-                  onFocus={() => {}}
+                  onFocus={() => {
+                    dispatch(loginValue());
+                  }}
                   label="Email"
                   placeholder="Email"
                   error={errors.email || error}

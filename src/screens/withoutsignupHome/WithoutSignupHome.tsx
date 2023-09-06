@@ -125,9 +125,9 @@ const WithoutSignupHome: FC = ({}) => {
                 <AntDesign name="right" size={10} color={colors.black} />
               </Pressable>
             </View>
-            <Pressable style={styles.joinButton}>
+            {/* <Pressable style={styles.joinButton}>
               <Text style={styles.joinButtonText}>Join</Text>
-            </Pressable>
+            </Pressable> */}
           </Animated.View>
         </View>
 
@@ -207,7 +207,7 @@ const WithoutSignupHome: FC = ({}) => {
           <Text style={{fontFamily: fonts.semibold, fontSize: 16}}>
             Blogs / News
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Feedss')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Feeds')}>
             <Text style={{fontFamily: fonts.medium, color: colors.primary}}>
               View All
             </Text>
@@ -263,7 +263,12 @@ const WithoutSignupHome: FC = ({}) => {
           <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
             {adminService?.slice(0, 4).map((_item, index) => (
               <TouchableOpacity
-                // onPress={() => navigation.navigate('FilterJobDetail', {_item})}
+                onPress={() => {
+                  setInputValue('');
+                  navigation.navigate('FilterJobs', {
+                    item: _item.serviceName,
+                  });
+                }}
                 key={index.toString()}
                 style={{
                   ...appstyle.shadow,
@@ -302,9 +307,9 @@ const styles = StyleSheet.create({
     width: 280,
     backgroundColor: colors.white,
     borderRadius: 16,
-    padding: 20,
+    padding: 10,
     paddingTop: 50,
-    height: 200,
+    height: 150,
   },
   closeButton: {
     position: 'absolute',

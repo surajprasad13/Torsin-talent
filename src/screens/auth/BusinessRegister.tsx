@@ -21,7 +21,6 @@ import {decode} from 'base64-arraybuffer';
 import {Formik, useFormik} from 'formik';
 import * as Yup from 'yup';
 import CountryPicker from 'react-native-country-picker-modal';
-import Geolocation from '@react-native-community/geolocation';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -111,8 +110,6 @@ const BusinessRegister = ({}) => {
     validationSchema,
     onSubmit,
   });
-
-  Geolocation.getCurrentPosition(info => console.log(info));
 
   const [image, setImage] = useState('');
   const [imageLoading, setImageLoading] = useState<boolean>(false);

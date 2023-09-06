@@ -245,6 +245,9 @@ const CreatePassword = ({}) => {
             handleError('', 'password');
             dispatch(loginValue());
           }}
+          onFocus={() => {
+            dispatch(loginValue());
+          }}
           error={errors.password}
         />
 
@@ -258,6 +261,9 @@ const CreatePassword = ({}) => {
           onChangeText={text => {
             handleChange(text, 'confirmPassword');
             handleError('', 'confirmPassword');
+            dispatch(loginValue());
+          }}
+          onFocus={() => {
             dispatch(loginValue());
           }}
           error={errors.confirmPassword}

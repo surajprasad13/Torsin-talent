@@ -32,11 +32,18 @@ const AddSkill: FC = () => {
 
   const [inputValue, setInputValue] = useState<string>('');
   const [selectedItems, setSelectedItem] = useState<string[]>([]);
+  const [duplicateSkill, setDuplicateSkill] = useState<string | null>(null);
 
   const handleSearch = (text: string) => {
     if (selectedItems.length > 10) return;
     setInputValue(text);
     dispatch(fetchAdminService(text));
+
+    if (selectedItems.includes(text)) {
+      setDuplicateSkill('Skill already added');
+    } else {
+      setDuplicateSkill(null);
+    }
   };
 
   const handleRemoveItem = (item: any) => {
@@ -48,7 +55,7 @@ const AddSkill: FC = () => {
     inputValue !== '' &&
     typeof adminService !== 'string' &&
     adminService.length > 0;
-  //@ts-ignore
+
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {
       dispatch(updateSuccess());
@@ -88,7 +95,7 @@ const AddSkill: FC = () => {
           />
           <Pressable
             style={{position: 'absolute', right: 10, top: 44}}
-            disabled={!inputValue} // Disable the button when inputValue is empty
+            disabled={!inputValue || !!duplicateSkill} // Disable the button when inputValue is empty or duplicate skill exists
             onPress={() => {
               if (selectedItems.length > 10) return;
               selectedItems.push(inputValue);
@@ -102,6 +109,17 @@ const AddSkill: FC = () => {
             />
           </Pressable>
         </View>
+
+        {!!duplicateSkill && (
+          <Text
+            style={{
+              padding: 10,
+              color: colors.red,
+              fontFamily: fonts.medium,
+            }}>
+            {duplicateSkill}
+          </Text>
+        )}
 
         <View style={[styles.chipContainer, {marginTop: 10}]}>
           {selectedItems.map((item, index) => (

@@ -56,10 +56,14 @@ const authSlice = createSlice({
 
     loginValue: state => {
       state.error = '';
+      state.loading = false;
     },
     logout: state => {
       state.userToken = null;
       state.userInfo = null;
+    },
+    resetMessage: state => {
+      state.message = '';
     },
     resetSuccess: state => {
       state.success = false;
@@ -279,6 +283,7 @@ export const {
   resetFirst,
   resetOtpVerified,
   updateUserInfo,
+  resetMessage,
 } = authSlice.actions;
 
 export default authSlice.reducer;

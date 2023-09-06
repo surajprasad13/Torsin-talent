@@ -32,6 +32,7 @@ import {
   resetOtpVerified,
   resetSuccess,
   loginValue,
+  resetMessage,
 } from '../../../redux/reducers/authSlice';
 import {AuthScreenParamList} from '../../../routes/RouteType';
 
@@ -116,6 +117,7 @@ const VerifyOtp = ({route}: any) => {
                   onChangeText={text => {
                     handleChange('otp')(text);
                     dispatch(loginValue());
+                    dispatch(resetMessage());
                   }}
                   cellCount={CELL_COUNT}
                   rootStyle={styles.codeFiledRoot}
@@ -123,7 +125,8 @@ const VerifyOtp = ({route}: any) => {
                   textContentType="oneTimeCode"
                   returnKeyType="done"
                   onFocus={() => {
-                    dispatch(resetSuccess());
+                    dispatch(resetMessage());
+                    console.log('OTP input field focused');
                   }}
                   renderCell={({index, symbol, isFocused}) => (
                     <View

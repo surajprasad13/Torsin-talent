@@ -114,6 +114,8 @@ const HomeScreen = ({}) => {
               padding: 10,
               flex: 1,
             }}
+            onPressIn={() => navigation.navigate('JobNavigator')}
+            onPressOut={() => navigation.navigate('JobNavigator')}
           />
         </TouchableOpacity>
       </View>

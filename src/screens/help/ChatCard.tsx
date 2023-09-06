@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   SafeAreaView,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -49,8 +50,34 @@ const ChatCard = ({route}) => {
     setNewMessage('');
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(supportChat(item?.ticketId));
+    setRefreshing(false);
+  };
+
   useEffect(() => {
     dispatch(supportChat(item?.ticketId));
+  }, []);
+
+  useEffect(() => {
+    // Function to fetch supportChat
+    const fetchSupportChat = () => {
+      dispatch(supportChat(item?.ticketId));
+    };
+
+    // Fetch supportChat immediately when the component mounts
+    fetchSupportChat();
+
+    // Set up an interval to fetch supportChat every 3 seconds
+    // const refreshInterval = setInterval(fetchSupportChat, 3000);
+
+    // // Clean up the interval when the component unmounts
+    // return () => {
+    //   clearInterval(refreshInterval);
+    // };
   }, []);
 
   useEffect(() => {
@@ -153,6 +180,9 @@ const ChatCard = ({route}) => {
       <Title title={`Ticket No : #${item.ticketId}`} />
 
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         data={data}
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}

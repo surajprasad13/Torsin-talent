@@ -88,9 +88,12 @@ const ServiceSkill = ({}) => {
               </View>
             ))
           ) : (
-            <Text style={{fontFamily: fonts.medium, color: colors.black}}>
-              No Skills
-            </Text>
+            <View
+              style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+              <Text style={{fontFamily: fonts.medium, color: colors.black}}>
+                No Skills
+              </Text>
+            </View>
           )}
         </View>
 

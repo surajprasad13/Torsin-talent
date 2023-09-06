@@ -8,11 +8,11 @@ import {
   ActivityIndicator,
   Dimensions,
   RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
-
 
 //helpers
 import {Title} from '../../components';
@@ -47,16 +47,20 @@ const Feeds = () => {
       <Title title="Feeds" />
       {mainFeed?.length > 0 &&
         mainFeed?.map((item, index) => (
-          <FastImage
-            source={{uri: item?.feedPhoto}}
-            resizeMode="cover"
-            style={{
-              width: 'auto',
-              height: 150,
-              margin: 10,
-              borderRadius: 10,
-            }}
-          />
+          <TouchableOpacity
+            key={index}
+            onPress={() => navigation.navigate('FeedDetails', {item})}>
+            <FastImage
+              source={{uri: item?.feedPhoto}}
+              resizeMode="cover"
+              style={{
+                width: 'auto',
+                height: 150,
+                margin: 10,
+                borderRadius: 10,
+              }}
+            />
+          </TouchableOpacity>
         ))}
       <FlatList
         refreshControl={

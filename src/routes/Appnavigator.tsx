@@ -235,7 +235,7 @@ const AppNavigator: FC = () => {
             <Stack.Screen
               name="ResetPassword"
               component={ResetPassword}
-              options={{headerShown: false}}
+              options={{headerShown: false, gestureEnabled: false}}
             />
             <Stack.Screen
               name="ChangePassword"
@@ -262,6 +262,24 @@ const AppNavigator: FC = () => {
             <Stack.Screen
               name="WithoutSignupHome"
               component={WithoutSignupHome}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
+            <Stack.Screen
+              name="Feeds"
+              component={Feeds}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
+            <Stack.Screen
+              name="FeedDetails"
+              component={FeedDetails}
               options={{
                 headerShown: false,
                 ...TransitionPresets.SlideFromRightIOS,

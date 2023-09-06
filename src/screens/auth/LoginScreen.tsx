@@ -112,8 +112,12 @@ const LoginScreen = ({}) => {
                   onChangeText={(text: string) => {
                     setErrors({email: ''});
                     handleChange('email')(text);
+                    dispatch(loginValue());
                   }}
-                  onFocus={() => setErrors({email: ''})}
+                  onFocus={() => {
+                    setErrors({email: ''});
+                    dispatch(loginValue());
+                  }}
                   label="Mobile / Email"
                   placeholder="Mobile no / Email"
                   error={errors.email}

@@ -441,6 +441,9 @@ const IndivisualRegister = ({}) => {
                 }}
                 error={formik.errors.countryName}
                 maxLength={50}
+                onPressIn={() => setCountryPickerOpen(true)}
+                onPressOut={() => setCountryPickerOpen(true)}
+                editable={false}
               />
 
               <Pressable

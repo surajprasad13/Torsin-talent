@@ -5,7 +5,6 @@ import {
   ScrollView,
   Pressable,
   StyleSheet,
-  Alert,
   Modal,
 } from 'react-native';
 import React, {useState} from 'react';
@@ -275,7 +274,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   loginButton: {
-    backgroundColor: 'blue',
+    backgroundColor: colors.primary,
     borderRadius: 5,
     padding: 10,
     flex: 1,

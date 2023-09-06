@@ -352,7 +352,7 @@ const AddPortfolio: FC = ({}) => {
 
           <View>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-              {videosToShow.map((item, index) => (
+              {videosToShow?.map((item, index) => (
                 <Pressable
                   key={index.toString()}
                   style={{width: '33%', padding: 5}}
@@ -465,7 +465,7 @@ const AddPortfolio: FC = ({}) => {
             }}>
             <View>
               <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                {imagesToShow.map((item, index) => (
+                {imagesToShow?.map((item, index) => (
                   <Pressable
                     key={index}
                     style={{width: '33%', padding: 5}} // Each image takes up 33% of the width with some padding
@@ -487,7 +487,7 @@ const AddPortfolio: FC = ({}) => {
                   </Pressable>
                 ))}
               </View>
-              {portfolio?.photos.length > 9 && !showAllImages && (
+              {portfolio?.photos?.length > 9 && !showAllImages && (
                 <View style={{alignItems: 'center'}}>
                   <Pressable
                     onPress={() => setShowAllImages(true)}

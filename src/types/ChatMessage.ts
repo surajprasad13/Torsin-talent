@@ -16,7 +16,7 @@ export interface ChatMessage {
 
 export interface ChatMessageList {
   createdAt: string;
-  fullname: string;
+  fullName: string;
   image: string[];
   jobDescription: string;
   jobId: number;

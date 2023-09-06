@@ -204,6 +204,7 @@ const EditUserProfile = ({}) => {
             placeholderTextColor="#333333"
             containerStyle={{marginTop: 40}}
             error={errors.fullName}
+            maxLength={30}
           />
 
           <CustomInput
@@ -311,6 +312,9 @@ const EditUserProfile = ({}) => {
               placeholder={inputs.countryName}
               containerStyle={{marginTop: 20}}
               error={errors.countryName}
+              onPressIn={() => setCountryPickerOpen(true)}
+              onPressOut={() => setCountryPickerOpen(true)}
+              editable={false}
             />
             <Pressable
               onPress={() => setCountryPickerOpen(true)}
