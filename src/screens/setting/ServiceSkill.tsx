@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {
   View,
   Text,
@@ -20,7 +20,7 @@ import {fetchService, fetchSkill} from '../../redux/actions/userAction';
 import {Service} from '../../types/user';
 import {Title} from '../../components';
 
-const ServiceSkill = ({}) => {
+const ServiceSkill: FC = ({}) => {
   const navigation = useNavigation();
 
   const dispatch = useAppDispatch();

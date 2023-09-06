@@ -26,7 +26,7 @@ const AddSkill: FC = () => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
 
-  const {loading, error, success, adminService} = useAppSelector(
+  const {loading, error, success, adminService, skills} = useAppSelector(
     state => state.user,
   );
 
@@ -152,19 +152,21 @@ const AddSkill: FC = () => {
           {inputValue.length > 0 &&
             adminService.length > 0 &&
             typeof adminService !== 'string' &&
-            adminService.map((item, index) => (
-              <Pressable
-                onPress={() => {
-                  setInputValue('');
-                  selectedItems.push(item.serviceName);
-                  setSelectedItem([...selectedItems]);
-                  dispatch(resetAdminService());
-                }}
-                key={index}
-                style={styles.section}>
-                <Text>{item.serviceName}</Text>
-              </Pressable>
-            ))}
+            adminService
+              .filter(item => !skills.includes(item.serviceName))
+              .map((item, index) => (
+                <Pressable
+                  onPress={() => {
+                    setInputValue('');
+                    selectedItems.push(item.serviceName);
+                    setSelectedItem([...selectedItems]);
+                    dispatch(resetAdminService());
+                  }}
+                  key={index}
+                  style={styles.section}>
+                  <Text>{item.serviceName}</Text>
+                </Pressable>
+              ))}
         </ScrollView>
       </View>
 

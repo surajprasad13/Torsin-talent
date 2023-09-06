@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {FC, useEffect, useState, ReactNode} from 'react';
 import {
   View,
   StyleSheet,
@@ -37,9 +38,14 @@ export const ACTIVE_CELL_BG_COLOR = '#f7fafe';
 
 const CELL_COUNT = 6;
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
-const ModalPoup = ({visible, children}) => {
+interface ModalPoupProp {
+  visible: boolean;
+  children: ReactNode;
+}
+
+const ModalPoup: FC<ModalPoupProp> = ({visible, children}) => {
   const [showModal, setShowModal] = React.useState(visible);
   const scaleValue = React.useRef(new Animated.Value(0)).current;
 
@@ -76,7 +82,12 @@ const ModalPoup = ({visible, children}) => {
   );
 };
 
-const PhoneModal = ({active, phone}) => {
+interface PhoneModalProp {
+  active: boolean;
+  phone: string;
+}
+
+const PhoneModal: FC<PhoneModalProp> = ({active, phone}) => {
   const dispatch = useAppDispatch();
   const {mobileVerified} = useAppSelector(state => state.auth);
 
@@ -96,16 +107,7 @@ const PhoneModal = ({active, phone}) => {
 
   const sendOtp = async () => {
     try {
-      const newNumber = phone.replace(/^0+/, '');
-      var mobilePhone = newNumber;
-      if (newNumber.length === 9) {
-        mobilePhone = '971' + phone;
-      } else {
-        mobilePhone = '91' + phone;
-      }
-      setLoading(true);
-      const mobile = '+' + mobilePhone;
-      const confirmation = await auth().signInWithPhoneNumber(mobile);
+      const confirmation = await auth().signInWithPhoneNumber(phone);
       setConfirm(confirmation);
       setMessage('Otp sent sucessfully');
       setLoading(false);

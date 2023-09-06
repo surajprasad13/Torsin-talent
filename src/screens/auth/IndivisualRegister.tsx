@@ -67,6 +67,7 @@ const IndivisualRegister = ({}) => {
 
   const [selectedCountry, setSelectedCountry] = useState<any | null>(null);
   const [isCountryPickerOpen, setCountryPickerOpen] = useState(false);
+  const [mobileWithCode, setMobileWithCode] = useState<string>('');
 
   const handleCountrySelect = (country: any) => {
     setSelectedCountry(country);
@@ -322,7 +323,9 @@ const IndivisualRegister = ({}) => {
                       formik.handleChange('mobileNo')(text);
                     }
                   }}
-                  onChangeFormattedText={() => {}}
+                  onChangeFormattedText={(text: string) => {
+                    setMobileWithCode(text);
+                  }}
                   textInputProps={{
                     maxLength: 15,
                     onFocus: () => formik.setErrors({mobileNo: ''}),
@@ -336,10 +339,7 @@ const IndivisualRegister = ({}) => {
                   }}>
                   <PhoneModal
                     active={formik.values.mobileNo.length >= 9}
-                    phone={
-                      phoneInput?.current?.getCallingCode() +
-                      formik.values.mobileNo
-                    }
+                    phone={mobileWithCode}
                   />
                 </Pressable>
               </View>
