@@ -23,7 +23,11 @@ import {CustomButton, CustomInput} from '../../components';
 
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {userLogin} from '../../redux/actions/authAction';
-import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
+import {
+  loginValue,
+  resetSuccess,
+  updateWithoutRegister,
+} from '../../redux/reducers/authSlice';
 
 interface Values {
   email?: string;
@@ -69,6 +73,7 @@ const LoginScreen = ({}) => {
   useEffect(() => {
     if (userToken) {
       dispatch(resetSuccess());
+      dispatch(updateWithoutRegister());
     }
   }, [userToken]);
 

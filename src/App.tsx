@@ -25,14 +25,14 @@ async function onAppBootstrap() {
   // Register the device with FCM
   //  await messaging().registerDeviceForRemoteMessages();
   const token = await messaging().getToken();
-
+  console.log(token);
   // Save the token
 }
 
 const App = () => {
   useEffect(() => {
     checkApplicationPermission();
-    //onAppBootstrap();
+    onAppBootstrap();
   }, []);
 
   injectStore(store);

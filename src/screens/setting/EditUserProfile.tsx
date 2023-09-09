@@ -339,6 +339,7 @@ const EditUserProfile = ({}) => {
               containerButtonStyle={{
                 display: 'none',
               }}
+              onClose={() => setCountryPickerOpen(false)}
             />
           )}
 

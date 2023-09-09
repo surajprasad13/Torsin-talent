@@ -34,6 +34,7 @@ const onRequest = (
     'talent/resetPassword',
     'skill/corresponding/job',
     'admin/services',
+    '/feed/list',
   ];
 
   if (notValid.includes(url as string)) {

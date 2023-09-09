@@ -38,6 +38,7 @@ const NotificationCard: FC<NotificationCardProp> = ({item}) => {
           screen: 'ProposalDetail',
           params: {
             proposalId: item.renderId,
+            jobId: item.jobId,
           },
         });
         break;

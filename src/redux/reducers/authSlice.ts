@@ -28,6 +28,7 @@ interface AuthState {
   mobileVerified: boolean;
   isFirstOpen: boolean;
   expired: boolean;
+  withoutRegister: boolean;
 }
 
 const initialState: AuthState = {
@@ -44,6 +45,7 @@ const initialState: AuthState = {
   isFirstOpen: true,
   expired: false,
   otpVerified: false,
+  withoutRegister: false,
 };
 
 const authSlice = createSlice({
@@ -52,6 +54,10 @@ const authSlice = createSlice({
   reducers: {
     updateExpire: state => {
       state.expired = true;
+    },
+
+    updateWithoutRegister: state => {
+      state.withoutRegister = true;
     },
 
     loginValue: state => {
@@ -284,6 +290,7 @@ export const {
   resetOtpVerified,
   updateUserInfo,
   resetMessage,
+  updateWithoutRegister,
 } = authSlice.actions;
 
 export default authSlice.reducer;

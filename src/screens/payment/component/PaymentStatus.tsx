@@ -11,17 +11,17 @@ const PaymentStatus: FC = ({item}: any) => {
   const renderStatus = (id: number) => {
     switch (id) {
       case 1:
-        return;
-      case 2:
         return (
-          <Text style={{fontFamily: fonts.regular, color: 'green'}}>
-            Pending
+          <Text
+            style={{fontFamily: fonts.regular, color: 'orange', fontSize: 10}}>
+            Payment yet to receive ${item.receivedAmount}
           </Text>
         );
-      case 3:
+      case 2:
         return (
-          <Text style={{fontFamily: fonts.regular, color: 'red'}}>
-            Received
+          <Text
+            style={{fontFamily: fonts.regular, color: 'green', fontSize: 10}}>
+            Payment has been received ${item.receivedAmount}
           </Text>
         );
       default:
@@ -46,9 +46,6 @@ const PaymentStatus: FC = ({item}: any) => {
           </Text>
           <Text style={styles.time}>View Job</Text>
         </View>
-        <Text style={styles.title}>
-          Payment yet to receive ${item.receivedAmount}
-        </Text>
         <Text
           style={{
             textAlign: 'right',

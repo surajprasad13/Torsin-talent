@@ -129,7 +129,7 @@ const OnboardingScreen = ({}) => {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           navigation.navigate('WithoutSignupHome');
         }}
@@ -146,7 +146,7 @@ const OnboardingScreen = ({}) => {
           }}>
           Continue without signup
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };

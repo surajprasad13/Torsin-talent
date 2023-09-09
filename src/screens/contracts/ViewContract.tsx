@@ -566,3 +566,20 @@ const styles = StyleSheet.create({
 });
 
 export default ViewContract;
+
+const json = [
+  {
+    contractId: '885d18ec-2718-4576-9c25-2db46fd17bfb',
+    createdAt: '2023-09-07T10:21:12.627407Z',
+    jobDescription:
+      'weufvurhuhdefvusheihuhrfhufhhfuruhuirufgudheuruguhruhuhuhuhuhuhuhuhuhu',
+    jobId: 234,
+    jobName: 'React JS developer',
+    location: 'Gorakhpur',
+    milestoneId: null,
+    paymentStatus: 1,
+    photos: [],
+    projectType: 1,
+    receivedAmount: 190,
+  },
+];

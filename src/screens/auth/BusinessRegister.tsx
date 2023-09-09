@@ -76,6 +76,8 @@ const BusinessRegister = ({}) => {
   const [selectedCountry, setSelectedCountry] = useState<any | null>(null);
   const [isCountryPickerOpen, setCountryPickerOpen] = useState(false);
 
+  const [mobileWithCode, setMobileWithCode] = useState<string>('');
+
   const handleCountrySelect = (country: any) => {
     setSelectedCountry(country);
     setCountryPickerOpen(false); // Close the country dropdown after selection
@@ -334,14 +336,13 @@ const BusinessRegister = ({}) => {
                       formik.handleChange('mobileNo')(text);
                     }
                   }}
-                  onChangeFormattedText={text => {
-                    setFormattedValue(text);
+                  onChangeFormattedText={(text: string) => {
+                    setMobileWithCode(text);
                   }}
                   textInputProps={{
                     maxLength: 15,
                     onFocus: () => formik.setErrors({mobileNo: ''}),
                   }}
-                  error={formik.errors.mobileNo}
                 />
                 <Pressable
                   style={{
@@ -351,10 +352,7 @@ const BusinessRegister = ({}) => {
                   }}>
                   <PhoneModal
                     active={formik.values.mobileNo.length >= 9}
-                    phone={
-                      phoneInput?.current?.getCallingCode() +
-                      formik.values.mobileNo
-                    }
+                    phone={mobileWithCode}
                   />
                 </Pressable>
               </View>
@@ -423,6 +421,7 @@ const BusinessRegister = ({}) => {
                 containerButtonStyle={{
                   display: 'none',
                 }}
+                onClose={() => setCountryPickerOpen(false)}
               />
             )}
 

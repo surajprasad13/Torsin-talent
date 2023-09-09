@@ -427,7 +427,7 @@ const IndivisualRegister = ({}) => {
             />
 
             <View style={{position: 'relative', marginTop: 10}}>
-              <Input
+              <CustomInput
                 label="Country"
                 placeholder="eg. India"
                 value={selectedCountry?.name || formik.values.countryName}
@@ -472,6 +472,7 @@ const IndivisualRegister = ({}) => {
                 containerButtonStyle={{
                   display: 'none',
                 }}
+                onClose={() => setCountryPickerOpen(false)}
               />
             )}
 

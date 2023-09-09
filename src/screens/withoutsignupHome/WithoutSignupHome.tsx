@@ -25,6 +25,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {
   withoutSignupSkill,
   fetchAdminService,
+  allAdminService,
 } from '../../redux/actions/userAction';
 import {resetAdminService, updateSuccess} from '../../redux/reducers/userSlice';
 import {CustomInput} from '../../components';
@@ -33,7 +34,7 @@ const WithoutSignupHome: FC = ({}) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
 
-  const {without, adminService} = useAppSelector(state => state.user);
+  const {without, adminService, allAdmin} = useAppSelector(state => state.user);
 
   const [inputValue, setInputValue] = useState<string>('');
   const [selectedItems, setSelectedItem] = useState<string[]>([]);
@@ -72,6 +73,10 @@ const WithoutSignupHome: FC = ({}) => {
       useNativeDriver: false, // Adjust as needed
     }).start();
   };
+
+  useEffect(() => {
+    dispatch(allAdminService(''));
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -261,7 +266,7 @@ const WithoutSignupHome: FC = ({}) => {
           </Text>
 
           <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            {adminService?.slice(0, 4).map((_item, index) => (
+            {allAdmin?.map((_item, index) => (
               <TouchableOpacity
                 onPress={() => {
                   setInputValue('');
