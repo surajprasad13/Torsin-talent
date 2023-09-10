@@ -11,8 +11,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Divider} from 'react-native-paper';
-import {} from 'react-native-element-dropdown';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 
 //components
 import {CustomInput, Title} from '../../components';
@@ -32,7 +32,7 @@ import {
 import {Contract} from '../../types/contract';
 import {interestAmount} from '../../utils';
 
-const contractType = ['', 'Hourly', 'Fixed'];
+const contractType = ['', 'Fixed', 'Hourly'];
 
 const ViewContract: FC = ({route}: any) => {
   const {id} = route.params;
@@ -46,6 +46,7 @@ const ViewContract: FC = ({route}: any) => {
 
   const [contract, setContract] = useState<Contract | null>(contractDetail);
 
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(getContractDetail(id));
@@ -178,7 +179,7 @@ const ViewContract: FC = ({route}: any) => {
               />
 
               <CustomInput
-                placeholder="$100"
+                placeholder="100 AEDs"
                 label="Hourly Rate"
                 placeholderTextColor="#333333"
                 editable={false}
@@ -340,86 +341,90 @@ const ViewContract: FC = ({route}: any) => {
                       fontSize: 16,
                       fontFamily: fonts.semibold,
                     }}>
-                    $ {contract?.receivedAmount}
+                    {contract?.receivedAmount} AEDs
                   </Text>
                 </View>
               </View>
             )}
 
-            {contract?.ismilestone == 2 &&
-              contract?.milestoneData.length > 0 &&
-              contract?.milestoneData.map((a: any, b: number) => (
-                <View key={b.toString()} style={{marginTop: 10}}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-                      Milestones
-                    </Text>
-                    <Pressable
-                      onPress={() => {
-                        contract.milestoneData[b].active =
-                          !contract.milestoneData[b].active;
-                        setContract(prev => ({
-                          ...prev,
-                          ...contract,
-                        }));
-                      }}>
-                      <Feather
-                        name={a.active ? 'chevron-down' : 'chevron-up'}
-                        color={colors.primary}
-                        size={20}
-                      />
-                    </Pressable>
-                  </View>
+            <View style={{marginTop: 10}}>
+              <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
+                Milestone
+              </Text>
 
-                  {a.active && (
+              {contract?.ismilestone == 2 &&
+                contract?.milestoneData.length > 0 &&
+                contract?.milestoneData.map((a: any, b: number) => (
+                  <View key={b.toString()} style={{marginTop: 10}}>
                     <View
                       style={{
-                        borderWidth: 0.5,
-                        borderColor: '#BDBDBD',
-                        padding: 10,
-                        borderRadius: 12,
-                        marginTop: 20,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
                       }}>
-                      <CustomInput
-                        placeholder="Enter name"
-                        label="Milestone name"
-                        value={a.name}
-                        editable={false}
-                        containerStyle={{marginTop: 10}}
-                      />
-
-                      <CustomInput
-                        label="Start Date"
-                        placeholder=""
-                        editable={false}
-                        value={a.start_date}
-                        containerStyle={{marginTop: 10}}
-                      />
-
-                      <CustomInput
-                        label="End Date"
-                        value={a.end_date}
-                        placeholder=""
-                        editable={false}
-                        containerStyle={{marginTop: 10}}
-                      />
-
-                      <CustomInput
-                        placeholder="$ Enter amount"
-                        label="Milestone Price"
-                        value={`${a.price}`}
-                        editable={false}
-                        containerStyle={{marginTop: 10}}
-                      />
+                      <Text style={{fontFamily: fonts.medium, fontSize: 12}}>
+                        {a.name}
+                      </Text>
+                      <Pressable
+                        onPress={() => {
+                          contract.milestoneData[b].active =
+                            !contract.milestoneData[b].active;
+                          setContract(prev => ({
+                            ...prev,
+                            ...contract,
+                          }));
+                        }}>
+                        <Feather
+                          name={a.active ? 'chevron-down' : 'chevron-up'}
+                          color={colors.primary}
+                          size={20}
+                        />
+                      </Pressable>
                     </View>
-                  )}
-                </View>
-              ))}
+
+                    {a.active && (
+                      <View
+                        style={{
+                          borderWidth: 0.5,
+                          borderColor: '#BDBDBD',
+                          padding: 10,
+                          borderRadius: 12,
+                          marginTop: 20,
+                        }}>
+                        <CustomInput
+                          placeholder="Enter name"
+                          label="Milestone name"
+                          value={a.name}
+                          editable={false}
+                          containerStyle={{marginTop: 10}}
+                        />
+
+                        <CustomInput
+                          label="Start Date"
+                          editable={false}
+                          value={a.startDate}
+                          containerStyle={{marginTop: 10}}
+                        />
+
+                        <CustomInput
+                          label="End Date"
+                          value={a.endDate}
+                          editable={false}
+                          containerStyle={{marginTop: 10}}
+                        />
+
+                        <CustomInput
+                          placeholder="$ Enter amount"
+                          label="Milestone Price"
+                          value={`${a.price}`}
+                          editable={false}
+                          containerStyle={{marginTop: 10}}
+                        />
+                      </View>
+                    )}
+                  </View>
+                ))}
+            </View>
           </View>
         )}
 
@@ -566,20 +571,3 @@ const styles = StyleSheet.create({
 });
 
 export default ViewContract;
-
-const json = [
-  {
-    contractId: '885d18ec-2718-4576-9c25-2db46fd17bfb',
-    createdAt: '2023-09-07T10:21:12.627407Z',
-    jobDescription:
-      'weufvurhuhdefvusheihuhrfhufhhfuruhuirufgudheuruguhruhuhuhuhuhuhuhuhuhu',
-    jobId: 234,
-    jobName: 'React JS developer',
-    location: 'Gorakhpur',
-    milestoneId: null,
-    paymentStatus: 1,
-    photos: [],
-    projectType: 1,
-    receivedAmount: 190,
-  },
-];

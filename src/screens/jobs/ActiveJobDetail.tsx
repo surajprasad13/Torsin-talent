@@ -10,7 +10,6 @@ import {
   TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import FastImage from 'react-native-fast-image';
 import {Divider} from 'react-native-paper';
 import Animated, {
   useAnimatedStyle,
@@ -23,16 +22,17 @@ import moment from 'moment';
 import {appstyle, colors, fonts} from '../../theme';
 
 //icons
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import {AntDesign, Entypo, IonIcons} from '../../theme/icons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {CustomInput, Title} from '../../components';
 
-const contractType = ['', 'Hourly', 'Fixed'];
+const contractType = ['', 'Fixed', 'Hourly'];
 
 const ActiveJobDetail: FC = ({route}: any) => {
+  const navigation = useNavigation();
+
   const {item} = route.params;
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -47,7 +47,8 @@ const ActiveJobDetail: FC = ({route}: any) => {
     return {height: heightProgress.value};
   });
 
-  const navigation = useNavigation();
+  // console.log(item);
+
   return (
     <SafeAreaView style={styles.container}>
       <Title title="Active Job Details" />
@@ -72,7 +73,7 @@ const ActiveJobDetail: FC = ({route}: any) => {
                   fontFamily: fonts.regular,
                   fontSize: 12,
                 }}>
-                Cost : ${item.amount}
+                Cost : {item.amount} AEDs
               </Text>
             </View>
             <View
@@ -157,7 +158,7 @@ const ActiveJobDetail: FC = ({route}: any) => {
                   borderColor: '#4f4f4f',
                 }}>
                 <TextInput
-                  placeholder="$100"
+                  placeholder="100 AEDs"
                   placeholderTextColor="#333333"
                   style={{}}
                   editable={false}
@@ -519,7 +520,7 @@ const ActiveJobDetail: FC = ({route}: any) => {
                 padding: 15,
                 borderRadius: 100,
               }}>
-              <Ionicons
+              <IonIcons
                 name="md-shield-checkmark"
                 size={30}
                 style={{color: colors.primary}}
@@ -616,3 +617,46 @@ const styles = StyleSheet.create({
 });
 
 export default ActiveJobDetail;
+const json = {
+  amount: 600,
+  clientId: 191,
+  contractDesc: 'okay test it  and take a look at the contract details ',
+  contractId: 'a487d347-6e62-4097-85ec-58a6495694a6',
+  contractType: 1,
+  countryName: 'India',
+  createdAt: '2023-09-08T11:11:22.420680Z',
+  email: 'webclient@yopmail.com',
+  endDate: 1,
+  fullName: 'Web client',
+  image: [],
+  ismilestone: 2,
+  jobDescription:
+    'here we are testing the payment details again & again to fix all the issues and get the proper details ',
+  jobId: 243,
+  jobName: 'Third time payment check ',
+  location: 'New Delhi',
+  milestoneData: [
+    {
+      endDate: '2023-09-09',
+      milestoneId: 58,
+      name: 'M1',
+      price: 200,
+      startDate: '2023-09-08',
+      status: 4,
+    },
+    {
+      endDate: '2023-09-29',
+      milestoneId: 59,
+      name: 'M2',
+      price: 400,
+      startDate: '2023-09-22',
+      status: 2,
+    },
+  ],
+  profileImage: null,
+  recievedAmount: 552,
+  specificDate: null,
+  status: 1,
+  timeDuration: 0,
+  torsinRate: 48,
+};

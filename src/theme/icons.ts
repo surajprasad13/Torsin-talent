@@ -9,6 +9,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
+import IonIcons from 'react-native-vector-icons/Ionicons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -18,6 +19,7 @@ export {
   Feather,
   EvilIcon,
   Entypo,
+  IonIcons,
   IonIcon,
   FontAwesome,
   FontAwesome5,

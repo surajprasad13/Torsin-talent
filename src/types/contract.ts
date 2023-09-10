@@ -36,6 +36,9 @@ export interface MileStone {
   receivedAmount: string;
   startDate: string;
   endDate: string;
+  name?: string;
+  price?: string;
+  status?: number;
 }
 
 export interface Contract {
@@ -89,5 +92,3 @@ export interface ActiveJobDetailInterface extends Contract {
   profileImage: string;
   receievedAmount: number;
 }
-
-

@@ -134,11 +134,11 @@ export interface PortfolioResponse {
   photos: {
     tagUser: string[];
     photos: string;
-    description: null | string;
+    description: string | null;
   }[];
   videos: {
     tagUser: string[];
     video: string;
-    description: null | string;
+    description: string | null;
   }[];
 }

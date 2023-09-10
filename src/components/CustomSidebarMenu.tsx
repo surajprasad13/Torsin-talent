@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import {Divider} from 'react-native-paper';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -21,9 +23,7 @@ import Logout from './Logout';
 import CircleProgress from './CircleProgress';
 import {colors, fonts} from '../theme';
 import {useAppSelector} from '../hooks';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {DrawerScreenParamaList, RootStackParamList} from '../routes/RouteType';
-import {StackNavigationProp} from '@react-navigation/stack';
 
 type NavigationProp = CompositeNavigationProp<
   DrawerNavigationProp<DrawerScreenParamaList, 'BottomNavigation'>,

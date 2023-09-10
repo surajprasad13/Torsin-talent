@@ -12,7 +12,6 @@ import {
   Pressable,
   Modal,
   ActivityIndicator,
-  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -41,8 +40,6 @@ type Source = 'camera' | 'library';
 
 type NavigationProp = StackNavigationProp<SettingScreenParamList>;
 
-const {width} = Dimensions.get('window');
-
 const AddPortfolio: FC = ({}) => {
   const navigation = useNavigation<NavigationProp>();
 
@@ -50,11 +47,15 @@ const AddPortfolio: FC = ({}) => {
 
   const {portfolio} = useAppSelector(state => state.user);
 
+  const [addVideo, setAddVideo] = useState<boolean>(false);
+  const [addImage, setAddImage] = useState<boolean>(false);
+
   const [videoModal, setVideoModal] = useState<boolean>(false);
   const [imageModal, setImageModal] = useState<boolean>(false);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
   const [showAllImages, setShowAllImages] = useState(false);
   const [showAllVideos, setShowAllVideos] = useState(false);
+
   const videosToShow = showAllVideos
     ? portfolio?.videos
     : portfolio?.videos.slice(0, 9);
@@ -339,7 +340,7 @@ const AddPortfolio: FC = ({}) => {
         <Title title="Add Portfolio" />
 
         <ScrollView>
-          <View style={styles.textContainer}>
+          <View style={[styles.textContainer, appstyle.rowBetween]}>
             <Text
               style={{
                 fontFamily: fonts.semibold,
@@ -348,6 +349,15 @@ const AddPortfolio: FC = ({}) => {
               }}>
               Video
             </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setAddVideo(!addVideo);
+              }}>
+              <Text style={{color: '#4F4F4F'}}>
+                <Feather name="plus-circle" size={15} color={colors.primary} />{' '}
+                Add more{' '}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           <View>
@@ -358,8 +368,9 @@ const AddPortfolio: FC = ({}) => {
                   style={{width: '33%', padding: 5}}
                   onPress={() => {
                     navigation.navigate('PortfolioDetail', {
-                      item: item,
+                      item: portfolio,
                       type: 'video',
+                      activeIndex: index,
                     });
                   }}>
                   {item.video.length > 10 ? (
@@ -380,7 +391,7 @@ const AddPortfolio: FC = ({}) => {
                 </Pressable>
               ))}
             </View>
-            {portfolio?.videos.length > 9 && !showAllVideos && (
+            {portfolio?.videos && !showAllVideos && (
               <View style={{alignItems: 'center'}}>
                 <Pressable
                   onPress={() => setShowAllVideos(true)}
@@ -400,30 +411,32 @@ const AddPortfolio: FC = ({}) => {
             )}
           </View>
 
-          <Pressable
-            onPress={() => setVideoModal(true)}
-            style={styles.videoInput}>
-            <View
-              style={{
-                backgroundColor: '#EBEFFF',
-                minHeight: 150,
-                borderRadius: 10,
-                borderColor: colors.primary,
-                borderWidth: 1,
-                borderStyle: 'dashed',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <AntDesign name="cloudupload" size={40} color="#14226D" />
-              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                Click{' '}
-                <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
-                  here{' '}
+          {portfolio?.videos && portfolio.videos.length > 1 && addVideo && (
+            <Pressable
+              onPress={() => setVideoModal(true)}
+              style={styles.videoInput}>
+              <View
+                style={{
+                  backgroundColor: '#EBEFFF',
+                  minHeight: 150,
+                  borderRadius: 10,
+                  borderColor: colors.primary,
+                  borderWidth: 1,
+                  borderStyle: 'dashed',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <AntDesign name="cloudupload" size={40} color="#14226D" />
+                <Text style={{fontFamily: fonts.regular, color: colors.black}}>
+                  Click{' '}
+                  <Text style={{color: colors.primary, fontFamily: fonts.bold}}>
+                    here{' '}
+                  </Text>
+                  upload
                 </Text>
-                upload
-              </Text>
-            </View>
-          </Pressable>
+              </View>
+            </Pressable>
+          )}
 
           <View
             style={{
@@ -442,9 +455,7 @@ const AddPortfolio: FC = ({}) => {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                if (list <= 5) {
-                  setList(list + 1);
-                }
+                setAddImage(!addImage);
               }}>
               <Text style={{color: '#4F4F4F'}}>
                 <Feather name="plus-circle" size={15} color={colors.primary} />{' '}
@@ -471,8 +482,9 @@ const AddPortfolio: FC = ({}) => {
                     style={{width: '33%', padding: 5}} // Each image takes up 33% of the width with some padding
                     onPress={() => {
                       navigation.navigate('PortfolioDetail', {
-                        item: item,
+                        item: portfolio,
                         type: 'image',
+                        activeIndex: index,
                       });
                     }}>
                     <FastImage
@@ -487,15 +499,17 @@ const AddPortfolio: FC = ({}) => {
                   </Pressable>
                 ))}
               </View>
-              {portfolio?.photos?.length > 9 && !showAllImages && (
-                <View style={{alignItems: 'center'}}>
-                  <Pressable
-                    onPress={() => setShowAllImages(true)}
-                    style={{paddingVertical: 10}}>
-                    <Text style={{color: 'blue'}}>Show More</Text>
-                  </Pressable>
-                </View>
-              )}
+              {portfolio?.photos &&
+                portfolio?.photos?.length > 9 &&
+                !showAllImages && (
+                  <View style={{alignItems: 'center'}}>
+                    <Pressable
+                      onPress={() => setShowAllImages(true)}
+                      style={{paddingVertical: 10}}>
+                      <Text style={{color: 'blue'}}>Show More</Text>
+                    </Pressable>
+                  </View>
+                )}
               {showAllImages && (
                 <View style={{alignItems: 'center'}}>
                   <Pressable
@@ -507,59 +521,30 @@ const AddPortfolio: FC = ({}) => {
               )}
             </View>
 
-            {Array(list)
-              .fill('')
-              .map((_, index) => {
-                return (
-                  <View key={index} style={styles.photoContainer}>
-                    <Pressable
-                      onPress={() => setImageModal(true)}
-                      style={styles.innerPhotos}>
-                      <Feather name="image" size={30} color="#14226D" />
-                      <Text
-                        style={{
-                          fontFamily: fonts.regular,
-                          color: colors.black,
-                        }}>
-                        Click{' '}
-                        <Text
-                          style={{
-                            color: colors.primary,
-                            fontFamily: fonts.bold,
-                          }}>
-                          here{' '}
-                        </Text>
-                      </Text>
-                    </Pressable>
-                  </View>
-                );
-              })}
+            {portfolio?.photos && portfolio.photos.length > 1 && addImage && (
+              <View style={styles.photoContainer}>
+                <Pressable
+                  onPress={() => setImageModal(true)}
+                  style={styles.innerPhotos}>
+                  <Feather name="image" size={30} color="#14226D" />
+                  <Text
+                    style={{
+                      fontFamily: fonts.regular,
+                      color: colors.black,
+                    }}>
+                    Click{' '}
+                    <Text
+                      style={{
+                        color: colors.primary,
+                        fontFamily: fonts.bold,
+                      }}>
+                      here{' '}
+                    </Text>
+                  </Text>
+                </Pressable>
+              </View>
+            )}
           </View>
-
-          {list >= 2 && (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'flex-end',
-                alignItems: 'flex-end',
-                marginTop: 10,
-                margin: 15,
-              }}>
-              <Pressable
-                onPress={() => {
-                  if (list >= 2) {
-                    setList(list - 1);
-                  }
-                }}
-                style={{
-                  backgroundColor: 'red',
-                  padding: 5,
-                  borderRadius: 100,
-                }}>
-                <Feather name="x" size={15} color={colors.white} />
-              </Pressable>
-            </View>
-          )}
 
           {/*  */}
         </ScrollView>

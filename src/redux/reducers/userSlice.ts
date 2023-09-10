@@ -91,7 +91,7 @@ interface UserInterface {
   created: boolean;
   adminPercentage: number;
   support: [];
-  portfolio: null | PortfolioResponse;
+  portfolio: PortfolioResponse | null;
 }
 
 const initialState: UserInterface = {
@@ -381,7 +381,24 @@ const userSlice = createSlice({
       })
       .addCase(getContractDetail.fulfilled, (state, action) => {
         state.loading = false;
-        state.contractDetail = action.payload.response.data;
+        const data = action.payload.response.data;
+        let milestone;
+        if (data.milestoneData) {
+          milestone = data.milestoneData.map((_item: any, index: any) => {
+            if (index == 0) {
+              return {
+                ..._item,
+                active: true,
+              };
+            }
+            return {
+              ..._item,
+              active: false,
+            };
+          });
+        }
+        data.milestoneData = milestone;
+        state.contractDetail = data;
       })
       .addCase(getContractDetail.rejected, (state, action) => {
         state.loading = false;

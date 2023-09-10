@@ -3,6 +3,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import notifee from '@notifee/react-native';
+import {useFlipper} from '@react-navigation/devtools';
 
 /**
  * Screens
@@ -40,7 +41,6 @@ import RatingDetail from '../screens/rating/RatingDetail';
 import FeedDetails from '../screens/feeds/FeedDetails';
 import ChangePassword from '../screens/auth/ChangePassword';
 
-import {useFlipper} from '@react-navigation/devtools';
 import Complaints from '../screens/help/Complaints';
 import Location from '../screens/common/Location';
 import WithoutSignupHome from '../screens/withoutsignupHome/WithoutSignupHome';

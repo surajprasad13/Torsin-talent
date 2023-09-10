@@ -4,6 +4,7 @@ import type {
 } from '@react-navigation/native';
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {PortfolioResponse} from '../types/user';
 
 export type RootStackParamList = AuthScreenParamList & {
   OnboardingScreen: undefined;
@@ -93,6 +94,12 @@ export type BottomScreenParamList = {
   SettingNavigator: NavigatorScreenParams<SettingScreenParamList>;
 };
 
+export interface PortfolioDetailProp {
+  item: PortfolioResponse | null;
+  type: 'image' | 'video';
+  activeIndex: number;
+}
+
 export type SettingScreenParamList = {
   Setting: undefined;
   EditProfile: undefined;
@@ -103,12 +110,7 @@ export type SettingScreenParamList = {
   ServiceDetail: undefined;
   AddPortfolio: undefined;
   OpenImage: {item: any; type: 'image' | 'video'} | undefined;
-  PortfolioDetail:
-    | {
-        item: {tagUser: string[]; photos: string; description: null | string};
-        type: 'image' | 'video';
-      }
-    | undefined;
+  PortfolioDetail: PortfolioDetailProp;
 };
 
 export type HomeScreenParamList = {
