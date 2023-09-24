@@ -10,6 +10,7 @@ import {
   resetOtpSent,
   otpverify,
   resetPassword,
+  changePassword,
 } from '../actions/authAction';
 import {LoginResponseData} from '../../types/auth';
 
@@ -19,6 +20,7 @@ interface AuthState {
   userToken: null | string;
   error: null | any;
   success: null | object | boolean;
+  otpVerified: boolean;
   status: null | string;
   registerSuccess: boolean;
   message: null | string;
@@ -26,6 +28,7 @@ interface AuthState {
   mobileVerified: boolean;
   isFirstOpen: boolean;
   expired: boolean;
+  withoutRegister: boolean;
 }
 
 const initialState: AuthState = {
@@ -41,6 +44,8 @@ const initialState: AuthState = {
   mobileVerified: false,
   isFirstOpen: true,
   expired: false,
+  otpVerified: false,
+  withoutRegister: false,
 };
 
 const authSlice = createSlice({
@@ -51,12 +56,20 @@ const authSlice = createSlice({
       state.expired = true;
     },
 
+    updateWithoutRegister: state => {
+      state.withoutRegister = true;
+    },
+
     loginValue: state => {
       state.error = '';
+      state.loading = false;
     },
     logout: state => {
       state.userToken = null;
       state.userInfo = null;
+    },
+    resetMessage: state => {
+      state.message = '';
     },
     resetSuccess: state => {
       state.success = false;
@@ -70,8 +83,14 @@ const authSlice = createSlice({
     phoneVerified: state => {
       state.mobileVerified = true;
     },
+    resetOtpVerified: state => {
+      state.otpVerified = false;
+    },
     resetFirst: state => {
       state.isFirstOpen = false;
+    },
+    updateUserInfo: (state, action) => {
+      state.userInfo = action.payload;
     },
   },
   extraReducers: builder => {
@@ -193,10 +212,12 @@ const authSlice = createSlice({
       .addCase(resetOtpSent.pending, state => {
         state.error = null;
         state.loading = true;
+        state.message = '';
       })
-      .addCase(resetOtpSent.fulfilled, state => {
+      .addCase(resetOtpSent.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true; // registration successful
+        state.success = true;
+        state.message = action.payload.response.message.successMessage;
       })
       .addCase(resetOtpSent.rejected, (state, action) => {
         state.loading = false;
@@ -211,9 +232,9 @@ const authSlice = createSlice({
       })
       .addCase(otpverify.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true; // registration successful
+        state.success = true;
         state.message = action.payload.response.message.successMessage;
-        state.emailVerified = true;
+        state.otpVerified = true;
       })
       .addCase(otpverify.rejected, (state, action) => {
         state.loading = false;
@@ -237,6 +258,22 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.message = '';
+      })
+
+      .addCase(changePassword.pending, state => {
+        state.error = null;
+        state.loading = true;
+        state.success = false;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true; // registration successful
+        state.message = action.payload.response.message.successMessage;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.message = '';
       });
   },
 });
@@ -250,6 +287,10 @@ export const {
   resetMobileVerified,
   phoneVerified,
   resetFirst,
+  resetOtpVerified,
+  updateUserInfo,
+  resetMessage,
+  updateWithoutRegister,
 } = authSlice.actions;
 
 export default authSlice.reducer;

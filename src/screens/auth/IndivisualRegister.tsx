@@ -1,27 +1,37 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  Keyboard,
   SafeAreaView,
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
 } from 'react-native';
-import {RadioButton} from 'react-native-paper';
+import {} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import PhoneInput from 'react-native-phone-number-input';
+import {CountryCode} from 'react-native-country-picker-modal';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import {getLocales} from 'react-native-localize';
 import {decode} from 'base64-arraybuffer';
+import {useFormik} from 'formik';
+import * as Yup from 'yup';
+import CountryPicker from 'react-native-country-picker-modal';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // helpers
-import {metrics, colors, fonts} from '../../theme';
+import {metrics, colors, fonts, appstyle} from '../../theme';
 
 // components
 import Input from '../../components/Input';
@@ -31,85 +41,66 @@ import ProFile from '../../components/Profile';
 
 // redux
 import {RootState} from '../../redux';
-import {} from '../../redux/actions/authAction';
-import {CustomButton} from '../../components';
+import {CustomButton, CustomInput, Stepper} from '../../components';
 
-import {email, alphabets, number} from '../../utils/regex';
 import {uploadFileToS3} from '../../services/s3';
 import {useAppDispatch} from '../../hooks';
 import {
   resetEmailVerified,
   resetMobileVerified,
+  updateUserInfo,
 } from '../../redux/reducers/authSlice';
-import ImageCropPicker from 'react-native-image-crop-picker';
+import {RootStackParamList} from '../../routes/RouteType';
+import {email} from '../../utils/regex';
 
-const {horizontalScale, moderateScale, verticalScale} = metrics;
+const {moderateScale} = metrics;
 
-type InputProp = {
-  fullName: string;
-  email: string;
-  mobileNo: string;
-  location: string;
-  countryName: string;
-  gender: number;
-  password: string;
-  confirmPassword: string;
-  profileImage: string;
-};
+type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const IndivisualRegister = ({}) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
-  const {loading, emailVerified, mobileVerified} = useSelector(
-    (state: RootState) => state.auth,
-  );
-
-  const [inputs, setInputs] = useState<InputProp>({
-    fullName: '',
-    email: '',
-    mobileNo: '',
-    location: '',
-    countryName: '',
-    gender: 1,
-    password: '',
-    confirmPassword: '',
-    profileImage: '',
-  });
-
-  const [errors, setErrors] = useState<any>({});
+  const {loading, userInfo} = useSelector((state: RootState) => state.auth);
 
   const [checked, setChecked] = useState('first');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
-  const validate = () => {
-    Keyboard.dismiss();
+  const [selectedCountry, setSelectedCountry] = useState<any | null>(null);
+  const [isCountryPickerOpen, setCountryPickerOpen] = useState(false);
+  const [mobileWithCode, setMobileWithCode] = useState<string>('');
 
-    let isValid = true;
+  const handleCountrySelect = (country: any) => {
+    setSelectedCountry(country);
+    setCountryPickerOpen(false); // Close the country dropdown after selection
+  };
 
-    const validName = alphabets(inputs.fullName);
-    const validEmail = email(inputs.email);
-    const validNumber = number(inputs.mobileNo);
+  const validationSchema = Yup.object().shape({
+    fullName: Yup.string().required('Please enter name'),
+    email: Yup.string()
+      .email('Please enter valid email')
+      .required('Please enter email'),
+    mobileNo: Yup.string(),
+    location: Yup.string(),
+  });
 
-    if (!validName) {
-      handleError('Please input Name', 'fullName');
-      isValid = false;
-    }
-    if (!validEmail) {
-      handleError('Please input email', 'email');
-      isValid = false;
-    }
-    if (!validNumber) {
-      handleError('Please input Phone', 'mobileNo');
-      isValid = false;
-    }
-    if (!inputs.location) {
-      handleError('Please input Location', 'location');
-      isValid = false;
-    }
+  const [profileImage, setProfileImage] = useState('');
+  const phoneInput = useRef<any | null>(null);
 
-    if (isValid) {
-      register();
-    }
+  const locales = getLocales();
+
+  const onSubmit = (event: any) => {
+    const field = {
+      screen: 'indivisual',
+      data: {
+        ...event,
+        profileImage,
+        countryId: phoneInput?.current?.getCallingCode(),
+      },
+    };
+
+    navigation.navigate('CreatePassword', {
+      item: JSON.stringify(field),
+    });
   };
 
   const [image, setImage] = useState('');
@@ -134,13 +125,14 @@ const IndivisualRegister = ({}) => {
         `${response.filename}`,
         'image/jpeg',
       );
-      setInputs(prevState => ({...prevState, profileImage: url.Location}));
+      setProfileImage(url.Location);
       setImageLoading(false);
     } else {
       setImageLoading(false);
     }
   };
 
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', () => {
       dispatch(resetEmailVerified());
@@ -149,6 +141,17 @@ const IndivisualRegister = ({}) => {
     return () => listener;
   }, []);
 
+  //@ts-ignore
+  useEffect(() => {
+    const listener = navigation.addListener('state', () => {
+      if (userInfo?.location) {
+        formik.handleChange('location')(userInfo?.location);
+      }
+    });
+    return () => listener;
+  }, []);
+
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(resetEmailVerified());
@@ -157,53 +160,26 @@ const IndivisualRegister = ({}) => {
     return () => listener;
   }, []);
 
-  const register = () => {
-    const field = {
-      screen: 'indivisual',
-      data: {
-        ...inputs,
-      },
-    };
-
-    navigation.navigate('CreatePassword', {
-      item: JSON.stringify(field),
-    });
-  };
-
-  const handleOnchange = (text: any, input: any) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
-  };
-  const handleError = (_error: any, input: any) => {
-    setErrors((prevState: any) => ({...prevState, [input]: _error}));
-  };
+  const formik = useFormik({
+    initialValues: {
+      fullName: '',
+      email: '',
+      mobileNo: '',
+      location: '',
+      confirmPassword: '',
+      gender: 1,
+      countryName: '',
+    },
+    validateOnChange: false,
+    validationSchema,
+    onSubmit,
+  });
 
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {},
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {},
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
-  const active: boolean =
-    inputs.fullName &&
-    inputs.email &&
-    inputs.mobileNo &&
-    emailVerified &&
-    mobileVerified &&
-    inputs.location &&
-    inputs.countryName
-      ? true
-      : false;
+    if (userInfo?.location) {
+      formik.setFieldValue('location', userInfo.location); // Use setFieldValue to set the value
+    }
+  }, [userInfo?.location]);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
@@ -211,41 +187,9 @@ const IndivisualRegister = ({}) => {
         style={{flex: 1}}
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
         <ScrollView contentContainerStyle={{padding: 10}}>
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <View
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 10,
-                backgroundColor: '#14226D',
-                right: -1,
-              }}></View>
+          <Stepper step={0} />
 
-            <View
-              style={{
-                width: 120,
-                height: 10,
-                backgroundColor: '#E0E0E0',
-                top: 5,
-              }}></View>
-
-            <View
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 10,
-                backgroundColor: '#E0E0E0',
-                left: -2,
-              }}></View>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              top: 36,
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
+          <View style={[appstyle.rowBetween, {top: 36}]}>
             <TouchableOpacity
               onPress={() => {
                 if (navigation.canGoBack()) {
@@ -296,30 +240,32 @@ const IndivisualRegister = ({}) => {
           </View>
 
           <View style={{marginVertical: 47, marginTop: 84}}>
-            <Input
-              label="Name"
-              value={inputs.fullName}
-              onFocus={() => handleError(null, 'fullName')}
-              placeholder="John smith"
-              onChangeText={(text: any) => {
+            <CustomInput
+              value={formik.values.fullName}
+              onChangeText={(text: string) => {
                 const name = text.replace(/[^a-zA-Z ]/g, '');
-                handleOnchange(name, 'fullName');
+                formik.handleChange('fullName')(name);
               }}
-              error={errors.fullName}
+              maxLength={30}
+              onFocus={() => formik.setErrors({fullName: ''})}
+              label="Name"
+              placeholder="eg. John smith"
+              error={formik.errors.fullName}
             />
 
-            <View>
-              <Input
+            <View style={{marginTop: 20}}>
+              <CustomInput
                 onChangeText={(text: string) => {
-                  handleOnchange(text, 'email');
+                  formik.handleChange('email')(text);
                 }}
-                onFocus={() => handleError(null, 'email')}
+                onFocus={() => formik.setErrors({email: ''})}
                 label="Email"
                 keyboardType="email-address"
                 placeholder="john@gmail.com"
-                error={errors.email}
+                error={formik.errors.email}
                 autoComplete="email"
                 autoCapitalize="none"
+                containerStyle={{}}
               />
               <Pressable
                 style={{
@@ -327,43 +273,76 @@ const IndivisualRegister = ({}) => {
                   marginTop: 45,
                   right: 10,
                 }}>
-                <EmailModal active={email(inputs.email)} email={inputs.email} />
+                <EmailModal
+                  active={email(formik.values.email)}
+                  email={formik.values.email}
+                />
               </Pressable>
             </View>
 
-            <View>
-              <Input
-                onFocus={() => handleError(null, 'mobileNo')}
-                label="Mobile Number"
-                placeholder="eg. 895204300"
-                error={errors.phone}
-                value={inputs.mobileNo}
-                defaultValue="+"
-                onChangeText={(text: any) => {
-                  const pattern = /^[0-9]*$/;
-                  const pass = pattern.test(text);
-                  if (pass) {
-                    handleOnchange(text, 'mobileNo');
-                  }
-                }}
-                keyboardType="phone-pad"
-                maxLength={13}
-                style={{paddingLeft: 10}}
-              />
-              <View style={{position: 'absolute', marginTop: 45, left: 10}}>
-                <Text>+</Text>
-              </View>
-              <Pressable
+            <View style={{margin: 2, marginTop: 20}}>
+              <Text
                 style={{
-                  position: 'absolute',
-                  marginTop: 45,
-                  right: 10,
+                  fontFamily: fonts.regular,
+                  color: '#4F4F4F',
+                  fontSize: 16,
                 }}>
-                <PhoneModal
-                  active={inputs.mobileNo.length >= 10}
-                  phone={inputs.mobileNo}
+                Mobile Number
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  borderRadius: 10,
+                  marginTop: 10,
+                  backgroundColor: 'white',
+                  borderColor: '#BDBDBD',
+                  borderWidth: 1,
+                }}>
+                <PhoneInput
+                  ref={phoneInput}
+                  defaultValue={''}
+                  defaultCode={locales[0].countryCode as CountryCode}
+                  layout="first"
+                  placeholder="eg. 7895325085"
+                  containerStyle={{borderRadius: 10, alignItems: 'center'}}
+                  textContainerStyle={{
+                    borderColor: '#BDBDBD',
+                    backgroundColor: 'transparent',
+                  }}
+                  textInputStyle={{
+                    color: '#333333',
+                    fontSize: 14,
+                    fontFamily: fonts.regular,
+                  }}
+                  codeTextStyle={{color: '#333333'}}
+                  onChangeText={(text: string) => {
+                    const pattern = /^[0-9]*$/;
+                    const pass = pattern.test(text);
+                    if (pass) {
+                      formik.handleChange('mobileNo')(text);
+                    }
+                  }}
+                  onChangeFormattedText={(text: string) => {
+                    setMobileWithCode(text);
+                  }}
+                  textInputProps={{
+                    maxLength: 15,
+                    onFocus: () => formik.setErrors({mobileNo: ''}),
+                  }}
                 />
-              </Pressable>
+                <Pressable
+                  style={{
+                    position: 'absolute',
+                    marginTop: 46,
+                    right: 10,
+                  }}>
+                  <PhoneModal
+                    active={formik.values.mobileNo.length >= 9}
+                    phone={mobileWithCode}
+                  />
+                </Pressable>
+              </View>
             </View>
 
             <View>
@@ -373,6 +352,7 @@ const IndivisualRegister = ({}) => {
                   fontFamily: fonts.regular,
                   fontSize: moderateScale(16),
                   bottom: 10,
+                  marginTop: 30,
                 }}>
                 Gender
               </Text>
@@ -381,7 +361,7 @@ const IndivisualRegister = ({}) => {
                 style={{flexDirection: 'row', alignItems: 'center'}}
                 onPress={() => {
                   setChecked('first');
-                  setInputs(prevState => ({...prevState, gender: 1}));
+                  formik.handleChange('gender')('1');
                 }}>
                 <FontAwesome
                   name={checked === 'first' ? 'dot-circle-o' : 'circle-o'}
@@ -407,7 +387,7 @@ const IndivisualRegister = ({}) => {
                 }}
                 onPress={() => {
                   setChecked('second');
-                  setInputs(prevState => ({...prevState, gender: 2}));
+                  formik.handleChange('gender')('2');
                 }}>
                 <FontAwesome
                   name={checked === 'second' ? 'dot-circle-o' : 'circle-o'}
@@ -426,29 +406,75 @@ const IndivisualRegister = ({}) => {
               </Pressable>
             </View>
 
-            <View style={{marginTop: 10}}>
-              <Input
-                onChangeText={(text: any) => handleOnchange(text, 'location')}
-                onFocus={() => handleError(null, 'location')}
-                label="Location"
-                placeholder="Enter Location"
-                error={errors.location}
+            <CustomInput
+              label="Location"
+              placeholder="Location "
+              value={userInfo?.location}
+              onChangeText={(text: string) => {
+                dispatch(updateUserInfo({...userInfo, location: text}));
+                formik.handleChange('location')(text);
+                if (text.length >= 2) {
+                  navigation.navigate('Location');
+                }
+              }}
+              onFocus={() => {
+                if (!formik.values.location) {
+                  navigation.navigate('Location');
+                }
+              }}
+              containerStyle={{marginTop: 20}}
+              error={formik.errors.location}
+            />
+
+            <View style={{position: 'relative', marginTop: 10}}>
+              <CustomInput
+                label="Country"
+                placeholder="eg. India"
+                value={selectedCountry?.name || formik.values.countryName}
+                onChangeText={text => {
+                  setCountryPickerOpen(true);
+                  formik.handleChange('countryName')(text);
+                }}
+                onFocus={() => {
+                  formik.setErrors({countryName: ''});
+                  setCountryPickerOpen(true);
+                }}
+                error={formik.errors.countryName}
+                maxLength={50}
+                onPressIn={() => setCountryPickerOpen(true)}
+                onPressOut={() => setCountryPickerOpen(true)}
+                editable={false}
               />
+
+              <Pressable
+                onPress={() => setCountryPickerOpen(true)}
+                style={{
+                  alignItems: 'center',
+                  position: 'absolute',
+                  right: 10,
+                  justifyContent: 'center',
+                  marginTop: 50,
+                }}>
+                <AntDesign name="down" size={15} />
+              </Pressable>
             </View>
 
-            <View style={{marginTop: 10}}>
-              <Input
-                value={inputs.countryName}
-                onChangeText={(text: any) => {
-                  const name = text.replace(/[^a-zA-Z ]/g, '');
-                  handleOnchange(name, 'countryName');
+            {isCountryPickerOpen && (
+              <CountryPicker
+                withFilter
+                withFlag={false}
+                onSelect={country => {
+                  handleCountrySelect(country);
+                  formik.handleChange('countryName')(country.name as string);
                 }}
-                onFocus={() => handleError(null, 'countryName')}
-                label="Country"
-                placeholder="Enter your country"
-                error={errors.countryName}
+                countryCode={selectedCountry?.cca2}
+                visible
+                containerButtonStyle={{
+                  display: 'none',
+                }}
+                onClose={() => setCountryPickerOpen(false)}
               />
-            </View>
+            )}
 
             <View
               style={{
@@ -471,9 +497,6 @@ const IndivisualRegister = ({}) => {
                 <Text style={{fontFamily: fonts.regular, fontSize: 13}}>
                   I have accepted the{' '}
                   <Text
-                    onPress={() => {
-                      navigation.navigate('RegisterScreen');
-                    }}
                     style={{
                       color: colors.blue,
                       fontFamily: fonts.bold,
@@ -486,8 +509,16 @@ const IndivisualRegister = ({}) => {
 
             <CustomButton
               title="Next"
-              disabled={active}
-              onPress={validate}
+              disabled={
+                !!formik.values.fullName &&
+                !!formik.values.email &&
+                !!formik.values.mobileNo &&
+                !!formik.values.location &&
+                !!formik.values.countryName
+                  ? true
+                  : false
+              }
+              onPress={formik.handleSubmit}
               style={{marginTop: 20}}
               loading={loading}
             />
@@ -516,5 +547,27 @@ const IndivisualRegister = ({}) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  autocompleteContainer: {
+    flex: 1,
+
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  textInput: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 12,
+    padding: 10,
+    marginTop: 10,
+  },
+  listView: {
+    padding: 5,
+  },
+  powered: {},
+});
 
 export default IndivisualRegister;

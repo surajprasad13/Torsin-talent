@@ -21,9 +21,7 @@ const getFcmToken = async () => {
       if (fcToken) {
         await AsyncStorage.setItem('fcmToken', fcmToken);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 };
 

@@ -1,12 +1,19 @@
-import {View, Text, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+} from 'react-native';
+import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {Divider} from 'react-native-paper';
 import moment from 'moment';
 
 // components
-import {CustomButton, Title} from '../../components';
+import {CustomButton, GridImageView, Title} from '../../components';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
@@ -22,40 +29,29 @@ const JobDetails = ({route}: any) => {
   const {item} = route.params as {item: JobDetail};
   const navigation = useNavigation();
 
+  const [imageVisible, setImageVisible] = useState<boolean>(false);
+  console.log(item?.adminService);
+
   return (
     <SafeAreaView style={styles.container}>
       <Title title="Job Details" />
 
       <ScrollView>
         <View style={styles.cardContainer}>
-          <Text style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
-            {item.adminService}
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginTop: 20,
-            }}>
-            <FastImage
-              source={{
-                uri: item.photos[0],
-              }}
-              resizeMode="cover"
-              style={{width: 50, height: 50, borderRadius: 25}}
-            />
-            <View style={{width: '80%'}}>
-              <Text style={styles.headertext}>{item.jobName}</Text>
-              <Text
-                style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
-                Project type : {projectType[item.projectType]}
-              </Text>
-              <Text
-                style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
-                Cost : {item.priceRate}
-              </Text>
-            </View>
+          <View style={{width: '80%'}}>
+            <Text style={styles.headertext}>{item.jobName}</Text>
+            <Text
+              style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
+              Project type : {projectType[item.projectType]}
+            </Text>
+            <Text
+              style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
+              Cost : {item.priceRate}
+            </Text>
+            <Text
+              style={{fontFamily: fonts.regular, fontSize: 12, marginTop: 5}}>
+              Skills Required: {item.adminService?.join(', ')}
+            </Text>
           </View>
           <View
             style={{
@@ -110,35 +106,40 @@ const JobDetails = ({route}: any) => {
 
           <Divider style={{marginTop: 20}} />
 
-          <View
-            style={{
-              borderRadius: 10,
-              marginTop: 20,
-            }}>
-            <Text
-              style={{
-                fontFamily: fonts.semibold,
-                color: colors.black,
-                fontSize: 16,
-              }}>
-              Photos
-            </Text>
-
+          {item.photos !== null && item.photos.length > 0 && (
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
+                ...appstyle.shadow,
+                borderRadius: 10,
               }}>
-              {item.photos.map((_item, _index) => (
-                <FastImage
-                  source={{uri: _item}}
-                  key={_index.toString()}
-                  style={styles.innerImage}
-                />
-              ))}
+              <Text
+                style={{
+                  fontFamily: fonts.semibold,
+                  color: colors.black,
+                  fontSize: 16,
+                  padding: 5,
+                }}>
+                Photos
+              </Text>
+
+              <View style={styles.photoContainer}>
+                {item.photos?.map((a, b) => (
+                  <Pressable
+                    onPress={() => {
+                      setImageVisible(true);
+                    }}
+                    key={b.toString()}
+                    style={styles.innerPhotos}>
+                    <FastImage
+                      source={{uri: a}}
+                      resizeMode="cover"
+                      style={{width: '100%', height: 140, borderRadius: 10}}
+                    />
+                  </Pressable>
+                ))}
+              </View>
             </View>
-          </View>
+          )}
 
           <View style={{marginTop: 30}}>
             <CustomButton
@@ -152,6 +153,15 @@ const JobDetails = ({route}: any) => {
           </View>
         </View>
       </ScrollView>
+      {item.photos !== null && item.photos.length > 0 && (
+        <GridImageView
+          data={item.photos}
+          visible={imageVisible}
+          onRequestClose={() => {
+            setImageVisible(false);
+          }}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -179,7 +189,6 @@ const styles = StyleSheet.create({
   headertext: {
     fontFamily: fonts.regular,
     color: colors.black,
-    fontSize: 12,
     justifyContent: 'center',
   },
   icon: {
@@ -190,6 +199,16 @@ const styles = StyleSheet.create({
     height: 86,
     borderRadius: 5,
     margin: 5,
+  },
+  innerPhotos: {
+    borderRadius: 10,
+    flex: 1,
+    margin: 5,
+  },
+  photoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderRadius: 10,
   },
 });
 

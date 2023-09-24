@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {fonts, appstyle, colors} from '../../theme';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = React.useState(visible);
@@ -50,104 +51,78 @@ const SignupPopup = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = React.useState(false);
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{flex: 1}}>
       <ModalPoup visible={visible}>
-        <View style={{alignItems: 'center'}}>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => setVisible(false)}>
-              <Entypo name="cross" size={20} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View>
-          <View
+        <TouchableOpacity
+          onPress={() => setVisible(false)}
+          style={{alignItems: 'flex-end', right: 10}}>
+          <Entypo name="cross" size={20} />
+        </TouchableOpacity>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            maxHeight: 300,
+          }}>
+          <Image
+            source={require('../../assets/images/otp.png')}
             style={{
-              flexDirection: 'row',
-              bottom: 30,
-            }}>
-            <Image
-              source={require('../../assets/images/otp.png')}
-              style={{
-                width: 89,
-                height: 80,
-                left: 5,
-                top: 5,
-              }}
-            />
+              width: 89,
+              height: 80,
+              alignSelf: 'center',
+              bottom: 10,
+              marginLeft: 5,
+            }}
+          />
+          <View style={{width: '80%', margin: 5, marginLeft: 10}}>
             <Text
               style={{
-                width: 183,
-                height: 20,
-                fontFamily: 'Inter',
-                fontStyle: 'normal',
-                fontWeight: '600',
+                fontFamily: fonts.semibold,
                 fontSize: 16,
-                top: 10,
-                left: 15,
-                lineHeight: 20,
-                display: 'flex',
-                alignItems: 'center',
                 color: '#1E202B',
               }}>
               Sign up to explore more
             </Text>
+
+            <Text
+              style={{
+                fontFamily: fonts.regular,
+                fontSize: 10,
+                color: '#1E202B',
+                marginTop: 5,
+              }}>
+              Continue to the sign up page to start exploring more content.
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('OnboardingScreen')}>
+              <Text
+                style={{
+                  fontFamily: fonts.medium,
+                  fontSize: 12,
+                  color: '#14226D',
+                  marginTop: 5,
+                }}>
+                Go to login/SignUp
+              </Text>
+            </TouchableOpacity>
           </View>
-
-          <Text
-            style={{
-              width: 175,
-              height: 26,
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              fontSize: 10,
-              top: 10,
-              left: 100,
-              opacity: 0.8,
-              position: 'absolute',
-              lineHeight: 12,
-              textAlign: 'center',
-              color: '#1E202B',
-            }}>
-            Continue to the sign up page to start exploring more content.
-          </Text>
         </View>
-
-        <TouchableOpacity
-          onPress={() => navigation.navigate('OnboardingScreen')}>
-          <Text
-            style={{
-              textAlign: 'center',
-              fontFamily: 'Inter',
-              fontStyle: 'normal',
-              fontWeight: '500',
-              fontSize: 12,
-              bottom: 20,
-              color: '#14226D',
-            }}>
-            Go to login/SignUp
-          </Text>
-        </TouchableOpacity>
       </ModalPoup>
       <TouchableOpacity
         onPress={setVisible}
         style={{
-          width: 82,
-          height: 27,
+          padding: 10,
           backgroundColor: '#14226D',
           borderRadius: 4,
           bottom: 10,
           justifyContent: 'center',
+          alignItems: 'center',
         }}>
         <Text
           style={{
-            textAlign: 'center',
-            fontFamily: 'Inter',
-            fontStyle: 'normal',
-            fontWeight: '400',
-            fontSize: 12,
-            lineHeight: 15,
-            color: '#FFFFFF',
+            color: colors.white,
+            fontFamily: fonts.semibold,
+            fontSize: 14,
           }}>
           Sign up
         </Text>
@@ -164,18 +139,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContainer: {
-    width: '80%',
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-    borderRadius: 20,
-    elevation: 20,
-  },
-  header: {
-    width: '100%',
-    height: 40,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
+    ...appstyle.shadow,
+    margin: 10,
+    width: '95%',
+    borderRadius: 15,
   },
 });
 

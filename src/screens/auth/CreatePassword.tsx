@@ -245,6 +245,9 @@ const CreatePassword = ({}) => {
             handleError('', 'password');
             dispatch(loginValue());
           }}
+          onFocus={() => {
+            dispatch(loginValue());
+          }}
           error={errors.password}
         />
 
@@ -258,6 +261,9 @@ const CreatePassword = ({}) => {
           onChangeText={text => {
             handleChange(text, 'confirmPassword');
             handleError('', 'confirmPassword');
+            dispatch(loginValue());
+          }}
+          onFocus={() => {
             dispatch(loginValue());
           }}
           error={errors.confirmPassword}
@@ -311,15 +317,6 @@ const CreatePassword = ({}) => {
           style={{marginTop: 50}}
           loading={loading}
         />
-        <Text
-          style={{
-            textAlign: 'center',
-            fontFamily: fonts.regular,
-            marginTop: 10,
-          }}>
-          Already have an account?{' '}
-          <Text style={{fontFamily: fonts.bold}}>Log In</Text>
-        </Text>
       </ScrollView>
     </SafeAreaView>
   );

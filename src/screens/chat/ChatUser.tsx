@@ -187,7 +187,7 @@ const ChatUser = ({route}: any) => {
         />
         <View style={{alignItems: 'center'}}>
           <Text style={{textTransform: 'capitalize', fontSize: 16}}>
-            {item.fullname}
+            {item.fullName}
           </Text>
         </View>
         <Feather name="more-vertical" size={20} />

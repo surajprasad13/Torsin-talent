@@ -11,7 +11,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {} from 'react-native-paper';
+import {StackNavigationProp} from '@react-navigation/stack';
 import messaging from '@react-native-firebase/messaging';
 import database from '@react-native-firebase/database';
 
@@ -22,20 +22,23 @@ import Feather from 'react-native-vector-icons/Feather';
 // components
 import ImageSlider from '../../components/ImageSlider';
 import CircleProgress from '../../components/CircleProgress';
-import {colors, fonts} from '../../theme';
+import {appstyle, colors, fonts} from '../../theme';
 import ExpertiseCard from './components/ExpertiseCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {profileDetail, userUpdate} from '../../redux/actions/authAction';
 import {jobCorrespondSkill} from '../../redux/actions/userAction';
+import {HomeScreenParamList} from '../../routes/RouteType';
 
 const {} = Dimensions.get('window');
+
+type NavigationProp = StackNavigationProp<HomeScreenParamList>;
 
 const HomeScreen = ({}) => {
   const dispatch = useAppDispatch();
   const {userInfo, userToken} = useAppSelector(state => state.auth);
   const {correspond, loading} = useAppSelector(state => state.user);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
 
   const setToken = async () => {
     const token = await messaging().getToken();
@@ -78,53 +81,50 @@ const HomeScreen = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+      <View style={[appstyle.rowBetween, {padding: 10}]}>
+        <TouchableOpacity
+          onPress={() => {
+            //@ts-ignore
+            navigation.openDrawer();
+          }}>
+          <MaterialIcons name="sort" size={20} color="#14226D" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('JobNavigator')}
+          style={{
+            flex: 0.9,
+            backgroundColor: colors.white,
+            borderRadius: 100,
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderWidth: 0.2,
+          }}>
+          <Feather
+            name="search"
+            size={18}
+            color={colors.primary}
+            style={{marginLeft: 10}}
+          />
+
+          <TextInput
+            placeholder="Search Jobs"
+            disableFullscreenUI
+            placeholderTextColor="#BDBDBD"
+            style={{
+              padding: 10,
+              flex: 1,
+            }}
+            onPressIn={() => navigation.navigate('JobNavigator')}
+            onPressOut={() => navigation.navigate('JobNavigator')}
+          />
+        </TouchableOpacity>
+      </View>
+
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={onRefresh} />
         }
-        style={{padding: 10}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: 10,
-            justifyContent: 'space-between',
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              //@ts-ignore
-              navigation.openDrawer();
-            }}>
-            <MaterialIcons name="sort" size={20} color="#14226D" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flex: 0.9,
-              backgroundColor: colors.white,
-              borderRadius: 100,
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderWidth: 0.2,
-            }}>
-            <Feather
-              name="search"
-              size={18}
-              color={colors.primary}
-              style={{marginLeft: 10}}
-            />
-
-            <TextInput
-              placeholder="Search Talent"
-              disableFullscreenUI
-              placeholderTextColor="#BDBDBD"
-              style={{
-                padding: 10,
-                flex: 1,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-
+        style={{}}>
         <View
           style={{
             borderRadius: 15,
@@ -133,7 +133,8 @@ const HomeScreen = ({}) => {
             padding: 15,
             justifyContent: 'space-between',
           }}>
-          <CircleProgress image={userInfo?.profileImage} />
+          <CircleProgress image={userInfo?.profileImage ?? ''} progress={100} />
+
           <View style={{width: '70%'}}>
             <Text style={{fontFamily: fonts.semibold, color: '#1E202B'}}>
               {userInfo?.fullName} Profile
@@ -155,17 +156,25 @@ const HomeScreen = ({}) => {
             </TouchableOpacity>
           </View>
         </View>
-
-        <View style={{top: 8}}>
-          <ImageSlider />
-        </View>
-
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-around',
-            marginTop: 30,
+            justifyContent: 'space-between',
+            margin: 10,
           }}>
+          <Text style={{fontFamily: fonts.semibold, fontSize: 16}}>
+            Blogs / News
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Feeds')}>
+            <Text style={{fontFamily: fonts.medium, color: colors.primary}}>
+              View All
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <ImageSlider />
+
+        <View style={{margin: 10}}>
           <Text
             style={{
               fontFamily: fonts.regular,
@@ -173,17 +182,8 @@ const HomeScreen = ({}) => {
             }}>
             Hey, {userInfo?.fullName} job based on your expertise
           </Text>
-          <Text
-            onPress={() => navigation.navigate('AllExpertise')}
-            style={{
-              height: 20,
-              fontFamily: fonts.semibold,
-              color: colors.primary,
-            }}>
-            View All
-          </Text>
         </View>
-        <View style={{marginTop: 20}}>
+        <View style={{margin: 10}}>
           {correspond
             .filter(_item => _item.proposalStatus == 0)
             .map((item, index) => (

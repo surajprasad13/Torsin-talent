@@ -1,97 +1,95 @@
-import React, {useState, useRef, useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  ImageBackground,
-  ScrollView,
-  Animated,
+  TouchableOpacity,
   Dimensions,
+  ImageBackground,
 } from 'react-native';
-
-// icons
-
-// helpers
-import {colors, fonts} from '../theme';
-
-const images = [
-  'https://source.unsplash.com/400x400?stone',
-  'https://source.unsplash.com/400x400?water',
-  'https://source.unsplash.com/400x400?mountain',
-  'https://source.unsplash.com/400x400?tree',
-  'https://source.unsplash.com/400x400?clouds',
-  'https://source.unsplash.com/400x400?sky',
-];
-
-const {width} = Dimensions.get('window');
+import Swiper from 'react-native-swiper';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {useAppDispatch, useAppSelector} from '../hooks';
+import {getFeedList} from '../redux/actions/userAction';
+import {fonts} from '../theme';
 
 const ImageSlider = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollRef = useRef(null);
-  const scrollX = useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation();
+
+  const dispatch = useAppDispatch();
+
+  const {feed} = useAppSelector(state => state.user);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const newIndex = (currentIndex + 1) % images.length;
-      setCurrentIndex(newIndex);
-      scrollRef.current?.scrollTo({x: newIndex * width - 5, animated: true});
-    }, 5000);
+    dispatch(getFeedList(''));
+  }, []);
 
-    return () => clearInterval(interval);
-  }, [currentIndex]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const {width} = Dimensions.get('window');
 
   const handleNextImage = () => {
-    const newIndex = (currentIndex + 1) % images.length;
-    setCurrentIndex(newIndex);
-    scrollRef.current?.scrollTo({x: newIndex * width - 5, animated: true});
-  };
-
-  const handlePreviousImage = () => {
-    const newIndex = (currentIndex - 1 + images.length) % images.length;
-    setCurrentIndex(newIndex);
-    scrollRef.current?.scrollTo({x: newIndex * width - 5, animated: true});
+    const nextIndex = (currentIndex + 1) % feed.length;
+    setCurrentIndex(nextIndex);
   };
 
   return (
-    <ScrollView
-      ref={scrollRef}
-      horizontal
-      pagingEnabled
-      showsHorizontalScrollIndicator={false}
-      onScroll={Animated.event([{nativeEvent: {contentOffset: {x: scrollX}}}], {
-        useNativeDriver: false,
-      })}
-      scrollEventThrottle={16}>
-      {images.map((image, index) => (
-        <View key={index.toString()} style={{width: width - 5, margin: 5}}>
-          <ImageBackground
+    <View style={{flex: 1}}>
+      <Swiper
+        style={{height: 210}}
+        loop={false}
+        index={currentIndex}
+        showsPagination={false}
+        onIndexChanged={index => setCurrentIndex(index)}>
+        {feed?.slice(0, 5)?.map((item, index) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('FeedDetails', {item})}
             key={index}
-            source={{uri: image}}
-            resizeMode="cover"
-            style={{width: '100%', height: 200}}
-            imageStyle={{borderRadius: 10}}>
-            <Text
-              style={{
-                padding: 10,
-                fontFamily: fonts.medium,
-                color: colors.white,
-              }}>
-              Blog {index + 1}
-            </Text>
-            <Text
-              style={{
-                padding: 10,
-                fontFamily: fonts.medium,
-                color: colors.white,
-                position: 'absolute',
-                bottom: 10,
-              }}>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum,
-              explicabo? Fuga, reiciendis.
-            </Text>
-          </ImageBackground>
-        </View>
-      ))}
-    </ScrollView>
+            style={{width}}>
+            <ImageBackground
+              source={{uri: item?.feedPhoto}}
+              resizeMode="cover"
+              style={{width: 'auto', height: 180, margin: 10}}
+              imageStyle={{borderRadius: 10}}>
+              <Text
+                style={{
+                  position: 'absolute',
+                  top: 5,
+                  left: 5,
+                  color: 'rgba(0, 0, 0, .5)',
+                  fontSize: 20,
+                  fontFamily: fonts.bold,
+                }}>
+                {item?.feedHeadline}
+              </Text>
+
+              <Text
+                style={{
+                  position: 'absolute',
+                  bottom: 5,
+                  left: 5,
+                  color: 'rgba(0, 0, 0, .5)',
+                  fontFamily: fonts.semibold,
+                }}>
+                {item?.feedDescription?.length > 150
+                  ? item?.feedDescription?.substr(0, 150) + '...'
+                  : item?.feedDescription}
+              </Text>
+            </ImageBackground>
+          </TouchableOpacity>
+        ))}
+      </Swiper>
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          right: 5,
+          top: 100,
+          transform: [{translateY: -15}],
+        }}
+        onPress={handleNextImage}>
+        <Icon name="right" size={20} color="rgba(0, 0, 0, .5)" />
+      </TouchableOpacity>
+    </View>
   );
 };
 

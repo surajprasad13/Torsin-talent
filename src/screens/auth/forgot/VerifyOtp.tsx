@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -6,26 +7,36 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {
   CodeField,
   Cursor,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
-//helpers
+// Helpers
+import {fonts, appstyle, colors} from '../../../theme';
+
 import {CustomButton, Title} from '../../../components';
-import {colors, fonts} from '../../../theme';
-import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {otpverify, resetOtpSent} from '../../../redux/actions/authAction';
-import {resetSuccess} from '../../../redux/reducers/authSlice';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {
+  resetOtpVerified,
+  resetSuccess,
+  loginValue,
+  resetMessage,
+} from '../../../redux/reducers/authSlice';
 import {AuthScreenParamList} from '../../../routes/RouteType';
 
 const {width} = Dimensions.get('window');
-
 const CELL_COUNT = 6;
 
 type NavigationProp = StackNavigationProp<AuthScreenParamList>;
@@ -34,34 +45,24 @@ const VerifyOtp = ({route}: any) => {
   const {email} = route.params;
   const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
-  const {loading, success, emailVerified} = useAppSelector(state => state.auth);
+  const {loading, success, error, otpVerified, message} = useAppSelector(
+    state => state.auth,
+  );
 
-  const onPressResend = () => {
-    if (email) {
-      let field = {
-        inputs: {
-          email,
-        },
-      };
-      dispatch(otpverify(field));
+  const validationSchema = Yup.object().shape({
+    otp: Yup.string()
+      .length(CELL_COUNT, 'OTP must be exactly 6 characters')
+      .matches(/^\d+$/, 'OTP must only contain numbers')
+      .required('OTP is required'),
+  });
+
+  useEffect(() => {
+    if (success && otpVerified) {
+      dispatch(resetSuccess());
       navigation.navigate('ResetPassword', {email});
+      dispatch(resetOtpVerified());
     }
-  };
-
-  useEffect(() => {
-    if (value.length >= 6) {
-      const field = {
-        email,
-        otp: Number(value),
-      };
-      dispatch(otpverify(field));
-    }
-  }, [value]);
-
-  useEffect(() => {
-    if (emailVerified) {
-    }
-  }, [emailVerified]);
+  }, [success, otpVerified]);
 
   const [value, setValue] = useState('');
 
@@ -71,84 +72,136 @@ const VerifyOtp = ({route}: any) => {
     setValue,
   });
 
-  useEffect(() => {
-    if (success) {
-      dispatch(resetSuccess());
-      navigation.navigate('ResetPassword', {email});
-    }
-  }, [success]);
-
   return (
     <SafeAreaView style={styles.container}>
       <Title title="" />
-      <View style={{flex: 0.8, padding: 10, marginTop: 20}}>
-        <Text
-          style={{
-            fontFamily: fonts.semibold,
-            fontSize: 22,
-            color: '#0E184D',
-          }}>
-          Verify Otp
-        </Text>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+        <ScrollView style={{flex: 0.8, padding: 10, marginTop: 20}}>
+          <Text
+            style={{
+              fontFamily: fonts.semibold,
+              fontSize: 22,
+              color: '#0E184D',
+            }}>
+            Verify Otp
+          </Text>
 
-        <Text
-          style={{
-            fontFamily: fonts.regular,
-            alignItems: 'center',
-            color: '#000F1A',
-            top: 10,
-          }}>
-          Please wait till we verify your Email address
-        </Text>
-        <CodeField
-          ref={ref}
-          {...props}
-          value={value}
-          onChangeText={setValue}
-          cellCount={CELL_COUNT}
-          rootStyle={styles.codeFiledRoot}
-          keyboardType="number-pad"
-          textContentType="oneTimeCode"
-          renderCell={({index, symbol, isFocused}) => (
-            <View
-              onLayout={getCellOnLayoutHandler(index)}
-              key={index}
-              style={[]}>
-              <Text style={styles.cell}>
-                {symbol || (isFocused ? <Cursor /> : null)}
-              </Text>
-            </View>
-          )}
-        />
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Text
             style={{
               fontFamily: fonts.regular,
-              color: '#000000',
+              alignItems: 'center',
+              color: '#000F1A',
+              marginTop: 10,
             }}>
-            I didn't receive code?
+            Please wait till we verify your Email address
           </Text>
-          <TouchableOpacity
-            onPress={() => {
-              dispatch(resetOtpSent({email}));
+
+          <Formik
+            initialValues={{otp: ''}}
+            validationSchema={validationSchema}
+            onSubmit={values => {
+              const field = {
+                email,
+                otp: Number(values.otp),
+              };
+              dispatch(otpverify(field));
             }}>
-            <Text
-              style={{
-                color: '#27AE60',
-                fontFamily: fonts.regular,
-              }}>
-              {''} Resend Code
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <CustomButton
-          onPress={onPressResend}
-          title="Submit & Verify"
-          disabled
-          loading={loading}
-          style={{marginTop: 300}}
-        />
-      </View>
+            {({values, handleChange, handleSubmit, errors, touched}) => (
+              <>
+                <CodeField
+                  ref={ref}
+                  {...props}
+                  value={values.otp}
+                  onChangeText={text => {
+                    handleChange('otp')(text);
+                    dispatch(loginValue());
+                    dispatch(resetMessage());
+                  }}
+                  cellCount={CELL_COUNT}
+                  rootStyle={styles.codeFiledRoot}
+                  keyboardType="number-pad"
+                  textContentType="oneTimeCode"
+                  returnKeyType="done"
+                  onFocus={() => {
+                    dispatch(resetMessage());
+                    console.log('OTP input field focused');
+                  }}
+                  renderCell={({index, symbol, isFocused}) => (
+                    <View
+                      onLayout={getCellOnLayoutHandler(index)}
+                      key={index}
+                      style={[]}>
+                      <Text style={styles.cell}>
+                        {symbol || (isFocused ? <Cursor /> : null)}
+                      </Text>
+                    </View>
+                  )}
+                />
+                {!!error && (
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      color: 'red',
+                      fontFamily: fonts.medium,
+                      padding: 10,
+                    }}>
+                    {error}
+                  </Text>
+                )}
+
+                {!!message && (
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      color: 'green',
+                      fontFamily: fonts.medium,
+                      padding: 10,
+                    }}>
+                    {message}
+                  </Text>
+                )}
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    marginTop: 10,
+                  }}>
+                  <Text
+                    style={{
+                      fontFamily: fonts.regular,
+                      color: '#000000',
+                    }}>
+                    I didn't receive code?
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      dispatch(resetOtpSent({email}));
+                    }}>
+                    <Text
+                      style={{
+                        color: '#27AE60',
+                        fontFamily: fonts.regular,
+                      }}>
+                      {' '}
+                      Resend Code
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <CustomButton
+                  onPress={handleSubmit}
+                  title="Submit & Verify"
+                  disabled={values.otp.length > 5}
+                  loading={loading}
+                  style={{marginTop: 300}}
+                />
+              </>
+            )}
+          </Formik>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -167,26 +220,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 9,
     width: width * 0.2,
     height: width * 0.2,
-    maxWidth: 45,
+    maxWidth: 40,
     maxHeight: 45,
     fontSize: 20,
     borderWidth: 0.3,
-    borderRadius: 2,
+    borderRadius: 4,
     color: '#0C0900',
-    backgroundColor: colors.white,
     textAlign: 'center',
     padding: 10,
-
-    // IOS
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    // Android
-    elevation: 1,
+    backgroundColor: colors.white,
   },
 });
 

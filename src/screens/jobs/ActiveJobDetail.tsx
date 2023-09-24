@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {
   View,
   Text,
@@ -6,194 +6,120 @@ import {
   Pressable,
   StyleSheet,
   ScrollView,
-  LayoutAnimation,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import FastImage from 'react-native-fast-image';
 import {Divider} from 'react-native-paper';
-import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import moment from 'moment';
 
 // helpers
 import {appstyle, colors, fonts} from '../../theme';
 
 //icons
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import {AntDesign, Entypo, IonIcons} from '../../theme/icons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {CustomInput, Title} from '../../components';
 
-const contractType = ['', 'Hourly', 'Fixed'];
+const contractType = ['', 'Fixed', 'Hourly'];
 
-const ActiveJobDetail = ({route}: any) => {
+const ActiveJobDetail: FC = ({route}: any) => {
+  const navigation = useNavigation();
+
   const {item} = route.params;
 
-  const ref = useRef(null);
-
   const [isExpanded, setIsExpanded] = useState(false);
+  const heightProgress = useSharedValue(150);
 
   const handleViewMore = () => {
-    if (ref.current) {
-      //@ts-ignore
-      ref.current.scrollTo({y: 0, animated: true});
-    }
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsExpanded(!isExpanded);
+    heightProgress.value = withTiming(isExpanded ? 150 : 300);
   };
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: withTiming(isExpanded ? 0 : 1),
-    };
+  const rStyle = useAnimatedStyle(() => {
+    return {height: heightProgress.value};
   });
 
-  const navigation = useNavigation();
+  // console.log(item);
+
   return (
     <SafeAreaView style={styles.container}>
       <Title title="Active Job Details" />
-      <ScrollView contentContainerStyle={{margin: 15}}>
+      <ScrollView contentContainerStyle={{margin: 10}}>
         <View style={styles.cardContainer}>
-          {isExpanded ? (
-            <Animated.View style={{}}>
-              <Text
-                style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
-                {item.jobName}
-              </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: 20,
-                }}>
-                <FastImage
-                  source={{uri: item.image[0]}}
-                  resizeMode="cover"
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    borderWidth: 0.3,
-                  }}
-                />
-                <View style={{width: '80%'}}>
-                  <Text style={styles.headertext}>{item.fullname}</Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    email : {item.email}
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    Cost : ${item.amount}
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginTop: 20,
-                  margin: 10,
-                }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <AntDesign
-                    name="clockcircleo"
-                    size={10}
-                    style={styles.icon}
-                  />
-                  <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
-                    {moment(item.createdAt).format('lll')}
-                  </Text>
-                </View>
+          <Animated.View style={[rStyle, {overflow: 'hidden'}]}>
+            <Text style={{fontSize: 18, fontFamily: fonts.medium}}>
+              {item.jobName}
+            </Text>
 
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Entypo name="location-pin" size={10} style={styles.icon} />
-                  <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
-                    {item.location}, {item.countryName}
-                  </Text>
-                </View>
-              </View>
-              <View style={{marginTop: 20}}>
-                <Divider />
-              </View>
-              <View style={{marginTop: 20}}>
-                <Text style={{fontSize: 14, fontFamily: fonts.semibold}}>
-                  Job Description
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: fonts.regular,
-                    lineHeight: 20,
-                    marginTop: 10,
-                    fontSize: 12,
-                    color: '#1E202B',
-                  }}>
-                  {item.jobDescription}
-                </Text>
-              </View>
-            </Animated.View>
-          ) : (
-            <Animated.View style={[{}, animatedStyle]}>
+            <View style={{width: '80%'}}>
+              <Text style={styles.headertext}>{item.fullName}</Text>
               <Text
-                style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
-                {item.jobName}
+                style={{
+                  fontFamily: fonts.regular,
+                  fontSize: 12,
+                }}>
+                email : {item.email}
               </Text>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  fontSize: 12,
+                }}>
+                Cost : {item.amount} AEDs
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: 20,
+                margin: 10,
+              }}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <AntDesign name="clockcircleo" size={10} style={styles.icon} />
+                <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
+                  {moment(item.createdAt).format('lll')}
+                </Text>
+              </View>
+
               <View
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginTop: 20,
+                  justifyContent: 'center',
                 }}>
-                <FastImage
-                  source={{uri: item.image[0]}}
-                  resizeMode="cover"
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    borderWidth: 0.3,
-                  }}
-                />
-                <View style={{width: '80%'}}>
-                  <Text style={styles.headertext}>{item.fullname}</Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    email : {item.email}
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    Cost : ${item.amount}
-                  </Text>
-                </View>
+                <Entypo name="location-pin" size={10} style={styles.icon} />
+                <Text style={{fontFamily: fonts.regular, fontSize: 12}}>
+                  {item.location}, {item.countryName}
+                </Text>
               </View>
-            </Animated.View>
-          )}
+            </View>
+            <View style={{marginTop: 20}}>
+              <Divider />
+            </View>
+            <View style={{marginTop: 20}}>
+              <Text style={{fontSize: 14, fontFamily: fonts.semibold}}>
+                Job Description
+              </Text>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  marginTop: 10,
+                  fontSize: 12,
+                  color: '#1E202B',
+                }}>
+                {item.jobDescription}
+              </Text>
+            </View>
+          </Animated.View>
 
           <TouchableOpacity
             style={{alignItems: 'flex-end', padding: 5}}
@@ -232,7 +158,7 @@ const ActiveJobDetail = ({route}: any) => {
                   borderColor: '#4f4f4f',
                 }}>
                 <TextInput
-                  placeholder="$100"
+                  placeholder="100 AEDs"
                   placeholderTextColor="#333333"
                   style={{}}
                   editable={false}
@@ -251,7 +177,7 @@ const ActiveJobDetail = ({route}: any) => {
               </View>
             </View>
             <CustomInput
-              label="5% Torsin Fee"
+              label={`${adminPercentage}% Torsin Fee`}
               value={item.torsinRate}
               editable={false}
               containerStyle={{marginTop: 15}}
@@ -259,7 +185,7 @@ const ActiveJobDetail = ({route}: any) => {
             <CustomInput
               label="Grand Total"
               editable={false}
-              value={item.recived_amount}
+              value={item.receivedAmount}
               containerStyle={{marginTop: 15}}
             />
             <Divider style={{marginTop: 15}} />
@@ -322,7 +248,7 @@ const ActiveJobDetail = ({route}: any) => {
               <>
                 <CustomInput
                   label="Specified Date"
-                  value={item.specific_date}
+                  value={item.specificDate}
                   containerStyle={{marginTop: 10}}
                 />
                 <Divider style={{marginTop: 10}} />
@@ -350,7 +276,7 @@ const ActiveJobDetail = ({route}: any) => {
             containerStyle={{marginTop: 15}}
           />
 
-          {item.isMileStone == 2 &&
+          {item.ismilestone == 2 &&
             item.milestoneData.length > 0 &&
             item.milestoneData.map((a: any, b: number) => (
               <View key={b.toString()} style={{marginTop: 10}}>
@@ -378,13 +304,13 @@ const ActiveJobDetail = ({route}: any) => {
                     label="Start Date"
                     placeholder=""
                     editable={false}
-                    value={a.start_date}
+                    value={a.startDate}
                     containerStyle={{marginTop: 10}}
                   />
 
                   <CustomInput
                     label="End Date"
-                    value={a.end_date}
+                    value={a.endDate}
                     placeholder=""
                     editable={false}
                     containerStyle={{marginTop: 10}}
@@ -524,109 +450,106 @@ const ActiveJobDetail = ({route}: any) => {
           )}
         </View>
 
-        {item.status == 4 && (
-          <View>
-            <Pressable
-              onPress={() => {
-                navigation.navigate('ChatUser', {item});
-              }}
+        {/* {item.status == 4 && ( )} */}
+        <View>
+          <Pressable
+            onPress={() => {
+              navigation.navigate('ChatUser', {item});
+            }}
+            style={{
+              ...appstyle.shadow,
+              marginTop: 10,
+              padding: 15,
+              margin: 5,
+              flexDirection: 'row',
+              borderRadius: 15,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View
               style={{
-                ...appstyle.shadow,
-                marginTop: 10,
+                backgroundColor: '#D6DFFF',
                 padding: 15,
-                margin: 10,
-                flexDirection: 'row',
-                borderRadius: 15,
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                borderRadius: 100,
               }}>
-              <View
+              <AntDesign
+                name="star"
+                size={30}
+                style={{color: colors.primary}}
+              />
+            </View>
+            <View
+              style={{
+                width: '80%',
+              }}>
+              <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
+                Chats
+              </Text>
+              <Text
                 style={{
-                  backgroundColor: '#D6DFFF',
-                  padding: 15,
-                  borderRadius: 100,
+                  fontFamily: fonts.regular,
+                  marginTop: 5,
+                  fontSize: 10,
+                  opacity: 0.8,
+                  color: '#1E202B',
+                  lineHeight: 15,
                 }}>
-                <AntDesign
-                  name="star"
-                  size={30}
-                  style={{color: colors.primary}}
-                />
-              </View>
-              <View
-                style={{
-                  width: '80%',
-                }}>
-                <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-                  Chats
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: fonts.regular,
-                    marginTop: 5,
-                    fontSize: 10,
-                    opacity: 0.8,
-                    color: '#1E202B',
-                    lineHeight: 15,
-                  }}>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Blanditiis labore iusto velit aspernatur deleniti
-                  necessitatibus molestias ad, dolores nisi harum placeat quis
-                  consequuntur hic libero laboriosam nam iste, ipsam
-                  accusantium.
-                </Text>
-              </View>
-            </Pressable>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Blanditiis labore iusto velit aspernatur deleniti necessitatibus
+                molestias ad, dolores nisi harum placeat quis consequuntur hic
+                libero laboriosam nam iste, ipsam accusantium.
+              </Text>
+            </View>
+          </Pressable>
 
-            <Pressable
-              onPress={() => navigation.navigate('ReportProblem')}
+          <Pressable
+            onPress={() => navigation.navigate('Complaints')}
+            style={{
+              ...appstyle.shadow,
+              marginTop: 10,
+              padding: 15,
+              margin: 5,
+              flexDirection: 'row',
+              borderRadius: 15,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View
               style={{
-                ...appstyle.shadow,
-                marginTop: 10,
+                backgroundColor: '#D6DFFF',
                 padding: 15,
-                margin: 10,
-                flexDirection: 'row',
-                borderRadius: 15,
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                borderRadius: 100,
               }}>
-              <View
+              <IonIcons
+                name="md-shield-checkmark"
+                size={30}
+                style={{color: colors.primary}}
+              />
+            </View>
+            <View
+              style={{
+                width: '80%',
+              }}>
+              <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
+                Report a problems
+              </Text>
+              <Text
                 style={{
-                  backgroundColor: '#D6DFFF',
-                  padding: 15,
-                  borderRadius: 100,
+                  fontFamily: fonts.regular,
+                  marginTop: 5,
+                  fontSize: 10,
+                  opacity: 0.8,
+                  color: '#1E202B',
+                  lineHeight: 15,
                 }}>
-                <Ionicons
-                  name="md-shield-checkmark"
-                  size={30}
-                  style={{color: colors.primary}}
-                />
-              </View>
-              <View
-                style={{
-                  width: '80%',
-                }}>
-                <Text style={{fontFamily: fonts.medium, fontSize: 16}}>
-                  Report a problems
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: fonts.regular,
-                    marginTop: 5,
-                    fontSize: 10,
-                    opacity: 0.8,
-                    color: '#1E202B',
-                    lineHeight: 15,
-                  }}>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Blanditiis labore iusto velit aspernatur deleniti
-                  necessitatibus molestias ad, dolores nisi harum placeat quis
-                  consequuntur hic libero laboriosam nam iste, ipsam
-                  accusantium.
-                </Text>
-              </View>
-            </Pressable>
-          </View>
-        )}
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Blanditiis labore iusto velit aspernatur deleniti necessitatibus
+                molestias ad, dolores nisi harum placeat quis consequuntur hic
+                libero laboriosam nam iste, ipsam accusantium.
+              </Text>
+            </View>
+          </Pressable>
+        </View>
 
         {/* <Pressable
           style={{
@@ -694,3 +617,46 @@ const styles = StyleSheet.create({
 });
 
 export default ActiveJobDetail;
+const json = {
+  amount: 600,
+  clientId: 191,
+  contractDesc: 'okay test it  and take a look at the contract details ',
+  contractId: 'a487d347-6e62-4097-85ec-58a6495694a6',
+  contractType: 1,
+  countryName: 'India',
+  createdAt: '2023-09-08T11:11:22.420680Z',
+  email: 'webclient@yopmail.com',
+  endDate: 1,
+  fullName: 'Web client',
+  image: [],
+  ismilestone: 2,
+  jobDescription:
+    'here we are testing the payment details again & again to fix all the issues and get the proper details ',
+  jobId: 243,
+  jobName: 'Third time payment check ',
+  location: 'New Delhi',
+  milestoneData: [
+    {
+      endDate: '2023-09-09',
+      milestoneId: 58,
+      name: 'M1',
+      price: 200,
+      startDate: '2023-09-08',
+      status: 4,
+    },
+    {
+      endDate: '2023-09-29',
+      milestoneId: 59,
+      name: 'M2',
+      price: 400,
+      startDate: '2023-09-22',
+      status: 2,
+    },
+  ],
+  profileImage: null,
+  recievedAmount: 552,
+  specificDate: null,
+  status: 1,
+  timeDuration: 0,
+  torsinRate: 48,
+};

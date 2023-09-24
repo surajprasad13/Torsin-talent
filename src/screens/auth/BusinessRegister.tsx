@@ -1,53 +1,116 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  Keyboard,
   SafeAreaView,
   Pressable,
-  Platform,
   KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
 } from 'react-native';
+import {} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import PhoneInput from 'react-native-phone-number-input';
+import {CountryCode} from 'react-native-country-picker-modal';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import {getLocales} from 'react-native-localize';
+import {decode} from 'base64-arraybuffer';
+import {Formik, useFormik} from 'formik';
+import * as Yup from 'yup';
+import CountryPicker from 'react-native-country-picker-modal';
 
 // icons
+import Feather from 'react-native-vector-icons/Feather';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
+// helpers
 import {metrics, colors, fonts} from '../../theme';
+import {email} from '../../utils/regex';
 
+// components
 import Input from '../../components/Input';
+import EmailModal from '../../components/modal/EmailModal';
+import PhoneModal from '../../components/modal/PhoneModal';
 import ProFile from '../../components/Profile';
 
-import Feather from 'react-native-vector-icons/Feather';
-import {CustomButton} from '../../components';
-import PhoneModal from '../../components/modal/PhoneModal';
-import EmailModal from '../../components/modal/EmailModal';
-import {email} from '../../utils/regex';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import {decode} from 'base64-arraybuffer';
+// redux
+import {RootState} from '../../redux';
+import {CustomButton, CustomInput} from '../../components';
+
 import {uploadFileToS3} from '../../services/s3';
+import {useAppDispatch} from '../../hooks';
 import {
   resetEmailVerified,
+  updateUserInfo,
   resetMobileVerified,
 } from '../../redux/reducers/authSlice';
-import ImageCropPicker from 'react-native-image-crop-picker';
 
 const {moderateScale} = metrics;
 
 const BusinessRegister = ({}) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const {emailVerified, mobileVerified} = useAppSelector(state => state.auth);
+  const {loading, userInfo} = useSelector((state: RootState) => state.auth);
 
-  const [inputs, setInputs] = React.useState({
-    fullName: '',
-    email: '',
-    mobileNo: '',
-    location: '',
-    countryName: '',
-    profileImage: '',
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
+  const validationSchema = Yup.object().shape({
+    fullName: Yup.string().required('Please enter name'),
+    email: Yup.string()
+      .email('Please enter valid email')
+      .required('Please enter email'),
+    mobileNo: Yup.string(),
+    location: Yup.string(),
+  });
+
+  const [profileImage, setProfileImage] = useState('');
+  const [formattedValue, setFormattedValue] = useState('');
+  const phoneInput = useRef<any | null>(null);
+
+  const locales = getLocales();
+
+  const [selectedCountry, setSelectedCountry] = useState<any | null>(null);
+  const [isCountryPickerOpen, setCountryPickerOpen] = useState(false);
+
+  const [mobileWithCode, setMobileWithCode] = useState<string>('');
+
+  const handleCountrySelect = (country: any) => {
+    setSelectedCountry(country);
+    setCountryPickerOpen(false); // Close the country dropdown after selection
+  };
+
+  const onSubmit = (event: any) => {
+    const field = {
+      screen: 'business',
+      data: {
+        ...event,
+        profileImage,
+        countryId: phoneInput?.current?.getCallingCode(),
+      },
+    };
+
+    navigation.navigate('CreatePassword', {
+      item: JSON.stringify(field),
+    });
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      fullName: '',
+      email: '',
+      mobileNo: '',
+      location: '',
+      confirmPassword: '',
+      gender: 1,
+      countryName: '',
+    },
+    validateOnChange: false,
+    validationSchema,
+    onSubmit,
   });
 
   const [image, setImage] = useState('');
@@ -72,46 +135,10 @@ const BusinessRegister = ({}) => {
         `${response.filename}`,
         'image/jpeg',
       );
-      setInputs(prevState => ({...prevState, profileImage: url.Location}));
+      setProfileImage(url.Location);
       setImageLoading(false);
     } else {
       setImageLoading(false);
-    }
-  };
-
-  const [errors, setErrors] = React.useState<any>({});
-
-  const [toggleCheckBox, setToggleCheckBox] = React.useState(false);
-
-  const validate = () => {
-    Keyboard.dismiss();
-    let isValid = true;
-
-    if (!inputs.fullName) {
-      handleError('Please input fullname', 'fullname');
-      isValid = false;
-    }
-
-    if (!inputs.email) {
-      handleError('Please input email', 'email');
-      isValid = false;
-    } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
-      handleError('Please input a valid email', 'email');
-      isValid = false;
-    }
-
-    if (!inputs.mobileNo) {
-      handleError('Please input phone number', 'phone');
-      isValid = false;
-    }
-
-    if (!inputs.location) {
-      handleError('Please input Location', 'location');
-      isValid = false;
-    }
-
-    if (isValid) {
-      register();
     }
   };
 
@@ -131,43 +158,18 @@ const BusinessRegister = ({}) => {
     return () => listener;
   }, []);
 
-  const register = () => {
-    const field = {
-      screen: 'business',
-      data: {
-        ...inputs,
-      },
-    };
-    navigation.navigate('CreatePassword', {
-      item: JSON.stringify(field),
-    });
-  };
-
-  const handleOnchange = (text: string, input: any) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
-  };
-  const handleError = (_error: any, input: any) => {
-    setErrors((prevState: any) => ({...prevState, [input]: _error}));
-  };
-
-  const active: boolean =
-    inputs.fullName &&
-    inputs.email &&
-    inputs.mobileNo &&
-    emailVerified &&
-    mobileVerified &&
-    inputs.location &&
-    inputs.countryName
-      ? true
-      : false;
+  useEffect(() => {
+    if (userInfo?.location) {
+      formik.setFieldValue('location', userInfo.location); // Use setFieldValue to set the value
+    }
+  }, [userInfo?.location]);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-        <ScrollView
-          contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
+        <ScrollView contentContainerStyle={{padding: 10}}>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <View
               style={{
@@ -195,12 +197,13 @@ const BusinessRegister = ({}) => {
                 left: -2,
               }}></View>
           </View>
+
           <View
             style={{
               flexDirection: 'row',
+              top: 36,
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginTop: 20,
             }}>
             <TouchableOpacity
               onPress={() => {
@@ -210,21 +213,23 @@ const BusinessRegister = ({}) => {
               }}>
               <Feather name="arrow-left" size={20} />
             </TouchableOpacity>
+
             <Text
               style={{
-                color: colors.blue,
                 fontFamily: fonts.bold,
                 fontSize: moderateScale(32),
+                color: colors.primary,
+                textAlign: 'center',
               }}>
               Create Account
             </Text>
-            <View />
+            <View style={{flex: 0.2}} />
           </View>
+
           <Text
             style={{
               fontFamily: fonts.regular,
-              fontSize: moderateScale(14),
-              lineHeight: moderateScale(17),
+              top: 50,
               alignItems: 'center',
               color: '#000F1A',
             }}>
@@ -234,38 +239,45 @@ const BusinessRegister = ({}) => {
 
           <Text
             style={{
-              fontFamily: fonts.medium,
-              color: colors.primary,
-              marginTop: 20,
-              marginBottom: 20,
-              fontSize: 16,
+              fontFamily: fonts.regular,
+              top: 70,
+              color: '#0E184D',
             }}>
-            Add Business Information
+            Add Business Information.
           </Text>
 
-          <ProFile onPress={uploadImage} image={image} loading={imageLoading} />
+          <View style={{top: 80}}>
+            <ProFile
+              onPress={uploadImage}
+              image={image}
+              loading={imageLoading}
+            />
+          </View>
 
-          <View style={{marginVertical: 10}}>
+          <View style={{marginVertical: 47, marginTop: 84}}>
             <Input
-              value={inputs.fullName}
-              onChangeText={text => {
-                const name = text.replace(/[^a-zA-Z ]/g, '');
-                handleOnchange(name, 'fullName');
-              }}
-              onFocus={() => handleError(null, 'fullname')}
               label="Name"
-              placeholder="Enter your full name"
-              error={errors.fullname}
+              value={formik.values.fullName}
+              onFocus={() => formik.setErrors({fullName: ''})}
+              placeholder="John smith"
+              onChangeText={(text: any) => {
+                const name = text.replace(/[^a-zA-Z ]/g, '');
+                formik.handleChange('fullName')(name);
+              }}
+              error={formik.errors.fullName}
             />
 
             <View>
               <Input
-                onChangeText={text => handleOnchange(text, 'email')}
-                onFocus={() => handleError(null, 'email')}
+                onChangeText={(text: string) => {
+                  formik.handleChange('email')(text);
+                }}
+                onFocus={() => formik.setErrors({email: ''})}
                 label="Email"
-                placeholder="Enter your email address"
-                error={errors.email}
                 keyboardType="email-address"
+                placeholder="john@gmail.com"
+                error={formik.errors.email}
+                autoComplete="email"
                 autoCapitalize="none"
               />
               <Pressable
@@ -274,68 +286,149 @@ const BusinessRegister = ({}) => {
                   marginTop: 45,
                   right: 10,
                 }}>
-                <EmailModal active={email(inputs.email)} email={inputs.email} />
-              </Pressable>
-            </View>
-
-            <View>
-              <Input
-                label="Phone Number"
-                placeholder="Enter your phone no"
-                keyboardType="phone-pad"
-                value={inputs.mobileNo}
-                onChangeText={text => {
-                  const pattern = /^[0-9]*$/;
-                  const pass = pattern.test(text);
-                  if (pass) {
-                    handleOnchange(text, 'mobileNo');
-                  }
-                }}
-                onFocus={() => handleError(null, 'phone')}
-                error={errors.phone}
-                maxLength={13}
-                style={{paddingLeft: 10}}
-              />
-              <View style={{position: 'absolute', marginTop: 45, left: 10}}>
-                <Text>+</Text>
-              </View>
-              <Pressable
-                style={{
-                  position: 'absolute',
-                  marginTop: 45,
-                  right: 10,
-                }}>
-                <PhoneModal
-                  active={inputs.mobileNo.length >= 9}
-                  phone={inputs.mobileNo}
+                <EmailModal
+                  active={email(formik.values.email)}
+                  email={formik.values.email}
                 />
               </Pressable>
             </View>
 
-            <Input
-              onChangeText={text => handleOnchange(text, 'location')}
-              onFocus={() => handleError(null, 'location')}
+            <View style={{margin: 2}}>
+              <Text
+                style={{
+                  fontFamily: fonts.regular,
+                  color: '#4F4F4F',
+                  fontSize: 16,
+                }}>
+                Mobile Number
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  borderRadius: 10,
+                  marginTop: 10,
+                  backgroundColor: 'white',
+                  borderColor: '#BDBDBD',
+                  borderWidth: 1,
+                }}>
+                <PhoneInput
+                  ref={phoneInput}
+                  defaultValue={''}
+                  defaultCode={locales[0].countryCode as CountryCode}
+                  layout="first"
+                  placeholder="eg. 7895325085"
+                  containerStyle={{borderRadius: 10, alignItems: 'center'}}
+                  textContainerStyle={{
+                    borderColor: '#BDBDBD',
+                    backgroundColor: 'transparent',
+                  }}
+                  textInputStyle={{
+                    color: '#333333',
+                    fontSize: 14,
+                    fontFamily: fonts.regular,
+                  }}
+                  codeTextStyle={{color: '#333333'}}
+                  onChangeText={(text: string) => {
+                    const pattern = /^[0-9]*$/;
+                    const pass = pattern.test(text);
+                    if (pass) {
+                      formik.handleChange('mobileNo')(text);
+                    }
+                  }}
+                  onChangeFormattedText={(text: string) => {
+                    setMobileWithCode(text);
+                  }}
+                  textInputProps={{
+                    maxLength: 15,
+                    onFocus: () => formik.setErrors({mobileNo: ''}),
+                  }}
+                />
+                <Pressable
+                  style={{
+                    position: 'absolute',
+                    marginTop: 46,
+                    right: 10,
+                  }}>
+                  <PhoneModal
+                    active={formik.values.mobileNo.length >= 9}
+                    phone={mobileWithCode}
+                  />
+                </Pressable>
+              </View>
+            </View>
+
+            <CustomInput
               label="Location"
-              placeholder="Enter your Location"
-              error={errors.location}
+              placeholder="Location "
+              value={userInfo?.location}
+              onChangeText={(text: string) => {
+                dispatch(updateUserInfo({...userInfo, location: text}));
+                formik.handleChange('location')(text);
+                if (text.length >= 2) {
+                  navigation.navigate('Location');
+                }
+              }}
+              onFocus={() => {
+                if (!formik.values.location) {
+                  navigation.navigate('Location');
+                }
+              }}
+              containerStyle={{marginTop: 20}}
+              error={formik.errors.location}
             />
 
-            <Input
-              value={inputs.countryName}
-              onChangeText={text => {
-                const name = text.replace(/[^a-zA-Z ]/g, '');
-                handleOnchange(name, 'countryName');
-              }}
-              onFocus={() => handleError(null, 'country')}
-              label="Country"
-              placeholder="Enter your country"
-              error={errors.country}
-            />
+            <View style={{position: 'relative', marginTop: 10}}>
+              <Input
+                label="Country"
+                placeholder="eg. India"
+                value={selectedCountry?.name || formik.values.countryName}
+                onChangeText={text => {
+                  setCountryPickerOpen(true);
+                  formik.handleChange('countryName')(text);
+                }}
+                onFocus={() => {
+                  formik.setErrors({countryName: ''});
+                  setCountryPickerOpen(true);
+                }}
+                error={formik.errors.countryName}
+                maxLength={50}
+              />
+
+              <Pressable
+                onPress={() => setCountryPickerOpen(true)}
+                style={{
+                  alignItems: 'center',
+                  position: 'absolute',
+                  right: 10,
+                  justifyContent: 'center',
+                  marginTop: 50,
+                }}>
+                <AntDesign name="down" size={15} />
+              </Pressable>
+            </View>
+
+            {isCountryPickerOpen && (
+              <CountryPicker
+                withFilter
+                withFlag={false}
+                onSelect={country => {
+                  handleCountrySelect(country);
+                  formik.handleChange('countryName')(country.name as string);
+                }}
+                countryCode={selectedCountry?.cca2}
+                visible
+                containerButtonStyle={{
+                  display: 'none',
+                }}
+                onClose={() => setCountryPickerOpen(false)}
+              />
+            )}
 
             <View
               style={{
                 flexDirection: 'row',
-                marginTop: 20,
+                marginTop: 10,
                 alignItems: 'center',
               }}>
               <TouchableOpacity
@@ -349,46 +442,84 @@ const BusinessRegister = ({}) => {
                 />
               </TouchableOpacity>
 
-              <Text
-                style={{
-                  fontFamily: fonts.regular,
-                  color: colors.black,
-                  paddingLeft: 10,
-                }}>
-                I have accepted the{' '}
-                <Text style={{fontFamily: fonts.medium, color: colors.primary}}>
-                  Terms and Conditions.
+              <View style={{paddingLeft: 5}}>
+                <Text style={{fontFamily: fonts.regular, fontSize: 13}}>
+                  I have accepted the{' '}
+                  <Text
+                    onPress={() => {
+                      navigation.navigate('RegisterScreen');
+                    }}
+                    style={{
+                      color: colors.blue,
+                      fontFamily: fonts.bold,
+                    }}>
+                    Terms and Conditions.
+                  </Text>
                 </Text>
-              </Text>
+              </View>
             </View>
 
             <CustomButton
               title="Next"
-              disabled={active}
-              onPress={validate}
+              disabled={
+                !!formik.values.fullName &&
+                !!formik.values.email &&
+                !!formik.values.mobileNo &&
+                !!formik.values.location &&
+                !!formik.values.countryName
+                  ? true
+                  : false
+              }
+              onPress={formik.handleSubmit}
               style={{marginTop: 20}}
+              loading={loading}
             />
 
-            <View
+            <Text
               style={{
-                flexDirection: 'row',
-                marginTop: moderateScale(20),
-                justifyContent: 'center',
+                fontFamily: fonts.regular,
+                textAlign: 'center',
+                marginTop: 10,
               }}>
-              <Text style={{fontFamily: fonts.regular, color: colors.black}}>
-                Already have an account?{' '}
-                <Text
-                  onPress={() => navigation.navigate('LoginScreen')}
-                  style={{color: colors.primary, fontFamily: fonts.bold}}>
-                  Log In
-                </Text>
+              Already have an account?{' '}
+              <Text
+                onPress={() => {
+                  navigation.navigate('LoginScreen');
+                }}
+                style={{
+                  color: '#0E184D',
+                  fontFamily: fonts.bold,
+                }}>
+                Log In
               </Text>
-            </View>
+            </Text>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  autocompleteContainer: {
+    flex: 1,
+
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  textInput: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 12,
+    padding: 10,
+    marginTop: 10,
+  },
+  listView: {
+    padding: 5,
+  },
+  powered: {},
+});
 
 export default BusinessRegister;

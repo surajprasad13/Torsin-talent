@@ -22,15 +22,14 @@ const addSkill = createAsyncThunk(
   'user/addSkill',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.post(`talent/add/skill`, value.inputs, {
-        headers: {Authorization: `Bearer ${value.userToken}`},
-      });
+      const {data} = await api.post(`talent/add/skill`, value);
       return data;
     } catch (error: any) {
+      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
-        return rejectWithValue('Something went wrong');
+        return rejectWithValue('Something went wrosng');
       }
     }
   },
@@ -38,7 +37,7 @@ const addSkill = createAsyncThunk(
 
 const fetchSkill = createAsyncThunk(
   'user/fetchSkill',
-  async (value: any, {rejectWithValue}) => {
+  async (_, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/skill/detail`);
       return data;
@@ -51,11 +50,32 @@ const fetchSkill = createAsyncThunk(
     }
   },
 );
+
 const fetchService = createAsyncThunk(
   'user/fetchService',
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/service/detail`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const fetchAdminService = createAsyncThunk(
+  'user/fetchAdminService',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`admin/services`, {
+        params: {
+          serviceName: value,
+        },
+      });
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -124,10 +144,8 @@ const addProposal = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.post(`talent/proposal/job`, value.inputs);
-
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -165,9 +183,29 @@ const getAccepted = createAsyncThunk(
 
 const getProposalStatus = createAsyncThunk(
   'user/proposal/status',
-  async (value: any, {rejectWithValue}) => {
+  async (_, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/proposal/status`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getProposalDetail = createAsyncThunk(
+  'user/proposal/detail',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`talent/proposal/status`, {
+        params: {
+          proposalId: value,
+        },
+      });
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -186,8 +224,7 @@ const getContract = createAsyncThunk(
       const {data} = await api.get(
         `talent/talent_contract_list/?status=${value}`,
       );
-
-      return data;
+      return {response: data.response.data, status: value};
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
@@ -235,7 +272,7 @@ const updateContract = createAsyncThunk(
 
 const fetchNotification = createAsyncThunk(
   'fetch_notification/',
-  async (value: any, {rejectWithValue}) => {
+  async (_, {rejectWithValue}) => {
     try {
       const {data} = await api.get(`talent/get_notification_list/`);
       return data;
@@ -275,12 +312,10 @@ async function fetchDataFromDatabase(item: any, userId: number) {
 }
 
 const getRating = createAsyncThunk(
-  'https://torsin-admin.apponward.com/v1/api/common/rating/get',
+  'rating/get',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.get(
-        `https://torsin-admin.apponward.com/v1/api/common/rating/get`,
-      );
+      const {data} = await api.get(`common/rating/get`);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -290,16 +325,260 @@ const getRating = createAsyncThunk(
       }
     }
   },
-)
+);
 
 const createRating = createAsyncThunk(
-  'https://torsin-admin.apponward.com/v1/api/common/rating/create',
+  'rating/create',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.post(
-        `https://torsin-admin.apponward.com/v1/api/common/rating/create`,
-        value,
-      );
+      const {data} = await api.post(`common/rating/create`, value);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getAdminPercentage = createAsyncThunk(
+  'admin/percentage',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`admin/percentage`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+const filterCity = createAsyncThunk(
+  'country/city',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`city/filter`, {
+        params: {
+          search: value.search,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getFeedList = createAsyncThunk(
+  '/feed/list',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`/feed/list`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getHelpSupport = createAsyncThunk(
+  'support/topic/list',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`support/topic/list`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const createSupport = createAsyncThunk(
+  'support/ticket/initiate',
+  async (value: {topicId: number; description: string}, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`support/ticket/initiate`, value);
+      console.log(value, 'success');
+      return data;
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const TicketList = createAsyncThunk(
+  'support/ticket/list',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`support/ticket/list`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const supportChat = createAsyncThunk(
+  'support/ticket/chat/list',
+  async (value: any, {rejectWithValue}) => {
+    console.log(value, 'Hello');
+    try {
+      const {data} = await api.get(`support/ticket/chat/list`, {
+        params: {
+          ticketId: value,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const supportPostChat = createAsyncThunk(
+  'support/ticket/chat/initiate',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`support/ticket/chat/initiate`, value);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getPaymentStatus = createAsyncThunk(
+  'user/payment/status',
+  async (_, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`/talent/payment/status`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getPaymentDetails = createAsyncThunk(
+  'user/payment/detail',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`/talent/payment/status`, {
+        params: {
+          proposalId: value,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const filterUser = createAsyncThunk(
+  'filter/user',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`user/search`, {
+        params: {
+          fullName: value,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const createPortfolio = createAsyncThunk(
+  'create/portfolio',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`talent/portfolio/created`, value);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const getPortfolio = createAsyncThunk(
+  'get/portfolio',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`talent/portfolio/retrieve`);
+      return data;
+    } catch (error: any) {
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const withoutSignupSkill = createAsyncThunk(
+  'skill/corresponding/withoutjob',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.get(`skill/corresponding/job`, {
+        params: {
+          skill: value,
+        },
+      });
+
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -327,7 +606,23 @@ export {
   updateContract,
   fetchNotification,
   getRating,
-  createRating
+  createRating,
+  getAdminPercentage,
+  filterCity,
+  fetchAdminService,
+  getProposalDetail,
+  getFeedList,
+  getHelpSupport,
+  createSupport,
+  TicketList,
+  supportChat,
+  supportPostChat,
+  getPaymentStatus,
+  getPaymentDetails,
+  filterUser,
+  createPortfolio,
+  getPortfolio,
+  withoutSignupSkill,
 };
 
 export default {};

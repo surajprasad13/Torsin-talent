@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -16,7 +16,11 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 type NavigationProp = StackNavigationProp<JobScreenParamList>;
 
-const JobCard = ({item}: {item: any}) => {
+interface JobCardProp {
+  item: any;
+}
+
+const JobCard: FC<JobCardProp> = ({item}) => {
   const navigation = useNavigation<NavigationProp>();
 
   return (
@@ -29,28 +33,22 @@ const JobCard = ({item}: {item: any}) => {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <FastImage
-          source={{uri: item.image[0]}}
-          resizeMode="cover"
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: 25,
-            borderWidth: 0.5,
-          }}
-        />
         <View style={{width: '80%'}}>
           <Text style={[styles.headertext, {marginTop: 10}]}>
             {item.jobName}
+            {item.adminService}
           </Text>
-          <Text style={styles.text}>{item.jobDescription}</Text>
+          <Text style={styles.text}>
+            {' '}
+            {item.jobDescription.length > 50
+              ? item.jobDescription.substring(0, 50) + '...'
+              : item.jobDescription}
+          </Text>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-            }}>
-            <Text style={styles.text}>$ {item.amount}</Text>
-          </View>
+            }}></View>
         </View>
       </View>
 

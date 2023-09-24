@@ -1,12 +1,14 @@
-import React, {useEffect} from 'react';
-import {} from 'react-native';
+import React, {FC, useEffect} from 'react';
+import {ActivityIndicator, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import notifee from '@notifee/react-native';
+import {useFlipper} from '@react-navigation/devtools';
 
 /**
  * Screens
  */
+
 import OnboardingScreen from '../screens/OnboardingScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import LostPassword from '../screens/auth/forgot/LostPassword';
@@ -32,14 +34,25 @@ import {RootStackParamList} from './RouteType';
 import {useAppSelector} from '../hooks';
 import ThroughRegister from '../screens/ThroughRegister';
 import PdfScreen from '../screens/chat/PdfScreen';
-import PaymentDetail from '../screens/payment/PendingPaymentDetail';
+import PaymentDetail from '../screens/payment/PaymentDetail';
 import ReportProblem from '../screens/jobs/services/ReportProblem';
 import ReceivedPayment from '../screens/payment/ReceivedPaymentDetail';
 import RatingDetail from '../screens/rating/RatingDetail';
+import FeedDetails from '../screens/feeds/FeedDetails';
+import ChangePassword from '../screens/auth/ChangePassword';
+
+import Complaints from '../screens/help/Complaints';
+import Location from '../screens/common/Location';
+import WithoutSignupHome from '../screens/withoutsignupHome/WithoutSignupHome';
+
+import ViewAllTalent from '../screens/withoutsignupHome/ViewAllTalent';
+import FliterJobs from '../screens/withoutsignupHome/FliterJobs';
+import FilterJobDetail from '../screens/withoutsignupHome/FilterJobDetail';
+import Feeds from '../screens/feeds/Feeds';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export default function AppNavigator() {
+const AppNavigator: FC = () => {
   const {userToken, isFirstOpen} = useAppSelector(state => state.auth);
 
   const config = {
@@ -57,8 +70,6 @@ export default function AppNavigator() {
   const openAppBootStrap = async () => {
     const initialNotification = await notifee.getInitialNotification();
     if (initialNotification) {
-      console.log('Initial Notification');
-      // this.handleNotificationOpen(initialNotification.notification);
       navigationRef?.navigate('ChatUser', {item: {}});
       await notifee.cancelNotification(
         initialNotification.notification.id ?? '',
@@ -70,8 +81,17 @@ export default function AppNavigator() {
     openAppBootStrap();
   }, []);
 
+  useFlipper(navigationRef);
+
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer
+      ref={navigationRef}
+      linking={linking}
+      fallback={
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator />
+        </View>
+      }>
       <Stack.Navigator
         screenOptions={{}}
         initialRouteName={isFirstOpen ? 'OnboardingScreen' : 'LoginScreen'}>
@@ -125,6 +145,25 @@ export default function AppNavigator() {
                 ...TransitionPresets.SlideFromRightIOS,
               }}
             />
+
+            <Stack.Screen
+              name="FeedDetails"
+              component={FeedDetails}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
+            <Stack.Screen
+              name="Feeds"
+              component={Feeds}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
             <Stack.Screen
               name="RatingDetail"
               component={RatingDetail}
@@ -133,6 +172,15 @@ export default function AppNavigator() {
                 ...TransitionPresets.SlideFromRightIOS,
               }}
             />
+            <Stack.Screen
+              name="Complaints"
+              component={Complaints}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
             <Stack.Screen
               name="Report"
               component={ReportProblem}
@@ -149,6 +197,14 @@ export default function AppNavigator() {
                 ...TransitionPresets.SlideFromRightIOS,
               }}
               initialParams={{item: ''}}
+            />
+            <Stack.Screen
+              name="Location"
+              component={Location}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
             />
           </Stack.Group>
         ) : (
@@ -179,6 +235,11 @@ export default function AppNavigator() {
             <Stack.Screen
               name="ResetPassword"
               component={ResetPassword}
+              options={{headerShown: false, gestureEnabled: false}}
+            />
+            <Stack.Screen
+              name="ChangePassword"
+              component={ChangePassword}
               options={{headerShown: false}}
             />
             <Stack.Screen
@@ -196,6 +257,42 @@ export default function AppNavigator() {
               name="WalkthroughScreen"
               component={WalkthroughScreen}
               options={{headerShown: false}}
+            />
+
+            <Stack.Screen
+              name="WithoutSignupHome"
+              component={WithoutSignupHome}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
+            <Stack.Screen
+              name="Feeds"
+              component={Feeds}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
+            <Stack.Screen
+              name="FeedDetails"
+              component={FeedDetails}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+
+            <Stack.Screen
+              name="ViewAllTalent"
+              component={ViewAllTalent}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
             />
 
             <Stack.Screen
@@ -241,9 +338,35 @@ export default function AppNavigator() {
               }}
               initialParams={{item: ''}}
             />
+            <Stack.Screen
+              name="Location"
+              component={Location}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="FilterJobs"
+              component={FliterJobs}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="FilterJobDetail"
+              component={FilterJobDetail}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
           </Stack.Group>
         )}
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default AppNavigator;

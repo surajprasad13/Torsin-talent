@@ -1,9 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Keyboard, ScrollView, SafeAreaView} from 'react-native';
+import {
+  View,
+  Text,
+  Keyboard,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 //icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 
 // helpers
 import {colors, fonts} from '../../../theme';
@@ -14,7 +22,7 @@ import {CustomButton, CustomInput, Title} from '../../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthScreenParamList} from '../../../routes/RouteType';
 import {resetPassword} from '../../../redux/actions/authAction';
-import {resetSuccess} from '../../../redux/reducers/authSlice';
+import {loginValue, resetSuccess} from '../../../redux/reducers/authSlice';
 
 type NavigationProp = StackNavigationProp<AuthScreenParamList>;
 
@@ -28,7 +36,7 @@ const ResetPassword = ({route}: any) => {
     password: '',
     confirmPassword: '',
   });
-  const {loading, success} = useAppSelector(state => state.auth);
+  const {loading, success, error} = useAppSelector(state => state.auth);
 
   const [isValid, setIsValid] = useState<Array<boolean>>([]);
 
@@ -128,7 +136,12 @@ const ResetPassword = ({route}: any) => {
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <Title title="" />
+      <TouchableOpacity
+        onPress={() => navigation.navigate('LoginScreen')}
+        style={{padding: 10}}>
+        <Feather name="arrow-left" size={20} />
+      </TouchableOpacity>
+
       <ScrollView
         contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
         <View style={{flex: 0.8}}>
@@ -158,12 +171,13 @@ const ResetPassword = ({route}: any) => {
             <CustomInput
               onChangeText={(text: string) => {
                 setIsValid(handleValidation(text));
-                handleError(null, 'password');
                 handleOnchange(text, 'password');
+                handleError('', 'password');
+                dispatch(loginValue());
               }}
-              onFocus={() => handleError(null, 'password')}
+              onFocus={() => handleError('', 'password')}
               label="New password"
-              maxLength={16}
+              maxLength={30}
               placeholder="Enter password"
               autoCapitalize="none"
               password
@@ -173,19 +187,32 @@ const ResetPassword = ({route}: any) => {
           <View style={{top: 32}}>
             <CustomInput
               onChangeText={(text: string) => {
-                handleError(null, 'confirmPassword');
                 handleOnchange(text, 'confirmPassword');
+                handleError('', 'confirmPassword');
+                dispatch(loginValue());
               }}
               onFocus={() => {
-                handleError(null, 'confirmPassword');
+                handleError('', 'confirmPassword');
               }}
-              maxLength={16}
+              maxLength={30}
               label="Re-enter new password"
               placeholder="Re-enter password"
               autoCapitalize="none"
               password
             />
           </View>
+
+          {!!error && (
+            <Text
+              style={{
+                textAlign: 'left',
+                color: 'red',
+                fontFamily: fonts.medium,
+                marginTop: 40,
+              }}>
+              {error}
+            </Text>
+          )}
 
           <View style={{marginTop: 50}}>
             {passwordStrength.map((_item: string, index: number) => {
@@ -222,7 +249,7 @@ const ResetPassword = ({route}: any) => {
             input.confirmPassword.length >= 8 &&
             isValid.every(_item => _item == true)
           }
-          style={{marginTop: 200}}
+          style={{marginTop: 150, bottom: 20}}
         />
       </ScrollView>
     </SafeAreaView>

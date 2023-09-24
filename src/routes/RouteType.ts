@@ -1,26 +1,17 @@
-import type {CompositeScreenProps} from '@react-navigation/native';
+import type {
+  CompositeScreenProps,
+  NavigatorScreenParams,
+} from '@react-navigation/native';
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {PortfolioResponse} from '../types/user';
 
-export type RootStackParamList = {
+export type RootStackParamList = AuthScreenParamList & {
   OnboardingScreen: undefined;
-  LoginScreen: undefined;
-  RegisterScreen: undefined;
-  LostPassword: undefined;
-  VerifyOtp: {
-    email: undefined | string;
-  };
-  ResetPassword: {
-    email: undefined | string;
-  };
-  Successfull: undefined;
   VerifyOtpRegister: undefined;
   WalkthroughScreen: undefined;
-  IndivisualRegister: undefined;
-  ThroughRegister: undefined;
-  BusinessRegister: undefined;
   BusinessPassword: undefined;
-  DrawerNavigation: DrawerScreenParamaList;
+  DrawerNavigation: NavigatorScreenParams<DrawerScreenParamaList>;
   PostDetails: {id: string};
   NotFound: undefined;
   BottomScreens: undefined;
@@ -29,7 +20,14 @@ export type RootStackParamList = {
   PaymentDetail: undefined;
   ReceivePayment: undefined;
   Rating: undefined;
+  Location: undefined;
+  HelpDetails: undefined;
+  FeedDetails: undefined;
+  Feeds: undefined;
+  WithoutSignupHome: undefined;
   Report: undefined;
+  ViewAllTalent: undefined;
+  Complaints: undefined;
   ChatUser: {
     item: undefined | {};
   };
@@ -41,12 +39,13 @@ export type RootStackParamList = {
     item: undefined | object;
   };
   RatingDetail: undefined;
+  FilterJobs: {item: string | undefined} | undefined;
+  FilterJobDetail: undefined;
 };
 
 export type AuthScreenParamList = {
   OnboardingScreen: undefined;
   LoginScreen: undefined;
-  RegisterScreen: undefined;
   LostPassword: undefined;
   VerifyOtp: {
     email: undefined | string;
@@ -62,31 +61,44 @@ export type AuthScreenParamList = {
   BusinessRegister: undefined;
   BusinessPassword: undefined;
   IndivisualCreatePassword: undefined;
+  ChangePassword: undefined;
 };
 
 export type DrawerScreenParamaList = {
   Notifications: undefined;
-  ProposalNavigator: undefined;
+  ProposalNavigator: NavigatorScreenParams<ProposalScreenParamList>;
   MyRatings: undefined;
-  ContractNavigator: undefined;
+  ContractNavigator: NavigatorScreenParams<ContractsScreenParamList>;
   MyServices: undefined;
-  JobNavigator: undefined;
-  PaymentNavigator: undefined;
+  JobNavigator: NavigatorScreenParams<JobScreenParamList>;
+  PaymentNavigator: NavigatorScreenParams<PaymentScreenParamList>;
   SwitchAccount: undefined;
   AboutUs: undefined;
   TermsPrivacy: undefined;
   HelpSupport: undefined;
-  BottomNavigation: BottomScreenParamList;
+  HelpDetail: {
+    item: undefined | any;
+  };
+  BottomNavigation: NavigatorScreenParams<BottomScreenParamList>;
   DrawerSetting: undefined;
   PaymentMethod: undefined;
+  Feeds: undefined;
+  ChangePassword: undefined;
+  ChatCard: undefined;
 };
 
 export type BottomScreenParamList = {
   HomeNavigator: undefined;
   JobNavigator: undefined;
   Chat: undefined;
-  SettingNavigator: SettingScreenParamList;
+  SettingNavigator: NavigatorScreenParams<SettingScreenParamList>;
 };
+
+export interface PortfolioDetailProp {
+  item: PortfolioResponse | null;
+  type: 'image' | 'video';
+  activeIndex: number;
+}
 
 export type SettingScreenParamList = {
   Setting: undefined;
@@ -96,6 +108,9 @@ export type SettingScreenParamList = {
   AddSkill: undefined;
   ServiceSkill: undefined;
   ServiceDetail: undefined;
+  AddPortfolio: undefined;
+  OpenImage: {item: any; type: 'image' | 'video'} | undefined;
+  PortfolioDetail: PortfolioDetailProp;
 };
 
 export type HomeScreenParamList = {
@@ -145,6 +160,13 @@ export type ContractsScreenParamList = {
   CreateContract: undefined;
   ViewContract: {
     id: undefined | string;
+  };
+};
+
+export type ProposalScreenParamList = {
+  Proposals: undefined;
+  ProposalDetail: {
+    item: undefined;
   };
 };
 

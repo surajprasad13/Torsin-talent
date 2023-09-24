@@ -1,22 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   SafeAreaView,
-  TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
   Pressable,
+  TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Button, Dialog, Portal, RadioButton} from 'react-native-paper';
+import {Button, Dialog, Portal} from 'react-native-paper';
+import CountryPicker from 'react-native-country-picker-modal';
 
 // icons
-import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // components
 import ProFile from '../../components/Profile';
@@ -26,7 +27,11 @@ import {colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {CustomButton, CustomInput, Title} from '../../components';
 import {userUpdate} from '../../redux/actions/authAction';
-import {loginValue, resetSuccess} from '../../redux/reducers/authSlice';
+import {
+  loginValue,
+  resetSuccess,
+  updateUserInfo,
+} from '../../redux/reducers/authSlice';
 import {alphabets, email, number} from '../../utils/regex';
 import {uploadFileToS3} from '../../services/s3';
 import {decode} from 'base64-arraybuffer';
@@ -35,7 +40,7 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 const EditUserProfile = ({}) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const {userInfo, userToken, error, success, loading} = useAppSelector(
+  const {userInfo, error, success, loading} = useAppSelector(
     state => state.auth,
   );
 
@@ -47,7 +52,17 @@ const EditUserProfile = ({}) => {
     profileImage: userInfo?.profileImage,
     gender: userInfo?.gender ?? 1,
     countryName: userInfo?.countryName ?? '',
+    bio: userInfo?.bio ?? '',
   });
+
+  const [selectedCountry, setSelectedCountry] = useState<any | null>(null);
+  const [isCountryPickerOpen, setCountryPickerOpen] = useState(false);
+
+  const handleCountrySelect = (country: any) => {
+    setSelectedCountry(country);
+    setCountryPickerOpen(false);
+    setInputs(prevState => ({...prevState, countryName: country.name}));
+  };
 
   const [errors, setErrors] = React.useState<any>({});
   const [image, setImage] = useState('');
@@ -109,13 +124,25 @@ const EditUserProfile = ({}) => {
       isValid = false;
     }
 
+    if (inputs.bio.length == 0) {
+      isValid = true;
+    }
+
+    if (inputs.bio.length > 0) {
+      const characterCount = inputs.bio.trim().length;
+      if (characterCount < 30) {
+        handleError('Bio must be at least 30 characters', 'bio');
+        isValid = false;
+      }
+    }
+
     if (isValid) {
       update();
     }
   };
 
   const update = () => {
-    dispatch(userUpdate({inputs, userToken}));
+    dispatch(userUpdate({...inputs, location: userInfo?.location}));
   };
 
   const handleOnchange = (text: string, input: any) => {
@@ -125,6 +152,7 @@ const EditUserProfile = ({}) => {
     setErrors((prevState: any) => ({...prevState, [input]: _error}));
   };
 
+  //@ts-ignore
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       dispatch(loginValue());
@@ -152,7 +180,7 @@ const EditUserProfile = ({}) => {
         </Dialog>
       </Portal>
 
-      <Title title={userInfo?.fullName} />
+      <Title title={userInfo?.fullName ?? ''} />
 
       <KeyboardAvoidingView
         style={{flex: 1}}
@@ -176,6 +204,7 @@ const EditUserProfile = ({}) => {
             placeholderTextColor="#333333"
             containerStyle={{marginTop: 40}}
             error={errors.fullName}
+            maxLength={30}
           />
 
           <CustomInput
@@ -264,28 +293,112 @@ const EditUserProfile = ({}) => {
               </Pressable>
             </View>
           )}
-          <CustomInput
-            value={inputs.location}
-            onChangeText={(text: string) => handleOnchange(text, 'location')}
-            onFocus={() => handleError(null, 'location')}
-            label="Location"
-            placeholder={inputs.location}
-            containerStyle={{marginTop: 20}}
-            error={errors.location}
-          />
 
-          <CustomInput
-            value={inputs.countryName}
-            onChangeText={(text: string) => {
-              const name = text.replace(/[^a-zA-Z ]/g, '');
-              handleOnchange(name, 'countryName');
-            }}
-            onFocus={() => handleError(null, 'location')}
-            label="Country"
-            placeholder={inputs.countryName}
-            containerStyle={{marginTop: 20}}
-            error={errors.countryName}
-          />
+          <View style={{position: 'relative'}}>
+            <CustomInput
+              value={inputs.countryName}
+              onChangeText={(text: string) => {
+                const name = text.replace(/[^a-zA-Z ]/g, '');
+                handleOnchange(name, 'countryName');
+              }}
+              onBlur={() => {
+                setCountryPickerOpen(true);
+              }}
+              onFocus={() => {
+                handleError(null, 'location');
+                setCountryPickerOpen(true);
+              }}
+              label="Country"
+              placeholder={inputs.countryName}
+              containerStyle={{marginTop: 20}}
+              error={errors.countryName}
+              onPressIn={() => setCountryPickerOpen(true)}
+              onPressOut={() => setCountryPickerOpen(true)}
+              editable={false}
+            />
+            <Pressable
+              onPress={() => setCountryPickerOpen(true)}
+              style={{
+                alignItems: 'center',
+                position: 'absolute',
+                right: 10,
+                justifyContent: 'center',
+                marginTop: 65,
+              }}>
+              <AntDesign name="down" size={15} />
+            </Pressable>
+          </View>
+
+          {isCountryPickerOpen && (
+            <CountryPicker
+              withFilter
+              withFlag={false}
+              onSelect={handleCountrySelect}
+              countryCode={selectedCountry?.cca2}
+              visible={isCountryPickerOpen}
+              containerButtonStyle={{
+                display: 'none',
+              }}
+              onClose={() => setCountryPickerOpen(false)}
+            />
+          )}
+
+          <View style={{marginTop: 20}}>
+            <CustomInput
+              placeholder="Location"
+              label="Location"
+              value={userInfo?.location}
+              onChangeText={(text: string) => {
+                dispatch(updateUserInfo({...userInfo, location: text}));
+                if (text.length >= 2) {
+                  navigation.navigate('Location');
+                }
+              }}
+              onFocus={() => {
+                navigation.navigate('Location');
+              }}
+            />
+          </View>
+
+          <View style={{marginTop: 20}}>
+            <Text
+              style={{
+                fontFamily: fonts.regular,
+                color: '#4F4F4F',
+                fontSize: 16,
+              }}>
+              Bio
+            </Text>
+
+            <TextInput
+              placeholder="Write here"
+              multiline={true}
+              placeholderTextColor="#4F4F4F"
+              maxLength={500}
+              value={inputs.bio}
+              onChangeText={(text: string) => handleOnchange(text, 'bio')}
+              onFocus={() => handleError(null, 'bio')}
+              style={{
+                marginTop: 10,
+                padding: 15,
+                height: 170,
+                borderWidth: 0.5,
+                borderRadius: 8,
+                borderColor: colors.light,
+                backgroundColor: colors.white,
+              }}
+            />
+          </View>
+
+          {errors && (
+            <Text
+              style={{
+                marginTop: 5,
+                color: 'red',
+              }}>
+              {errors.bio}
+            </Text>
+          )}
 
           {!!error && (
             <Text
@@ -311,22 +424,5 @@ const EditUserProfile = ({}) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: colors.white,
-    padding: 10,
-  },
-  backContainer: {
-    backgroundColor: '#ffffff',
-    height: 100,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-});
 
 export default EditUserProfile;

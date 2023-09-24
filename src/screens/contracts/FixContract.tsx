@@ -173,7 +173,7 @@ const FixContract = ({route}: any) => {
         style={{margin: 10, padding: 5, backgroundColor: '#f9fbff', flex: 1}}>
         <View style={styles.fixContainer}>
           <CustomInput
-            placeholder="$"
+            placeholder="AEDs"
             label="Amount"
             value={amount}
             onChangeText={text => setAmount(text)}
@@ -282,7 +282,7 @@ const FixContract = ({route}: any) => {
                 color: '#828282',
                 fontFamily: fonts.regular,
               }}>
-              $ {Number(amount)}
+              AEDs {Number(amount)}
             </Text>
           </View>
           <View style={styles.innerFix}>
@@ -299,7 +299,7 @@ const FixContract = ({route}: any) => {
                 color: '#828282',
                 fontFamily: fonts.regular,
               }}>
-              $ {calculatePrice(5, Number(amount))}
+              AEDs {calculatePrice(5, Number(amount))}
             </Text>
           </View>
           <View style={styles.innerFix}>
@@ -312,7 +312,7 @@ const FixContract = ({route}: any) => {
                 fontSize: 16,
                 fontFamily: fonts.semibold,
               }}>
-              $ {Number(amount) - calculatePrice(5, Number(amount))}
+              AEDs {Number(amount) - calculatePrice(5, Number(amount))}
             </Text>
           </View>
         </View>

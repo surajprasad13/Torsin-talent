@@ -85,45 +85,31 @@ const OldJobDetail = ({route}: any) => {
           {isExpanded ? (
             <Animated.View style={{}}>
               <Text
-                style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
+                style={{
+                  fontSize: 18,
+                  fontFamily: fonts.medium,
+                }}>
                 {item.jobName}
               </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: 20,
-                }}>
-                <FastImage
-                  source={{uri: item.image[0]}}
-                  resizeMode="cover"
+
+              <View style={{width: '80%', marginTop: 10}}>
+                <Text style={styles.headertext}>{item.fullName}</Text>
+                <Text
                   style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    borderWidth: 0.3,
-                  }}
-                />
-                <View style={{width: '80%'}}>
-                  <Text style={styles.headertext}>{item.fullname}</Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    email : {item.email}
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    Cost : ${item.amount}
-                  </Text>
-                </View>
+                    fontFamily: fonts.regular,
+                    fontSize: 12,
+                    marginTop: 5,
+                  }}>
+                  email : {item.email}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    fontSize: 12,
+                    marginTop: 5,
+                  }}>
+                  Cost : ${item.amount}
+                </Text>
               </View>
               <View
                 style={{
@@ -180,42 +166,22 @@ const OldJobDetail = ({route}: any) => {
                 style={{fontSize: 18, fontFamily: fonts.medium, padding: 5}}>
                 {item.jobName}
               </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: 20,
-                }}>
-                <FastImage
-                  source={{uri: item.image[0]}}
-                  resizeMode="cover"
+
+              <View style={{width: '80%', margin: 5}}>
+                <Text
                   style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    borderWidth: 0.3,
-                  }}
-                />
-                <View style={{width: '80%'}}>
-                  <Text style={styles.headertext}>{item.fullname}</Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    email : {item.email}
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: fonts.regular,
-                      fontSize: 12,
-                      marginTop: 5,
-                    }}>
-                    Cost : ${item.amount}
-                  </Text>
-                </View>
+                    fontFamily: fonts.regular,
+                    fontSize: 12,
+                  }}>
+                  email : {item.email}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: fonts.regular,
+                    fontSize: 12,
+                  }}>
+                  Cost : ${item.amount}
+                </Text>
               </View>
             </Animated.View>
           )}
@@ -284,7 +250,7 @@ const OldJobDetail = ({route}: any) => {
             <CustomInput
               label="Grand Total"
               editable={false}
-              value={item.recived_amount}
+              value={item.receivedAmount}
               containerStyle={{marginTop: 15}}
             />
             <Divider style={{marginTop: 15}} />
@@ -347,7 +313,7 @@ const OldJobDetail = ({route}: any) => {
               <>
                 <CustomInput
                   label="Specified Date"
-                  value={item.specific_date}
+                  value={item.specificDate}
                   containerStyle={{marginTop: 10}}
                 />
                 <Divider style={{marginTop: 10}} />
@@ -375,7 +341,7 @@ const OldJobDetail = ({route}: any) => {
             containerStyle={{marginTop: 15}}
           />
 
-          {item.isMileStone == 2 &&
+          {item.ismilestone == 2 &&
             item.milestoneData.length > 0 &&
             item.milestoneData.map((a: any, b: number) => {
               const settleStatus = item.status == 2;
@@ -408,13 +374,13 @@ const OldJobDetail = ({route}: any) => {
                       label="Start Date"
                       placeholder=""
                       editable={false}
-                      value={a.start_date}
+                      value={a.startDate}
                       containerStyle={{marginTop: 10}}
                     />
 
                     <CustomInput
                       label="End Date"
-                      value={a.end_date}
+                      value={a.endDate}
                       placeholder=""
                       editable={false}
                       containerStyle={{marginTop: 10}}
@@ -486,7 +452,7 @@ const OldJobDetail = ({route}: any) => {
                     fontSize: 16,
                     fontFamily: fonts.semibold,
                   }}>
-                  $ {item.recievedAmount}
+                  $ {item.receivedAmount}
                 </Text>
               </View>
             </View>
@@ -547,7 +513,7 @@ const OldJobDetail = ({route}: any) => {
                       fontSize: 16,
                       fontFamily: fonts.semibold,
                     }}>
-                    $ {item.recievedAmount}
+                    $ {item.receivedAmount}
                   </Text>
                 </View>
               </View>
@@ -607,7 +573,7 @@ const OldJobDetail = ({route}: any) => {
           </Pressable>
 
           <Pressable
-            onPress={() => navigation.navigate('Report')}
+            onPress={() => navigation.navigate('Complaints')}
             style={{
               ...appstyle.shadow,
               marginTop: 10,

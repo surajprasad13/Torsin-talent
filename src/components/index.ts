@@ -5,6 +5,9 @@ import CircleProgress from './CircleProgress';
 import Profile from './Profile';
 import CustomInput from './CustomInput';
 import Title from './Title';
+import GridImageView from './GridImageView';
+import Stepper from './Stepper';
+import Textarea from './Textarea';
 
 export {
   CustomButton,
@@ -14,4 +17,7 @@ export {
   Profile,
   CustomInput,
   Title,
+  GridImageView,
+  Stepper,
+  Textarea,
 };

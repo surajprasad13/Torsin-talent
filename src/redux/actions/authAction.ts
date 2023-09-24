@@ -44,7 +44,6 @@ const userLogin = createAsyncThunk(
       const {data} = await api.post(`talent/user/login`, value);
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -58,7 +57,7 @@ const userUpdate = createAsyncThunk(
   'auth/update',
   async (value: any, {rejectWithValue}) => {
     try {
-      const {data} = await api.put(`talent/user/update`, value.inputs);
+      const {data} = await api.put(`talent/user/update`, value);
       return data;
     } catch (error: any) {
       if (error.response.data && error.response.data.error) {
@@ -155,10 +154,25 @@ const resetPassword = createAsyncThunk(
   async (value: any, {rejectWithValue}) => {
     try {
       const {data} = await api.post(`talent/resetPassword`, value);
-      console.log(data);
+
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
+      if (error.response.data && error.response.data.error) {
+        return rejectWithValue(error.response.data.error.errorMessage);
+      } else {
+        return rejectWithValue('Something went wrong');
+      }
+    }
+  },
+);
+
+const changePassword = createAsyncThunk(
+  'auth/changePassword',
+  async (value: any, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`change/password`, value);
+      return data;
+    } catch (error: any) {
       if (error.response.data && error.response.data.error) {
         return rejectWithValue(error.response.data.error.errorMessage);
       } else {
@@ -179,6 +193,7 @@ export {
   resetOtpSent,
   otpverify,
   resetPassword,
+  changePassword,
 };
 
 export default {};

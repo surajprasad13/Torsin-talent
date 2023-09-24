@@ -59,7 +59,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Torsin wants to access camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Torsin wants to access location</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Torsin would like to save photos to your photo gallery (For Upload your photo / adding image)</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Torsin wants to access photo library</string>
 	<key>UIAppFonts</key>
@@ -91,6 +93,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

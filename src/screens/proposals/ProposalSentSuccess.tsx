@@ -1,24 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
 import {Text, Image, SafeAreaView, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 // helpers
 import {colors, fonts} from '../../theme';
-import {useAppDispatch, useAppSelector} from '../../hooks';
+import {useAppDispatch} from '../../hooks';
 import {resetSuccess} from '../../redux/reducers/authSlice';
 
 const ProposalSentSuccess = () => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const {} = useAppSelector(state => state.user);
 
   useEffect(() => {
     dispatch(resetSuccess());
     const timeout = setTimeout(() => {
-      // navigation.reset({
-      //   index: 0,
-      //   routes: [{name: 'DrawerNavigation'}],
-      // });
+      //@ts-ignore
       navigation.replace('DrawerNavigation', {
         screen: 'ProposalNavigator',
       });
@@ -35,11 +32,10 @@ const ProposalSentSuccess = () => {
       <Text
         style={{
           fontFamily: fonts.regular,
-          fontSize: 14,
           marginTop: 5,
           color: '#000F1A',
         }}>
-        Your proposal has been sent successfully!{' '}
+        Your proposal has been sent successfully!
       </Text>
     </SafeAreaView>
   );

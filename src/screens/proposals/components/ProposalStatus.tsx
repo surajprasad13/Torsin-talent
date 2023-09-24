@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
 import {Divider} from 'react-native-paper';
-import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 
@@ -12,7 +11,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // helpers
 import {appstyle, colors, fonts} from '../../../theme';
 
-const ProposalStatus = ({item}: any) => {
+const ProposalStatus: FC = ({item}: any) => {
   const navigation = useNavigation();
 
   const renderStatus = (id: number) => {
@@ -38,7 +37,9 @@ const ProposalStatus = ({item}: any) => {
 
   return (
     <Pressable
-      onPress={() => navigation.navigate('ProposalDetail', {item})}
+      onPress={() =>
+        navigation.navigate('ProposalDetail', {id: item.proposalId})
+      }
       key={item.toString()}
       style={[styles.cardContainer, {}]}>
       <View
@@ -47,16 +48,6 @@ const ProposalStatus = ({item}: any) => {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <FastImage
-          source={{
-            uri:
-              item.images !== null
-                ? item.images[0]
-                : 'https://source.unsplash.com/400x400?user',
-          }}
-          resizeMode="cover"
-          style={{width: 50, height: 50, borderRadius: 25}}
-        />
         <View
           style={{
             flexDirection: 'row',
@@ -69,7 +60,9 @@ const ProposalStatus = ({item}: any) => {
               {item.jobName}
             </Text>
             <Text style={[styles.headertext, {marginTop: 10}]}>
-              {item.jobDescription}
+              {item.jobDescription.length > 50
+                ? item.jobDescription.substring(0, 50) + '...'
+                : item.jobDescription}
             </Text>
           </View>
           {renderStatus(item.proposalStatus)}
@@ -122,7 +115,6 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 15,
     backgroundColor: 'white',
-    marginTop: 20,
     margin: 10,
   },
   text: {
@@ -134,8 +126,9 @@ const styles = StyleSheet.create({
   },
   headertext: {
     fontFamily: fonts.regular,
-    color: colors.primary,
-    fontSize: 16,
+    color: '#1E202B',
+    fontSize: 12,
+    marginTop: 5,
     justifyContent: 'center',
   },
   icon: {

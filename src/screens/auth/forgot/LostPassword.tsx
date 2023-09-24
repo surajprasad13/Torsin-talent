@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {FC, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,7 +11,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {} from 'react-native-paper';
 import {Formik} from 'formik';
-import * as yup from 'yup';
+import * as Yup from 'yup';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -18,7 +19,7 @@ import Feather from 'react-native-vector-icons/Feather';
 //helpers
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {resetOtpSent} from '../../../redux/actions/authAction';
-import {resetSuccess} from '../../../redux/reducers/authSlice';
+import {resetSuccess, loginValue} from '../../../redux/reducers/authSlice';
 
 // components
 import {metrics, colors, fonts} from '../../../theme';
@@ -28,18 +29,20 @@ import {AuthScreenParamList} from '../../../routes/RouteType';
 
 const {moderateScale, verticalScale} = metrics;
 
-const validationSchema = yup.object().shape({
-  email: yup.string().email('Invalid email').required('Email is required *'),
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Please enter valid email')
+    .required('Please enter email'),
 });
 
 type NavigationProp = StackNavigationProp<AuthScreenParamList>;
 
-const LostPasswordScreen = ({}) => {
+const LostPasswordScreen: FC = ({}) => {
   const [value, setValue] = useState('');
 
   const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
-  const {loading, success} = useAppSelector(state => state.auth);
+  const {loading, success, error} = useAppSelector(state => state.auth);
 
   const handleOnSubmit = (values: any) => {
     dispatch(resetOtpSent({email: values.email}));
@@ -92,21 +95,25 @@ const LostPasswordScreen = ({}) => {
                     setErrors({email: ''});
                     handleChange('email')(text);
                     setValue(text);
+                    dispatch(loginValue());
                   }}
-                  onFocus={() => {}}
+                  onFocus={() => {
+                    dispatch(loginValue());
+                  }}
                   label="Email"
                   placeholder="Email"
-                  error={errors.email}
+                  error={errors.email || error}
+                  maxLength={30}
                 />
               </View>
             </View>
 
             <CustomButton
-              title="Send Otp"
-              disabled
+              title="Send OTP"
+              disabled={!!values.email}
               loading={loading}
               onPress={handleSubmit}
-              style={{marginTop: verticalScale(200)}}
+              style={{marginTop: 300, bottom: 20}}
             />
           </ScrollView>
         )}

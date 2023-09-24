@@ -1,23 +1,52 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {
+  TicketList,
   addProposal,
   addService,
   addSkill,
+  createPortfolio,
   createRating,
+  createSupport,
+  fetchAdminService,
   fetchNotification,
   fetchService,
   fetchSkill,
+  filterCity,
+  filterUser,
   getAccepted,
+  getAdminPercentage,
   getContract,
   getContractDetail,
+  getFeedList,
+  getHelpSupport,
+  getPaymentDetails,
+  getPaymentStatus,
+  getPortfolio,
+  getProposalDetail,
   getProposalStatus,
   getRating,
   jobCorrespondSkill,
   notJobCorrespondSkill,
+  supportChat,
+  supportPostChat,
   updateContract,
+  withoutSignupSkill,
 } from '../actions/userAction';
-import {JobDetail, Rating, Service} from '../../types/user';
+import {
+  Feed,
+  Help,
+  JobDetail,
+  PaymentDetails,
+  PortfolioResponse,
+  ProposalDetail,
+  Rating,
+  Service,
+  Ticket,
+  UserTag,
+  WithoutSkill,
+} from '../../types/user';
 import {searchJob} from '../actions/userAction';
+import {Contract} from '../../types/contract';
 
 enum Status {
   pending = 'pending',
@@ -28,43 +57,81 @@ enum Status {
 interface UserInterface {
   loading: boolean;
   error: null | string | any;
+  message: string | null;
+  addMessage: string;
   success: boolean;
   status: null | Status;
   registerSuccess: false;
   skills: Array<string>;
+  adminService: Array<{id: number; serviceName: string}> | string;
   services: Array<Service>;
   correspond: Array<JobDetail>;
   notCorrespond: Array<JobDetail>;
   search: Array<JobDetail>;
+  city: [];
+  user: UserTag[];
+  without: WithoutSkill[];
   addSuccess: string;
   acceptList: Array<any>;
   proposalStatus: Array<any>;
-  contracts: Array<any>;
+  paymentStatus: Array<any>;
+  proposalDetail: null | ProposalDetail;
+  paymentDetail: null | PaymentDetails;
+  contracts: {
+    accepted: Array<any>;
+    rejected: Array<any>;
+    archived: Array<any>;
+  };
   notification: Array<any>;
-  contractDetail: null | any;
+  contractDetail: null | Contract;
   rating: Array<Rating>;
+  help: Array<Help>;
+  feed: Array<Feed>;
+  ticket: Array<Ticket>;
   created: boolean;
+  adminPercentage: number;
+  support: [];
+  portfolio: PortfolioResponse | null;
 }
 
 const initialState: UserInterface = {
   loading: false,
+  message: '',
+  addMessage: '',
   created: false,
   error: null,
   success: false,
   status: null,
   registerSuccess: false,
   skills: [],
+  adminService: [],
   services: [],
   correspond: [],
   notCorrespond: [],
   search: [],
+  city: [],
+  user: [],
+  without: [],
   addSuccess: '',
   acceptList: [],
   proposalStatus: [],
-  contracts: [],
+  paymentStatus: [],
+  proposalDetail: null,
+  paymentDetail: null,
+  contracts: {
+    accepted: [],
+    rejected: [],
+    archived: [],
+  },
   notification: [],
   contractDetail: null,
   rating: [],
+  feed: [],
+  help: [],
+  ticket: [],
+  adminPercentage: 0,
+  support: [],
+  portfolio: null,
 };
 
 const userSlice = createSlice({
@@ -75,18 +142,24 @@ const userSlice = createSlice({
       state.success = false;
       state.error = '';
     },
+    resetMessage: state => {
+      state.message = '';
+      state.addMessage = '';
+    },
     resetSuccess: state => {
       state.addSuccess = '';
+    },
+    resetAdminService: state => {
+      state.adminService = [];
     },
   },
   extraReducers: builder => {
     builder
-      .addCase(addService.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(addService.pending, state => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(addService.fulfilled, (state, action) => {
+      .addCase(addService.fulfilled, state => {
         state.loading = false;
         state.success = true;
       })
@@ -96,12 +169,11 @@ const userSlice = createSlice({
       })
 
       //skill
-      .addCase(addSkill.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(addSkill.pending, state => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(addSkill.fulfilled, (state, action) => {
+      .addCase(addSkill.fulfilled, state => {
         state.loading = false;
         state.success = true;
       })
@@ -111,8 +183,7 @@ const userSlice = createSlice({
       })
 
       // fetch Skills
-      .addCase(fetchSkill.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(fetchSkill.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -126,8 +197,7 @@ const userSlice = createSlice({
       })
 
       // fetch service
-      .addCase(fetchService.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(fetchService.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -140,9 +210,22 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
 
+      // admin service
+      .addCase(fetchAdminService.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(fetchAdminService.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminService = action.payload.response;
+      })
+      .addCase(fetchAdminService.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       // job correspond Skills
-      .addCase(jobCorrespondSkill.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(jobCorrespondSkill.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -156,8 +239,7 @@ const userSlice = createSlice({
       })
 
       // not job correspond Skills
-      .addCase(notJobCorrespondSkill.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(notJobCorrespondSkill.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -171,8 +253,7 @@ const userSlice = createSlice({
       })
 
       // not job correspond Skills
-      .addCase(searchJob.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(searchJob.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -186,8 +267,7 @@ const userSlice = createSlice({
       })
 
       // add propsal
-      .addCase(addProposal.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(addProposal.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -201,8 +281,7 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
       // Get Accepted
-      .addCase(getAccepted.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(getAccepted.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -216,8 +295,7 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
       // Proposal Status
-      .addCase(getProposalStatus.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(getProposalStatus.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -231,15 +309,37 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
 
+      // proposal detail
+      .addCase(getProposalDetail.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getProposalDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.proposalDetail = action.payload.response[0];
+      })
+      .addCase(getProposalDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       // contracts list
-      .addCase(getContract.pending, (state, action) => {
+      .addCase(getContract.pending, state => {
         state.error = null;
         state.loading = true;
       })
       .addCase(getContract.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.contracts = action.payload.response.data;
+        if (action.payload.status == 1) {
+          state.contracts.accepted = action.payload.response;
+        } else if (action.payload.status == 2) {
+          state.contracts.rejected = action.payload.response;
+        } else if (action.payload.status == 3) {
+          state.contracts.archived = action.payload.response;
+        } else {
+        }
       })
       .addCase(getContract.rejected, (state, action) => {
         state.loading = false;
@@ -247,11 +347,11 @@ const userSlice = createSlice({
       })
 
       // update contract status
-      .addCase(updateContract.pending, (state, action) => {
+      .addCase(updateContract.pending, state => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(updateContract.fulfilled, (state, action) => {
+      .addCase(updateContract.fulfilled, state => {
         state.loading = false;
         state.success = true;
       })
@@ -261,8 +361,7 @@ const userSlice = createSlice({
       })
 
       // Notification
-      .addCase(fetchNotification.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(fetchNotification.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -276,14 +375,30 @@ const userSlice = createSlice({
       })
 
       //get contract deatils
-      .addCase(getContractDetail.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(getContractDetail.pending, state => {
         state.error = null;
         state.loading = true;
       })
       .addCase(getContractDetail.fulfilled, (state, action) => {
         state.loading = false;
-        state.contractDetail = action.payload.response.data;
+        const data = action.payload.response.data;
+        let milestone;
+        if (data.milestoneData) {
+          milestone = data.milestoneData.map((_item: any, index: any) => {
+            if (index == 0) {
+              return {
+                ..._item,
+                active: true,
+              };
+            }
+            return {
+              ..._item,
+              active: false,
+            };
+          });
+        }
+        data.milestoneData = milestone;
+        state.contractDetail = data;
       })
       .addCase(getContractDetail.rejected, (state, action) => {
         state.loading = false;
@@ -291,8 +406,7 @@ const userSlice = createSlice({
       })
 
       //rating
-      .addCase(getRating.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(getRating.pending, state => {
         state.error = null;
         state.loading = true;
       })
@@ -306,22 +420,223 @@ const userSlice = createSlice({
       })
 
       //createRating
-      .addCase(createRating.pending, (state, action) => {
-        state.status = Status.pending;
+      .addCase(createRating.pending, state => {
         state.error = null;
         state.loading = true;
       })
-      .addCase(createRating.fulfilled, (state, action) => {
+      .addCase(createRating.fulfilled, state => {
         state.loading = false;
         state.created = true;
       })
       .addCase(createRating.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // admin Percentage
+      .addCase(getAdminPercentage.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getAdminPercentage.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminPercentage = action.payload.response[0].adminPercentage;
+      })
+      .addCase(getAdminPercentage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //Filter City
+      .addCase(filterCity.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(filterCity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.city = action.payload;
+      })
+      .addCase(filterCity.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //feed
+      .addCase(getFeedList.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getFeedList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.feed = action.payload.response;
+      })
+      .addCase(getFeedList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //help
+      .addCase(getHelpSupport.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getHelpSupport.fulfilled, (state, action) => {
+        state.loading = false;
+        state.help = action.payload.response;
+      })
+      .addCase(getHelpSupport.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // create help
+      .addCase(createSupport.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(createSupport.fulfilled, (state, action) => {
+        state.loading = false;
+        state.created = true;
+        state.message = action.payload.response.message.successMessage;
+      })
+      .addCase(createSupport.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //TicketList
+      .addCase(TicketList.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(TicketList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ticket = action.payload.response;
+      })
+      .addCase(TicketList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //Support Chat
+      .addCase(supportChat.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(supportChat.fulfilled, (state, action) => {
+        state.loading = false;
+        state.support = action.payload.response;
+      })
+      .addCase(supportChat.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // create support chat
+      .addCase(supportPostChat.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(supportPostChat.fulfilled, state => {
+        state.loading = false;
+        state.created = true;
+      })
+      .addCase(supportPostChat.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // payment Status
+      .addCase(getPaymentStatus.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getPaymentStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.paymentStatus = action.payload.response;
+      })
+      .addCase(getPaymentStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // proposal detail
+      .addCase(getPaymentDetails.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getPaymentDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.paymentDetail = action.payload.response[0];
+      })
+      .addCase(getPaymentDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // search user
+      .addCase(filterUser.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(filterUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.response;
+      })
+      .addCase(filterUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // create portfolio
+      .addCase(createPortfolio.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(createPortfolio.fulfilled, state => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(createPortfolio.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Get Porfolio
+      .addCase(getPortfolio.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(getPortfolio.fulfilled, (state, action) => {
+        state.loading = false;
+        state.portfolio = action.payload.response;
+      })
+      .addCase(getPortfolio.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // search user
+      .addCase(withoutSignupSkill.pending, state => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(withoutSignupSkill.fulfilled, (state, action) => {
+        state.loading = false;
+        state.without = action.payload.response;
+      })
+      .addCase(withoutSignupSkill.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+
+    // last
   },
 });
 
-export const {updateSuccess, resetSuccess} = userSlice.actions;
+export const {updateSuccess, resetSuccess, resetAdminService, resetMessage} =
+  userSlice.actions;
 
 export default userSlice.reducer;

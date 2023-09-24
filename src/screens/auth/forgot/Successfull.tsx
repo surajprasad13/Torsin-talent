@@ -19,23 +19,27 @@ const Successfull = ({}) => {
 
   return (
     <View style={{backgroundColor: '#ffffff', flex: 1}}>
-      <View style={{marginTop: 150, alignItems: 'center'}}>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+        }}>
         <Image
           source={require('../../../assets/images/succes.png')}
           style={{width: 280, height: 150}}
         />
-      </View>
-      <View
-        style={{marginTop: 30, justifyContent: 'center', alignItems: 'center'}}>
         <Text
           style={{
             fontFamily: fonts.bold,
             fontSize: 24,
             color: '#000F1A',
+            marginTop: 10,
           }}>
           Password reset successfully!
         </Text>
       </View>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}></View>
     </View>
   );
 };

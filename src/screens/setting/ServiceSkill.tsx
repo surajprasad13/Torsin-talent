@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {
   View,
   Text,
@@ -18,8 +18,9 @@ import ServiceCard from './components/ServiceCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchService, fetchSkill} from '../../redux/actions/userAction';
 import {Service} from '../../types/user';
+import {Title} from '../../components';
 
-const ServiceSkill = ({}) => {
+const ServiceSkill: FC = ({}) => {
   const navigation = useNavigation();
 
   const dispatch = useAppDispatch();
@@ -36,29 +37,7 @@ const ServiceSkill = ({}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F9FBFF'}}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: colors.white,
-          padding: 10,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-            }
-          }}
-          style={{padding: 10}}>
-          <Feather name="arrow-left" size={20} />
-        </TouchableOpacity>
-
-        <Text style={{fontFamily: fonts.medium, color: '#000C14'}}>
-          Skills & Services
-        </Text>
-        <View />
-      </View>
+      <Title title="Skills & Services" />
 
       <ScrollView style={{padding: 10}}>
         {loading && <ActivityIndicator />}
@@ -77,7 +56,6 @@ const ServiceSkill = ({}) => {
             </Text>
           </TouchableOpacity>
         </View>
-
         <View
           style={{
             ...appstyle.shadow,
@@ -88,10 +66,8 @@ const ServiceSkill = ({}) => {
             flexDirection: 'row',
             minHeight: skills.length > 0 ? 0 : 100,
           }}>
-          {/*  */}
-
-          {skills.map((item, index) => {
-            return (
+          {skills.length > 0 ? (
+            skills.map((item, index) => (
               <View
                 key={index.toString()}
                 style={{
@@ -110,8 +86,15 @@ const ServiceSkill = ({}) => {
                   {item}
                 </Text>
               </View>
-            );
-          })}
+            ))
+          ) : (
+            <View
+              style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+              <Text style={{fontFamily: fonts.medium, color: colors.black}}>
+                No Skills
+              </Text>
+            </View>
+          )}
         </View>
 
         {/*  */}
@@ -144,9 +127,26 @@ const ServiceSkill = ({}) => {
         {/*  */}
 
         <View style={{marginTop: 20}}>
-          {services.map((item: Service, index) => (
-            <ServiceCard item={item} key={index.toString()} />
-          ))}
+          {services.length === 0 ? (
+            <View
+              style={{
+                ...appstyle.shadow,
+                borderRadius: 10,
+                margin: 10,
+                padding: 10,
+                minHeight: 100,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={{fontFamily: fonts.medium, color: colors.black}}>
+                No Services
+              </Text>
+            </View>
+          ) : (
+            services.map((item: Service, index) => (
+              <ServiceCard item={item} key={index.toString()} />
+            ))
+          )}
         </View>
 
         {/*  */}

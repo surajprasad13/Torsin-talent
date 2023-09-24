@@ -1,6 +1,9 @@
 import * as React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
+import {DrawerScreenParamaList} from './RouteType';
+import {fonts} from '../theme';
+
 import AboutUs from '../screens/drawerScreens/AboutUs';
 import CustomSidebarMenu from '../components/CustomSidebarMenu';
 import MyRating from '../screens/rating/MyRating';
@@ -10,17 +13,20 @@ import Terms from '../screens/drawerScreens/Terms';
 
 import BottomNavigation from './BottomNavigator';
 
-import {DrawerScreenParamaList} from './RouteType';
 import Notification from '../screens/notification/Notification';
-import {fonts} from '../theme';
 import ContractNavigator from './ContractNavigator';
 import ProposalNavigator from './ProposalNavigator';
-import PaymentMethod from '../screens/drawerScreens/PaymentMethod';
+import PaymentMethod from '../screens/payment/PaymentMethod';
 import JobNavigator from './JobNavigator';
+import HelpSupport from '../screens/help/HelpSupport';
+import Feeds from '../screens/feeds/Feeds';
+import ChangePassword from '../screens/auth/ChangePassword';
+import HelpDetails from '../screens/help/HelpDetails';
+import ChatCard from '../screens/help/ChatCard';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamaList>();
 
-const DrawerNavigation = () => {
+const DrawerNavigation: React.FC = ({}) => {
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomSidebarMenu {...props} />}
@@ -64,8 +70,19 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="AboutUs" component={AboutUs} options={{}} />
       <Drawer.Screen name="MyServices" component={MyService} options={{}} />
       <Drawer.Screen name="TermsPrivacy" component={Terms} options={{}} />
-      <Drawer.Screen name="HelpSupport" component={Terms} options={{}} />
+      <Drawer.Screen name="HelpSupport" component={HelpSupport} options={{}} />
+      <Drawer.Screen
+        name="HelpDetail"
+        component={HelpDetails}
+        options={{}}
+        initialParams={{
+          item: {},
+        }}
+      />
+      <Drawer.Screen name="ChatCard" component={ChatCard} />
       <Drawer.Screen name="PaymentMethod" component={PaymentMethod} />
+      <Drawer.Screen name="Feeds" component={Feeds} />
+      <Drawer.Screen name="ChangePassword" component={ChangePassword} />
     </Drawer.Navigator>
   );
 };

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,11 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Dropdown} from 'react-native-element-dropdown';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {decode} from 'base64-arraybuffer';
+import Video from 'react-native-video';
+import FastImage from 'react-native-fast-image';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -27,12 +32,7 @@ import {appstyle, colors, fonts} from '../../theme';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {addProposal} from '../../redux/actions/userAction';
 import {resetSuccess} from '../../redux/reducers/userSlice';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {uploadFileToS3, uploadVideoToS3} from '../../services/s3';
-import {decode} from 'base64-arraybuffer';
-import Video from 'react-native-video';
-import FastImage from 'react-native-fast-image';
-import ImageCropPicker from 'react-native-image-crop-picker';
 
 type InputProps = {
   job: number;
@@ -44,7 +44,7 @@ type InputProps = {
   images: Array<string>;
 };
 
-const AddJobDetails = ({route}: any) => {
+const AddJobDetails: FC = ({route}: any) => {
   const {id} = route.params;
 
   const navigation = useNavigation();
@@ -198,7 +198,7 @@ const AddJobDetails = ({route}: any) => {
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-        <Title title="Add Proposal Detail" />
+        <Title title="Add Proposal Details" />
 
         <ScrollView>
           <View style={{marginTop: 0, margin: 15}}>
@@ -208,7 +208,7 @@ const AddJobDetails = ({route}: any) => {
                 color: '#4F4F4F',
                 fontSize: 16,
               }}>
-              Message
+              Proposal
             </Text>
 
             <TextInput
@@ -429,6 +429,7 @@ const AddJobDetails = ({route}: any) => {
           </Pressable>
           <CustomInput
             label="Add Portfolio link"
+            autoCapitalize="none"
             placeholder="https://portfolio.link.com"
             containerStyle={{marginTop: 10, margin: 15}}
             value={inputs.portfolio}
